@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Who Steers the Money?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#F6F3EC; --paper:#FFFDF8; --ink:#1B2A41; --body:#3D4A5C; --muted:#6B7280;
+  --line:#DCD5C8; --accent:#1B2A41; --accent-ink:#F6F3EC; --dem:#2E5E9E; --rep:#B5451B; --teal:#2E6F8E;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#11161F; --paper:#18202C; --ink:#EEF1F5; --body:#C9D3DC; --muted:#93A0B0;
+  --line:#2C3747; --accent:#0E1520; --accent-ink:#EEF1F5; --dem:#6D9FE0; --rep:#E07E58; --teal:#6FB3CF;
+}}
+:root[data-theme="dark"]{
+  --bg:#11161F; --paper:#18202C; --ink:#EEF1F5; --body:#C9D3DC; --muted:#93A0B0;
+  --line:#2C3747; --accent:#0E1520; --accent-ink:#EEF1F5; --dem:#6D9FE0; --rep:#E07E58; --teal:#6FB3CF;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--body);font:17px/1.5 'IBM Plex Sans',system-ui,sans-serif}
+header{background:var(--accent);color:var(--accent-ink);padding:26px 16px 0;text-align:center}
+h1{font-family:'Source Serif 4',Georgia,serif;font-weight:700;font-size:clamp(28px,7vw,42px);line-height:1.1}
+.sub{opacity:.85;margin-top:6px}
+.tabs{display:flex;gap:4px;justify-content:center;margin-top:18px;max-width:860px;margin-left:auto;margin-right:auto}
+.tab{flex:1;background:transparent;color:var(--accent-ink);border:0;border-bottom:4px solid transparent;padding:10px 6px 12px;font:600 15px 'IBM Plex Sans',sans-serif;cursor:pointer;opacity:.75}
+.tab.on{border-bottom-color:#E09A74;opacity:1}
+.tab b{display:block;font-size:12px;letter-spacing:2px;text-transform:uppercase;opacity:.8}
+main{max-width:860px;margin:0 auto;padding:18px 16px 64px}
+section.step{display:none} section.step.on{display:block}
+h2{font-family:'Source Serif 4',Georgia,serif;font-weight:700;font-size:27px;color:var(--ink);margin:18px 0 8px}
+.lede{color:var(--muted);margin-bottom:12px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:16px;margin:12px 0}
+.q{font-weight:600;color:var(--ink);font-size:19px;margin-bottom:10px}
+.guess{display:flex;align-items:center;gap:14px}
+.guess input{flex:1;accent-color:var(--teal);height:36px}
+.guess output{font-family:'Source Serif 4',Georgia,serif;font-size:40px;font-weight:700;color:var(--ink);min-width:92px;text-align:right}
+.btn{display:block;width:100%;margin-top:12px;border:0;border-radius:10px;padding:14px;background:var(--teal);color:#fff;font:600 17px 'IBM Plex Sans',sans-serif;cursor:pointer;min-height:52px}
+.opts{display:grid;gap:10px}
+.opt{border:2px solid var(--line);background:transparent;color:var(--ink);border-radius:10px;padding:12px;text-align:left;font:500 16px 'IBM Plex Sans',sans-serif;cursor:pointer;min-height:52px}
+.opt.on{border-color:var(--teal);background:var(--teal);color:#fff}
+.race-h{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
+.race-name{font-weight:600;color:var(--ink);font-size:19px}
+.race-note{color:var(--muted);font-size:14px}
+.race-h.tap{cursor:pointer;-webkit-tap-highlight-color:transparent}
+.race-h.tap .race-name::after{content:" \25B8";color:var(--teal);font-size:15px}
+.race-h.tap.open .race-name::after{content:" \25BE"}
+.more-hint{color:var(--teal);font-size:14px;font-weight:600;cursor:pointer;margin-top:4px}
+.cases{display:none;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.cases.on{display:grid}
+.case{border-top:4px solid var(--line);padding-top:8px}
+.case.d{border-color:var(--dem)} .case.r{border-color:var(--rep)}
+.case b{display:block;font-size:14px;margin-bottom:4px}
+.case.d b{color:var(--dem)} .case.r b{color:var(--rep)}
+.case ul{margin:0;padding-left:18px;color:var(--body);font-size:14px;line-height:1.35}
+.case li{margin:0 0 6px}
+.picks{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.pick{border:2px solid var(--line);background:transparent;color:var(--ink);border-radius:10px;padding:12px 8px;font:600 16px 'IBM Plex Sans',sans-serif;cursor:pointer;min-height:56px}
+.pick small{display:block;font-weight:400;color:var(--muted);font-size:13px}
+.pick.d.on{border-color:var(--dem);background:var(--dem);color:#fff}
+.pick.r.on{border-color:var(--rep);background:var(--rep);color:#fff}
+.pick.on small{color:#fff;opacity:.9}
+.bar{display:flex;height:30px;border-radius:8px;overflow:hidden;margin-top:10px;background:var(--line)}
+.bar span{display:flex;align-items:center;font-size:14px;font-weight:600;color:#fff;padding:0 8px;white-space:nowrap;overflow:hidden}
+.bar .bd{background:var(--dem)} .bar .br{background:var(--rep);justify-content:flex-end}
+.hbar{display:grid;grid-template-columns:1fr 3fr auto;gap:8px;align-items:center;margin:6px 0;font-size:15px}
+.hbar .t{height:18px;background:var(--line);border-radius:9px;overflow:hidden}
+.hbar .t i{display:block;height:100%;background:var(--teal)}
+.hist{display:flex;align-items:flex-end;gap:3px;height:120px;margin-top:10px}
+.hist div{flex:1;background:var(--teal);border-radius:3px 3px 0 0;min-height:2px}
+.histx{display:flex;justify-content:space-between;color:var(--muted);font-size:13px}
+.status{font-size:14px;color:var(--muted);margin-top:8px}
+.room{border-left:4px solid var(--teal)}
+select{width:100%;padding:12px;border-radius:10px;border:1px solid var(--line);background:var(--paper);color:var(--ink);font:500 17px 'IBM Plex Sans',sans-serif}
+.big{font-family:'Source Serif 4',Georgia,serif;font-size:40px;font-weight:700;color:var(--ink);line-height:1}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:12px 0}
+.stat .lbl{color:var(--muted);font-size:14px}
+.tiles{display:grid;grid-template-columns:repeat(12,1fr);gap:3px;margin-top:10px}
+.tile{aspect-ratio:1;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:clamp(8px,2.2vw,13px);font-weight:600;color:var(--ink)}
+.tile.home{outline:3px solid var(--ink);outline-offset:-3px}
+.legend{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);margin-top:8px}
+.legend i{display:inline-block;width:120px;height:12px;border-radius:6px;background:linear-gradient(to right,var(--paper),var(--teal));border:1px solid var(--line)}
+.toplist{margin-top:10px;font-size:15px}
+.toplist div{display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding:4px 0}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:0 16px 32px}
+</style>
+</head>
+<body>
+<header>
+  <h1>Who Steers the Money?</h1>
+  <div class="sub">Follow along with the talk. No sign-in, nothing saved about you.</div>
+  <div class="tabs" role="tablist">
+    <button class="tab on" data-s="s1" role="tab"><b>Step 1</b>Your hunch</button>
+    <button class="tab" data-s="s2" role="tab"><b>Step 2</b>Follow the money</button>
+    <button class="tab" data-s="s3" role="tab"><b>Step 3</b>Make your calls</button>
+  </div>
+</header>
+<main>
+  <section class="step on" id="s1">
+    <h2>Your hunch</h2>
+    <p class="lede">No wrong answers. These are gut calls; we’ll see how the room’s hunches stack up against the data.</p>
+    <div class="card">
+      <div class="q">In a close House race, what share of the money from individual donors do you think comes from out of state?</div>
+      <div class="guess"><input type="range" id="oos" min="0" max="100" step="5" value="30" aria-label="Your guess, percent"><output id="oosOut">30%</output></div>
+      <button class="btn" id="oosBtn">Submit my guess</button>
+      <div class="status" id="oosStatus"></div>
+    </div>
+    <div class="card">
+      <div class="q">When a donor in California gives to a race in Iowa, who most likely pointed them there?</div>
+      <div class="opts" id="whoOpts"></div>
+      <div class="status" id="whoStatus"></div>
+    </div>
+    <div class="card room">
+      <div class="q">The room so far</div>
+      <div id="roomHunch" class="lede">Waiting for guesses…</div>
+    </div>
+  </section>
+  <section class="step" id="s2">
+    <h2>Follow the money</h2>
+    <p class="lede">Pick a candidate in one of Tuesday’s closest races and see where their donors live. Itemized gifts from individuals this cycle, as filed with the FEC.</p>
+    <select id="raceSel" aria-label="Choose a candidate"></select>
+    <div id="explorer"></div>
+  </section>
+  <section class="step" id="s3">
+    <h2>Make your calls</h2>
+    <p class="lede">Now that you know the races, who wins Tuesday? Change your mind anytime; your last pick counts.</p>
+    <div id="raceCards"></div>
+    <div class="card room">
+      <div class="q">The room’s calls</div>
+      <div id="tallyLede" class="lede">Updates every few seconds.</div>
+      <div id="tallyCards"></div>
+    </div>
+  </section>
+</main>
+<footer id="foot"></footer>
+<script>
+const RACES = /*RACES*/[];
+const MONEY = /*MONEY*/{};
+const META = /*META*/{asof:"", source:""};
+const WHO = [["party","The party (DCCC or NRCC)"],["self","Nobody: the donor read the news"],["group","An interest group (EMILY’s List, Club for Growth…)"],["cand","The candidate’s own fundraising emails"]];
+const BASE = "https://ntfy.sh/ucm-ftm-2026-k7q3vz";
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const ls = { get(k, d) { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch(e) { return d; } },
+             set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch(e) {} } };
+let voter = ls.get("ftm_voter", null); if (!voter) { voter = Math.random().toString(36).slice(2, 10); ls.set("ftm_voter", voter); }
+let mine = ls.get("ftm_mine", {});
+/* tabs */
+function show(s) { document.querySelectorAll(".tab").forEach(t => t.classList.toggle("on", t.dataset.s === s)); document.querySelectorAll(".step").forEach(x => x.classList.toggle("on", x.id === s)); ls.set("ftm_tab", s); }
+document.querySelectorAll(".tab").forEach(t => t.addEventListener("click", () => show(t.dataset.s)));
+const urlStep = new URLSearchParams(location.search).get("step"); show(urlStep ? "s" + urlStep : ls.get("ftm_tab", "s1"));
+async function send(obj, statusEl) {
+  try { const r = await fetch(BASE, {method: "POST", body: JSON.stringify(Object.assign({v: voter}, obj))});
+    if (statusEl) statusEl.textContent = r.ok ? "Got it." : "Couldn’t send; try again."; }
+  catch(e) { if (statusEl) statusEl.textContent = "Couldn’t send; check your connection."; }
+  refresh();
+}
+/* step 1 */
+const oos = document.getElementById("oos"), oosOut = document.getElementById("oosOut");
+if (mine.oos != null) oos.value = mine.oos;
+oosOut.textContent = oos.value + "%"; oos.addEventListener("input", () => oosOut.textContent = oos.value + "%");
+document.getElementById("oosBtn").addEventListener("click", () => { mine.oos = +oos.value; ls.set("ftm_mine", mine); send({q: "oos", a: +oos.value}, document.getElementById("oosStatus")); });
+function renderWho() {
+  document.getElementById("whoOpts").innerHTML = WHO.map(([k, t]) => `<button class="opt ${mine.who === k ? "on" : ""}" data-k="${k}">${esc(t)}</button>`).join("");
+  document.querySelectorAll("#whoOpts .opt").forEach(b => b.addEventListener("click", () => { mine.who = b.dataset.k; ls.set("ftm_mine", mine); renderWho(); send({q: "who", a: b.dataset.k}, document.getElementById("whoStatus")); }));
+}
+/* step 3 */
+const open = {};
+function renderCards() {
+  document.getElementById("raceCards").innerHTML = RACES.map(r => `
+    <div class="card"><div class="race-h tap ${open[r.id] ? "open" : ""}" data-x="${esc(r.id)}" role="button" aria-expanded="${open[r.id] ? "true" : "false"}"><span class="race-name">${esc(r.label)}</span><span class="race-note">${esc(r.rating)}</span></div>
+      <div class="race-note">${esc(r.blurb || "")}</div>
+      ${r.d_case ? `<div class="more-hint" data-x="${esc(r.id)}">${open[r.id] ? "Hide each side’s case" : "Tap for each side’s case"}</div>
+      <div class="cases ${open[r.id] ? "on" : ""}">
+        <div class="case d"><b>Why ${esc(r.d)} wins</b><ul>${r.d_case.map(s => `<li>${esc(s)}</li>`).join("")}</ul></div>
+        <div class="case r"><b>Why ${esc(r.r)} wins</b><ul>${r.r_case.map(s => `<li>${esc(s)}</li>`).join("")}</ul></div>
+      </div>` : ""}
+      <div class="picks">
+        <button class="pick d ${mine["r_" + r.id] === "D" ? "on" : ""}" data-r="${esc(r.id)}" data-p="D">${esc(r.d)}<small>Democrat</small></button>
+        <button class="pick r ${mine["r_" + r.id] === "R" ? "on" : ""}" data-r="${esc(r.id)}" data-p="R">${esc(r.r)}<small>Republican</small></button>
+      </div></div>`).join("");
+  document.querySelectorAll("#raceCards [data-x]").forEach(h => h.addEventListener("click", () => { open[h.dataset.x] = !open[h.dataset.x]; renderCards(); }));
+  document.querySelectorAll(".pick").forEach(b => b.addEventListener("click", () => { mine["r_" + b.dataset.r] = b.dataset.p; ls.set("ftm_mine", mine); renderCards(); send({q: "race", r: b.dataset.r, a: b.dataset.p}); }));
+}
+/* tallies */
+async function refresh() {
+  let rows = [];
+  try { const t = await (await fetch(BASE + "/json?poll=1&since=all")).text();
+    rows = t.split("\n").filter(Boolean).map(l => { try { return JSON.parse(l); } catch(e) { return null; } }).filter(m => m && m.event === "message"); }
+  catch(e) { document.getElementById("roomHunch").textContent = "Room results unavailable right now."; return; }
+  const last = {};
+  rows.sort((a, b) => a.time - b.time).forEach(m => { let x; try { x = JSON.parse(m.message); } catch(e) { return; }
+    if (!x || !x.v || !x.q) return; last[x.v + "|" + x.q + "|" + (x.r || "")] = x; });
+  const L = Object.values(last);
+  const g = L.filter(x => x.q === "oos" && typeof x.a === "number" && x.a >= 0 && x.a <= 100).map(x => x.a);
+  const w = L.filter(x => x.q === "who" && WHO.some(([k]) => k === x.a));
+  let h = "";
+  if (g.length) {
+    const bins = Array(11).fill(0); g.forEach(v => bins[Math.min(10, Math.floor(v / 10))]++); const mx = Math.max(...bins);
+    const sorted = g.slice().sort((a, b) => a - b); const med = sorted[Math.floor((sorted.length - 1) / 2)];
+    h += `<div><strong>${g.length}</strong> guess${g.length === 1 ? "" : "es"} · middle guess <strong>${med}%</strong></div>
+      <div class="hist">${bins.map(b => `<div style="height:${mx ? Math.max(2, 100 * b / mx) : 2}%"></div>`).join("")}</div><div class="histx"><span>0%</span><span>50%</span><span>100%</span></div>`;
+  }
+  if (w.length) {
+    const c = {}; w.forEach(x => c[x.a] = (c[x.a] || 0) + 1);
+    h += `<div style="margin-top:14px"><strong>Who pointed the donor?</strong> (${w.length})</div>` + WHO.map(([k, t]) => { const n = c[k] || 0, p = Math.round(100 * n / w.length);
+      return `<div class="hbar"><span>${esc(t.split(" (")[0])}</span><span class="t"><i style="width:${p}%"></i></span><span>${p}%</span></div>`; }).join("");
+  }
+  document.getElementById("roomHunch").innerHTML = h || "Waiting for guesses…";
+  const t = {}; const callers = new Set();
+  L.filter(x => x.q === "race" && (x.a === "D" || x.a === "R")).forEach(x => { t[x.r] = t[x.r] || {D: 0, R: 0}; t[x.r][x.a]++; callers.add(x.v); });
+  document.getElementById("tallyLede").textContent = callers.size + (callers.size === 1 ? " person has" : " people have") + " made calls.";
+  document.getElementById("tallyCards").innerHTML = RACES.map(r => { const c = t[r.id] || {D: 0, R: 0}; const n = c.D + c.R; const pd = n ? Math.round(100 * c.D / n) : 50;
+    const ln = s => esc(s.split(" ").slice(-1)[0]);
+    return `<div style="margin:10px 0"><div class="race-h"><span class="race-name" style="font-size:16px">${esc(r.label.split(" · ")[0])}</span><span class="race-note">${n} call${n === 1 ? "" : "s"}</span></div>
+      <div class="bar"><span class="bd" style="width:${pd}%">${n ? ln(r.d) + " " + pd + "%" : ""}</span><span class="br" style="width:${100 - pd}%">${n ? ln(r.r) + " " + (100 - pd) + "%" : ""}</span></div></div>`; }).join("");
+}
+/* step 2: tile map */
+const GRID = {AK:[0,0],ME:[0,11],VT:[1,10],NH:[1,11],WA:[2,1],ID:[2,2],MT:[2,3],ND:[2,4],MN:[2,5],IL:[2,6],WI:[2,7],MI:[2,8],NY:[2,9],RI:[2,10],MA:[2,11],OR:[3,1],NV:[3,2],WY:[3,3],SD:[3,4],IA:[3,5],IN:[3,6],OH:[3,7],PA:[3,8],NJ:[3,9],CT:[3,10],CA:[4,1],UT:[4,2],CO:[4,3],NE:[4,4],MO:[4,5],KY:[4,6],WV:[4,7],VA:[4,8],MD:[4,9],DE:[4,10],AZ:[5,2],NM:[5,3],KS:[5,4],AR:[5,5],TN:[5,6],NC:[5,7],SC:[5,8],DC:[5,9],OK:[6,4],LA:[6,5],MS:[6,6],AL:[6,7],GA:[6,8],HI:[7,0],TX:[7,4],FL:[7,9]};
+const fmt$ = x => x >= 1e6 ? "$" + (x / 1e6).toFixed(1) + "M" : "$" + Math.round(x / 1e3) + "K";
+function renderExplorer() {
+  const sel = document.getElementById("raceSel"); const keys = Object.keys(MONEY);
+  if (!keys.length) { sel.style.display = "none"; document.getElementById("explorer").innerHTML = '<p class="lede">This opens up during the talk.</p>'; return; }
+  sel.innerHTML = keys.map(k => `<option value="${esc(k)}">${esc(MONEY[k].label)}</option>`).join("");
+  const saved = ls.get("ftm_sel", null); if (saved && MONEY[saved]) sel.value = saved;
+  sel.onchange = () => { ls.set("ftm_sel", sel.value); draw(sel.value); }; draw(sel.value);
+}
+function draw(k) {
+  const m = MONEY[k]; const tot = m.total || 1;
+  const others = Object.entries(m.states).filter(([s]) => s !== m.home); const max = Math.max(1, ...others.map(([, v]) => v));
+  const cells = [];
+  for (let r = 0; r < 8; r++) for (let c = 0; c < 12; c++) {
+    const st = Object.keys(GRID).find(s => GRID[s][0] === r && GRID[s][1] === c);
+    if (!st) { cells.push("<div></div>"); continue; }
+    const v = m.states[st] || 0, home = st === m.home, a = home ? 0 : Math.sqrt(v / max);
+    const bg = home ? "var(--line)" : `color-mix(in srgb, var(--teal) ${Math.round(a * 100)}%, var(--paper))`;
+    cells.push(`<div class="tile ${home ? "home" : ""}" style="background:${bg};color:${!home && a > .55 ? "#fff" : "var(--ink)"}" title="${st}: ${fmt$(v)}">${st}</div>`);
+  }
+  const top = others.sort((a, b) => b[1] - a[1]).slice(0, 5);
+  document.getElementById("explorer").innerHTML = `<div class="card">
+    <div class="stats"><div class="stat"><div class="big">${fmt$(m.total)}</div><div class="lbl">itemized from individuals</div></div>
+      <div class="stat"><div class="big">${Math.round(100 * m.out / tot)}%</div><div class="lbl">from outside ${esc(m.home)}</div></div>
+      <div class="stat"><div class="big">${m.nstates}</div><div class="lbl">states giving</div></div></div>
+    <div class="tiles">${cells.join("")}</div><div class="legend">Less <i></i> More · outlined: home state</div>
+    <div class="toplist"><strong>Top states outside ${esc(m.home)}</strong>${top.map(([s, v]) => `<div><span>${s}</span><span>${fmt$(v)}</span></div>`).join("")}</div></div>`;
+}
+document.getElementById("foot").textContent = META.asof ? "Money: FEC filings through " + META.asof + ". " + META.source : "";
+renderWho(); renderCards(); renderExplorer(); refresh(); setInterval(refresh, 6000);
+</script>
+</body>
+</html>

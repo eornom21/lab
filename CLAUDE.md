@@ -17,4 +17,4 @@ Nate's professional public pages: talk companion pages, dashboards, small tools.
 - Personal and non-professional pages (parlays, HUSL, podcast) stay on popcornlove.net.
 
 ## Existing pages
-followthemoney (Scholar Showcase talk companion, Oct 30, 2026; also live at popcornlove.net/followthemoney, where its sources live in `_followthemoney_src/`. Rebuild there, then copy `followthemoney/index.html` here).
+followthemoney (Scholar Showcase talk companion, Oct 30, 2026; the deck's QR code points here). Sources live in `_followthemoney_src/` in this repo: rebuild with `python3 _followthemoney_src/build_page.py followthemoney/index.html`. popcornlove.net/followthemoney only forwards here (Nate, 10/29: no work pages on popcornlove).
