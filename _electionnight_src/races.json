@@ -1,0 +1,4020 @@
+[
+ {
+  "id": "CA13",
+  "label": "CA-13 \u00b7 Central Valley",
+  "rating": "Cook Lean D \u00b7 Sabato Likely D \u00b7 Inside Tilt D",
+  "d": "Adam Gray",
+  "r": "Kevin Lincoln",
+  "blurb": "Won by 187 votes in 2024; new lines lean Democratic",
+  "d_case": [
+   {
+    "text": "Incumbent, and Prop 50 gave him friendlier lines",
+    "url": ""
+   },
+   {
+    "text": "Raised $5.2M to Lincoln\u2019s $3.0M",
+    "url": ""
+   },
+   {
+    "text": "Republicans cut their ad buys here this week",
+    "url": ""
+   }
+  ],
+  "r_case": [
+   {
+    "text": "Gray\u2019s last two races were decided by 187 and 564 votes",
+    "url": ""
+   },
+   {
+    "text": "Former Stockton mayor and Marine veteran; a GOP-recruited candidate",
+    "url": ""
+   },
+   {
+    "text": "GOP super PAC spent $4.3M+ here vs. under $400K for Democrats (as of Oct 11)",
+    "url": ""
+   }
+  ],
+  "st": "CA",
+  "dd": 13,
+  "talk8": true,
+  "cook": "Lean D",
+  "sabato": "Likely D",
+  "inside": "Tilt D",
+  "inc_party": "D",
+  "open_seat": false,
+  "money": {
+   "D": "CA13_D",
+   "R": "CA13_R"
+  },
+  "county_fips": [
+   {
+    "fips": "06047",
+    "whole": true
+   },
+   {
+    "fips": "06019",
+    "whole": false
+   },
+   {
+    "fips": "06039",
+    "whole": false
+   },
+   {
+    "fips": "06077",
+    "whole": false
+   },
+   {
+    "fips": "06099",
+    "whole": false
+   }
+  ],
+  "counties_checked": true
+ },
+ {
+  "id": "CA22",
+  "label": "CA-22 \u00b7 Central Valley",
+  "rating": "Cook Toss-up \u00b7 Sabato Lean D \u00b7 Inside Toss-up",
+  "d": "Randy Villegas",
+  "r": "David Valadao",
+  "blurb": "Republican incumbent on redrawn, bluer lines",
+  "d_case": [
+   {
+    "text": "Prop 50 made the seat bluer",
+    "url": ""
+   },
+   {
+    "text": "Nearly matched Valadao: $5.9M raised to his $6.3M",
+    "url": ""
+   },
+   {
+    "text": "Sabato rates it Lean D",
+    "url": ""
+   }
+  ],
+  "r_case": [
+   {
+    "text": "Has won this seat on Biden-won ground before",
+    "url": ""
+   },
+   {
+    "text": "More cash on hand: $1.7M to $1.0M",
+    "url": ""
+   },
+   {
+    "text": "Cook and Inside Elections still call it a toss-up",
+    "url": ""
+   }
+  ],
+  "st": "CA",
+  "dd": 22,
+  "talk8": true,
+  "cook": "Toss-up",
+  "sabato": "Lean D",
+  "inside": "Toss-up",
+  "inc_party": "R",
+  "open_seat": false,
+  "money": {
+   "D": "CA22_D",
+   "R": "CA22_R"
+  },
+  "county_fips": [
+   {
+    "fips": "06019",
+    "whole": false
+   },
+   {
+    "fips": "06029",
+    "whole": false
+   },
+   {
+    "fips": "06031",
+    "whole": false
+   },
+   {
+    "fips": "06039",
+    "whole": false
+   },
+   {
+    "fips": "06107",
+    "whole": false
+   }
+  ],
+  "counties_checked": true
+ },
+ {
+  "id": "AZ6",
+  "label": "AZ-6 \u00b7 Tucson",
+  "rating": "Cook Lean D \u00b7 Sabato Lean D \u00b7 Inside Toss-up",
+  "d": "JoAnna Mendoza",
+  "r": "Juan Ciscomani",
+  "blurb": "Challenger has outraised the incumbent",
+  "d_case": [
+   {
+    "text": "Raised $11.2M, about $3.6M more than the incumbent",
+    "url": ""
+   },
+   {
+    "text": "Marine veteran; an early pick for the Democrats\u2019 target list",
+    "url": ""
+   },
+   {
+    "text": "Cook and Sabato rate it Lean D",
+    "url": ""
+   }
+  ],
+  "r_case": [
+   {
+    "text": "Has won this seat twice (2022, 2024)",
+    "url": ""
+   },
+   {
+    "text": "On the GOP\u2019s list of incumbents it protects",
+    "url": ""
+   },
+   {
+    "text": "Inside Elections still calls it a toss-up",
+    "url": ""
+   }
+  ],
+  "st": "AZ",
+  "dd": 6,
+  "talk8": true,
+  "cook": "Lean D",
+  "sabato": "Lean D",
+  "inside": "Toss-up",
+  "inc_party": "R",
+  "open_seat": false,
+  "money": {
+   "D": "AZ6_D",
+   "R": "AZ6_R"
+  },
+  "county_fips": [
+   {
+    "fips": "04011",
+    "whole": true
+   },
+   {
+    "fips": "04003",
+    "whole": false
+   },
+   {
+    "fips": "04009",
+    "whole": false
+   },
+   {
+    "fips": "04019",
+    "whole": false
+   },
+   {
+    "fips": "04021",
+    "whole": false
+   }
+  ],
+  "counties_checked": true
+ },
+ {
+  "id": "PA10",
+  "label": "PA-10 \u00b7 Harrisburg",
+  "rating": "Cook Lean D \u00b7 Sabato Lean D \u00b7 Inside Toss-up",
+  "d": "Janelle Stelson",
+  "r": "Scott Perry",
+  "blurb": "Rematch of 2024",
+  "d_case": [
+   {
+    "text": "Lost by only about 5,000 votes in 2024",
+    "url": ""
+   },
+   {
+    "text": "Outraised Perry $9.2M to $6.8M, with twice his cash on hand",
+    "url": ""
+   },
+   {
+    "text": "Cook moved it to Lean D on Oct 9",
+    "url": ""
+   }
+  ],
+  "r_case": [
+   {
+    "text": "Already beat this same opponent in 2024",
+    "url": ""
+   },
+   {
+    "text": "Has held the seat since 2013",
+    "url": ""
+   },
+   {
+    "text": "Inside Elections still calls it a toss-up",
+    "url": ""
+   }
+  ],
+  "st": "PA",
+  "dd": 10,
+  "talk8": true,
+  "cook": "Lean D",
+  "sabato": "Lean D",
+  "inside": "Toss-up",
+  "inc_party": "R",
+  "open_seat": false,
+  "money": {
+   "D": "PA10_D",
+   "R": "PA10_R"
+  },
+  "county_fips": [
+   {
+    "fips": "42043",
+    "whole": true
+   },
+   {
+    "fips": "42041",
+    "whole": false
+   },
+   {
+    "fips": "42133",
+    "whole": false
+   }
+  ],
+  "counties_checked": true
+ },
+ {
+  "id": "NC1",
+  "label": "NC-1 \u00b7 Northeast NC",
+  "rating": "Cook Toss-up \u00b7 Sabato Lean D \u00b7 Inside Toss-up",
+  "d": "Don Davis",
+  "r": "Laurie Buckhout",
+  "blurb": "Redrawn to be more Republican; a rematch",
+  "d_case": [
+   {
+    "text": "Beat this same opponent in 2024",
+    "url": ""
+   },
+   {
+    "text": "Outraised her: $5.8M to $4.8M (over $2M of hers is her own loans)",
+    "url": ""
+   },
+   {
+    "text": "Sabato rates it Lean D",
+    "url": ""
+   }
+  ],
+  "r_case": [
+   {
+    "text": "Republicans redrew it: Trump\u2019s 2024 share goes from 51% to 55%",
+    "url": ""
+   },
+   {
+    "text": "More cash on hand: $1.4M to $0.8M",
+    "url": ""
+   },
+   {
+    "text": "One of the most expensive races in the country: $12M+ in outside spending planned",
+    "url": ""
+   }
+  ],
+  "st": "NC",
+  "dd": 1,
+  "talk8": true,
+  "cook": "Toss-up",
+  "sabato": "Lean D",
+  "inside": "Toss-up",
+  "inc_party": "D",
+  "open_seat": false,
+  "money": {
+   "D": "NC1_D",
+   "R": "NC1_R"
+  },
+  "county_fips": [
+   {
+    "fips": "37013",
+    "whole": true
+   },
+   {
+    "fips": "37015",
+    "whole": true
+   },
+   {
+    "fips": "37029",
+    "whole": true
+   },
+   {
+    "fips": "37031",
+    "whole": true
+   },
+   {
+    "fips": "37041",
+    "whole": true
+   },
+   {
+    "fips": "37049",
+    "whole": true
+   },
+   {
+    "fips": "37053",
+    "whole": true
+   },
+   {
+    "fips": "37055",
+    "whole": true
+   },
+   {
+    "fips": "37065",
+    "whole": true
+   },
+   {
+    "fips": "37073",
+    "whole": true
+   },
+   {
+    "fips": "37083",
+    "whole": true
+   },
+   {
+    "fips": "37091",
+    "whole": true
+   },
+   {
+    "fips": "37095",
+    "whole": true
+   },
+   {
+    "fips": "37117",
+    "whole": true
+   },
+   {
+    "fips": "37127",
+    "whole": true
+   },
+   {
+    "fips": "37131",
+    "whole": true
+   },
+   {
+    "fips": "37137",
+    "whole": true
+   },
+   {
+    "fips": "37139",
+    "whole": true
+   },
+   {
+    "fips": "37143",
+    "whole": true
+   },
+   {
+    "fips": "37177",
+    "whole": true
+   },
+   {
+    "fips": "37181",
+    "whole": true
+   },
+   {
+    "fips": "37185",
+    "whole": true
+   },
+   {
+    "fips": "37187",
+    "whole": true
+   },
+   {
+    "fips": "37077",
+    "whole": false
+   },
+   {
+    "fips": "37133",
+    "whole": false
+   }
+  ],
+  "counties_checked": true
+ },
+ {
+  "id": "AL2",
+  "label": "AL-2 \u00b7 Mobile to Montgomery",
+  "rating": "Cook Lean R \u00b7 Sabato Toss-up \u00b7 Inside Lean R",
+  "d": "Shomari Figures",
+  "r": "Rhett Marques",
+  "blurb": "Older map reinstated after a Supreme Court ruling",
+  "d_case": [
+   {
+    "text": "Incumbent with far more cash: $1.2M to $0.2M",
+    "url": ""
+   },
+   {
+    "text": "Outraised Marques $2.7M to $1.7M",
+    "url": ""
+   },
+   {
+    "text": "Sabato moved it to toss-up on Oct 27",
+    "url": ""
+   }
+  ],
+  "r_case": [
+   {
+    "text": "The Supreme Court reinstated a map that drops the Black voting-age share from 49% to 40%",
+    "url": ""
+   },
+   {
+    "text": "Cook now scores the district 7 points more Republican than the nation",
+    "url": ""
+   },
+   {
+    "text": "A super PAC has spent $2.5M backing him",
+    "url": ""
+   }
+  ],
+  "st": "AL",
+  "dd": 2,
+  "talk8": true,
+  "cook": "Lean R",
+  "sabato": "Toss-up",
+  "inside": "Lean R",
+  "inc_party": "D",
+  "open_seat": false,
+  "money": {
+   "D": "AL2_D",
+   "R": "AL2_R"
+  },
+  "county_fips": [
+   {
+    "fips": "01005",
+    "whole": true
+   },
+   {
+    "fips": "01011",
+    "whole": true
+   },
+   {
+    "fips": "01013",
+    "whole": true
+   },
+   {
+    "fips": "01031",
+    "whole": true
+   },
+   {
+    "fips": "01041",
+    "whole": true
+   },
+   {
+    "fips": "01045",
+    "whole": true
+   },
+   {
+    "fips": "01061",
+    "whole": true
+   },
+   {
+    "fips": "01067",
+    "whole": true
+   },
+   {
+    "fips": "01069",
+    "whole": true
+   },
+   {
+    "fips": "01085",
+    "whole": true
+   },
+   {
+    "fips": "01087",
+    "whole": true
+   },
+   {
+    "fips": "01101",
+    "whole": true
+   },
+   {
+    "fips": "01109",
+    "whole": true
+   },
+   {
+    "fips": "01113",
+    "whole": true
+   },
+   {
+    "fips": "01051",
+    "whole": false
+   }
+  ],
+  "counties_checked": true
+ },
+ {
+  "id": "TX15",
+  "label": "TX-15 \u00b7 Rio Grande Valley",
+  "rating": "Cook Toss-up \u00b7 Sabato Lean D \u00b7 Inside Toss-up",
+  "d": "Bobby Pulido",
+  "r": "Monica De La Cruz",
+  "blurb": "A test of Republican gains with Latino voters",
+  "d_case": [
+   {
+    "text": "A Latin Grammy-winning Tejano star running as an \u201cold-school\u201d socially conservative Democrat",
+    "url": ""
+   },
+   {
+    "text": "Raised $6.8M, dead even with the incumbent",
+    "url": ""
+   },
+   {
+    "text": "Sabato moved it to Lean D on Oct 27",
+    "url": ""
+   }
+  ],
+  "r_case": [
+   {
+    "text": "The district voted for Trump by about 18 points in 2024",
+    "url": ""
+   },
+   {
+    "text": "Incumbent riding the GOP\u2019s gains with South Texas Latino voters",
+    "url": ""
+   },
+   {
+    "text": "Cook and Inside Elections still call it a toss-up",
+    "url": ""
+   }
+  ],
+  "st": "TX",
+  "dd": 15,
+  "talk8": true,
+  "cook": "Toss-up",
+  "sabato": "Lean D",
+  "inside": "Toss-up",
+  "inc_party": "R",
+  "open_seat": false,
+  "money": {
+   "D": "TX15_D",
+   "R": "TX15_R"
+  },
+  "county_fips": [
+   {
+    "fips": "48025",
+    "whole": true
+   },
+   {
+    "fips": "48047",
+    "whole": true
+   },
+   {
+    "fips": "48123",
+    "whole": true
+   },
+   {
+    "fips": "48175",
+    "whole": true
+   },
+   {
+    "fips": "48177",
+    "whole": true
+   },
+   {
+    "fips": "48249",
+    "whole": true
+   },
+   {
+    "fips": "48285",
+    "whole": true
+   },
+   {
+    "fips": "48007",
+    "whole": false
+   },
+   {
+    "fips": "48215",
+    "whole": false
+   },
+   {
+    "fips": "48391",
+    "whole": false
+   },
+   {
+    "fips": "48409",
+    "whole": false
+   }
+  ],
+  "counties_checked": true
+ },
+ {
+  "id": "NY17",
+  "label": "NY-17 \u00b7 Hudson Valley",
+  "rating": "Toss-up for all three",
+  "d": "Cait Conley",
+  "r": "Mike Lawler",
+  "blurb": "All three handicappers call it a coin flip",
+  "d_case": [
+   {
+    "text": "Harris carried this district in 2024",
+    "url": ""
+   },
+   {
+    "text": "Raised $10.7M",
+    "url": ""
+   },
+   {
+    "text": "Army combat veteran; won a crowded primary",
+    "url": ""
+   }
+  ],
+  "r_case": [
+   {
+    "text": "Won in 2024 even as Harris carried the district",
+    "url": ""
+   },
+   {
+    "text": "Raised $10.3M, about even with Conley",
+    "url": ""
+   },
+   {
+    "text": "All three raters: pure toss-up",
+    "url": ""
+   }
+  ],
+  "st": "NY",
+  "dd": 17,
+  "talk8": true,
+  "cook": "Toss-up",
+  "sabato": "Toss-up",
+  "inside": "Toss-up",
+  "inc_party": "R",
+  "open_seat": false,
+  "money": {
+   "D": "NY17_D",
+   "R": "NY17_R"
+  },
+  "county_fips": [
+   {
+    "fips": "36079",
+    "whole": true
+   },
+   {
+    "fips": "36087",
+    "whole": true
+   },
+   {
+    "fips": "36027",
+    "whole": false
+   },
+   {
+    "fips": "36119",
+    "whole": false
+   }
+  ],
+  "counties_checked": true
+ },
+ {
+  "id": "CO5",
+  "label": "CO-5 \u00b7 Colorado Springs",
+  "rating": "Cook Lean R \u00b7 Sabato Toss-up \u00b7 Inside Tilt R",
+  "d": "Jessica Killin",
+  "r": "Jeff Crank",
+  "incumbent": "Jeff Crank (R)",
+  "blurb": "Never held by a Democrat; Killin has outraised Crank",
+  "d_case": [
+   {
+    "text": "Raised $5.6M to Crank's $2.9M (FEC, through Oct 14)",
+    "url": "https://www.fec.gov/data/elections/house/CO/05/2026/"
+   },
+   {
+    "text": "Trump won by only 9 pts in 2024; district has trended Democratic",
+    "url": "https://www.cpr.org/2026/02/10/democrats-add-colorado-springs-cd-5-to-its-list-of-seats-to-flip-this-fall"
+   },
+   {
+    "text": "Named to DCCC\u2019s Red to Blue; House Majority PAC booked $1.1M+ in fall ads",
+    "url": "https://www.cpr.org/2026/05/04/democratic-congressional-campaign-supports-jessica-killin-co-5-race/"
+   }
+  ],
+  "r_case": [
+   {
+    "text": "Crank won by 14 pts in 2024 (54.7% to 40.9%)",
+    "url": "https://www.coloradopolitics.com/2026/10/25/crank-v-killin-election-could-be-closest-ever-result-in-5th-district/"
+   },
+   {
+    "text": "The only Colorado seat never held by a Democrat",
+    "url": "https://www.cpr.org/2026/02/10/democrats-add-colorado-springs-cd-5-to-its-list-of-seats-to-flip-this-fall"
+   },
+   {
+    "text": "MAGA Inc.-linked PAC is running ads on Killin; outside groups at $1M+",
+    "url": "https://coloradopolitics.com/2026/09/22/jeff-crank-jessica-killin-attack-ads-lies"
+   }
+  ],
+  "result_2024": {
+   "text": "Crank won by 14 pts (House, 2024); Trump +9 in district",
+   "url": "https://www.cpr.org/2026/02/10/democrats-add-colorado-springs-cd-5-to-its-list-of-seats-to-flip-this-fall"
+  },
+  "counties": [
+   {
+    "county": "El Paso",
+    "state": "CO",
+    "whole": false
+   }
+  ],
+  "counties_url": "https://www.kktv.com/2021/09/30/what-finalized-congressional-redistricting-map-could-mean-southern-colorado/",
+  "redrawn": "No",
+  "notes": "Counties: sources (KKTV on the 2021 final map; CPR Feb 2026; Colorado Politics Oct 25) all say the district is most of El Paso County and name no other county; I could not open the state commission's PDF or a county-by-county table, so confirm if exactness matters. Ratings: Colorado Politics (Oct 25) says Cook AND Sabato both rate it Lean R; the csv shows Sabato Toss-up as of Oct 27 and a Colorado Politics sidebar dated Oct 28 says 'a forecaster' now rates it a toss-up, but I could not open the Crystal Ball page, so the Sabato Toss-up is unverified by me. Cook's and Sabato's own pages were blocked. Poll note not used as a reason: Killin's internal GSG poll (Oct) had Killin 46, Crank 44 (\u00b14.4); July GSG had Crank 45, Killin 44. Killin has put in ~$632K of her own money (KRDO, thru June 30).",
+  "st": "CO",
+  "dd": 5,
+  "talk8": false,
+  "cook": "Lean R",
+  "sabato": "Toss-up",
+  "inside": "Tilt R",
+  "inc_party": "R",
+  "open_seat": false,
+  "money": {
+   "D": "CO5_D",
+   "R": "CO5_R"
+  },
+  "county_fips": [
+   {
+    "fips": "08041",
+    "whole": false
+   }
+  ],
+  "counties_checked": true
+ },
+ {
+  "id": "CO8",
+  "label": "CO-8 \u00b7 Northern Denver suburbs",
+  "rating": "Cook Lean D \u00b7 Sabato Lean D \u00b7 Inside Toss-up",
+  "d": "Manny Rutinel",
+  "r": "Gabe Evans",
+  "incumbent": "Gabe Evans (R)",
+  "blurb": "Seat decided by under 1 point in 2022 and 2024",
+  "d_case": [
+   {
+    "text": "Raised $9.5M to Evans's $7.2M (FEC, through Oct 14)",
+    "url": "https://www.fec.gov/data/elections/house/CO/08/2026/"
+   },
+   {
+    "text": "Sabato\u2019s Crystal Ball moved it from Toss-up to Lean D in October",
+    "url": "https://www.coloradopolitics.com/2026/10/21/election-forecaster-shifts-2-colorado-house-seats-toward-democrats/"
+   },
+   {
+    "text": "In a poll for a pro-Evans group, 51% of likely voters disapprove of Trump",
+    "url": "https://www.kunc.org/politics/2026-09-27/8th-congressional-district-race-is-essentially-tied-poll-shows-with-warning-signs-for-both-gabe-evans-and-manny-rutinel"
+   }
+  ],
+  "r_case": [
+   {
+    "text": "More cash on hand: $1.33M to $1.00M (FEC, Oct 14)",
+    "url": "https://www.fec.gov/data/elections/house/CO/08/2026/"
+   },
+   {
+    "text": "Incumbent: Weld County farmer who says he served 22 years in law enforcement and military",
+    "url": "https://www.coloradopolitics.com/2026/10/02/gabe-evans-manny-rutinel-congressional-district-8/"
+   },
+   {
+    "text": "Poll for a pro-Evans group: Evans 48%, Rutinel 46% (Sept. 16-17, +/-4.9)",
+    "url": "https://www.kunc.org/politics/2026-09-27/8th-congressional-district-race-is-essentially-tied-poll-shows-with-warning-signs-for-both-gabe-evans-and-manny-rutinel"
+   }
+  ],
+  "result_2024": {
+   "text": "Evans won by under 1 pt (House, 2024); Caraveo won 2022 by a similar margin",
+   "url": "https://www.kunc.org/politics/2026-09-27/8th-congressional-district-race-is-essentially-tied-poll-shows-with-warning-signs-for-both-gabe-evans-and-manny-rutinel"
+  },
+  "counties": [
+   {
+    "county": "Adams",
+    "state": "CO",
+    "whole": false
+   },
+   {
+    "county": "Larimer",
+    "state": "CO",
+    "whole": false
+   },
+   {
+    "county": "Weld",
+    "state": "CO",
+    "whole": false
+   }
+  ],
+  "counties_url": "https://www.coloradopolitics.com/2026/10/02/gabe-evans-manny-rutinel-congressional-district-8/",
+  "redrawn": "No",
+  "notes": "Counties from Colorado Politics (Oct 2 and Oct 21 both say parts of Adams, Larimer, Weld; Thornton to Greeley); not confirmed against the state commission map. No exact 2024 vote margin or Trump margin found in the pages I opened. Sabato move date: article published Oct 21 says 'Tuesday', so Oct 20 is inferred. Cook moved it Toss-up to Lean D on Oct 23 (reported by Rio Times, a weak source; Cook's own page was blocked). The rest of the Q3 numbers are from FEC filings as reported by Colorado Politics, not read on fec.gov (FEC election pages were blocked). Outside groups had spent $17M+ in the race, 4th-highest of any House race (same Colorado Politics article), not used as a reason because it is not one-sided.",
+  "st": "CO",
+  "dd": 8,
+  "talk8": false,
+  "cook": "Lean D",
+  "sabato": "Lean D",
+  "inside": "Toss-up",
+  "inc_party": "R",
+  "open_seat": false,
+  "money": {
+   "D": "CO8_D",
+   "R": "CO8_R"
+  },
+  "county_fips": [
+   {
+    "fips": "08001",
+    "whole": false
+   },
+   {
+    "fips": "08069",
+    "whole": false
+   },
+   {
+    "fips": "08123",
+    "whole": false
+   }
+  ],
+  "counties_checked": true
+ },
+ {
+  "id": "FL14",
+  "label": "FL-14 \u00b7 Tampa",
+  "rating": "Cook Toss-up \u00b7 Sabato Toss-up \u00b7 Inside Toss-up",
+  "d": "Kathy Castor",
+  "r": "Mike Beltran",
+  "incumbent": "Kathy Castor (D)",
+  "blurb": "Castor\u2019s Tampa seat redrawn from Harris +8 to Trump +11",
+  "d_case": [
+   {
+    "text": "Won the old district by 15 points in 2024",
+    "url": "https://www.fox13news.com/news/how-floridas-redrawn-district-map-shifts-kathy-castors-reelection-odds"
+   },
+   {
+    "text": "Raised $4.9M this cycle (FEC, through Oct. 14)",
+    "url": "https://www.fec.gov/data/candidate/H6FL11126/?cycle=2026"
+   },
+   {
+    "text": "DCCC is running ads here; Inside Elections moved it to Toss-up Sept. 17",
+    "url": "https://www.tampabay28.com/news/state/florida-gop-redraw-faces-new-questions-as-democrats-defend-castor-and-ratings-shift"
+   }
+  ],
+  "r_case": [
+   {
+    "text": "New lines: Trump would have won by 11 in 2024 (old lines: Harris +8)",
+    "url": "https://www.fox13news.com/news/how-floridas-redrawn-district-map-shifts-kathy-castors-reelection-odds"
+   },
+   {
+    "text": "Beltran has $1.73M cash on hand to Castor\u2019s $577K (FEC, Oct. 14)",
+    "url": "https://www.fec.gov/data/candidate/H6FL14237/"
+   },
+   {
+    "text": "Beltran served in the Florida House for parts of the district, 2018\u20132024",
+    "url": "https://floridaphoenix.com/2026/08/07/hillsborough-republicans-vie-to-try-to-defeat-kathy-castor-after-20-years-in-congress/"
+   }
+  ],
+  "result_2024": {
+   "text": "Castor won by 15 pts (House, 2024); new lines would have gone Trump +11",
+   "url": "https://www.fox13news.com/news/how-floridas-redrawn-district-map-shifts-kathy-castors-reelection-odds"
+  },
+  "counties": [
+   {
+    "county": "Hillsborough",
+    "state": "FL",
+    "whole": false
+   }
+  ],
+  "counties_url": "https://www.wlrn.org/government-politics/2026-05-05/breaking-down-the-changes-in-floridas-new-congressional-districts",
+  "redrawn": "Yes - FL map signed 2026-05-04; district split to favor GOP",
+  "notes": "Counties: WLRN (May 5) says Hillsborough only (Pinellas dropped); Florida Phoenix and Tampa Bay 28 agree. The state's EDR map PDFs gave no county text. 'whole' is false because the district covers only parts of Hillsborough (South Tampa to Plant City). The 'Castor $4.9M vs Beltran' pairing: Castor figure is the 2025-26 cycle total on her FEC page (receipts $4,930,537, cash $577,435, thru Oct 14); Beltran's FEC page (receipts $2.73M, cash $1.73M) only covers Apr 1-Oct 14, 2026. The cash-on-hand comparison in r_case uses both FEC pages (Castor's is H6FL11126). Trump margin: Fox13 and Florida Phoenix say about +11; Beltran has cited +10.5. Cook/Sabato pages were blocked: Toss-up confirmed for Cook by WLRN Oct 22 and Inside by Tampa Bay 28; Sabato Toss-up is from the csv only. CBS (Oct) still says Lean D, which looks stale. Castor Q2: $2.3M vs Beltran $2.1M (political.org, secondary).",
+  "st": "FL",
+  "dd": 14,
+  "talk8": false,
+  "cook": "Toss-up",
+  "sabato": "Toss-up",
+  "inside": "Toss-up",
+  "inc_party": "D",
+  "open_seat": false,
+  "money": {
+   "D": "FL14_D",
+   "R": "FL14_R"
+  },
+  "county_fips": [
+   {
+    "fips": "12057",
+    "whole": false
+   }
+  ],
+  "counties_checked": true
+ },
+ {
+  "id": "FL22",
+  "label": "FL-22 \u00b7 Palm Beach County",
+  "rating": "Cook Toss-up \u00b7 Sabato Toss-up \u00b7 Inside Tilt R",
+  "d": "Pia Dandiya",
+  "r": "Casey Askar",
+  "incumbent": "Open (Lois Frankel, D, running in FL-23)",
+  "blurb": "Open seat redrawn from Harris-won to Trump +11",
+  "d_case": [
+   {
+    "text": "Poll for House Majority PAC: Dandiya 46%, Askar 44% (Aug. 24\u201331)",
+    "url": "https://americanbazaaronline.com/2026/09/27/pia-dandiya-casey-askar-florida-22-poll-488903/"
+   },
+   {
+    "text": "House Majority PAC made a $9.7M ad buy, mostly against Askar (reported Oct. 7)",
+    "url": "https://floridianpress.com/?p=98953"
+   },
+   {
+    "text": "District backed the abortion-rights Amendment 4 by 20 points",
+    "url": "https://www.wlrn.org/government-politics/2026-10-22/desantis-congressional-map-was-designed-to-flip-4-seats-to-the-gop-will-it"
+   }
+  ],
+  "r_case": [
+   {
+    "text": "Trump won the new district 55% to 44% in 2024",
+    "url": "https://www.wlrn.org/government-politics/2026-08-31/battle-lines-drawn-in-floridas-22nd-congressional-district-race-over-affordable-care-act"
+   },
+   {
+    "text": "Republicans hold about an 8-point voter registration edge",
+    "url": "https://www.wlrn.org/government-politics/2026-10-22/desantis-congressional-map-was-designed-to-flip-4-seats-to-the-gop-will-it"
+   },
+   {
+    "text": "Askar raised $7.4M since April, incl. $6.7M of his own loans (FEC, Oct. 14)",
+    "url": "https://www.fec.gov/data/candidate/H6FL22248/?cycle=2026"
+   }
+  ],
+  "result_2024": {
+   "text": "Trump won the redrawn district 55%\u201344% (2024); Biden won it 51%\u201348% in 2020",
+   "url": "https://www.wlrn.org/government-politics/2026-08-31/battle-lines-drawn-in-floridas-22nd-congressional-district-race-over-affordable-care-act"
+  },
+  "counties": [
+   {
+    "county": "Palm Beach",
+    "state": "FL",
+    "whole": false
+   },
+   {
+    "county": "Broward",
+    "state": "FL",
+    "whole": false
+   },
+   {
+    "county": "Hendry",
+    "state": "FL",
+    "whole": null
+   },
+   {
+    "county": "Collier",
+    "state": "FL",
+    "whole": false
+   }
+  ],
+  "counties_url": "https://www.wlrn.org/government-politics/2026-05-05/breaking-down-the-changes-in-floridas-new-congressional-districts",
+  "redrawn": "Yes - FL map signed 2026-05-04",
+  "notes": "Counties (Palm Beach, Broward, Hendry, Collier) agree across WLRN May 5, Aug 31 and Sept 3. I could not confirm which are split vs whole; Hendry's 'whole' is null (unknown); the other three are surely partial (Wellington/Parkland; Marco Island). The state's EDR PDF listed many more county names but looked like a whole-state map legend, so I did not use it. The HMP poll is partisan (sponsor-released, no sample size or margin of error). Another poll, Tavern Research (Aug 10-12, 551 LV), had them tied 50-50 (sponsor unknown). Cook now says Toss-up (WLRN Oct 22); Aug WLRN story said Lean R (stale). Sabato and Inside ratings are from the csv only. 'Amendment 4' fact is attributed in the article to analyst Matt Isbell. Askar FEC: loans by candidate $6.69M, $6.29M still owed, cash $1.89M, covering Apr 1-Oct 14. Dandiya: ~$2M raised by Aug (Floridian Press/Guardian, secondary); her FEC page I opened (H6FL21059) showed a different race/cycle so I did not use it. A Trump-aligned super PAC had spent $3.76M+ against Dandiya (midtermmoney.com via WLRN Oct 22) and Trump endorsed Askar Sept 2/3 (WLRN), not used.",
+  "st": "FL",
+  "dd": 22,
+  "talk8": false,
+  "cook": "Toss-up",
+  "sabato": "Toss-up",
+  "inside": "Tilt R",
+  "inc_party": "D",
+  "open_seat": true,
+  "money": {
+   "D": "FL22_D",
+   "R": "FL22_R"
+  },
+  "county_fips": [
+   {
+    "fips": "12099",
+    "whole": false
+   },
+   {
+    "fips": "12011",
+    "whole": false
+   },
+   {
+    "fips": "12051",
+    "whole": true
+   },
+   {
+    "fips": "12021",
+    "whole": false
+   }
+  ],
+  "counties_checked": true
+ },
+ {
+  "id": "FL25",
+  "label": "FL-25 \u00b7 Boca Raton to Miami Beach",
+  "rating": "Cook Lean D \u00b7 Sabato Lean D \u00b7 Inside Toss-up",
+  "d": "Jared Moskowitz",
+  "r": "Scott Singer",
+  "incumbent": "Jared Moskowitz (D)",
+  "blurb": "Incumbent runs in new seat that went Trump +9",
+  "d_case": [
+   {
+    "text": "Two-term incumbent; Cook rates the race Lean Democratic",
+    "url": "https://www.wlrn.org/government-politics/2026-10-21/key-takeaways-from-congressional-forum-between-republican-scott-singer-and-democrat-jared-moskowitz"
+   },
+   {
+    "text": "Raised $5.7M to Singer's $3.3M; $1.2M cash to $467K (FEC, Oct 14)",
+    "url": "https://www.fec.gov/data/elections/house/FL/25/2026/"
+   },
+   {
+    "text": "GOP Congressional Leadership Fund canceled $6M in planned TV ads here",
+    "url": "https://www.wlrn.org/government-politics/2026-10-22/desantis-congressional-map-was-designed-to-flip-4-seats-to-the-gop-will-it"
+   }
+  ],
+  "r_case": [
+   {
+    "text": "Trump won the new district 54% to 45% in 2024",
+    "url": "https://www.dailygazette.com/tribune/moskowitz-signals-plan-to-run-for-reelection-in-new-coastal-south-florida-congressional-district/article_9bfcdf91-5eeb-5cac-9896-0a27cb808195.html"
+   },
+   {
+    "text": "Former Boca Raton mayor; won the Aug. 18 Republican primary",
+    "url": "https://floridianpress.com/2026/08/scott-singer-wins-republican-primary-without-trump-endorsement/"
+   },
+   {
+    "text": "Raised $3.3M since Dec. 2025 (FEC, through Oct. 14)",
+    "url": "https://www.fec.gov/data/candidate/H6FL23188/"
+   }
+  ],
+  "result_2024": {
+   "text": "Moskowitz won old FL-23 by ~5 pts (52.4%\u201347.6%, 2024); new FL-25 went Trump +9",
+   "url": "https://kdhnews.com/news/politics/facing-tough-election-campaign-in-new-congressional-district-moskowitz-raises-big-campaign-money/article_ddb86e3e-07d9-5339-91d4-ca47fc285c29.html"
+  },
+  "counties": [
+   {
+    "county": "Palm Beach",
+    "state": "FL",
+    "whole": false
+   },
+   {
+    "county": "Broward",
+    "state": "FL",
+    "whole": false
+   },
+   {
+    "county": "Miami-Dade",
+    "state": "FL",
+    "whole": false
+   }
+  ],
+  "counties_url": "https://cbs12.com/news/local/story/primary-election-new-map-crowded-field-seven-candidates-compete-in-florida-district-25-oliver-larkin-jared-moskowitz-dan-franzese-george-moraitis-scott-singer-raven-harrison-joe-kaufman",
+  "redrawn": "Yes - FL map signed 2026-05-04",
+  "notes": "Counties: CBS12 and Local10 name Palm Beach, Broward and Miami-Dade (parts of each; Boca Raton to Miami Beach). WLRN May 6 mentions only Palm Beach and Miami-Dade, so there is a small conflict; WLRN May 5 (inferred) also includes Broward (Pompano, Hallandale). 'whole' false for all (it takes pieces of the old 23rd, 24th, 25th). The 2024 margin 52.4-47.6 is from percentages in the KDH article (Kaufman 47.6); the 4.8 pts is my arithmetic, so the text says about 5. Singer FEC (H6FL23188): receipts $3.26M, cash $466,625, Dec 17, 2025 to Oct 14, 2026. Moskowitz's FEC pre-primary report (docquery): thru July 29, cash $1.88M, cycle receipts $3.01M; I could not get his Oct figures. Cook moved it Toss-up to Lean D (Colorado Politics Oct 16); Sabato Lean D and Inside Toss-up are from the csv only. 'Trump won by about 9' is repeated by WLRN May 6 and Oct 21 and WLRN May 5 (54-45). CLF cancelation reported by PunchBowl via WLRN.",
+  "st": "FL",
+  "dd": 25,
+  "talk8": false,
+  "cook": "Lean D",
+  "sabato": "Lean D",
+  "inside": "Toss-up",
+  "inc_party": "D",
+  "open_seat": false,
+  "money": {
+   "D": "FL25_D",
+   "R": "FL25_R"
+  },
+  "county_fips": [
+   {
+    "fips": "12099",
+    "whole": false
+   },
+   {
+    "fips": "12011",
+    "whole": false
+   },
+   {
+    "fips": "12086",
+    "whole": false
+   }
+  ],
+  "counties_checked": true
+ },
+ {
+  "id": "IA2",
+  "label": "IA-2 \u00b7 Northeast Iowa",
+  "rating": "Cook Toss-up \u00b7 Sabato Lean D \u00b7 Inside Toss-up",
+  "d": "Lindsay James",
+  "r": "Joe Mitchell",
+  "incumbent": "Open (Ashley Hinson, R, running for Senate)",
+  "blurb": "Open seat that Trump won by 10 in 2024",
+  "d_case": [
+   {
+    "text": "Poll for House Majority PAC: James 46%, Mitchell 45% (July 14\u201319)",
+    "url": "https://static.notus.org/27/58/c93f2d1946c0814f583fa25c7a31/hmp-ia-02-poll.pdf"
+   },
+   {
+    "text": "Raised $3.9M to Mitchell's $2.9M (FEC, through Oct 14)",
+    "url": "https://www.fec.gov/data/elections/house/IA/02/2026/"
+   },
+   {
+    "text": "Dubuque state representative, chosen House Minority Whip in 2022",
+    "url": "https://www2.thegazette.com/news/elections/state/democrat-lindsay-james-will-face-trump-tapped-joe-mitchell-in-u-s-house-district-2/article_983dd0e7-094a-49e9-a486-06e45acaa809.html"
+   }
+  ],
+  "r_case": [
+   {
+    "text": "Trump won the district by 10 points in 2024",
+    "url": "https://punchbowl.news/article/campaigns/inroads-iowa/"
+   },
+   {
+    "text": "More cash on hand: $546K to $266K (FEC, Oct 14)",
+    "url": "https://www.fec.gov/data/elections/house/IA/02/2026/"
+   },
+   {
+    "text": "Endorsed by Trump; former state representative and HUD regional director",
+    "url": "https://www2.thegazette.com/news/elections/state/democrat-lindsay-james-will-face-trump-tapped-joe-mitchell-in-u-s-house-district-2/article_983dd0e7-094a-49e9-a486-06e45acaa809.html"
+   }
+  ],
+  "result_2024": {
+   "text": "Hinson won by 15.6 pts (House, 2024); Trump +9.9 in district",
+   "url": "https://www.bleedingheartland.com/?p=434145"
+  },
+  "counties": [
+   {
+    "county": "Allamakee",
+    "state": "IA",
+    "whole": true
+   },
+   {
+    "county": "Benton",
+    "state": "IA",
+    "whole": true
+   },
+   {
+    "county": "Black Hawk",
+    "state": "IA",
+    "whole": true
+   },
+   {
+    "county": "Bremer",
+    "state": "IA",
+    "whole": true
+   },
+   {
+    "county": "Buchanan",
+    "state": "IA",
+    "whole": true
+   },
+   {
+    "county": "Butler",
+    "state": "IA",
+    "whole": true
+   },
+   {
+    "county": "Cerro Gordo",
+    "state": "IA",
+    "whole": true
+   },
+   {
+    "county": "Chickasaw",
+    "state": "IA",
+    "whole": true
+   },
+   {
+    "county": "Clayton",
+    "state": "IA",
+    "whole": true
+   },
+   {
+    "county": "Delaware",
+    "state": "IA",
+    "whole": true
+   },
+   {
+    "county": "Dubuque",
+    "state": "IA",
+    "whole": true
+   },
+   {
+    "county": "Fayette",
+    "state": "IA",
+    "whole": true
+   },
+   {
+    "county": "Floyd",
+    "state": "IA",
+    "whole": true
+   },
+   {
+    "county": "Grundy",
+    "state": "IA",
+    "whole": true
+   },
+   {
+    "county": "Hardin",
+    "state": "IA",
+    "whole": true
+   },
+   {
+    "county": "Howard",
+    "state": "IA",
+    "whole": true
+   },
+   {
+    "county": "Linn",
+    "state": "IA",
+    "whole": true
+   },
+   {
+    "county": "Mitchell",
+    "state": "IA",
+    "whole": true
+   },
+   {
+    "county": "Poweshiek",
+    "state": "IA",
+    "whole": true
+   },
+   {
+    "county": "Tama",
+    "state": "IA",
+    "whole": true
+   },
+   {
+    "county": "Winneshiek",
+    "state": "IA",
+    "whole": true
+   },
+   {
+    "county": "Worth",
+    "state": "IA",
+    "whole": true
+   }
+  ],
+  "counties_url": "https://www.legis.iowa.gov/docs/code/40.pdf",
+  "redrawn": "No",
+  "notes": "Counties: Iowa Code 40.1(2), 22 counties named in statute, all whole (Iowa assigns whole counties); matches the '22 counties' in Gazette/KTTC. 2024 results: Bleeding Heartland (a blog that reports certified results), not the Iowa SOS page; Trump 54.1-44.2, Hinson 57.1-41.5. Money: Q2 only (Apr-June). Telegraph Herald says James raised $878K and Mitchell $578K in Q2; Little Village lists James $755,587 and Mitchell $377,769 (different measure, perhaps individual contributions only). Both show James ahead; cash on hand agrees ($755.8K vs $895.6K). The Telegraph Herald piece wrongly calls James 'incumbent'. I found no Q3 numbers. Ratings: only Cook's old move (Solid R to Likely R, May) came up in what I opened; current Cook Toss-up / Sabato Lean D / Inside Toss-up are from the csv only (Cook/Sabato pages blocked), so no rating reason is used. Trump endorsed Mitchell (date not given in Gazette). Poll is partisan (HMP/GSG, no sample or MOE released). Punchbowl: Trump +10 (Bleeding Heartland has 9.9).",
+  "st": "IA",
+  "dd": 2,
+  "talk8": false,
+  "cook": "Toss-up",
+  "sabato": "Lean D",
+  "inside": "Toss-up",
+  "inc_party": "R",
+  "open_seat": true,
+  "money": {
+   "D": "IA2_D",
+   "R": "IA2_R"
+  },
+  "county_fips": [
+   {
+    "fips": "19005",
+    "whole": true
+   },
+   {
+    "fips": "19011",
+    "whole": true
+   },
+   {
+    "fips": "19013",
+    "whole": true
+   },
+   {
+    "fips": "19017",
+    "whole": true
+   },
+   {
+    "fips": "19019",
+    "whole": true
+   },
+   {
+    "fips": "19023",
+    "whole": true
+   },
+   {
+    "fips": "19033",
+    "whole": true
+   },
+   {
+    "fips": "19037",
+    "whole": true
+   },
+   {
+    "fips": "19043",
+    "whole": true
+   },
+   {
+    "fips": "19055",
+    "whole": true
+   },
+   {
+    "fips": "19061",
+    "whole": true
+   },
+   {
+    "fips": "19065",
+    "whole": true
+   },
+   {
+    "fips": "19067",
+    "whole": true
+   },
+   {
+    "fips": "19075",
+    "whole": true
+   },
+   {
+    "fips": "19083",
+    "whole": true
+   },
+   {
+    "fips": "19089",
+    "whole": true
+   },
+   {
+    "fips": "19113",
+    "whole": true
+   },
+   {
+    "fips": "19131",
+    "whole": true
+   },
+   {
+    "fips": "19157",
+    "whole": true
+   },
+   {
+    "fips": "19171",
+    "whole": true
+   },
+   {
+    "fips": "19191",
+    "whole": true
+   },
+   {
+    "fips": "19195",
+    "whole": true
+   }
+  ],
+  "counties_checked": true
+ },
+ {
+  "id": "KY6",
+  "label": "KY-6 \u00b7 Lexington",
+  "rating": "Cook Toss-up \u00b7 Sabato Toss-up \u00b7 Inside Tilt R",
+  "d": "Zach Dembo",
+  "r": "Ralph Alvarado",
+  "incumbent": "Open (Andy Barr, R, running for Senate)",
+  "blurb": "Open seat Trump won by 15 points; ratings just shifted",
+  "d_case": [
+   {
+    "text": "Raised $3.2M to Alvarado's $2.3M; $620K cash to $181K (FEC, Oct 14)",
+    "url": "https://www.fec.gov/data/elections/house/KY/06/2026/"
+   },
+   {
+    "text": "Gov. Beshear (D) carried the district by nearly 20 points in 2023",
+    "url": "https://insideelections.com/kentucky-6-new-poll-fuels-democratic-optimism/"
+   },
+   {
+    "text": "A DCCC-commissioned poll, reported Aug. 9, had them tied at 47% each",
+    "url": "https://www.wuky.org/wuky-news/2026-08-09/new-poll-shows-dembo-alvarado-tied-in-dem-targeted-race"
+   }
+  ],
+  "r_case": [
+   {
+    "text": "Cook rates the district R+7; Trump won it by 15 points in 2024",
+    "url": "https://www.cookpolitical.com/house/race/483151"
+   },
+   {
+    "text": "No Democrat has won the seat since Ben Chandler, over 15 years ago",
+    "url": "https://www.weku.org/2026-05-19/alvarado-dembo-win-central-kentuckys-u-s-house-primaries"
+   },
+   {
+    "text": "Dembo\u2019s own June internal poll had Alvarado ahead, 42% to 39%",
+    "url": "https://insideelections.com/kentucky-6-new-poll-fuels-democratic-optimism/"
+   }
+  ],
+  "result_2024": {
+   "text": "Barr won by 26 pts, 63%-37% (House, 2024); Trump +15 per Cook",
+   "url": "https://www.cookpolitical.com/house/race/483151"
+  },
+  "counties": [
+   {
+    "county": "Bourbon",
+    "state": "KY",
+    "whole": true
+   },
+   {
+    "county": "Clark",
+    "state": "KY",
+    "whole": true
+   },
+   {
+    "county": "Estill",
+    "state": "KY",
+    "whole": true
+   },
+   {
+    "county": "Fayette",
+    "state": "KY",
+    "whole": true
+   },
+   {
+    "county": "Fleming",
+    "state": "KY",
+    "whole": true
+   },
+   {
+    "county": "Garrard",
+    "state": "KY",
+    "whole": true
+   },
+   {
+    "county": "Jessamine",
+    "state": "KY",
+    "whole": true
+   },
+   {
+    "county": "Madison",
+    "state": "KY",
+    "whole": true
+   },
+   {
+    "county": "Mercer",
+    "state": "KY",
+    "whole": true
+   },
+   {
+    "county": "Montgomery",
+    "state": "KY",
+    "whole": true
+   },
+   {
+    "county": "Nicholas",
+    "state": "KY",
+    "whole": true
+   },
+   {
+    "county": "Powell",
+    "state": "KY",
+    "whole": true
+   },
+   {
+    "county": "Scott",
+    "state": "KY",
+    "whole": true
+   },
+   {
+    "county": "Woodford",
+    "state": "KY",
+    "whole": true
+   },
+   {
+    "county": "Anderson",
+    "state": "KY",
+    "whole": false
+   },
+   {
+    "county": "Bath",
+    "state": "KY",
+    "whole": false
+   }
+  ],
+  "counties_url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=52003",
+  "redrawn": "No",
+  "notes": "Ratings come from tossups_2026.csv; I could NOT open the Cook ratings page, Sabato Substack or the Inside Elections PDF (blocked). Cook and Sabato Toss-up (and Fox News) confirmed by Spectrum News 10/27; Inside Tilt R is csv-only (Inside's June article, which I opened, still said Solid R). Barr margin: NBC shows 63.0\u201337.0 (26 pts); Cook's race page says 27 pts. Trump +15 is from Cook/WEKU. Dembo poll (GQR) and DCCC poll are partisan internals. FEC candidate pages (Oct 14): Dembo $3.21M raised/$620K cash; Alvarado $2.31M/$181K; the cited Spectrum figures are Q3-based ($2.87M and $2.19M totals) and differ slightly. Counties: 16 per KY statute and Barr's house.gov page (also agree); statute marks only Anderson and Bath '(part)'; whole=true for the rest is inferred from absence of '(part)'.",
+  "st": "KY",
+  "dd": 6,
+  "talk8": false,
+  "cook": "Toss-up",
+  "sabato": "Toss-up",
+  "inside": "Tilt R",
+  "inc_party": "R",
+  "open_seat": true,
+  "money": {
+   "D": "KY6_D",
+   "R": "KY6_R"
+  },
+  "county_fips": [
+   {
+    "fips": "21017",
+    "whole": true
+   },
+   {
+    "fips": "21049",
+    "whole": true
+   },
+   {
+    "fips": "21065",
+    "whole": true
+   },
+   {
+    "fips": "21067",
+    "whole": true
+   },
+   {
+    "fips": "21069",
+    "whole": true
+   },
+   {
+    "fips": "21079",
+    "whole": true
+   },
+   {
+    "fips": "21113",
+    "whole": true
+   },
+   {
+    "fips": "21151",
+    "whole": true
+   },
+   {
+    "fips": "21167",
+    "whole": true
+   },
+   {
+    "fips": "21173",
+    "whole": true
+   },
+   {
+    "fips": "21181",
+    "whole": true
+   },
+   {
+    "fips": "21197",
+    "whole": true
+   },
+   {
+    "fips": "21209",
+    "whole": true
+   },
+   {
+    "fips": "21239",
+    "whole": true
+   },
+   {
+    "fips": "21005",
+    "whole": false
+   },
+   {
+    "fips": "21011",
+    "whole": false
+   }
+  ],
+  "counties_checked": true
+ },
+ {
+  "id": "MI4",
+  "label": "MI-4 \u00b7 Southwest Michigan",
+  "rating": "Cook Toss-up \u00b7 Sabato Toss-up \u00b7 Inside Tilt R",
+  "d": "Sean McCann",
+  "r": "Bill Huizenga",
+  "incumbent": "Bill Huizenga (R)",
+  "blurb": "Incumbent since 2011; Cook moved it to Toss-up",
+  "d_case": [
+   {
+    "text": "McCann has raised $4.7M and holds $1.03M cash (FEC, Oct. 14)",
+    "url": "https://www.fec.gov/data/candidate/H6MI04204/"
+   },
+   {
+    "text": "House Majority PAC and LCV Victory Fund spent $4.7M against Huizenga",
+    "url": "https://legis1.com/news/michigan-4th-district-conservative-action-spends"
+   },
+   {
+    "text": "Cook now rates the race a Toss-up",
+    "url": "https://bridgemi.com/michigan-government/these-michigan-races-could-help-decide-control-of-congress/"
+   }
+  ],
+  "r_case": [
+   {
+    "text": "In office since 2011; won by roughly 11 points in 2022 and 2024",
+    "url": "https://bridgemi.com/michigan-government/these-michigan-races-could-help-decide-control-of-congress/"
+   },
+   {
+    "text": "Huizenga has raised $5.6M this cycle (FEC, Oct. 14)",
+    "url": "https://www.fec.gov/data/committee/C00459297/"
+   },
+   {
+    "text": "Two outside groups spent $6.1M opposing McCann",
+    "url": "https://legis1.com/news/michigan-4th-district-conservative-action-spends"
+   }
+  ],
+  "result_2024": {
+   "text": "Huizenga won by 11.7 pts, 55.1%\u201343.4% (House, 2024)",
+   "url": "https://www.nbcnews.com/politics/2024-elections/michigan-us-house-district-4-results"
+  },
+  "counties": [
+   {
+    "county": "Allegan",
+    "state": "MI",
+    "whole": true
+   },
+   {
+    "county": "Van Buren",
+    "state": "MI",
+    "whole": true
+   },
+   {
+    "county": "Berrien",
+    "state": "MI",
+    "whole": false
+   },
+   {
+    "county": "Calhoun",
+    "state": "MI",
+    "whole": false
+   },
+   {
+    "county": "Kalamazoo",
+    "state": "MI",
+    "whole": false
+   },
+   {
+    "county": "Ottawa",
+    "state": "MI",
+    "whole": false
+   }
+  ],
+  "counties_url": "https://huizenga.house.gov/District/",
+  "redrawn": "No",
+  "notes": "Sabato Toss-up and Inside Tilt R are from tossups_2026.csv only (their pages were blocked/unopened); Cook Toss-up confirmed by Bridge Michigan (Oct 26) and Michigan Public (Oct 14). Outside-spending figures come from legis1.com, a secondary summary of FEC independent expenditures (HMP $2.87M + LCV Victory Fund $1.82M against Huizenga; No Going Back PAC $4.74M + Michigan Conservative Action $1.37M against McCann); the page itself carries a stale 'Likely Republican' label. Verify against FEC IE data if possible. Money is FEC candidate pages as of Oct 14 (McCann $4.70M raised/$1.03M cash; Huizenga committee $5.56M raised/$394K cash). Counties per Huizenga's house.gov page (Allegan, Van Buren whole; Berrien, Calhoun, Kalamazoo, Ottawa partial).",
+  "st": "MI",
+  "dd": 4,
+  "talk8": false,
+  "cook": "Toss-up",
+  "sabato": "Toss-up",
+  "inside": "Tilt R",
+  "inc_party": "R",
+  "open_seat": false,
+  "money": {
+   "D": "MI4_D",
+   "R": "MI4_R"
+  },
+  "county_fips": [
+   {
+    "fips": "26005",
+    "whole": true
+   },
+   {
+    "fips": "26159",
+    "whole": true
+   },
+   {
+    "fips": "26021",
+    "whole": false
+   },
+   {
+    "fips": "26025",
+    "whole": false
+   },
+   {
+    "fips": "26077",
+    "whole": false
+   },
+   {
+    "fips": "26139",
+    "whole": false
+   }
+  ],
+  "counties_checked": true
+ },
+ {
+  "id": "MI7",
+  "label": "MI-7 \u00b7 Lansing",
+  "rating": "Cook Toss-up \u00b7 Sabato Toss-up \u00b7 Inside Toss-up",
+  "d": "Will Lawrence",
+  "r": "Tom Barrett",
+  "incumbent": "Tom Barrett (R)",
+  "blurb": "Nearly $60M in ads in a seat Trump won by 1 point",
+  "d_case": [
+   {
+    "text": "Trump carried the district by only 1 point in 2024",
+    "url": "https://www.cookpolitical.com/house/race/483311"
+   },
+   {
+    "text": "Lawrence and allies lead ad spending: $33M+ to $27M+ (AdImpact)",
+    "url": "https://bridgemi.com/michigan-government/these-michigan-races-could-help-decide-control-of-congress/"
+   },
+   {
+    "text": "Won his primary by 15 points over a former ambassador and a Navy SEAL",
+    "url": "https://prospect.org/2026/10/27/trump-pac-attacking-democratic-house-candidate-will-lawrence-michigan/"
+   }
+  ],
+  "r_case": [
+   {
+    "text": "Barrett has raised $8.2M and holds $1.04M cash (FEC, Oct. 14)",
+    "url": "https://www.fec.gov/data/candidate/H2MI07123/?cycle=2026"
+   },
+   {
+    "text": "A Trump-aligned super PAC is putting $4M into ads against Lawrence",
+    "url": "https://prospect.org/2026/10/27/trump-pac-attacking-democratic-house-candidate-will-lawrence-michigan/"
+   },
+   {
+    "text": "Club for Growth endorsed Barrett; its Action arm bought a $600K ad against Lawrence",
+    "url": "https://www.clubforgrowth.org/club-for-growth-pac-endorses-rep-tom-barrett-in-mi-07-race/"
+   }
+  ],
+  "result_2024": {
+   "text": "Barrett won by about 4 pts, 50.3%-46.5% (House, 2024); Trump +1 per Cook",
+   "url": "https://www.cookpolitical.com/house/race/483311"
+  },
+  "counties": [
+   {
+    "county": "Clinton",
+    "state": "MI",
+    "whole": true
+   },
+   {
+    "county": "Ingham",
+    "state": "MI",
+    "whole": true
+   },
+   {
+    "county": "Livingston",
+    "state": "MI",
+    "whole": true
+   },
+   {
+    "county": "Shiawassee",
+    "state": "MI",
+    "whole": true
+   },
+   {
+    "county": "Eaton",
+    "state": "MI",
+    "whole": false
+   },
+   {
+    "county": "Genesee",
+    "state": "MI",
+    "whole": false
+   },
+   {
+    "county": "Oakland",
+    "state": "MI",
+    "whole": false
+   }
+  ],
+  "counties_url": "https://barrett.house.gov/about/our-district",
+  "redrawn": "No",
+  "notes": "Cook Toss-up confirmed (Cook race page, Bridge Michigan); Sabato/Inside Toss-up are csv-only (pages blocked). 2024 margin: Michigan Advance shows 50.3\u201346.5 (99% in; ~3.8 pts); Ballotpedia (lead only) says 46.6, NBC page was blocked. Trump +1 is from Cook's race page. Ad-spending totals (AdImpact via Bridge Michigan, Oct 26) include allied groups on both sides; Prospect says total ad buys exceeded $60M. The ~$4M Trump-aligned PAC figure is American Prospect (Oct 27) citing AdImpact; the PAC is described as funded by a $25M transfer from MAGA Inc. Club for Growth is an advocacy group citing its own spending, so treat as self-reported. FEC: Lawrence $4.16M raised/$629K cash vs Barrett $8.24M/$1.04M (Oct 14). Counties per Barrett's house.gov page (Eaton 'most of the county'; Genesee and Oakland partial).",
+  "st": "MI",
+  "dd": 7,
+  "talk8": false,
+  "cook": "Toss-up",
+  "sabato": "Toss-up",
+  "inside": "Toss-up",
+  "inc_party": "R",
+  "open_seat": false,
+  "money": {
+   "D": "MI7_D",
+   "R": "MI7_R"
+  },
+  "county_fips": [
+   {
+    "fips": "26037",
+    "whole": true
+   },
+   {
+    "fips": "26065",
+    "whole": true
+   },
+   {
+    "fips": "26093",
+    "whole": true
+   },
+   {
+    "fips": "26155",
+    "whole": true
+   },
+   {
+    "fips": "26045",
+    "whole": false
+   },
+   {
+    "fips": "26049",
+    "whole": false
+   },
+   {
+    "fips": "26125",
+    "whole": false
+   }
+  ],
+  "counties_checked": true
+ },
+ {
+  "id": "MI10",
+  "label": "MI-10 \u00b7 Macomb & Oakland",
+  "rating": "Cook Toss-up \u00b7 Sabato Toss-up \u00b7 Inside Tilt R",
+  "d": "Christina Hines",
+  "r": "Mike Bouchard Jr.",
+  "incumbent": "Open (John James, R, running for governor)",
+  "blurb": "Open Detroit-suburb seat decided by under 1 point in 2022",
+  "d_case": [
+   {
+    "text": "Hines has raised $4.2M since April 2025 (FEC, Oct. 14)",
+    "url": "https://www.fec.gov/data/candidate/H6MI10276/"
+   },
+   {
+    "text": "Giffords PAC is investing $1M behind Hines",
+    "url": "https://giffords.org/press-release/2026/10/giffords-pac-announces-new-ad-in-1-million-investment-to-elect-christina-hines-in-mi-10/"
+   },
+   {
+    "text": "James won by under 1 point in 2022; Cook calls this a true toss-up",
+    "url": "https://bridgemi.com/michigan-government/these-michigan-races-could-help-decide-control-of-congress/"
+   }
+  ],
+  "r_case": [
+   {
+    "text": "Bouchard has $1.57M cash on hand (FEC, Oct. 14)",
+    "url": "https://www.fec.gov/data/candidate/H6MI10359/"
+   },
+   {
+    "text": "Army veteran who shares a name with his father, a longtime county sheriff",
+    "url": "https://bridgemi.com/michigan-government/these-michigan-races-could-help-decide-control-of-congress/"
+   },
+   {
+    "text": "Trump endorsed Bouchard before the August primary",
+    "url": "https://michiganadvance.com/2026/08/04/bouchard-claims-nomination-in-10th-congressional-district-gop-primary-dem-race-too-close-to-call/"
+   }
+  ],
+  "result_2024": {
+   "text": "James won by about 6 pts, 51.1%\u201345.0% (House, 2024)",
+   "url": "https://michiganadvance.com/2024/11/06/james-cinches-victory-again-in-michigans-10th-congressional-district/"
+  },
+  "counties": [
+   {
+    "county": "Macomb",
+    "state": "MI",
+    "whole": false
+   },
+   {
+    "county": "Oakland",
+    "state": "MI",
+    "whole": false
+   }
+  ],
+  "counties_url": "https://bridgemi.com/michigan-government/these-michigan-races-could-help-decide-control-of-congress/",
+  "redrawn": "No",
+  "notes": "Cook Toss-up confirmed by Bridge Michigan (Oct 26); an Aug 4 Michigan Advance piece still said Lean R. Sabato/Inside are csv-only. COUNTIES NOT FULLY CONFIRMED: Bridge and Michigan Advance say the district covers southern Macomb County plus Rochester and Rochester Hills in Oakland County (i.e., parts of two counties); I could not open the official house.gov district page or a map to confirm there are no other counties or to give exact boundaries. 2024 result is Michigan Advance at 98% counted (51.1\u201345.0); NBC page was blocked. Hines FEC $4.16M raised/$1.01M cash; Bouchard $2.88M/$1.57M (Oct 14). Giffords item is the group's own press release (Oct 7). The 'Trump endorsed' claim appears in both the Michigan Advance and Fox 2 primary pieces; I cited Michigan Advance, but my fetch notes from the two pages were not cleanly separable, so re-check wording. Father's title: Bridge says 'longtime Oakland County Sheriff'.",
+  "st": "MI",
+  "dd": 10,
+  "talk8": false,
+  "cook": "Toss-up",
+  "sabato": "Toss-up",
+  "inside": "Tilt R",
+  "inc_party": "R",
+  "open_seat": true,
+  "money": {
+   "D": "MI10_D",
+   "R": "MI10_R"
+  },
+  "county_fips": [
+   {
+    "fips": "26099",
+    "whole": false
+   },
+   {
+    "fips": "26125",
+    "whole": false
+   }
+  ],
+  "counties_checked": true
+ },
+ {
+  "id": "MO2",
+  "label": "MO-2 \u00b7 St. Louis suburbs",
+  "rating": "Cook Likely R \u00b7 Sabato Toss-up \u00b7 Inside not rated competitive",
+  "d": "Fred Wellman",
+  "r": "Ann Wagner",
+  "incumbent": "Ann Wagner (R)",
+  "blurb": "GOP incumbent; polls tighten on the 2022 lines",
+  "d_case": [
+   {
+    "text": "A Democratic internal poll (FM3, May) had Wagner up only 44% to 41%",
+    "url": "https://themissouritimes.com/wp-content/uploads/2026/06/220-7670-Wellman-MO-02-Summary-Memo.pdf"
+   },
+   {
+    "text": "A Republican pollster\u2019s Sept. 15 poll had Wagner up 43% to 42%",
+    "url": "https://www.pollsmax.com/2026-us-house/missouri-2/"
+   },
+   {
+    "text": "St. Louis County, the district\u2019s population center, has swung toward Democrats",
+    "url": "https://www.kcur.org/politics-elections-and-government/2026-10-28/missouri-2nd-district-ann-wagner-democratic-wave"
+   }
+  ],
+  "r_case": [
+   {
+    "text": "Wagner has raised $4.2M and holds $1.63M cash (FEC, Oct. 14)",
+    "url": "https://www.fec.gov/data/candidate/H2MO02102/?cycle=2026"
+   },
+   {
+    "text": "Won re-election by 12 points in 2024",
+    "url": "https://www.nbcnews.com/politics/2024-elections/missouri-us-house-district-2-results"
+   },
+   {
+    "text": "Has outperformed Trump in St. Louis County",
+    "url": "https://www.kcur.org/politics-elections-and-government/2026-10-28/missouri-2nd-district-ann-wagner-democratic-wave"
+   }
+  ],
+  "result_2024": {
+   "text": "Wagner won by 12 pts, 54.5%\u201342.5% (House, 2024)",
+   "url": "https://www.nbcnews.com/politics/2024-elections/missouri-us-house-district-2-results"
+  },
+  "counties": [
+   {
+    "county": "Franklin",
+    "state": "MO",
+    "whole": true
+   },
+   {
+    "county": "St. Louis",
+    "state": "MO",
+    "whole": false
+   },
+   {
+    "county": "St. Charles",
+    "state": "MO",
+    "whole": false
+   },
+   {
+    "county": "Warren",
+    "state": "MO",
+    "whole": false
+   }
+  ],
+  "counties_url": "https://www.stlpr.org/government-politics-issues/2026-10-27/ann-wagner-defends-trump-iran-war-missouri-congress-race",
+  "redrawn": "No - MO 2025 map blocked for Nov 2026 by MO Supreme Court (2026-09-03); 2022 map used",
+  "notes": "WEAKEST RATINGS RACE: I could not open Cook, Sabato or Inside pages (blocked). 'Cook Likely R / Sabato Toss-up / Inside not competitive' is from tossups_2026.csv only; no opened source confirms any of them. The Remington (R) Sept 15 poll is cited via pollsmax.com, an aggregator; I could not open the original release. FM3 poll is a Wellman-campaign memo (600 LV, May 26-31, MoE 4.0); it also showed Wellman 48-41 after positive profiles. Wagner's margin: NBC 54.5-42.5. Money: FEC page shows Wagner committee $4.19M raised since Jan 2025, $1.63M cash (Oct 14); Wellman $2.18M raised/$241K cash. St. Louis Magazine (Aug 6) quoted Wagner at ~$4.2M, which matches her receipts, not cash on hand. Counties from STLPR/KCUR 10/27-28 ('portions of St. Louis, St. Charles and Warren counties and all of Franklin County'); the official 2022 map file was not opened, so exact splits unconfirmed. Jefferson County is not in the district (STLPR 2021 plan article).",
+  "st": "MO",
+  "dd": 2,
+  "talk8": false,
+  "cook": "Likely R",
+  "sabato": "Toss-up",
+  "inside": "Not in IE competitive columns (Likely R or safer)",
+  "inc_party": "R",
+  "open_seat": false,
+  "money": {
+   "D": "MO2_D",
+   "R": "MO2_R"
+  },
+  "county_fips": [
+   {
+    "fips": "29071",
+    "whole": true
+   },
+   {
+    "fips": "29189",
+    "whole": false
+   },
+   {
+    "fips": "29183",
+    "whole": false
+   },
+   {
+    "fips": "29219",
+    "whole": false
+   }
+  ],
+  "counties_checked": true
+ },
+ {
+  "id": "MT1",
+  "label": "MT-1 \u00b7 Western Montana",
+  "rating": "Cook Toss-up \u00b7 Sabato Toss-up \u00b7 Inside Tilt R",
+  "d": "Sam Forstag",
+  "r": "Aaron Flint",
+  "incumbent": "Open (Ryan Zinke, R, not running)",
+  "blurb": "Open seat; one poll had it 42% to 41%",
+  "d_case": [
+   {
+    "text": "Has raised about $4.3M to Flint\u2019s $2.8M; $726K cash to $408K (FEC, Oct. 14)",
+    "url": "https://dailymontanan.com/?p=39721"
+   },
+   {
+    "text": "Forstag 41% favorable, 19% unfavorable; Flint 31% to 32% (Aug. 27-Sept. 7 poll)",
+    "url": "https://nbcmontana.com/news/local/flint-forstag-in-dead-heat-for-house-seat"
+   },
+   {
+    "text": "Cook and Fox News moved the race to Toss-up in mid-October",
+    "url": "https://dailymontanan.com/2026/10/17/analysts-shift-western-montana-congressional-district-to-toss-up-status/"
+   }
+  ],
+  "r_case": [
+   {
+    "text": "Led 42% to 41% in a Montana Free Press-Rutgers poll (Aug. 27-Sept. 7, +/-6)",
+    "url": "https://nbcmontana.com/news/local/flint-forstag-in-dead-heat-for-house-seat"
+   },
+   {
+    "text": "Zinke backed Flint and gave him his campaign staff",
+    "url": "https://nbcmontana.com/news/local/trump-on-the-stump-for-flint"
+   },
+   {
+    "text": "Trump rallied with Flint Oct. 14; Inside Elections still rates it Tilt R",
+    "url": "https://dailymontanan.com/2026/10/17/analysts-shift-western-montana-congressional-district-to-toss-up-status/"
+   }
+  ],
+  "result_2024": {
+   "text": "Zinke won by 7 pts, 52%\u201345% (House, 2024)",
+   "url": "https://dailymontanan.com/2024/11/11/montana-election-results-wednesday-morning-update/"
+  },
+  "counties": [
+   {
+    "county": "Beaverhead",
+    "state": "MT",
+    "whole": true
+   },
+   {
+    "county": "Deer Lodge",
+    "state": "MT",
+    "whole": true
+   },
+   {
+    "county": "Flathead",
+    "state": "MT",
+    "whole": true
+   },
+   {
+    "county": "Gallatin",
+    "state": "MT",
+    "whole": true
+   },
+   {
+    "county": "Glacier",
+    "state": "MT",
+    "whole": true
+   },
+   {
+    "county": "Granite",
+    "state": "MT",
+    "whole": true
+   },
+   {
+    "county": "Lake",
+    "state": "MT",
+    "whole": true
+   },
+   {
+    "county": "Lincoln",
+    "state": "MT",
+    "whole": true
+   },
+   {
+    "county": "Madison",
+    "state": "MT",
+    "whole": true
+   },
+   {
+    "county": "Mineral",
+    "state": "MT",
+    "whole": true
+   },
+   {
+    "county": "Missoula",
+    "state": "MT",
+    "whole": true
+   },
+   {
+    "county": "Powell",
+    "state": "MT",
+    "whole": true
+   },
+   {
+    "county": "Ravalli",
+    "state": "MT",
+    "whole": true
+   },
+   {
+    "county": "Sanders",
+    "state": "MT",
+    "whole": true
+   },
+   {
+    "county": "Silver Bow",
+    "state": "MT",
+    "whole": true
+   },
+   {
+    "county": "Pondera",
+    "state": "MT",
+    "whole": false
+   }
+  ],
+  "counties_url": "https://sosmt.gov/wp-content/uploads/wpfd/preview_files/2022General-StateCanvassReport(b0cbc684c02ef796806b6300e19d76c3).pdf",
+  "redrawn": "No",
+  "notes": "Cook Toss-up, Fox News Toss-up and Inside Tilt R (moved from Lean R) confirmed by Daily Montanan 10/17; Sabato Toss-up is csv-only (Substack blocked). Counties: 16 counties listed under US House District 1 in the Montana Secretary of State's 2022 General canvass (same 2021 map used in 2026); Pondera is the single split county (Daily Montanan 2021, Montana Free Press, KXLF), so whole=false for it. Trump 2024 margin in the district (about +11) appears only on Wikipedia, so I left it out. The Eagleton poll is 375 registered voters, MoE 6.0, Aug 27-Sept 7. FEC figures are as reported by Daily Montanan 10/23 (through Oct 14), not read on fec.gov directly. Zinke announced in March he would not seek re-election (health).",
+  "st": "MT",
+  "dd": 1,
+  "talk8": false,
+  "cook": "Toss-up",
+  "sabato": "Toss-up",
+  "inside": "Tilt R",
+  "inc_party": "R",
+  "open_seat": true,
+  "money": {
+   "D": "MT1_D",
+   "R": "MT1_R"
+  },
+  "county_fips": [
+   {
+    "fips": "30001",
+    "whole": true
+   },
+   {
+    "fips": "30023",
+    "whole": true
+   },
+   {
+    "fips": "30029",
+    "whole": true
+   },
+   {
+    "fips": "30031",
+    "whole": true
+   },
+   {
+    "fips": "30035",
+    "whole": true
+   },
+   {
+    "fips": "30039",
+    "whole": true
+   },
+   {
+    "fips": "30047",
+    "whole": true
+   },
+   {
+    "fips": "30053",
+    "whole": true
+   },
+   {
+    "fips": "30057",
+    "whole": true
+   },
+   {
+    "fips": "30061",
+    "whole": true
+   },
+   {
+    "fips": "30063",
+    "whole": true
+   },
+   {
+    "fips": "30077",
+    "whole": true
+   },
+   {
+    "fips": "30081",
+    "whole": true
+   },
+   {
+    "fips": "30089",
+    "whole": true
+   },
+   {
+    "fips": "30093",
+    "whole": true
+   },
+   {
+    "fips": "30073",
+    "whole": false
+   }
+  ],
+  "counties_checked": true
+ },
+ {
+  "id": "NC11",
+  "label": "NC-11 \u00b7 Asheville",
+  "rating": "Cook Lean D \u00b7 Sabato Lean D \u00b7 Inside Toss-up",
+  "d": "Jamie Ager",
+  "r": "Jennifer Balkcom",
+  "incumbent": "Open (Chuck Edwards, R, ended reelection bid)",
+  "blurb": "Open seat after incumbent's exit; late GOP replacement",
+  "d_case": [
+   {
+    "text": "Ager has raised $5.9M, with $620K cash on hand (FEC, through Oct 14)",
+    "url": "https://www.fec.gov/data/candidate/H6NC11248/"
+   },
+   {
+    "text": "GOP nominee was named Aug 10, after Edwards quit over an Ethics Committee report",
+    "url": "https://rollcall.com/2026/08/10/north-carolina-republicans-pick-state-legislator-to-replace-edwards-on-ballot/"
+   },
+   {
+    "text": "Buncombe, Henderson and Transylvania counties moved left two cycles in a row",
+    "url": "https://wlos.com/news/local/political-shifts-nc-11-more-competitive-analysts-north-carolina-congressional-district-republicans-gop-democrats-purple-state-election-politics"
+   }
+  ],
+  "r_case": [
+   {
+    "text": "Trump carried the district by just under 10 points in 2024",
+    "url": "https://www.carolinajournal.com/crystal-ball-moves-2-nc-congressional-races-toss-up/"
+   },
+   {
+    "text": "Republicans have held the seat since Democrat Heath Shuler left in 2013",
+    "url": "https://cardinalpine.com/news/jamie-ager-and-jennifer-balkcom-meet-the-us-house-candidates-in-nc-11/"
+   },
+   {
+    "text": "Registered voters: 32% Republican, 24% Democratic, 43% unaffiliated",
+    "url": "https://wlos.com/news/local/political-shifts-nc-11-more-competitive-analysts-north-carolina-congressional-district-republicans-gop-democrats-purple-state-election-politics"
+   }
+  ],
+  "result_2024": {
+   "text": "Edwards (R) won with about 56% of the vote (House, 2024), per early reporting",
+   "url": "https://nsjonline.com/?p=96417"
+  },
+  "counties": [
+   {
+    "county": "Avery",
+    "state": "NC",
+    "whole": true
+   },
+   {
+    "county": "Buncombe",
+    "state": "NC",
+    "whole": true
+   },
+   {
+    "county": "Cherokee",
+    "state": "NC",
+    "whole": true
+   },
+   {
+    "county": "Clay",
+    "state": "NC",
+    "whole": true
+   },
+   {
+    "county": "Graham",
+    "state": "NC",
+    "whole": true
+   },
+   {
+    "county": "Haywood",
+    "state": "NC",
+    "whole": true
+   },
+   {
+    "county": "Henderson",
+    "state": "NC",
+    "whole": true
+   },
+   {
+    "county": "Jackson",
+    "state": "NC",
+    "whole": true
+   },
+   {
+    "county": "Macon",
+    "state": "NC",
+    "whole": true
+   },
+   {
+    "county": "Madison",
+    "state": "NC",
+    "whole": true
+   },
+   {
+    "county": "McDowell",
+    "state": "NC",
+    "whole": true
+   },
+   {
+    "county": "Mitchell",
+    "state": "NC",
+    "whole": true
+   },
+   {
+    "county": "Swain",
+    "state": "NC",
+    "whole": true
+   },
+   {
+    "county": "Transylvania",
+    "state": "NC",
+    "whole": true
+   },
+   {
+    "county": "Yancey",
+    "state": "NC",
+    "whole": true
+   },
+   {
+    "county": "Polk",
+    "state": "NC",
+    "whole": false
+   }
+  ],
+  "counties_url": "https://lrs.sog.unc.edu/billsum/S-757-2023-2024",
+  "redrawn": "State map is new (2025-10-22), but only NC-1 and NC-3 changed, so NC-11 keeps its 2023 lines (Ellis Insight, Oct 24 2025).",
+  "notes": "County list is from the UNC School of Government summary of S.L. 2023-145 (the 2023 map): 15 whole counties plus part of Polk = 16, matching NC Newsline's '16 counties'. That NC-11 was untouched in 2025 comes from Ellis Insight (https://www.ellisinsight.com/2025/10/24/), which says only districts 1 and 3 changed; I did not open the 2025 bill text itself. Money: Balkcom has raised $399,492 with $294,818 cash on hand (FEC H6NC11321, through Oct 14). Balkcom replaced Edwards on Aug 10 (Roll Call). 2024 final per Wikipedia (lead only): Edwards 56.8%, Rudow 43.2%; the cited NSJ piece said 'almost 56%' before results were final, and I could not open NCSBE or NBC results. Ratings come from the caller's CSV; I could not open the Cook, Sabato or Inside Elections pages (fetch blocked), so I did not use ratings as reasons.",
+  "st": "NC",
+  "dd": 11,
+  "talk8": false,
+  "cook": "Lean D",
+  "sabato": "Lean D",
+  "inside": "Toss-up",
+  "inc_party": "R",
+  "open_seat": true,
+  "money": {
+   "D": "NC11_D",
+   "R": "NC11_R"
+  },
+  "county_fips": [
+   {
+    "fips": "37011",
+    "whole": true
+   },
+   {
+    "fips": "37021",
+    "whole": true
+   },
+   {
+    "fips": "37039",
+    "whole": true
+   },
+   {
+    "fips": "37043",
+    "whole": true
+   },
+   {
+    "fips": "37075",
+    "whole": true
+   },
+   {
+    "fips": "37087",
+    "whole": true
+   },
+   {
+    "fips": "37089",
+    "whole": true
+   },
+   {
+    "fips": "37099",
+    "whole": true
+   },
+   {
+    "fips": "37113",
+    "whole": true
+   },
+   {
+    "fips": "37115",
+    "whole": true
+   },
+   {
+    "fips": "37111",
+    "whole": true
+   },
+   {
+    "fips": "37121",
+    "whole": true
+   },
+   {
+    "fips": "37173",
+    "whole": true
+   },
+   {
+    "fips": "37175",
+    "whole": true
+   },
+   {
+    "fips": "37199",
+    "whole": true
+   },
+   {
+    "fips": "37149",
+    "whole": false
+   }
+  ],
+  "counties_checked": true
+ },
+ {
+  "id": "OH7",
+  "label": "OH-7 \u00b7 Cleveland suburbs",
+  "rating": "Toss-up for all three",
+  "d": "Brian Poindexter",
+  "r": "Max Miller",
+  "incumbent": "Max Miller (R)",
+  "blurb": "Incumbent faces abuse allegations he denies",
+  "d_case": [
+   {
+    "text": "Ethics probe of Miller over abuse claims he denies; both GOP senators call him unfit",
+    "url": "https://www.wsbtv.com/news/politics/ironworker/KK2DYTCL4Y63LOYM2S6ODS5OOY/"
+   },
+   {
+    "text": "House Majority PAC committed $6M+ for Cleveland-area ads (as of Oct 19)",
+    "url": "https://www.wsbtv.com/news/politics/ironworker/KK2DYTCL4Y63LOYM2S6ODS5OOY/"
+   },
+   {
+    "text": "Poindexter has raised $3.7M, with $794K cash on hand (FEC, through Oct 14)",
+    "url": "https://www.fec.gov/data/candidate/H6OH07168/?cycle=2026"
+   }
+  ],
+  "r_case": [
+   {
+    "text": "Trump won the district by 11 points in 2024",
+    "url": "https://www.wsbtv.com/news/politics/ironworker/KK2DYTCL4Y63LOYM2S6ODS5OOY/"
+   },
+   {
+    "text": "Miller won 55% in 2022 and 51% in 2024, both against Matthew Diemer",
+    "url": "https://www.clevelandjewishnews.com/news/politics/elections/poindexter-to-face-miller-for-ohio-7th-congressional-district-seat-solon-s-eisner-finishes-3rd/article_60380787-a49f-4068-97b2-7d41d965d219.html"
+   },
+   {
+    "text": "Congressional Leadership Fund booked $5.5M+ in TV airtime (as of Oct 19)",
+    "url": "https://www.wsbtv.com/news/politics/ironworker/KK2DYTCL4Y63LOYM2S6ODS5OOY/"
+   }
+  ],
+  "result_2024": {
+   "text": "Miller won with 51% in a three-way race (House, 2024); Trump +11 in district",
+   "url": "https://www.wsbtv.com/news/politics/ironworker/KK2DYTCL4Y63LOYM2S6ODS5OOY/"
+  },
+  "counties": [
+   {
+    "county": "Cuyahoga",
+    "state": "OH",
+    "whole": false
+   },
+   {
+    "county": "Medina",
+    "state": "OH",
+    "whole": true
+   },
+   {
+    "county": "Wayne",
+    "state": "OH",
+    "whole": false
+   },
+   {
+    "county": "Ashland",
+    "state": "OH",
+    "whole": true
+   }
+  ],
+  "counties_url": "https://www.ashlandsource.com/?p=349412",
+  "redrawn": "State map is new (2025-10-31). Ashland County now belongs to OH-7 (Ashland Source, Apr 28 2026); Inside Elections says the new lines do not fundamentally shift the seat's partisanship.",
+  "notes": "UNCERTAIN COUNTIES: Ashland Source (Apr 28 2026) says 'Ashland County now belongs to District 7, which also includes Medina County and portions of Cuyahoga and Wayne counties'; Cleveland19 (Oct 28 2026) names Medina, Wayne, Ashland plus Cleveland's west-side suburbs and its page summary says four neighboring counties. Whole/partial flags: Medina whole and Cuyahoga partial are consistent across sources; Wayne is partial per Ashland Source but 'all of Wayne' per older (2022-map) coverage; Ashland whole is inferred. An older source and Wikipedia (lead) also mention a small piece of Holmes County under the earlier map; I could not confirm whether Holmes is in the 2026 district. Ohio Secretary of State and Redistricting Commission files would not open. Money: Miller's 2026 FEC totals would not load. Political Wire (Oct 15, citing the Washington Sun) says Miller is almost $2M in campaign debt to himself; Newsweek reported he planned a $1M personal loan. House Majority PAC had spent over $7M in the race total by Aug 14 (Washington Examiner). Poindexter won the May 5 primary with 36.55% (Cleveland Jewish News). Several polls exist but are internal or sponsor-released, so I did not use them. Ratings from the caller's CSV; Cook/Sabato/Inside pages would not open. The AP story is reached through the WSB-TV copy; the CSV lists the KIRO copy of the same story.",
+  "st": "OH",
+  "dd": 7,
+  "talk8": false,
+  "cook": "Toss-up",
+  "sabato": "Toss-up",
+  "inside": "Toss-up",
+  "inc_party": "R",
+  "open_seat": false,
+  "money": {
+   "D": "OH7_D",
+   "R": "OH7_R"
+  },
+  "county_fips": [
+   {
+    "fips": "39035",
+    "whole": false
+   },
+   {
+    "fips": "39103",
+    "whole": true
+   },
+   {
+    "fips": "39169",
+    "whole": false
+   },
+   {
+    "fips": "39005",
+    "whole": true
+   }
+  ],
+  "counties_checked": true
+ },
+ {
+  "id": "OH9",
+  "label": "OH-9 \u00b7 Toledo",
+  "rating": "Toss-up for all three",
+  "d": "Marcy Kaptur",
+  "r": "Derek Merrin",
+  "incumbent": "Marcy Kaptur (D)",
+  "blurb": "Rematch on lines redrawn toward Republicans",
+  "d_case": [
+   {
+    "text": "Won in 2024 on lines Trump carried by 6.7 points",
+    "url": "https://www.13abc.com/2025/10/30/kapturs-district-moves-further-right-new-congressional-map-compromise/"
+   },
+   {
+    "text": "Has raised $5.9M to Merrin's $2.2M (FEC, through Oct 14)",
+    "url": "https://www.fec.gov/data/candidate/H2OH09031/?cycle=2026"
+   },
+   {
+    "text": "Won by 13 points in 2022 and by under 1 point in 2024, 8 points ahead of Harris",
+    "url": "https://new.insideelections.com/a-detailed-analysis-of-ohios-new-congressional-map/"
+   }
+  ],
+  "r_case": [
+   {
+    "text": "New lines were carried by Trump by 10.5 points, up from 6.7 on the old ones",
+    "url": "https://www.13abc.com/2025/10/30/kapturs-district-moves-further-right-new-congressional-map-compromise/"
+   },
+   {
+    "text": "Merrin lost the 2024 race by only about 2,400 votes",
+    "url": "https://www.cbsnews.com/news/2026-midterm-election-races/"
+   },
+   {
+    "text": "Merrin served eight years in the Ohio House and was mayor of Waterville",
+    "url": "https://legis1.com/news/ohio-9th-congressional-district-2026-money-maps"
+   }
+  ],
+  "result_2024": {
+   "text": "Kaptur won by about 2,400 votes (House, 2024), on the old lines Trump carried by 6.7",
+   "url": "https://www.cbsnews.com/news/2026-midterm-election-races/"
+  },
+  "counties": [
+   {
+    "county": "Lucas",
+    "state": "OH",
+    "whole": true
+   },
+   {
+    "county": "Ottawa",
+    "state": "OH",
+    "whole": true
+   },
+   {
+    "county": "Erie",
+    "state": "OH",
+    "whole": true
+   },
+   {
+    "county": "Fulton",
+    "state": "OH",
+    "whole": true
+   },
+   {
+    "county": "Williams",
+    "state": "OH",
+    "whole": true
+   },
+   {
+    "county": "Defiance",
+    "state": "OH",
+    "whole": true
+   },
+   {
+    "county": "Henry",
+    "state": "OH",
+    "whole": true
+   },
+   {
+    "county": "Paulding",
+    "state": "OH",
+    "whole": true
+   },
+   {
+    "county": "Putnam",
+    "state": "OH",
+    "whole": true
+   },
+   {
+    "county": "Wood",
+    "state": "OH",
+    "whole": false
+   }
+  ],
+  "counties_url": "https://www.crescent-news.com/news/local_news/local-counties-would-be-in-same-u-s-congressional-district-under-new-map/article_fcdfe8f4-8c54-4aa7-8dab-224888721ed9.html",
+  "redrawn": "Yes. Ohio map adopted 2025-10-31. Henry, Paulding and Putnam counties added; Sandusky County and northeast Wood County removed. Trump margin rose from 6.7 to 10.5 points (13abc).",
+  "notes": "COUNTIES PARTLY INFERRED: Crescent-News (Oct 31 2025) says the new 9th has 'nine whole counties and part of Wood County' but names only six (Defiance, Fulton, Williams, Henry, Paulding, Putnam). WTOL's county list names Lucas, Ottawa and Erie (it also lists Sandusky, which 13abc and Crescent-News say was removed, so WTOL's list may predate the final map). Six named plus Lucas, Ottawa and Erie makes nine, which fits, but no single source lists all ten. Ohio Secretary of State legal-description PDFs would not open. Kaptur's FEC: $5,910,481 raised, $697,508 cash on hand; Merrin: $2,217,821 raised, $449,466 cash on hand (FEC, through Oct 14). Margin figures differ slightly by source: Inside Elections says Trump +11 on new lines (13abc and Ballotpedia: +10.5), and says baseline moved from R+3 to R+8. 2024 final: Ballotpedia (lead) 48.3% to 47.6%. Merrin background is from Legis1, a secondary site. Ratings from caller's CSV; the Cook/Sabato/Inside pages would not open.",
+  "st": "OH",
+  "dd": 9,
+  "talk8": false,
+  "cook": "Toss-up",
+  "sabato": "Toss-up",
+  "inside": "Toss-up",
+  "inc_party": "D",
+  "open_seat": false,
+  "money": {
+   "D": "OH9_D",
+   "R": "OH9_R"
+  },
+  "county_fips": [
+   {
+    "fips": "39095",
+    "whole": true
+   },
+   {
+    "fips": "39123",
+    "whole": true
+   },
+   {
+    "fips": "39043",
+    "whole": true
+   },
+   {
+    "fips": "39051",
+    "whole": true
+   },
+   {
+    "fips": "39171",
+    "whole": true
+   },
+   {
+    "fips": "39039",
+    "whole": true
+   },
+   {
+    "fips": "39069",
+    "whole": true
+   },
+   {
+    "fips": "39125",
+    "whole": true
+   },
+   {
+    "fips": "39137",
+    "whole": true
+   },
+   {
+    "fips": "39173",
+    "whole": false
+   }
+  ],
+  "counties_checked": true
+ },
+ {
+  "id": "PA1",
+  "label": "PA-1 \u00b7 Bucks County",
+  "rating": "Cook Lean R \u00b7 Sabato Toss-up \u00b7 Inside Lean R",
+  "d": "Bob Harvie",
+  "r": "Brian Fitzpatrick",
+  "incumbent": "Brian Fitzpatrick (R)",
+  "blurb": "Republican incumbent in a district Harris won",
+  "d_case": [
+   {
+    "text": "Harris won this district in 2024, though it re-elected a Republican",
+    "url": "https://jewishinsider.com/2026/10/rjc-drops-400000-to-boost-brian-fitzpatrick-in-pennsylvania-swing-district/"
+   },
+   {
+    "text": "Democrats planned $8.4M in ads through Election Day to Republicans' $5.2M",
+    "url": "https://www.inquirer.com/politics/pennsylvania/pennsylvania-congressional-races-2026-campaigns-hakeem-jeffries-mike-johnson-20261009.html"
+   },
+   {
+    "text": "Harvie won a county commissioner seat in 2019, giving Democrats the board majority",
+    "url": "https://whyy.org/articles/election-2026-pennsylvania-1st-congressional-district-voter-guide/"
+   }
+  ],
+  "r_case": [
+   {
+    "text": "Fitzpatrick won in 2024 by more than 12 points",
+    "url": "https://whyy.org/articles/election-2026-pennsylvania-1st-congressional-district-voter-guide/"
+   },
+   {
+    "text": "Former FBI agent who has broken with his party on climate, guns and LGBTQ rights",
+    "url": "https://whyy.org/articles/election-2026-pennsylvania-1st-congressional-district-voter-guide/"
+   },
+   {
+    "text": "Has raised $8.0M to Harvie's $3.2M (FEC, through Oct 14)",
+    "url": "https://www.fec.gov/data/candidate/H6PA08277/?cycle=2026"
+   }
+  ],
+  "result_2024": {
+   "text": "Fitzpatrick won by nearly 13 points (House, 2024)",
+   "url": "https://www.cbsnews.com/news/2026-midterm-election-races/"
+  },
+  "counties": [
+   {
+    "county": "Bucks",
+    "state": "PA",
+    "whole": true
+   },
+   {
+    "county": "Montgomery",
+    "state": "PA",
+    "whole": false
+   }
+  ],
+  "counties_url": "https://whyy.org/articles/election-2026-pennsylvania-1st-congressional-district-voter-guide/",
+  "redrawn": "No. Pennsylvania did not redraw mid-decade (Gov. Shapiro: 'not on the table'), so PA-1 keeps the lines used in 2024.",
+  "notes": "Result line: CBS says 'nearly 13 points'; WHYY says 'more than 12 points'. The 'Harris also carried the district' part rests on Jewish Insider (Oct 2026), which says PA-1 was one of two seats Harris won that elected a Republican; neither article gives Harris's margin. I did not find an official county-level result. Montgomery County portion: WHYY lists Hatfield, Souderton, Telford, Lansdale-area and nearby municipalities. Pennsylvania used the 2022 court-adopted map in 2024; the 'no redraw' claim rests on Spotlight PA (Sept 2025) quoting Shapiro, which does not say in so many words that the 2022 map is in use. Money: Fitzpatrick $8,021,376 raised, $709,097 cash on hand; Harvie $3,167,942 raised, $409,413 cash on hand (FEC, through Oct 14). At June 30 Fitzpatrick had $6.35M cash to Harvie's $795K (Newtown PA Now), so his cash has dropped as he spent on ads ($4.5M ad allocation, AdImpact via Inquirer). Outside money not used as reasons: CLF put $4.5M in this week, its first PA-1 spending since 2020, and RJC $400K (Jewish Insider); DCCC about $900K for Harvie (Inquirer). Ratings from caller's CSV; Cook/Sabato/Inside pages would not open.",
+  "st": "PA",
+  "dd": 1,
+  "talk8": false,
+  "cook": "Lean R",
+  "sabato": "Toss-up",
+  "inside": "Lean R",
+  "inc_party": "R",
+  "open_seat": false,
+  "money": {
+   "D": "PA1_D",
+   "R": "PA1_R"
+  },
+  "county_fips": [
+   {
+    "fips": "42017",
+    "whole": true
+   },
+   {
+    "fips": "42091",
+    "whole": false
+   }
+  ],
+  "counties_checked": true
+ },
+ {
+  "id": "PA8",
+  "label": "PA-8 \u00b7 Scranton",
+  "rating": "Cook Toss-up \u00b7 Sabato Lean D \u00b7 Inside Tilt D",
+  "d": "Paige Cognetti",
+  "r": "Rob Bresnahan",
+  "incumbent": "Rob Bresnahan (R)",
+  "blurb": "Scranton mayor challenges a first-term incumbent",
+  "d_case": [
+   {
+    "text": "Cognetti has raised $7.5M (FEC, through Oct 14)",
+    "url": "https://www.fec.gov/data/candidate/H6PA08293/"
+   },
+   {
+    "text": "Bresnahan made almost 650 stock trades in 2025; he says an adviser made them",
+    "url": "https://spotlightpa.org/news/2026/10/bresnahan-cognetti-midterm-election-campaign-finance-anticorruption-elections/"
+   },
+   {
+    "text": "Bresnahan won in 2024 by less than 2 points",
+    "url": "https://www.cbsnews.com/news/2026-midterm-election-races/"
+   }
+  ],
+  "r_case": [
+   {
+    "text": "Trump won the district 53.8% to 45.4% in 2024",
+    "url": "https://www.washingtonexaminer.com/news/campaigns/congressional/4573438/pennsylvania-8th-district-results-rob-bresnahan-paige-cognetti/"
+   },
+   {
+    "text": "Flipped this seat in 2024 by unseating a Democratic incumbent",
+    "url": "https://www.cbsnews.com/news/2026-midterm-election-races/"
+   },
+   {
+    "text": "More cash on hand: $733K to $244K (FEC, Oct 14)",
+    "url": "https://www.fec.gov/data/elections/house/PA/08/2026/"
+   }
+  ],
+  "result_2024": {
+   "text": "Bresnahan beat Rep. Matt Cartwright by less than 2 points (House, 2024)",
+   "url": "https://www.cbsnews.com/news/2026-midterm-election-races/"
+  },
+  "counties": [
+   {
+    "county": "Lackawanna",
+    "state": "PA",
+    "whole": true
+   },
+   {
+    "county": "Pike",
+    "state": "PA",
+    "whole": true
+   },
+   {
+    "county": "Wayne",
+    "state": "PA",
+    "whole": true
+   },
+   {
+    "county": "Luzerne",
+    "state": "PA",
+    "whole": false
+   },
+   {
+    "county": "Monroe",
+    "state": "PA",
+    "whole": false
+   }
+  ],
+  "counties_url": "https://bresnahan.house.gov/about/our-district",
+  "redrawn": "No. Pennsylvania did not redraw mid-decade, so PA-8 keeps the lines used in 2024.",
+  "notes": "County LIST is from Rep. Bresnahan's official page (Wayne, Lackawanna, Luzerne, Monroe, Pike). WHOLE vs PARTIAL flags come only from Wikipedia (lead, not citable): Lackawanna, Pike and Wayne whole; Luzerne and Monroe partial (a few municipalities shared with PA-9 and PA-7). I could not confirm the splits from a primary source (PA Supreme Court order PDF would not parse). Result line: the Washington Examiner article gives Trump 53.8-45.4 and says Bresnahan unseated a Democratic incumbent but not his own margin; the 'less than 2 points' is from CBS. WVIA's unofficial election-night count was 192,265 to 184,595 (about 2.0 pts); Wikipedia (lead) has the final as 50.8% to 49.2%. Bresnahan's 2026 FEC page would not load (permission prompt unanswered), so the latest Bresnahan cash figure is April (WFMZ, from Q1 reports) and is stale; Cognetti's FEC: $7,502,359 raised, $243,672 cash on hand (through Oct 14), so the April cash lead may no longer hold. Bresnahan said a financial adviser made the trades and that he has stopped trading (Spotlight PA). Washington Examiner also reports about $7.2M in stock buys and sales since he took office. Ratings from caller's CSV; Cook/Sabato/Inside pages would not open.",
+  "st": "PA",
+  "dd": 8,
+  "talk8": false,
+  "cook": "Toss-up",
+  "sabato": "Lean D",
+  "inside": "Tilt D",
+  "inc_party": "R",
+  "open_seat": false,
+  "money": {
+   "D": "PA8_D",
+   "R": "PA8_R"
+  },
+  "county_fips": [
+   {
+    "fips": "42069",
+    "whole": true
+   },
+   {
+    "fips": "42103",
+    "whole": true
+   },
+   {
+    "fips": "42127",
+    "whole": true
+   },
+   {
+    "fips": "42079",
+    "whole": false
+   },
+   {
+    "fips": "42089",
+    "whole": false
+   }
+  ],
+  "counties_checked": true
+ },
+ {
+  "id": "TX34",
+  "label": "TX-34 \u00b7 South Texas",
+  "rating": "Cook Lean D \u00b7 Sabato Lean D \u00b7 Inside Toss-up",
+  "d": "Vicente Gonzalez",
+  "r": "Eric Flores",
+  "incumbent": "Vicente Gonzalez (D)",
+  "blurb": "Border-area Democrat on lines redrawn toward the GOP",
+  "d_case": [
+   {
+    "text": "Won re-election in 2024 by 3 points, over Mayra Flores",
+    "url": "https://www.texastribune.org/2026/02/26/south-texas-34th-congressional-district-eric-mayra-flores-vicente-gonzalez/"
+   },
+   {
+    "text": "Has $1.4M cash on hand to Flores's $246K (FEC, through Oct 14)",
+    "url": "https://www.fec.gov/data/candidate/H6TX34080/?cycle=2026"
+   },
+   {
+    "text": "DCCC reserved $248K in coordinated TV ads for Gonzalez (reported Sept 3)",
+    "url": "https://www.washingtonexaminer.com/?p=4713085"
+   }
+  ],
+  "r_case": [
+   {
+    "text": "Redrawn to add Corpus Christi area; Trump would have carried it by ~10 points",
+    "url": "https://www.texastribune.org/2026/02/26/south-texas-34th-congressional-district-eric-mayra-flores-vicente-gonzalez/"
+   },
+   {
+    "text": "Flores: ex-federal prosecutor endorsed by Trump, Gov. Abbott and Speaker Johnson",
+    "url": "https://www.texastribune.org/2026/02/26/south-texas-34th-congressional-district-eric-mayra-flores-vicente-gonzalez/"
+   },
+   {
+    "text": "Raised $4.0M, vs. Gonzalez's $5.2M (FEC, through Oct 14)",
+    "url": "https://www.fec.gov/data/candidate/H6TX15162/?cycle=2026"
+   }
+  ],
+  "result_2024": {
+   "text": "Gonzalez beat Mayra Flores by 3 points (House, 2024, old lines)",
+   "url": "https://www.texastribune.org/2026/02/26/south-texas-34th-congressional-district-eric-mayra-flores-vicente-gonzalez/"
+  },
+  "counties": [
+   {
+    "county": "Cameron",
+    "state": "TX",
+    "whole": true
+   },
+   {
+    "county": "Kenedy",
+    "state": "TX",
+    "whole": true
+   },
+   {
+    "county": "Kleberg",
+    "state": "TX",
+    "whole": true
+   },
+   {
+    "county": "Willacy",
+    "state": "TX",
+    "whole": true
+   },
+   {
+    "county": "Nueces",
+    "state": "TX",
+    "whole": false
+   }
+  ],
+  "counties_url": "https://data.capitol.texas.gov/dataset/748c952b-e926-4f44-8d01-a738884b3ec8/resource/7a1a23c7-78f4-4587-962e-313350020fdf/download/planc2333_r150.pdf",
+  "redrawn": "Yes. Texas H.B. 4 (PLANC2333), signed 2025-08-29, in force after the U.S. Supreme Court stay on 2025-12-04. A portion of Hidalgo County was removed and the Corpus Christi area added. Trump margin rose from about 4.5 to about 10 points.",
+  "notes": "Counties are from the Texas Legislative Council district-by-county report for PLANC2333 (Cameron, Kenedy, Kleberg and Willacy whole; Nueces split, 83.4% in TX-34). The Texas Legislative Council timeline page confirms PLANC2333 is the H.B. 4 plan; it also notes a Nov 18 2025 federal injunction that the Supreme Court stayed Dec 4 2025. KRIS-TV says only the Southside of Corpus Christi is in TX-34, consistent with the Nueces split. Hidalgo County no longer appears in the TLC report for this district, though Texas Tribune only says a portion was removed; the caller's CSV says Trump ~52% to ~55%, while Ballotpedia (lead) says Trump 51.8-47.3 on old lines and 54.7-44.5 on new (+10.2). The Texas Tribune and Inside Elections (via Latin Times) both say about 10 points. Money: Gonzalez $5,211,344 raised, $1,396,949 cash on hand; Flores $4,009,074 raised, $246,427 cash on hand across three committees (FEC, through Oct 14); the Flores URL I cite (H6TX15162) is his FEC candidate page. Spectrum News (Oct 14) says the old district voted for Trump in 2024 but Gonzalez narrowly won. Eric Flores (2026 nominee) is a different person from Mayra Flores (2022 and 2024 opponent). Latin Times reported that all public polls were sponsored by Republican-aligned groups, so I did not use polls. Texas Tribune (Apr 23) reports HMP $2.35M and CLF $1.6M initial Corpus Christi-market reservations, but it does not name TX-34, so I left them out. Ratings from the caller's CSV; Cook/Sabato/Inside pages would not open, and one Latin Times/Hoodline piece describes Cook as Toss-up (date unclear), which conflicts with the CSV's Lean D, so check the live Cook page.",
+  "st": "TX",
+  "dd": 34,
+  "talk8": false,
+  "cook": "Lean D",
+  "sabato": "Lean D",
+  "inside": "Toss-up",
+  "inc_party": "D",
+  "open_seat": false,
+  "money": {
+   "D": "TX34_D",
+   "R": "TX34_R"
+  },
+  "county_fips": [
+   {
+    "fips": "48061",
+    "whole": true
+   },
+   {
+    "fips": "48261",
+    "whole": true
+   },
+   {
+    "fips": "48273",
+    "whole": true
+   },
+   {
+    "fips": "48489",
+    "whole": true
+   },
+   {
+    "fips": "48355",
+    "whole": false
+   }
+  ],
+  "counties_checked": true
+ },
+ {
+  "id": "TX35",
+  "label": "TX-35 \u00b7 San Antonio area",
+  "rating": "Cook Toss-up \u00b7 Sabato Toss-up \u00b7 Inside Lean R",
+  "d": "Johnny Garcia",
+  "r": "Carlos De La Cruz",
+  "incumbent": "Open (Greg Casar, D, now running in TX-37)",
+  "blurb": "Open seat redrawn by Republicans; two newcomers",
+  "d_case": [
+   {
+    "text": "Raised $2.2M to De La Cruz\u2019s $2.0M (FEC, Oct 14)",
+    "url": "https://www.fec.gov/data/candidate/H6TX35095/"
+   },
+   {
+    "text": "Garcia worked 20+ years at the Bexar County Sheriff\u2019s Office",
+    "url": "https://www.ksat.com/news/local/2026/10/21/political-newcomers-de-la-cruz-and-garcia-battle-for-redrawn-texas-35th-congressional-district/"
+   },
+   {
+    "text": "Cook's partisan index is only R+4; Trump won it by 2 pts in 2020 (10 in 2024)",
+    "url": "https://www.cookpolitical.com/house/race/485391"
+   }
+  ],
+  "r_case": [
+   {
+    "text": "Republicans redrew it; Trump would have won new lines by ~10 pts in 2024",
+    "url": "https://www.texastribune.org/2026/02/28/texas-35th-congressional-district-republican-democratic-primaries-trump/"
+   },
+   {
+    "text": "More cash on hand: $313K to $150K (FEC, Oct 14)",
+    "url": "https://www.fec.gov/data/candidate/H6TX35087/"
+   },
+   {
+    "text": "Trump-endorsed Air Force veteran; his sister represented 3 of its counties",
+    "url": "https://www.ksat.com/news/local/2026/10/21/political-newcomers-de-la-cruz-and-garcia-battle-for-redrawn-texas-35th-congressional-district/"
+   }
+  ],
+  "result_2024": {
+   "text": "Trump would have won the new lines by ~10 pts (2024); Casar (D) won the old TX-35",
+   "url": "https://www.texastribune.org/2026/02/28/texas-35th-congressional-district-republican-democratic-primaries-trump/"
+  },
+  "counties": [
+   {
+    "county": "Bexar",
+    "state": "TX",
+    "whole": false
+   },
+   {
+    "county": "Guadalupe",
+    "state": "TX",
+    "whole": true
+   },
+   {
+    "county": "Karnes",
+    "state": "TX",
+    "whole": true
+   },
+   {
+    "county": "Wilson",
+    "state": "TX",
+    "whole": true
+   }
+  ],
+  "counties_url": "https://www.ksat.com/news/local/2026/10/21/political-newcomers-de-la-cruz-and-garcia-battle-for-redrawn-texas-35th-congressional-district/",
+  "redrawn": "Yes - redrawn by 2025 TX map into a GOP-leaning San Antonio-area seat",
+  "notes": "Comparisons use two FEC pages (Garcia H6TX35095: $2,201,579 raised, $149,503 cash; De La Cruz H6TX35087: $2,021,118 raised, $312,607 cash; both through Oct 14, 2026). De La Cruz's FEC page starts 9/22/2025. Cook's race page (cookpolitical.com/house/race/485391) gives PVI R+4 and Trump +10 (2024) / +2 (2020) but its rating labels are garbled (shows 'Solid D' and 'Likely R', dated Aug 2025), so current Cook/Sabato/Inside ratings come only from the csv and were not independently confirmed (Cook/Sabato pages blocked). Texas Tribune (Feb 2026) says Cook gives GOP a 4-pt edge; TPR says Trump +10, 57% Hispanic population (52% of eligible voters per Tribune). Counties: KSAT says south, east and northeast Bexar plus Guadalupe, Karnes, Wilson; SA Current says 'southeastern edge' of Bexar. Whether Guadalupe/Karnes/Wilson are wholly inside is not stated; marked whole. Old TX-35 retained <10% of constituency, so 2024 House result is not comparable.",
+  "st": "TX",
+  "dd": 35,
+  "talk8": false,
+  "cook": "Toss-up",
+  "sabato": "Toss-up",
+  "inside": "Lean R",
+  "inc_party": "D",
+  "open_seat": true,
+  "money": {
+   "D": "TX35_D",
+   "R": "TX35_R"
+  },
+  "county_fips": [
+   {
+    "fips": "48029",
+    "whole": false
+   },
+   {
+    "fips": "48187",
+    "whole": true
+   },
+   {
+    "fips": "48255",
+    "whole": true
+   },
+   {
+    "fips": "48493",
+    "whole": true
+   }
+  ],
+  "counties_checked": true
+ },
+ {
+  "id": "VA1",
+  "label": "VA-1 \u00b7 Northern Neck to Richmond",
+  "rating": "Cook Toss-up \u00b7 Sabato Toss-up \u00b7 Inside Lean R",
+  "d": "Shannon Taylor",
+  "r": "Rob Wittman",
+  "incumbent": "Rob Wittman (R)",
+  "blurb": "Henrico prosecutor vs. incumbent since 2007",
+  "d_case": [
+   {
+    "text": "Washington Post-Schar poll of likely voters: Taylor 50%, Wittman 46% (+/-4.5)",
+    "url": "https://politicalwire.com/2026/10/01/two-virginia-districts-shift-left/"
+   },
+   {
+    "text": "Trump won it by only 5 pts in 2024; Spanberger carried it in 2025",
+    "url": "https://www.news4jax.com/news/politics/2026/10/07/in-virginia-democrat-hoping-to-oust-republican-tests-anti-corruption-message-echoing-around-country/"
+   },
+   {
+    "text": "Outside groups have spent nearly $5M on Taylor\u2019s behalf (VPAP)",
+    "url": "https://www.news4jax.com/news/politics/2026/10/07/in-virginia-democrat-hoping-to-oust-republican-tests-anti-corruption-message-echoing-around-country/"
+   }
+  ],
+  "r_case": [
+   {
+    "text": "Won by 13 pts in 2024",
+    "url": "https://vpap.org/candidates/492251/elections"
+   },
+   {
+    "text": "No Democrat has held the seat since the late 1970s",
+    "url": "https://www.news4jax.com/news/politics/2026/10/07/in-virginia-democrat-hoping-to-oust-republican-tests-anti-corruption-message-echoing-around-country/"
+   },
+   {
+    "text": "Raised $5.4M this cycle; $797K cash on hand (FEC, Oct 14)",
+    "url": "https://www.fec.gov/data/committee/C00441014/"
+   }
+  ],
+  "result_2024": {
+   "text": "Wittman won by 13 pts (House, 2024: 56.3% to 43.5%)",
+   "url": "https://vpap.org/candidates/492251/elections"
+  },
+  "counties": [
+   {
+    "county": "Chesterfield",
+    "state": "VA",
+    "whole": false
+   },
+   {
+    "county": "Essex",
+    "state": "VA",
+    "whole": true
+   },
+   {
+    "county": "Gloucester",
+    "state": "VA",
+    "whole": true
+   },
+   {
+    "county": "Hanover",
+    "state": "VA",
+    "whole": false
+   },
+   {
+    "county": "Henrico",
+    "state": "VA",
+    "whole": false
+   },
+   {
+    "county": "James City",
+    "state": "VA",
+    "whole": true
+   },
+   {
+    "county": "King and Queen",
+    "state": "VA",
+    "whole": true
+   },
+   {
+    "county": "King William",
+    "state": "VA",
+    "whole": true
+   },
+   {
+    "county": "Lancaster",
+    "state": "VA",
+    "whole": true
+   },
+   {
+    "county": "Mathews",
+    "state": "VA",
+    "whole": true
+   },
+   {
+    "county": "Middlesex",
+    "state": "VA",
+    "whole": true
+   },
+   {
+    "county": "New Kent",
+    "state": "VA",
+    "whole": true
+   },
+   {
+    "county": "Northumberland",
+    "state": "VA",
+    "whole": true
+   },
+   {
+    "county": "Richmond",
+    "state": "VA",
+    "whole": true
+   },
+   {
+    "county": "Westmoreland",
+    "state": "VA",
+    "whole": true
+   },
+   {
+    "county": "York",
+    "state": "VA",
+    "whole": true
+   },
+   {
+    "county": "Poquoson city",
+    "state": "VA",
+    "whole": true
+   },
+   {
+    "county": "Williamsburg city",
+    "state": "VA",
+    "whole": true
+   }
+  ],
+  "counties_url": "https://mail.virginiagrassroots.org/PowerPacks/2026-CD1-pp.pdf",
+  "redrawn": "No - VA 2026 map struck by VA Supreme Court 2026-05-08",
+  "notes": "Money is lopsided in what I could source: I found Wittman's FEC totals but could not find Taylor's FEC page (her committee shows $598,734 cash on VPAP, undated, so not used). News4jax/AP says Wittman ~$4M vs Taylor ~$2.1M 'most recent reporting period' (unclear period), which does not match FEC's $5.4M cycle total for Wittman; FEC page itself has a coverage-date inconsistency (summary to 10/14/2026, detail sections to 7/15/2026). Cook's race page (cookpolitical.com/house/race/485436) gives Trump +5, PVI R+3, Lean R as of May 8; current Cook Toss-up / Sabato Toss-up / Inside Lean R come from csv only (Sabato move Lean R to Toss-up confirmed by Cardinal News Oct 2; Cook/Sabato sites blocked). Counties: list of 18 localities (16 counties + Poquoson, Williamsburg) is from the Virginia Grassroots 'power pack' PDF (an advocacy group, not an official source) and matches Wikipedia lead; WRIC confirms parts of Henrico and Chesterfield, York, Williamsburg, Poquoson. Whole/partial flags are my best reading: Henrico, Chesterfield, Hanover marked partial (Hanover is split with VA-5); James City and others marked whole but not confirmed. The 2021 court-drawn map is in use. Needs an official locality list (VA Dept of Elections / Supreme Court of VA map).",
+  "st": "VA",
+  "dd": 1,
+  "talk8": false,
+  "cook": "Toss-up",
+  "sabato": "Toss-up",
+  "inside": "Lean R",
+  "inc_party": "R",
+  "open_seat": false,
+  "money": {
+   "D": "VA1_D",
+   "R": "VA1_R"
+  },
+  "county_fips": [
+   {
+    "fips": "51041",
+    "whole": false
+   },
+   {
+    "fips": "51057",
+    "whole": true
+   },
+   {
+    "fips": "51073",
+    "whole": true
+   },
+   {
+    "fips": "51085",
+    "whole": false
+   },
+   {
+    "fips": "51087",
+    "whole": false
+   },
+   {
+    "fips": "51095",
+    "whole": true
+   },
+   {
+    "fips": "51097",
+    "whole": true
+   },
+   {
+    "fips": "51101",
+    "whole": true
+   },
+   {
+    "fips": "51103",
+    "whole": true
+   },
+   {
+    "fips": "51115",
+    "whole": true
+   },
+   {
+    "fips": "51119",
+    "whole": true
+   },
+   {
+    "fips": "51127",
+    "whole": true
+   },
+   {
+    "fips": "51133",
+    "whole": true
+   },
+   {
+    "fips": "51159",
+    "whole": true
+   },
+   {
+    "fips": "51193",
+    "whole": true
+   },
+   {
+    "fips": "51199",
+    "whole": true
+   },
+   {
+    "fips": "51735",
+    "whole": true
+   },
+   {
+    "fips": "51830",
+    "whole": true
+   }
+  ],
+  "counties_checked": true
+ },
+ {
+  "id": "VA2",
+  "label": "VA-2 \u00b7 Virginia Beach",
+  "rating": "Cook Lean D \u00b7 Sabato Lean D \u00b7 Inside Toss-up",
+  "d": "Elaine Luria",
+  "r": "Jen Kiggans",
+  "incumbent": "Jen Kiggans (R)",
+  "blurb": "Rematch of 2022; Luria wants her old seat back",
+  "d_case": [
+   {
+    "text": "Luria held this seat before; retired Navy commander",
+    "url": "https://www.whro.org/elections/2026-09-28/luria-and-kiggans-rematch-in-virginias-2nd-congressional-district-among-most-watched-races-in-nation"
+   },
+   {
+    "text": "Spanberger won 53% here in the 2025 governor\u2019s race",
+    "url": "https://www.whro.org/elections/2026-09-28/luria-and-kiggans-rematch-in-virginias-2nd-congressional-district-among-most-watched-races-in-nation"
+   },
+   {
+    "text": "Raised $8.0M to Kiggans\u2019s $7.6M this cycle (FEC, Oct 14)",
+    "url": "https://www.fec.gov/data/candidate/H6VA02198/"
+   }
+  ],
+  "r_case": [
+   {
+    "text": "Beat Luria in 2022 and won again in 2024",
+    "url": "https://www.whro.org/elections/2026-09-28/luria-and-kiggans-rematch-in-virginias-2nd-congressional-district-among-most-watched-races-in-nation"
+   },
+   {
+    "text": "More cash on hand: $1.3M to $0.5M (FEC, Oct 14)",
+    "url": "https://www.fec.gov/data/candidate/H2VA02064/?cycle=2026"
+   },
+   {
+    "text": "Trump narrowly won the district in 2024",
+    "url": "https://www.cookpolitical.com/analysis/house/house-overview/four-house-ratings-move-towards-dems-virginia-and-new-jersey"
+   }
+  ],
+  "result_2024": {
+   "text": "Kiggans won by about 4 pts (House, 2024)",
+   "url": "https://www.vpm.org/elections/2024-11-06/unofficial-jen-kiggans-missy-cotter-smasal-2nd-congressional-district-results"
+  },
+  "counties": [
+   {
+    "county": "Virginia Beach city",
+    "state": "VA",
+    "whole": true
+   },
+   {
+    "county": "Suffolk city",
+    "state": "VA",
+    "whole": true
+   },
+   {
+    "county": "Franklin city",
+    "state": "VA",
+    "whole": true
+   },
+   {
+    "county": "Isle of Wight",
+    "state": "VA",
+    "whole": true
+   },
+   {
+    "county": "Accomack",
+    "state": "VA",
+    "whole": true
+   },
+   {
+    "county": "Northampton",
+    "state": "VA",
+    "whole": true
+   },
+   {
+    "county": "Chesapeake city",
+    "state": "VA",
+    "whole": false
+   },
+   {
+    "county": "Southampton",
+    "state": "VA",
+    "whole": false
+   }
+  ],
+  "counties_url": "https://kiggans.house.gov/our-district",
+  "redrawn": "No - VA 2026 map struck by VA Supreme Court 2026-05-08",
+  "notes": "FEC periods differ: Luria's committee covers 11/12/2025 to 10/14/2026 ($8,044,064 receipts; $478,862 cash); Kiggans's covers 1/1/2025 to 10/14/2026 ($7,589,812 receipts; $1,292,408 cash). WHRO (Sept 28) quoted older cash figures (Kiggans ~$3.4M, Luria $3.5M); FEC Oct 14 numbers used instead. The Kiggans 2024 margin is from VPM's election-night/near-final report ('about a 4% lead', unofficial); I could not open an official final tally. 'Trump narrowly won' is Cook's wording (Nov 2025 analysis, no exact margin). Handicapper ratings: Sabato Toss-up to Lean D confirmed by Cardinal News (Oct 2); Cook Lean D and Inside Toss-up come from csv only (Cook/Inside pages blocked or not opened). Counties from Kiggans's official house.gov page: full = Virginia Beach, Suffolk, Isle of Wight, Accomack, Northampton, Franklin; partial = Southampton, Chesapeake. The page does not say if 'Franklin' is the city or county; Wikipedia lead says Franklin city (county Franklin is not in VA-2). Uses 2021 court-drawn map.",
+  "st": "VA",
+  "dd": 2,
+  "talk8": false,
+  "cook": "Lean D",
+  "sabato": "Lean D",
+  "inside": "Toss-up",
+  "inc_party": "R",
+  "open_seat": false,
+  "money": {
+   "D": "VA2_D",
+   "R": "VA2_R"
+  },
+  "county_fips": [
+   {
+    "fips": "51810",
+    "whole": true
+   },
+   {
+    "fips": "51800",
+    "whole": true
+   },
+   {
+    "fips": "51620",
+    "whole": true
+   },
+   {
+    "fips": "51093",
+    "whole": true
+   },
+   {
+    "fips": "51001",
+    "whole": true
+   },
+   {
+    "fips": "51131",
+    "whole": true
+   },
+   {
+    "fips": "51550",
+    "whole": false
+   },
+   {
+    "fips": "51175",
+    "whole": false
+   }
+  ],
+  "counties_checked": true
+ },
+ {
+  "id": "VA5",
+  "label": "VA-5 \u00b7 Charlottesville to Southside",
+  "rating": "Cook Likely R \u00b7 Sabato Toss-up \u00b7 Inside Likely R or safer",
+  "d": "Tom Perriello",
+  "r": "John McGuire",
+  "incumbent": "John McGuire (R)",
+  "blurb": "Former congressman tries a comeback",
+  "d_case": [
+   {
+    "text": "Held this seat 2009\u20132011; beat Republican Virgil Goode in 2008",
+    "url": "https://virginiamercury.com/2026/06/22/mcguire-faces-primary-test-as-democrats-eye-more-competitive-5th-district-race/"
+   },
+   {
+    "text": "Raised $3.8M to McGuire's $2.4M; $684K cash to $382K (FEC, Oct 14)",
+    "url": "https://www.fec.gov/data/elections/house/VA/05/2026/"
+   },
+   {
+    "text": "Sabato moved the race from Likely R to Leans R in late September",
+    "url": "https://cardinalnews.org/2026/10/02/early-voting-numbers-show-a-shift-toward-democrats-if-those-hold-at-least-two-house-seats-in-virginia-could-flip-and-a-third-could-be-close/"
+   }
+  ],
+  "r_case": [
+   {
+    "text": "Won by about 15 pts in 2024 (57.7% to 42.3%)",
+    "url": "https://www.wsls.com/decision-2024/2024/11/01/us-house-of-representatives-district-5-general-election-results-on-nov-5-2024/"
+   },
+   {
+    "text": "Trump carried the district by 11 pts in 2024",
+    "url": "https://virginiamercury.com/2026/06/22/mcguire-faces-primary-test-as-democrats-eye-more-competitive-5th-district-race/"
+   },
+   {
+    "text": "Washington Post-Schar poll of likely voters: McGuire 51%, Perriello 45% (+/-4.5)",
+    "url": "https://politicalwire.com/2026/10/01/two-virginia-districts-shift-left/"
+   }
+  ],
+  "result_2024": {
+   "text": "McGuire won by about 15 pts (House, 2024: 242,947 to 178,415 votes)",
+   "url": "https://www.wsls.com/decision-2024/2024/11/01/us-house-of-representatives-district-5-general-election-results-on-nov-5-2024/"
+  },
+  "counties": [
+   {
+    "county": "Albemarle",
+    "state": "VA",
+    "whole": true
+   },
+   {
+    "county": "Amelia",
+    "state": "VA",
+    "whole": true
+   },
+   {
+    "county": "Amherst",
+    "state": "VA",
+    "whole": true
+   },
+   {
+    "county": "Appomattox",
+    "state": "VA",
+    "whole": true
+   },
+   {
+    "county": "Bedford",
+    "state": "VA",
+    "whole": false
+   },
+   {
+    "county": "Buckingham",
+    "state": "VA",
+    "whole": true
+   },
+   {
+    "county": "Campbell",
+    "state": "VA",
+    "whole": true
+   },
+   {
+    "county": "Charlotte",
+    "state": "VA",
+    "whole": true
+   },
+   {
+    "county": "Cumberland",
+    "state": "VA",
+    "whole": true
+   },
+   {
+    "county": "Fluvanna",
+    "state": "VA",
+    "whole": true
+   },
+   {
+    "county": "Goochland",
+    "state": "VA",
+    "whole": false
+   },
+   {
+    "county": "Halifax",
+    "state": "VA",
+    "whole": true
+   },
+   {
+    "county": "Hanover",
+    "state": "VA",
+    "whole": false
+   },
+   {
+    "county": "Louisa",
+    "state": "VA",
+    "whole": true
+   },
+   {
+    "county": "Lunenburg",
+    "state": "VA",
+    "whole": true
+   },
+   {
+    "county": "Mecklenburg",
+    "state": "VA",
+    "whole": true
+   },
+   {
+    "county": "Nelson",
+    "state": "VA",
+    "whole": true
+   },
+   {
+    "county": "Nottoway",
+    "state": "VA",
+    "whole": true
+   },
+   {
+    "county": "Pittsylvania",
+    "state": "VA",
+    "whole": true
+   },
+   {
+    "county": "Powhatan",
+    "state": "VA",
+    "whole": false
+   },
+   {
+    "county": "Prince Edward",
+    "state": "VA",
+    "whole": true
+   },
+   {
+    "county": "Charlottesville city",
+    "state": "VA",
+    "whole": true
+   },
+   {
+    "county": "Danville city",
+    "state": "VA",
+    "whole": true
+   },
+   {
+    "county": "Lynchburg city",
+    "state": "VA",
+    "whole": true
+   }
+  ],
+  "counties_url": "https://www.virginiagrassroots.org/PowerPacks/2026-CD5-pp.pdf",
+  "redrawn": "No - VA 2026 map struck by VA Supreme Court 2026-05-08",
+  "notes": "COUNTY LIST IS NOT CONFIRMED. I could not find an official locality list. The 24 names are assembled from: Virginia Grassroots CD5 PDF (says the district has 24 localities but names only 6 with shares), WSLS 2024 results (Appomattox, Amherst, Bedford [parts], Campbell, Charlotte, Danville, Halifax, Lynchburg, Nelson, Pittsylvania), WRIC (Louisa, Amherst, Powhatan, Goochland, Nottoway, Amelia, part of Hanover), Virginia Mercury voter guide (parts of Goochland, Hanover, Powhatan; Albemarle, Charlottesville, Lynchburg, Danville), and the Wikipedia lead for the rest (Buckingham, Cumberland, Fluvanna, Lunenburg, Mecklenburg, Prince Edward). A Virginia Works (state agency) PDF lists 37 localities incl. Chesterfield, Henrico, Spotsylvania, Rockingham, Augusta, which conflicts and looks like a different geography; not used. Whole/partial flags are guesses except Bedford (WSLS: 'parts'), Goochland/Hanover/Powhatan (Mercury: 'parts of'). Trump margin: Virginia Mercury (June) says +11; WSET says +12 and McGuire +15; used +11 with the Mercury cite. Money: Cardinal News Oct 17 (FEC filings released that Friday); WHRO (Oct 16) gives older Q3 totals ($3.5M/$2.2M) without cash. Ratings: Sabato Likely R to Leans R confirmed Oct 2 (Cardinal); Sabato Toss-up and Cook Likely R and Inside come from csv only (Cook/Sabato pages blocked; DCCC page blocked). The DCCC Red to Blue addition (Aug 20) could not be opened so is not cited. The poll is one WaPo-Schar poll, margin of error about 4.5.",
+  "st": "VA",
+  "dd": 5,
+  "talk8": false,
+  "cook": "Likely R",
+  "sabato": "Toss-up",
+  "inside": "Not in IE competitive columns (Likely R or safer)",
+  "inc_party": "R",
+  "open_seat": false,
+  "money": {
+   "D": "VA5_D",
+   "R": "VA5_R"
+  },
+  "county_fips": [
+   {
+    "fips": "51003",
+    "whole": true
+   },
+   {
+    "fips": "51007",
+    "whole": true
+   },
+   {
+    "fips": "51009",
+    "whole": true
+   },
+   {
+    "fips": "51011",
+    "whole": true
+   },
+   {
+    "fips": "51019",
+    "whole": false
+   },
+   {
+    "fips": "51029",
+    "whole": true
+   },
+   {
+    "fips": "51031",
+    "whole": true
+   },
+   {
+    "fips": "51037",
+    "whole": true
+   },
+   {
+    "fips": "51049",
+    "whole": true
+   },
+   {
+    "fips": "51065",
+    "whole": true
+   },
+   {
+    "fips": "51075",
+    "whole": false
+   },
+   {
+    "fips": "51083",
+    "whole": true
+   },
+   {
+    "fips": "51085",
+    "whole": false
+   },
+   {
+    "fips": "51109",
+    "whole": true
+   },
+   {
+    "fips": "51111",
+    "whole": true
+   },
+   {
+    "fips": "51117",
+    "whole": true
+   },
+   {
+    "fips": "51125",
+    "whole": true
+   },
+   {
+    "fips": "51135",
+    "whole": true
+   },
+   {
+    "fips": "51143",
+    "whole": true
+   },
+   {
+    "fips": "51145",
+    "whole": false
+   },
+   {
+    "fips": "51147",
+    "whole": true
+   },
+   {
+    "fips": "51540",
+    "whole": true
+   },
+   {
+    "fips": "51590",
+    "whole": true
+   },
+   {
+    "fips": "51680",
+    "whole": true
+   }
+  ],
+  "counties_checked": true
+ },
+ {
+  "id": "WA3",
+  "label": "WA-3 \u00b7 Southwest Washington",
+  "rating": "Cook Lean D \u00b7 Sabato Lean D \u00b7 Inside Toss-up",
+  "d": "Marie Gluesenkamp Perez",
+  "r": "John Braun",
+  "incumbent": "Marie Gluesenkamp Perez (D)",
+  "blurb": "Democrat holds a Trump-won seat; heavy outside spending",
+  "d_case": [
+   {
+    "text": "Raised $9.5M to Braun's $3.3M (FEC, through Oct 14)",
+    "url": "https://www.fec.gov/data/elections/house/WA/03/2026/"
+   },
+   {
+    "text": "Won in 2022 and again in a 2024 rematch with Joe Kent (about 52%)",
+    "url": "https://washingtonstatestandard.com/2024/11/09/gluesenkamp-perez-defeats-kent-holding-wa-congressional-seat-for-democrats/"
+   },
+   {
+    "text": "House Majority PAC has spent $4.3M against Braun",
+    "url": "https://www.opb.org/article/2026/10/21/washington-congressional-election-gluesenkamp-perez-braun/"
+   }
+  ],
+  "r_case": [
+   {
+    "text": "Trump won this district in all three of his campaigns",
+    "url": "https://www.opb.org/article/2026/10/21/washington-congressional-election-gluesenkamp-perez-braun/"
+   },
+   {
+    "text": "About $11M in outside spending against the incumbent",
+    "url": "https://www.opb.org/article/2026/10/21/washington-congressional-election-gluesenkamp-perez-braun/"
+   },
+   {
+    "text": "More cash on hand: $672K to $235K (FEC, Oct 14)",
+    "url": "https://www.fec.gov/data/elections/house/WA/03/2026/"
+   }
+  ],
+  "result_2024": {
+   "text": "Gluesenkamp Perez won with about 52% (House, 2024 rematch with Joe Kent)",
+   "url": "https://washingtonstatestandard.com/2024/11/09/gluesenkamp-perez-defeats-kent-holding-wa-congressional-seat-for-democrats/"
+  },
+  "counties": [
+   {
+    "county": "Clark",
+    "state": "WA",
+    "whole": true
+   },
+   {
+    "county": "Cowlitz",
+    "state": "WA",
+    "whole": true
+   },
+   {
+    "county": "Lewis",
+    "state": "WA",
+    "whole": true
+   },
+   {
+    "county": "Pacific",
+    "state": "WA",
+    "whole": true
+   },
+   {
+    "county": "Skamania",
+    "state": "WA",
+    "whole": true
+   },
+   {
+    "county": "Wahkiakum",
+    "state": "WA",
+    "whole": true
+   },
+   {
+    "county": "Thurston",
+    "state": "WA",
+    "whole": false
+   }
+  ],
+  "counties_url": "https://www.opb.org/article/2026/10/21/washington-congressional-election-gluesenkamp-perez-braun/",
+  "redrawn": "No",
+  "notes": "The 52% (51.9%, led by 16,340 votes) is from a Saturday-after-election count in Washington State Standard (Nov 9, 2024); final certified number not checked and Kent's share not stated. The outside spending ($11M against her, incl. Congressional Leadership Fund $4.8M, No Going Back $3.9M, NRCC/Braun $2.6M, American Action Network $1M; and $4.3M House Majority PAC against Braun, DCCC/campaign $2.6M) is as of early October per OPB; it did not give a Trump margin in numbers, only that he won all three times. 'Won in 2022' rests on the Standard ('won by a couple thousand votes'). Cash: OPB says Gluesenkamp Perez 'started October with about $640,000'; Braun $1.1M. Cook's Olympic Trials analysis calls the seat 'marginally right-of-center' and says her moderate reputation and large war chest make it hard to target (not cited). I could not source Trump's 2024 numeric margin or the current Cook/Sabato/Inside ratings (csv only; sites blocked). Republicans cutting ad reservations here (from races_to_watch) not re-verified. Counties per OPB and Washington State Standard (Clark, Cowlitz, Lewis, Pacific, Wahkiakum, Skamania + small part of Thurston); whether the six are wholly inside is not stated, marked whole.",
+  "st": "WA",
+  "dd": 3,
+  "talk8": false,
+  "cook": "Lean D",
+  "sabato": "Lean D",
+  "inside": "Toss-up",
+  "inc_party": "D",
+  "open_seat": false,
+  "money": {
+   "D": "WA3_D",
+   "R": "WA3_R"
+  },
+  "county_fips": [
+   {
+    "fips": "53011",
+    "whole": true
+   },
+   {
+    "fips": "53015",
+    "whole": true
+   },
+   {
+    "fips": "53041",
+    "whole": true
+   },
+   {
+    "fips": "53049",
+    "whole": true
+   },
+   {
+    "fips": "53059",
+    "whole": true
+   },
+   {
+    "fips": "53069",
+    "whole": true
+   },
+   {
+    "fips": "53067",
+    "whole": false
+   }
+  ],
+  "counties_checked": true
+ },
+ {
+  "id": "WI3",
+  "label": "WI-3 \u00b7 Western Wisconsin",
+  "rating": "Cook Lean D \u00b7 Sabato Lean D \u00b7 Inside Toss-up",
+  "d": "Rebecca Cooke",
+  "r": "Derrick Van Orden",
+  "incumbent": "Derrick Van Orden (R)",
+  "blurb": "Rematch; Democrat has outraised the incumbent",
+  "d_case": [
+   {
+    "text": "Raised $12.7M to Van Orden's $9.1M (FEC, through Oct 14)",
+    "url": "https://www.fec.gov/data/elections/house/WI/03/2026/"
+   },
+   {
+    "text": "Van Orden ran well behind Trump in 2024 (won by 2.7 pts)",
+    "url": "https://thebadgerproject.org/2024/12/16/van-orden-ran-well-behind-trump-can-he-hold-his-western-wis-district-in-2026/"
+   },
+   {
+    "text": "Cook\u2019s partisan index puts the district at only R+3",
+    "url": "https://www.wsaw.com/2026/08/16/decision-2026-why-wisconsins-3rd-congressional-district-race-matters-why-voters-will-see-so-many-ads/"
+   }
+  ],
+  "r_case": [
+   {
+    "text": "Won this seat in 2022 (by 3.7 pts) and again in 2024",
+    "url": "https://thebadgerproject.org/2024/12/16/van-orden-ran-well-behind-trump-can-he-hold-his-western-wis-district-in-2026/"
+   },
+   {
+    "text": "More cash on hand: $1.17M to $447K (FEC, Oct 14)",
+    "url": "https://www.fec.gov/data/elections/house/WI/03/2026/"
+   },
+   {
+    "text": "Trump carried the district by more than 7 pts in 2024",
+    "url": "https://thebadgerproject.org/2024/12/16/van-orden-ran-well-behind-trump-can-he-hold-his-western-wis-district-in-2026/"
+   }
+  ],
+  "result_2024": {
+   "text": "Van Orden won by about 3 pts (House, 2024: 51.4% to 48.6%)",
+   "url": "https://wpr.org/news/election-2024-derrick-van-orden-wins-reelection-3rd-congressional-district"
+  },
+  "counties": [
+   {
+    "county": "Adams",
+    "state": "WI",
+    "whole": true
+   },
+   {
+    "county": "Buffalo",
+    "state": "WI",
+    "whole": true
+   },
+   {
+    "county": "Crawford",
+    "state": "WI",
+    "whole": true
+   },
+   {
+    "county": "Dunn",
+    "state": "WI",
+    "whole": true
+   },
+   {
+    "county": "Eau Claire",
+    "state": "WI",
+    "whole": true
+   },
+   {
+    "county": "Grant",
+    "state": "WI",
+    "whole": true
+   },
+   {
+    "county": "La Crosse",
+    "state": "WI",
+    "whole": true
+   },
+   {
+    "county": "Pepin",
+    "state": "WI",
+    "whole": true
+   },
+   {
+    "county": "Pierce",
+    "state": "WI",
+    "whole": true
+   },
+   {
+    "county": "Portage",
+    "state": "WI",
+    "whole": true
+   },
+   {
+    "county": "Trempealeau",
+    "state": "WI",
+    "whole": true
+   },
+   {
+    "county": "Vernon",
+    "state": "WI",
+    "whole": true
+   },
+   {
+    "county": "Chippewa",
+    "state": "WI",
+    "whole": false
+   },
+   {
+    "county": "Jackson",
+    "state": "WI",
+    "whole": false
+   },
+   {
+    "county": "Juneau",
+    "state": "WI",
+    "whole": false
+   },
+   {
+    "county": "Monroe",
+    "state": "WI",
+    "whole": false
+   },
+   {
+    "county": "Richland",
+    "state": "WI",
+    "whole": false
+   },
+   {
+    "county": "Wood",
+    "state": "WI",
+    "whole": false
+   }
+  ],
+  "counties_url": "https://law.justia.com/codes/wisconsin/chapter-3/section-3-13/",
+  "redrawn": "No",
+  "notes": "Counties are from Wisconsin Statutes s. 3.13 (text as hosted on Justia, 2025 edition); the page text is long and I read it through a summarizer, so spot-check against docs.legis.wisconsin.gov (that page was blocked). Whole: Adams, Buffalo, Crawford, Dunn, Eau Claire, Grant, La Crosse, Pepin, Pierce, Portage, Trempealeau, Vernon. Partial: Chippewa, Jackson, Juneau, Monroe, Richland, Wood. The Wikipedia lead differs (Richland and Wood whole, Sauk partial, no Chippewa listing as I read it); statute used. Money: Q3 (Jul 23 to Sep 30) numbers are from WPR (Cooke raised ~$3.4M, spent ~$4.3M; Van Orden raised ~$1.3M, spent ~$3.8M); no cash-on-hand figure found for the Sept 30 close, so the cash line is the July 22 FEC figure from WSAW (Cooke ~$1.83M, Van Orden ~$4.68M). Cooke's own side may have burned cash since. Since start of 2025 Cooke has raised ~$8.6M vs ~$7.5M (Wisconsin Examiner, Aug 11). NOTUS Oct article on the Q3 filings redirected off-site and was not read. 2022 margin 3.7 and 2024 margin 2.7 and Trump 7+ are all from Badger Project (Dec 2024); WPR's 51.4/48.6 is an unofficial AP count. WSAW says Cook rated it Toss Up as of Aug 16; csv says Cook Lean D as of Oct 23 (not independently confirmed; Cook/Sabato pages blocked).",
+  "st": "WI",
+  "dd": 3,
+  "talk8": false,
+  "cook": "Lean D",
+  "sabato": "Lean D",
+  "inside": "Toss-up",
+  "inc_party": "R",
+  "open_seat": false,
+  "money": {
+   "D": "WI3_D",
+   "R": "WI3_R"
+  },
+  "county_fips": [
+   {
+    "fips": "55001",
+    "whole": true
+   },
+   {
+    "fips": "55011",
+    "whole": true
+   },
+   {
+    "fips": "55023",
+    "whole": true
+   },
+   {
+    "fips": "55033",
+    "whole": true
+   },
+   {
+    "fips": "55035",
+    "whole": true
+   },
+   {
+    "fips": "55043",
+    "whole": true
+   },
+   {
+    "fips": "55063",
+    "whole": true
+   },
+   {
+    "fips": "55091",
+    "whole": true
+   },
+   {
+    "fips": "55093",
+    "whole": true
+   },
+   {
+    "fips": "55097",
+    "whole": true
+   },
+   {
+    "fips": "55121",
+    "whole": true
+   },
+   {
+    "fips": "55123",
+    "whole": true
+   },
+   {
+    "fips": "55017",
+    "whole": false
+   },
+   {
+    "fips": "55053",
+    "whole": false
+   },
+   {
+    "fips": "55057",
+    "whole": false
+   },
+   {
+    "fips": "55081",
+    "whole": false
+   },
+   {
+    "fips": "55103",
+    "whole": false
+   },
+   {
+    "fips": "55141",
+    "whole": false
+   }
+  ],
+  "counties_checked": true
+ }
+]

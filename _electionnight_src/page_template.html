@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Election Night 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/*BASECSS*/
+main{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 4px}
+.chipbtn{border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:999px;padding:7px 12px;font:500 14px 'IBM Plex Sans',sans-serif;cursor:pointer}
+.chipbtn.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.rating{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.rating span{font-size:12px;border:1px solid var(--line);border-radius:6px;padding:2px 6px;color:var(--muted)}
+.result{margin-top:10px;font-weight:600;color:var(--ink);font-size:15px}
+.result .w{display:inline-block;padding:2px 8px;border-radius:6px;color:#fff;margin-right:6px}
+.result .w.D{background:var(--dem)} .result .w.R{background:var(--rep)}
+.case a{color:var(--muted);font-size:12px}
+.subsel{margin-top:10px}
+.score{font-family:'Source Serif 4',Georgia,serif;font-size:34px;font-weight:700;color:var(--ink)}
+</style>
+</head>
+<body>
+<header>
+  <h1>Election Night 2026</h1>
+  <div class="sub">The 32 House races to watch. Pick your winners, follow the money, check your calls as results come in.</div>
+  <div class="tabs" role="tablist">
+    <button class="tab on" data-s="s1" role="tab"><b>Races</b>Who wins?</button>
+    <button class="tab" data-s="s2" role="tab"><b>Money</b>Where it comes from</button>
+    <button class="tab" data-s="s3" role="tab"><b>Results</b>The room's calls</button>
+  </div>
+</header>
+<main>
+  <section class="step on" id="s1">
+    <h2>Who wins?</h2>
+    <p class="lede">Every race at least one forecaster calls a toss-up, plus CA-13. Tap a race for each side's case, then make your call. Change your mind anytime; your last pick counts.</p>
+    <div class="filters" id="filters"></div>
+    <div id="raceCards"></div>
+  </section>
+  <section class="step" id="s2">
+    <h2>Where the money comes from</h2>
+    <p class="lede">Pick a race, then a candidate, and see where their donors live. Itemized gifts from individuals this cycle, as filed with the FEC.</p>
+    <select id="raceSel" aria-label="Choose a race"></select>
+    <div class="subsel"><select id="candSel" aria-label="Choose a candidate"></select></div>
+    <div id="explorer"></div>
+  </section>
+  <section class="step" id="s3">
+    <h2>The room's calls</h2>
+    <p class="lede" id="resLede">Winners get marked here as races are called tonight.</p>
+    <div class="card room" id="scoreCard" hidden></div>
+    <div id="tallyCards"></div>
+  </section>
+</main>
+<footer id="foot"></footer>
+<script>
+const RACES = /*RACES*/[];
+const MONEY = /*MONEY*/{};
+const BASE = "https://ntfy.sh/ucm-eln-2026-a03f51";
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const ls = { get(k, d) { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch(e) { return d; } },
+             set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch(e) {} } };
+let voter = ls.get("eln_voter", null); if (!voter) { voter = Math.random().toString(36).slice(2, 10); ls.set("eln_voter", voter); }
+let mine = ls.get("eln_mine", {});
+let RESULTS = { races: {} };
+const short = r => r.label.split(" · ")[0];
+function show(s) { document.querySelectorAll(".tab").forEach(t => t.classList.toggle("on", t.dataset.s === s)); document.querySelectorAll(".step").forEach(x => x.classList.toggle("on", x.id === s)); ls.set("eln_tab", s); }
+document.querySelectorAll(".tab").forEach(t => t.addEventListener("click", () => show(t.dataset.s)));
+const urlStep = new URLSearchParams(location.search).get("step"); show(urlStep ? "s" + urlStep : ls.get("eln_tab", "s1"));
+async function send(obj) { try { await fetch(BASE, {method: "POST", body: JSON.stringify(Object.assign({v: voter}, obj))}); } catch(e) {} refresh(); }
+
+/* races */
+const GROUPS = [["all","All 32"],["talk","Talk races"],["rheld","Republican seats"],["dheld","Democratic seats"],["open","Open seats"]];
+let grp = ls.get("eln_grp", "all"); const open = {};
+function inGroup(r) { return grp === "all" || (grp === "talk" && r.talk8) || (grp === "rheld" && r.inc_party === "R") || (grp === "dheld" && r.inc_party === "D") || (grp === "open" && r.open_seat); }
+function renderFilters() {
+  document.getElementById("filters").innerHTML = GROUPS.map(([k, t]) => `<button class="chipbtn ${grp === k ? "on" : ""}" data-g="${k}">${t}</button>`).join("");
+  document.querySelectorAll("#filters .chipbtn").forEach(b => b.onclick = () => { grp = b.dataset.g; ls.set("eln_grp", grp); renderFilters(); renderCards(); });
+}
+function resultLine(r) { const x = RESULTS.races[r.id]; if (!x || !x.called) return x && x.pct_in != null ? `<div class="result">${x.pct_in}% counted · ${esc(r.d.split(" ").slice(-1)[0])} ${x.d_pct ?? "–"}%, ${esc(r.r.split(" ").slice(-1)[0])} ${x.r_pct ?? "–"}%</div>` : "";
+  return `<div class="result"><span class="w ${x.called}">Winner</span>${esc(x.called === "D" ? r.d : r.r)}${mine["r_" + r.id] ? (mine["r_" + r.id] === x.called ? " · you called it" : " · you picked the other side") : ""}</div>`; }
+function renderCards() {
+  document.getElementById("raceCards").innerHTML = RACES.filter(inGroup).map(r => `
+    <div class="card"><div class="race-h tap ${open[r.id] ? "open" : ""}" data-x="${esc(r.id)}" role="button" aria-expanded="${open[r.id] ? "true" : "false"}"><span class="race-name">${esc(r.label)}</span><span class="race-note">${esc(r.incumbent || "")}</span></div>
+      <div class="race-note">${esc(r.blurb || "")}</div>
+      <div class="rating"><span>Cook: ${esc(r.cook)}</span><span>Sabato: ${esc(r.sabato)}</span><span>Inside Elections: ${esc(r.inside)}</span></div>
+      <div class="more-hint" data-x="${esc(r.id)}">${open[r.id] ? "Hide each side’s case" : "Tap for each side’s case"}</div>
+      <div class="cases ${open[r.id] ? "on" : ""}">
+        <div class="case d"><b>Why ${esc(r.d)} wins</b><ul>${r.d_case.map(s => `<li>${esc(s.text)}${s.url ? ` <a href="${esc(s.url)}" target="_blank" rel="noopener">source</a>` : ""}</li>`).join("")}</ul></div>
+        <div class="case r"><b>Why ${esc(r.r)} wins</b><ul>${r.r_case.map(s => `<li>${esc(s.text)}${s.url ? ` <a href="${esc(s.url)}" target="_blank" rel="noopener">source</a>` : ""}</li>`).join("")}</ul></div>
+      </div>
+      <div class="picks">
+        <button class="pick d ${mine["r_" + r.id] === "D" ? "on" : ""}" data-r="${esc(r.id)}" data-p="D">${esc(r.d)}<small>Democrat</small></button>
+        <button class="pick r ${mine["r_" + r.id] === "R" ? "on" : ""}" data-r="${esc(r.id)}" data-p="R">${esc(r.r)}<small>Republican</small></button>
+      </div>${resultLine(r)}</div>`).join("");
+  document.querySelectorAll("#raceCards [data-x]").forEach(h => h.addEventListener("click", () => { open[h.dataset.x] = !open[h.dataset.x]; renderCards(); }));
+  document.querySelectorAll(".pick").forEach(b => b.addEventListener("click", () => { mine["r_" + b.dataset.r] = b.dataset.p; ls.set("eln_mine", mine); renderCards(); send({q: "race", r: b.dataset.r, a: b.dataset.p}); }));
+}
+
+/* room tally + results */
+let tally = {}, callers = 0;
+async function refresh() {
+  try { const t = await (await fetch(BASE + "/json?poll=1&since=all")).text();
+    const last = {}; t.split("\n").filter(Boolean).map(l => { try { return JSON.parse(l); } catch(e) { return null; } }).filter(m => m && m.event === "message").sort((a, b) => a.time - b.time)
+      .forEach(m => { let x; try { x = JSON.parse(m.message); } catch(e) { return; } if (x && x.v && x.q === "race" && (x.a === "D" || x.a === "R") && RACES.some(r => r.id === x.r)) last[x.v + "|" + x.r] = x; });
+    tally = {}; const who = new Set(); Object.values(last).forEach(x => { tally[x.r] = tally[x.r] || {D: 0, R: 0}; tally[x.r][x.a]++; who.add(x.v); }); callers = who.size;
+  } catch(e) {}
+  renderTally();
+}
+async function loadResults() { try { const r = await fetch("results.json?t=" + Date.now()); if (r.ok) { RESULTS = await r.json(); renderCards(); renderTally(); } } catch(e) {} }
+function renderTally() {
+  const called = RACES.filter(r => RESULTS.races[r.id] && RESULTS.races[r.id].called);
+  const roomRight = called.filter(r => { const c = tally[r.id]; return c && c.D + c.R && ((c.D >= c.R ? "D" : "R") === RESULTS.races[r.id].called); }).length;
+  const myCalled = called.filter(r => mine["r_" + r.id]); const myRight = myCalled.filter(r => mine["r_" + r.id] === RESULTS.races[r.id].called).length;
+  const sc = document.getElementById("scoreCard");
+  sc.hidden = !called.length;
+  sc.innerHTML = called.length ? `<div class="stats"><div class="stat"><div class="score">${called.length} / ${RACES.length}</div><div class="lbl">races called</div></div>
+    <div class="stat"><div class="score">${roomRight} / ${called.length}</div><div class="lbl">the room got right</div></div>
+    <div class="stat"><div class="score">${myRight} / ${myCalled.length}</div><div class="lbl">you got right</div></div></div>` : "";
+  document.getElementById("resLede").textContent = `${callers} ${callers === 1 ? "person has" : "people have"} made calls. Winners get marked as races are called tonight.`;
+  document.getElementById("tallyCards").innerHTML = RACES.map(r => { const c = tally[r.id] || {D: 0, R: 0}; const n = c.D + c.R; const pd = n ? Math.round(100 * c.D / n) : 50; const x = RESULTS.races[r.id];
+    const ln = s => esc(s.split(" ").slice(-1)[0]);
+    return `<div style="margin:12px 0"><div class="race-h"><span class="race-name" style="font-size:16px">${esc(short(r))}${x && x.called ? ` <span class="race-note">· winner: ${esc(x.called === "D" ? r.d : r.r)}</span>` : ""}</span><span class="race-note">${n} call${n === 1 ? "" : "s"}</span></div>
+      <div class="bar"><span class="bd" style="width:${pd}%">${n ? ln(r.d) + " " + pd + "%" : ""}</span><span class="br" style="width:${100 - pd}%">${n ? ln(r.r) + " " + (100 - pd) + "%" : ""}</span></div></div>`; }).join("");
+}
+
+/* money explorer */
+const GRID = {AK:[0,0],ME:[0,11],VT:[1,10],NH:[1,11],WA:[2,1],ID:[2,2],MT:[2,3],ND:[2,4],MN:[2,5],IL:[2,6],WI:[2,7],MI:[2,8],NY:[2,9],RI:[2,10],MA:[2,11],OR:[3,1],NV:[3,2],WY:[3,3],SD:[3,4],IA:[3,5],IN:[3,6],OH:[3,7],PA:[3,8],NJ:[3,9],CT:[3,10],CA:[4,1],UT:[4,2],CO:[4,3],NE:[4,4],MO:[4,5],KY:[4,6],WV:[4,7],VA:[4,8],MD:[4,9],DE:[4,10],AZ:[5,2],NM:[5,3],KS:[5,4],AR:[5,5],TN:[5,6],NC:[5,7],SC:[5,8],DC:[5,9],OK:[6,4],LA:[6,5],MS:[6,6],AL:[6,7],GA:[6,8],HI:[7,0],TX:[7,4],FL:[7,9]};
+const fmt$ = x => x == null ? "–" : x >= 1e6 ? "$" + (x / 1e6).toFixed(1) + "M" : "$" + Math.round(x / 1e3) + "K";
+function renderExplorer() {
+  const rs = document.getElementById("raceSel"), cs = document.getElementById("candSel");
+  rs.innerHTML = RACES.map(r => `<option value="${esc(r.id)}">${esc(r.label)}</option>`).join("");
+  const saved = ls.get("eln_sel", null); if (saved && MONEY[saved]) rs.value = saved.split("_")[0];
+  const fill = () => { const r = RACES.find(x => x.id === rs.value); cs.innerHTML = [["D", r.d + " (D)"], ["R", r.r + " (R)"]].map(([p, t]) => `<option value="${esc(r.id + "_" + p)}">${esc(t)}</option>`).join(""); if (saved && saved.startsWith(r.id + "_")) cs.value = saved; draw(cs.value); };
+  rs.onchange = () => { fill(); ls.set("eln_sel", cs.value); }; cs.onchange = () => { ls.set("eln_sel", cs.value); draw(cs.value); }; fill();
+}
+function draw(k) {
+  const m = MONEY[k];
+  if (!m || !m.itemized) { document.getElementById("explorer").innerHTML = `<div class="card"><p class="lede">The FEC hasn't posted donor-state totals for this candidate yet.${m && m.receipts ? " Total raised: " + fmt$(m.receipts) + "." : ""}</p></div>`; return; }
+  const others = Object.entries(m.states).filter(([s]) => s !== m.home); const max = Math.max(1, ...others.map(([, v]) => v));
+  const cells = [];
+  for (let r = 0; r < 8; r++) for (let c = 0; c < 12; c++) {
+    const st = Object.keys(GRID).find(s => GRID[s][0] === r && GRID[s][1] === c);
+    if (!st) { cells.push("<div></div>"); continue; }
+    const v = m.states[st] || 0, home = st === m.home, a = home ? 0 : Math.sqrt(v / max);
+    const bg = home ? "var(--line)" : `color-mix(in srgb, var(--teal) ${Math.round(a * 100)}%, var(--paper))`;
+    cells.push(`<div class="tile ${home ? "home" : ""}" style="background:${bg};color:${!home && a > .55 ? "#fff" : "var(--ink)"}" title="${st}: ${fmt$(v)}">${st}</div>`);
+  }
+  const top = others.sort((a, b) => b[1] - a[1]).slice(0, 5);
+  document.getElementById("explorer").innerHTML = `<div class="card">
+    <div class="stats"><div class="stat"><div class="big">${fmt$(m.receipts)}</div><div class="lbl">raised in all (FEC, Oct 14)</div></div>
+      <div class="stat"><div class="big">${Math.round(100 * m.out)}%</div><div class="lbl">of itemized gifts from outside ${esc(m.home)}</div></div>
+      <div class="stat"><div class="big">${m.nstates}</div><div class="lbl">states giving $1K or more</div></div></div>
+    <div class="tiles">${cells.join("")}</div><div class="legend">Less <i></i> More · outlined: home state</div>
+    <div class="toplist"><strong>Top states outside ${esc(m.home)}</strong>${top.map(([s, v]) => `<div><span>${s}</span><span>${fmt$(v)}</span></div>`).join("")}</div>
+    <p class="status">Donor states cover ${esc(m.cov)}, the latest the FEC has processed for this candidate, so compare shares, not dollars.</p></div>`;
+}
+document.getElementById("foot").textContent = "Money: FEC.gov candidate and election pages, pulled Oct 30, 2026. Ratings: Cook, Sabato's Crystal Ball, Inside Elections. Each side's case links to its source.";
+renderFilters(); renderCards(); renderExplorer(); refresh(); loadResults(); setInterval(refresh, 8000); setInterval(loadResults, 60000);
+</script>
+</body>
+</html>

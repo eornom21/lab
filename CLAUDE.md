@@ -18,3 +18,5 @@ Nate's professional public pages: talk companion pages, dashboards, small tools.
 
 ## Existing pages
 followthemoney (Scholar Showcase talk companion, Oct 30, 2026; the deck's QR code points here). Sources live in `_followthemoney_src/` in this repo: rebuild with `python3 _followthemoney_src/build_page.py followthemoney/index.html`. popcornlove.net/followthemoney only forwards here (Nate, 10/29: no work pages on popcornlove).
+
+electionnight (Election Night 2026 watch-party phone page: 32 races, each side's case, money explorer, picks, results). Sources in `_electionnight_src/`: rebuild with `python3 _electionnight_src/build_page.py electionnight/index.html`. Winners: edit `electionnight/results.json` ({"races": {"PA10": {"called": "D", "d_pct": 51, "r_pct": 49, "pct_in": 95}}}); the page re-reads it every minute. Poll topic ntfy.sh/ucm-eln-2026-a03f51. Owned by the Election Night Lab thread from Oct 30, 2026.
