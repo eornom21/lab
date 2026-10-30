@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>PAGE TITLE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800&family=Source+Sans+3:wght@400;600;700&display=swap">
+<style>
+:root{
+  --bg:#F5F3EC; --paper:#FFFDF8; --ink:#1C1F1A; --body:#3A4335; --muted:#69745F;
+  --line:#E2DCCD; --accent:#1B3322; --accent-ink:#F2EFE4; --hl:#B85B18;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#12160F; --paper:#1A2017; --ink:#EDEBE0; --body:#CBD2C2; --muted:#93A089;
+  --line:#2E3828; --accent:#16281B; --accent-ink:#EDEBE0; --hl:#E08A44;
+}}
+:root[data-theme="dark"]{
+  --bg:#12160F; --paper:#1A2017; --ink:#EDEBE0; --body:#CBD2C2; --muted:#93A089;
+  --line:#2E3828; --accent:#16281B; --accent-ink:#EDEBE0; --hl:#E08A44;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--body);font:16px/1.55 'Source Sans 3',system-ui,sans-serif}
+header{background:var(--accent);color:var(--accent-ink);padding:32px 16px 24px;text-align:center}
+h1{font-family:'Big Shoulders Display',sans-serif;font-weight:800;font-size:clamp(30px,7vw,46px);letter-spacing:.5px;line-height:1.05}
+.sub{opacity:.8;margin-top:6px}
+main{max-width:860px;margin:0 auto;padding:24px 16px 64px}
+h2{font-family:'Big Shoulders Display',sans-serif;font-weight:700;font-size:26px;color:var(--ink);margin:28px 0 10px}
+p{margin:0 0 12px}
+a{color:var(--hl)}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:18px;margin:14px 0}
+table{width:100%;border-collapse:collapse;background:var(--paper);font-size:15px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}
+th{color:var(--ink)}
+.scroll{overflow-x:auto}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:0 16px 32px}
+</style>
+</head>
+<body>
+<header>
+  <h1>PAGE TITLE</h1>
+  <div class="sub">One-line description</div>
+</header>
+<main>
+  <!-- content -->
+</main>
+<footer>Updated DATE</footer>
+</body>
+</html>

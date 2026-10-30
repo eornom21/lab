@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Who Steers the Money?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#F6F3EC; --paper:#FFFDF8; --ink:#1B2A41; --body:#3D4A5C; --muted:#6B7280;
+  --line:#DCD5C8; --accent:#1B2A41; --accent-ink:#F6F3EC; --dem:#2E5E9E; --rep:#B5451B; --teal:#2E6F8E;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#11161F; --paper:#18202C; --ink:#EEF1F5; --body:#C9D3DC; --muted:#93A0B0;
+  --line:#2C3747; --accent:#0E1520; --accent-ink:#EEF1F5; --dem:#6D9FE0; --rep:#E07E58; --teal:#6FB3CF;
+}}
+:root[data-theme="dark"]{
+  --bg:#11161F; --paper:#18202C; --ink:#EEF1F5; --body:#C9D3DC; --muted:#93A0B0;
+  --line:#2C3747; --accent:#0E1520; --accent-ink:#EEF1F5; --dem:#6D9FE0; --rep:#E07E58; --teal:#6FB3CF;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--body);font:17px/1.5 'IBM Plex Sans',system-ui,sans-serif}
+header{background:var(--accent);color:var(--accent-ink);padding:26px 16px 0;text-align:center}
+h1{font-family:'Source Serif 4',Georgia,serif;font-weight:700;font-size:clamp(28px,7vw,42px);line-height:1.1}
+.sub{opacity:.85;margin-top:6px}
+.tabs{display:flex;gap:4px;justify-content:center;margin-top:18px;max-width:860px;margin-left:auto;margin-right:auto}
+.tab{flex:1;background:transparent;color:var(--accent-ink);border:0;border-bottom:4px solid transparent;padding:10px 6px 12px;font:600 15px 'IBM Plex Sans',sans-serif;cursor:pointer;opacity:.75}
+.tab.on{border-bottom-color:#E09A74;opacity:1}
+.tab b{display:block;font-size:12px;letter-spacing:2px;text-transform:uppercase;opacity:.8}
+main{max-width:860px;margin:0 auto;padding:18px 16px 64px}
+section.step{display:none} section.step.on{display:block}
+h2{font-family:'Source Serif 4',Georgia,serif;font-weight:700;font-size:27px;color:var(--ink);margin:18px 0 8px}
+.lede{color:var(--muted);margin-bottom:12px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:16px;margin:12px 0}
+.q{font-weight:600;color:var(--ink);font-size:19px;margin-bottom:10px}
+.guess{display:flex;align-items:center;gap:14px}
+.guess input{flex:1;accent-color:var(--teal);height:36px}
+.guess output{font-family:'Source Serif 4',Georgia,serif;font-size:40px;font-weight:700;color:var(--ink);min-width:92px;text-align:right}
+.btn{display:block;width:100%;margin-top:12px;border:0;border-radius:10px;padding:14px;background:var(--teal);color:#fff;font:600 17px 'IBM Plex Sans',sans-serif;cursor:pointer;min-height:52px}
+.opts{display:grid;gap:10px}
+.opt{border:2px solid var(--line);background:transparent;color:var(--ink);border-radius:10px;padding:12px;text-align:left;font:500 16px 'IBM Plex Sans',sans-serif;cursor:pointer;min-height:52px}
+.opt.on{border-color:var(--teal);background:var(--teal);color:#fff}
+.race-h{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
+.race-name{font-weight:600;color:var(--ink);font-size:19px}
+.race-note{color:var(--muted);font-size:14px}
+.race-h.tap{cursor:pointer;-webkit-tap-highlight-color:transparent}
+.race-h.tap .race-name::after{content:" \25B8";color:var(--teal);font-size:15px}
+.race-h.tap.open .race-name::after{content:" \25BE"}
+.more-hint{color:var(--teal);font-size:14px;font-weight:600;cursor:pointer;margin-top:4px}
+.cases{display:none;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.cases.on{display:grid}
+.case{border-top:4px solid var(--line);padding-top:8px}
+.case.d{border-color:var(--dem)} .case.r{border-color:var(--rep)}
+.case b{display:block;font-size:14px;margin-bottom:4px}
+.case.d b{color:var(--dem)} .case.r b{color:var(--rep)}
+.case ul{margin:0;padding-left:18px;color:var(--body);font-size:14px;line-height:1.35}
+.case li{margin:0 0 6px}
+.picks{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.pick{border:2px solid var(--line);background:transparent;color:var(--ink);border-radius:10px;padding:12px 8px;font:600 16px 'IBM Plex Sans',sans-serif;cursor:pointer;min-height:56px}
+.pick small{display:block;font-weight:400;color:var(--muted);font-size:13px}
+.pick.d.on{border-color:var(--dem);background:var(--dem);color:#fff}
+.pick.r.on{border-color:var(--rep);background:var(--rep);color:#fff}
+.pick.on small{color:#fff;opacity:.9}
+.bar{display:flex;height:30px;border-radius:8px;overflow:hidden;margin-top:10px;background:var(--line)}
+.bar span{display:flex;align-items:center;font-size:14px;font-weight:600;color:#fff;padding:0 8px;white-space:nowrap;overflow:hidden}
+.bar .bd{background:var(--dem)} .bar .br{background:var(--rep);justify-content:flex-end}
+.hbar{display:grid;grid-template-columns:1fr 3fr auto;gap:8px;align-items:center;margin:6px 0;font-size:15px}
+.hbar .t{height:18px;background:var(--line);border-radius:9px;overflow:hidden}
+.hbar .t i{display:block;height:100%;background:var(--teal)}
+.hist{display:flex;align-items:flex-end;gap:3px;height:120px;margin-top:10px}
+.hist div{flex:1;background:var(--teal);border-radius:3px 3px 0 0;min-height:2px}
+.histx{display:flex;justify-content:space-between;color:var(--muted);font-size:13px}
+.status{font-size:14px;color:var(--muted);margin-top:8px}
+.room{border-left:4px solid var(--teal)}
+select{width:100%;padding:12px;border-radius:10px;border:1px solid var(--line);background:var(--paper);color:var(--ink);font:500 17px 'IBM Plex Sans',sans-serif}
+.big{font-family:'Source Serif 4',Georgia,serif;font-size:40px;font-weight:700;color:var(--ink);line-height:1}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:12px 0}
+.stat .lbl{color:var(--muted);font-size:14px}
+.tiles{display:grid;grid-template-columns:repeat(12,1fr);gap:3px;margin-top:10px}
+.tile{aspect-ratio:1;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:clamp(8px,2.2vw,13px);font-weight:600;color:var(--ink)}
+.tile.home{outline:3px solid var(--ink);outline-offset:-3px}
+.legend{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);margin-top:8px}
+.legend i{display:inline-block;width:120px;height:12px;border-radius:6px;background:linear-gradient(to right,var(--paper),var(--teal));border:1px solid var(--line)}
+.toplist{margin-top:10px;font-size:15px}
+.toplist div{display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding:4px 0}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:0 16px 32px}
+</style>
+</head>
+<body>
+<header>
+  <h1>Who Steers the Money?</h1>
+  <div class="sub">Follow along with the talk. No sign-in, nothing saved about you.</div>
+  <div class="tabs" role="tablist">
+    <button class="tab on" data-s="s1" role="tab"><b>Step 1</b>Your hunch</button>
+    <button class="tab" data-s="s2" role="tab"><b>Step 2</b>Follow the money</button>
+    <button class="tab" data-s="s3" role="tab"><b>Step 3</b>Make your calls</button>
+  </div>
+</header>
+<main>
+  <section class="step on" id="s1">
+    <h2>Your hunch</h2>
+    <p class="lede">No wrong answers. These are gut calls; we’ll see how the room’s hunches stack up against the data.</p>
+    <div class="card">
+      <div class="q">In a close House race, what share of the money from individual donors do you think comes from out of state?</div>
+      <div class="guess"><input type="range" id="oos" min="0" max="100" step="5" value="30" aria-label="Your guess, percent"><output id="oosOut">30%</output></div>
+      <button class="btn" id="oosBtn">Submit my guess</button>
+      <div class="status" id="oosStatus"></div>
+    </div>
+    <div class="card">
+      <div class="q">When a donor in California gives to a race in Iowa, who most likely pointed them there?</div>
+      <div class="opts" id="whoOpts"></div>
+      <div class="status" id="whoStatus"></div>
+    </div>
+    <div class="card room">
+      <div class="q">The room so far</div>
+      <div id="roomHunch" class="lede">Waiting for guesses…</div>
+    </div>
+  </section>
+  <section class="step" id="s2">
+    <h2>Follow the money</h2>
+    <p class="lede">Pick a candidate in one of Tuesday’s closest races and see where their donors live. Itemized gifts from individuals this cycle, as filed with the FEC.</p>
+    <select id="raceSel" aria-label="Choose a candidate"></select>
+    <div id="explorer"></div>
+  </section>
+  <section class="step" id="s3">
+    <h2>Make your calls</h2>
+    <p class="lede">Now that you know the races, who wins Tuesday? Change your mind anytime; your last pick counts.</p>
+    <div id="raceCards"></div>
+    <div class="card room">
+      <div class="q">The room’s calls</div>
+      <div id="tallyLede" class="lede">Updates every few seconds.</div>
+      <div id="tallyCards"></div>
+    </div>
+  </section>
+</main>
+<footer id="foot"></footer>
+<script>
+const RACES = [{"id": "CA13", "label": "CA-13 · Central Valley", "rating": "Cook Lean D · Sabato Likely D · Inside Tilt D", "d": "Adam Gray", "r": "Kevin Lincoln", "blurb": "Won by 187 votes in 2024; new lines lean Democratic", "d_case": ["Incumbent, and Prop 50 gave him friendlier lines", "Raised $5.2M to Lincoln’s $3.0M", "Republicans cut their ad buys here this week"], "r_case": ["Gray’s last two races were decided by 187 and 564 votes", "Former Stockton mayor and Marine veteran; a GOP-recruited candidate", "GOP super PAC spent $4.3M+ here vs. under $400K for Democrats (as of Oct 11)"]}, {"id": "CA22", "label": "CA-22 · Central Valley", "rating": "Cook Toss-up · Sabato Lean D · Inside Toss-up", "d": "Randy Villegas", "r": "David Valadao", "blurb": "Republican incumbent on redrawn, bluer lines", "d_case": ["Prop 50 made the seat bluer", "Nearly matched Valadao: $5.9M raised to his $6.3M", "Sabato rates it Lean D"], "r_case": ["Has won this seat on Biden-won ground before", "More cash on hand: $1.7M to $1.0M", "Cook and Inside Elections still call it a toss-up"]}, {"id": "AZ6", "label": "AZ-6 · Tucson", "rating": "Cook Lean D · Sabato Lean D · Inside Toss-up", "d": "JoAnna Mendoza", "r": "Juan Ciscomani", "blurb": "Challenger has outraised the incumbent", "d_case": ["Raised $11.2M, about $3.6M more than the incumbent", "Marine veteran; an early pick for the Democrats’ target list", "Cook and Sabato rate it Lean D"], "r_case": ["Has won this seat twice (2022, 2024)", "On the GOP’s list of incumbents it protects", "Inside Elections still calls it a toss-up"]}, {"id": "PA10", "label": "PA-10 · Harrisburg", "rating": "Cook Lean D · Sabato Lean D · Inside Toss-up", "d": "Janelle Stelson", "r": "Scott Perry", "blurb": "Rematch of 2024", "d_case": ["Lost by only about 5,000 votes in 2024", "Outraised Perry $9.2M to $6.8M, with twice his cash on hand", "Cook moved it to Lean D on Oct 9"], "r_case": ["Already beat this same opponent in 2024", "Has held the seat since 2013", "Inside Elections still calls it a toss-up"]}, {"id": "NC1", "label": "NC-1 · Northeast NC", "rating": "Cook Toss-up · Sabato Lean D · Inside Toss-up", "d": "Don Davis", "r": "Laurie Buckhout", "blurb": "Redrawn to be more Republican; a rematch", "d_case": ["Beat this same opponent in 2024", "Outraised her: $5.8M to $4.8M (over $2M of hers is her own loans)", "Sabato rates it Lean D"], "r_case": ["Republicans redrew it: Trump’s 2024 share goes from 51% to 55%", "More cash on hand: $1.4M to $0.8M", "One of the most expensive races in the country: $12M+ in outside spending planned"]}, {"id": "AL2", "label": "AL-2 · Mobile to Montgomery", "rating": "Cook Lean R · Sabato Toss-up · Inside Lean R", "d": "Shomari Figures", "r": "Rhett Marques", "blurb": "Older map reinstated after a Supreme Court ruling", "d_case": ["Incumbent with far more cash: $1.2M to $0.2M", "Outraised Marques $2.7M to $1.7M", "Sabato moved it to toss-up on Oct 27"], "r_case": ["The Supreme Court reinstated a map that drops the Black voting-age share from 49% to 40%", "Cook now scores the district 7 points more Republican than the nation", "A super PAC has spent $2.5M backing him"]}, {"id": "TX15", "label": "TX-15 · Rio Grande Valley", "rating": "Cook Toss-up · Sabato Lean D · Inside Toss-up", "d": "Bobby Pulido", "r": "Monica De La Cruz", "blurb": "A test of Republican gains with Latino voters", "d_case": ["A Latin Grammy-winning Tejano star running as an “old-school” socially conservative Democrat", "Raised $6.8M, dead even with the incumbent", "Sabato moved it to Lean D on Oct 27"], "r_case": ["The district voted for Trump by about 18 points in 2024", "Incumbent riding the GOP’s gains with South Texas Latino voters", "Cook and Inside Elections still call it a toss-up"]}, {"id": "NY17", "label": "NY-17 · Hudson Valley", "rating": "Toss-up for all three", "d": "Cait Conley", "r": "Mike Lawler", "blurb": "All three handicappers call it a coin flip", "d_case": ["Harris carried this district in 2024", "Raised $10.7M", "Army combat veteran; won a crowded primary"], "r_case": ["Won in 2024 even as Harris carried the district", "Raised $10.3M, about even with Conley", "All three raters: pure toss-up"]}];
+const MONEY = {"CA13_D": {"label": "Adam Gray (D) · CA-13", "home": "CA", "total": 2367265, "out": 1268835, "nstates": 48, "states": {"CA": 1098430, "NY": 278370, "MA": 223960, "IL": 115008, "DC": 82980, "MD": 72999, "TX": 60400, "FL": 42486, "CT": 34960, "WA": 31355, "VA": 31158, "CO": 27282, "OR": 25541, "MN": 23819, "WY": 20000, "OK": 19204, "KY": 15500, "MT": 14300, "NV": 13950, "AZ": 10750, "NH": 10500, "MO": 9127, "NC": 9033, "AL": 9000, "NJ": 8891, "OH": 8750, "GA": 7275, "MS": 7000, "ID": 7000, "PA": 6361, "RI": 6357, "NM": 6218, "UT": 5249, "SC": 4893, "ME": 4083, "AR": 3500, "HI": 2519, "TN": 2417, "LA": 2029, "KS": 1000, "WI": 850, "IN": 789, "MI": 767, "IA": 500, "AK": 250, "VT": 231, "DE": 214, "SD": 10}}, "CA13_R": {"label": "Kevin Lincoln (R) · CA-13", "home": "CA", "total": 1631971, "out": 961226, "nstates": 47, "states": {"CA": 670745, "TX": 278403, "FL": 224740, "NY": 50352, "IL": 43822, "LA": 28788, "VA": 28677, "TN": 26190, "MA": 24949, "CO": 23481, "MO": 22852, "AR": 22412, "NV": 20317, "MI": 19726, "AZ": 19279, "ID": 15818, "MN": 14890, "GA": 13699, "OH": 13658, "PA": 10623, "CT": 9128, "AL": 5934, "SD": 5096, "KS": 4307, "SC": 3860, "NJ": 3625, "IN": 3416, "MS": 3339, "UT": 2687, "NC": 2561, "ME": 1943, "WI": 1723, "WY": 1709, "OR": 1590, "NM": 1530, "WA": 1520, "OK": 1430, "KY": 908, "NH": 525, "WV": 420, "MD": 415, "IA": 266, "HI": 239, "MT": 168, "NE": 125, "AK": 50, "DC": 36}}, "CA22_D": {"label": "Randy Villegas (D) · CA-22", "home": "CA", "total": 1648485, "out": 658480, "nstates": 40, "states": {"CA": 990005, "NY": 122987, "MA": 81121, "TX": 75778, "IL": 48753, "MD": 45654, "DC": 44924, "CO": 39567, "WA": 37123, "FL": 20468, "OR": 18975, "CT": 12798, "AZ": 12750, "KY": 11000, "VA": 9612, "PA": 9522, "MN": 8475, "ME": 8000, "MT": 7470, "NJ": 4817, "OH": 4550, "NM": 4300, "TN": 3600, "HI": 3369, "MI": 2810, "VT": 2525, "UT": 2500, "NH": 2500, "WI": 2250, "GA": 2000, "MO": 1625, "RI": 1500, "DE": 1000, "ID": 850, "NC": 732, "AK": 500, "MS": 350, "AR": 300, "NE": 100, "AL": 75}}, "CA22_R": {"label": "David Valadao (R) · CA-22", "home": "CA", "total": 3137366, "out": 2078089, "nstates": 43, "states": {"CA": 1059277, "FL": 439325, "TX": 436911, "NY": 152944, "VA": 131506, "LA": 100332, "DC": 68756, "IL": 67425, "MA": 57127, "MN": 50376, "MD": 49067, "TN": 48185, "MI": 43912, "NV": 41937, "CO": 41432, "MO": 39049, "CT": 34022, "AZ": 31799, "AR": 23317, "GA": 23153, "OH": 21796, "WA": 18268, "PA": 17599, "ID": 17237, "WI": 16316, "WY": 13566, "NC": 13500, "OK": 11300, "UT": 10810, "SC": 7537, "NE": 7000, "NH": 6705, "IN": 6598, "AL": 6443, "NJ": 6426, "SD": 5530, "MS": 3209, "NM": 3150, "MT": 1000, "VT": 1000, "IA": 782, "ME": 671, "OR": 571}}, "AZ6_D": {"label": "JoAnna Mendoza (D) · AZ-6", "home": "AZ", "total": 4017512, "out": 3381952, "nstates": 51, "states": {"NY": 939995, "CA": 735943, "AZ": 635560, "MA": 313021, "MD": 125196, "WA": 121971, "CT": 113691, "IL": 106749, "TX": 100705, "FL": 94784, "DC": 75508, "CO": 61301, "NM": 53479, "OR": 50303, "WY": 48539, "NJ": 42293, "MN": 38018, "VA": 33836, "NV": 28965, "PA": 26350, "KY": 24937, "GA": 21684, "ID": 17668, "UT": 16280, "VT": 15814, "OK": 15754, "MT": 15170, "NH": 14800, "NC": 14402, "TN": 14337, "OH": 13762, "MO": 12723, "MI": 12665, "WI": 9503, "MS": 9200, "SC": 7475, "ME": 6612, "IN": 4146, "KS": 3570, "IA": 3093, "LA": 2715, "AK": 2485, "HI": 1871, "NE": 1739, "DE": 1590, "RI": 1550, "AL": 1550, "AR": 1120, "SD": 865, "WV": 740, "ND": 25}}, "AZ6_R": {"label": "Juan Ciscomani (R) · AZ-6", "home": "AZ", "total": 4317949, "out": 2821448, "nstates": 46, "states": {"AZ": 1496501, "TX": 530752, "FL": 475313, "CA": 427450, "NY": 247705, "LA": 97132, "IL": 91652, "VA": 86395, "GA": 78792, "CO": 77319, "MA": 71623, "TN": 63075, "CT": 61435, "MN": 53433, "NV": 47376, "MI": 36534, "MO": 35809, "OH": 30975, "AR": 25462, "MD": 23240, "PA": 22468, "NM": 22272, "DC": 21296, "NJ": 16851, "WA": 16627, "UT": 14684, "NH": 13881, "AL": 13265, "WI": 11879, "WY": 11697, "NC": 10836, "ID": 8675, "OK": 8114, "HI": 8038, "SC": 7900, "IN": 7894, "KY": 7774, "NE": 7108, "SD": 6860, "KS": 6080, "OR": 5273, "MS": 3956, "ME": 3391, "IA": 2042, "ND": 500, "WV": 115}}, "PA10_D": {"label": "Janelle Stelson (D) · PA-10", "home": "PA", "total": 6481963, "out": 4465294, "nstates": 49, "states": {"PA": 2016669, "NY": 1147894, "CA": 972879, "MA": 441277, "MD": 251862, "WA": 190536, "DC": 187724, "CT": 138936, "FL": 129199, "IL": 120930, "VA": 114215, "NJ": 106335, "CO": 88417, "TX": 83888, "OR": 69073, "MN": 42881, "WY": 28464, "UT": 25576, "MO": 24157, "NV": 23664, "KY": 23136, "GA": 22511, "OH": 19876, "DE": 16844, "NH": 16250, "VT": 15362, "MT": 14433, "SC": 14233, "OK": 14100, "ID": 12525, "RI": 12456, "TN": 12005, "AZ": 11598, "NM": 11277, "NC": 9124, "MS": 8600, "MI": 5901, "ME": 5672, "IN": 4589, "NE": 4186, "IA": 3750, "WI": 2836, "HI": 2653, "KS": 1595, "AK": 1250, "AL": 1125, "LA": 600, "AR": 600, "WV": 500}}, "PA10_R": {"label": "Scott Perry (R) · PA-10", "home": "PA", "total": 3381939, "out": 2740114, "nstates": 51, "states": {"PA": 641825, "FL": 486817, "TX": 428155, "CA": 282736, "NY": 145105, "VA": 126453, "IL": 104061, "TN": 84072, "LA": 81474, "MN": 68323, "MI": 65816, "NJ": 57079, "OH": 55635, "CO": 50185, "WY": 43565, "DC": 43145, "MA": 42806, "MO": 42589, "NV": 40800, "GA": 37226, "AZ": 36545, "MD": 31415, "IN": 28863, "AR": 28569, "CT": 26358, "NC": 24883, "WA": 23069, "ID": 22708, "KS": 22677, "AL": 19559, "WI": 18921, "OK": 14798, "IA": 14019, "OR": 13753, "UT": 13605, "NE": 12525, "MS": 11895, "SD": 11456, "SC": 9610, "NM": 8510, "NH": 8333, "DE": 8093, "WV": 6886, "MT": 6825, "HI": 5782, "KY": 4808, "AK": 3410, "ME": 3308, "VT": 3285, "RI": 3176, "ND": 1778}}, "NC1_D": {"label": "Don Davis (D) · NC-1", "home": "NC", "total": 2383134, "out": 2219370, "nstates": 44, "states": {"NY": 557548, "CA": 514740, "MA": 222840, "NC": 163764, "FL": 106735, "TX": 105350, "DC": 99584, "GA": 87331, "MD": 74658, "CT": 59613, "IL": 46755, "VA": 33425, "WA": 27097, "KY": 26500, "PA": 25960, "NJ": 25580, "OR": 20272, "CO": 20079, "AZ": 18945, "OK": 18204, "DE": 18070, "MN": 15219, "MO": 12657, "SC": 12500, "NV": 12150, "RI": 6950, "UT": 6360, "LA": 4779, "TN": 4500, "NH": 3800, "MI": 3750, "MT": 3700, "MS": 3500, "WY": 2500, "NM": 2250, "HI": 2111, "ME": 1883, "AL": 1500, "OH": 1475, "ID": 1000, "IN": 1000, "WV": 1000, "AK": 1000, "WI": 600}}, "NC1_R": {"label": "Laurie Buckhout (R) · NC-1", "home": "NC", "total": 1051765, "out": 786449, "nstates": 41, "states": {"NC": 265316, "TX": 210536, "FL": 185458, "CA": 68529, "IL": 36655, "NY": 34843, "VA": 29189, "MO": 19000, "MA": 17320, "LA": 16937, "AR": 15401, "CO": 14451, "MI": 14450, "PA": 14010, "CT": 10593, "TN": 9522, "SC": 9144, "AZ": 8774, "ID": 8707, "NV": 6850, "OH": 6311, "AL": 6100, "GA": 5450, "WA": 5050, "IN": 4001, "KS": 3500, "NM": 3150, "NJ": 3116, "DC": 3012, "MN": 2334, "OK": 2000, "MD": 1759, "WY": 1509, "SD": 1411, "NH": 1145, "IA": 1000, "ND": 1000, "WV": 200, "UT": 100, "KY": 50, "MS": 24}}, "AL2_D": {"label": "Shomari Figures (D) · AL-2", "home": "AL", "total": 349545, "out": 250111, "nstates": 30, "states": {"AL": 99434, "DC": 45226, "CA": 37197, "NY": 29224, "WA": 26238, "MD": 20585, "VA": 18950, "GA": 14900, "TX": 8850, "CT": 7000, "FL": 5730, "NV": 5000, "CO": 4500, "MI": 3720, "IL": 3501, "AR": 3500, "NM": 3500, "OH": 2869, "MA": 1561, "LA": 1000, "NC": 840, "PA": 765, "OR": 451, "SC": 375, "TN": 250, "MN": 250, "KS": 250, "HI": 250, "NJ": 250, "OK": 190}}, "AL2_R": {"label": "Rhett Marques (R) · AL-2", "home": "AL", "total": 1335218, "out": 88134, "nstates": 11, "states": {"AL": 1247084, "TX": 32082, "VA": 18521, "SC": 14000, "FL": 12010, "LA": 7000, "DC": 1521, "AR": 1000, "NJ": 1000, "MD": 500, "GA": 500}}, "TX15_D": {"label": "Bobby Pulido (D) · TX-15", "home": "TX", "total": 2009250, "out": 1237434, "nstates": 40, "states": {"TX": 771816, "CA": 416348, "NY": 243983, "MA": 162636, "DC": 63434, "WA": 57398, "CT": 37510, "MD": 33467, "FL": 22138, "MN": 21850, "IL": 21099, "CO": 19799, "VA": 16330, "NV": 11500, "NJ": 11483, "OR": 10021, "NH": 8700, "KY": 7500, "OK": 7000, "ME": 7000, "UT": 5889, "PA": 4883, "GA": 4750, "AZ": 4615, "IN": 4350, "MO": 4000, "MT": 3867, "NM": 3167, "WY": 2375, "AR": 2250, "NC": 2000, "TN": 1875, "OH": 1500, "MI": 1350, "NE": 1000, "WI": 850, "AL": 750, "ID": 667, "LA": 600, "HI": 500}}, "TX15_R": {"label": "Monica De La Cruz (R) · TX-15", "home": "TX", "total": 3736368, "out": 2234037, "nstates": 51, "states": {"TX": 1502331, "FL": 436693, "CA": 281825, "NY": 150433, "IL": 97862, "VA": 70537, "MO": 64692, "MA": 64044, "OH": 63889, "MI": 61844, "GA": 61005, "CO": 57594, "PA": 57333, "AZ": 57254, "LA": 48220, "TN": 44506, "NV": 43882, "NJ": 38233, "MN": 36358, "SC": 35877, "ID": 34421, "AL": 33951, "NC": 32250, "IN": 30023, "CT": 29896, "AR": 29689, "WA": 26480, "KS": 21334, "NM": 21081, "OK": 18319, "OR": 17403, "MS": 17080, "WI": 16699, "DC": 14371, "WY": 13840, "MD": 13535, "UT": 9991, "IA": 9963, "WV": 9360, "ME": 9125, "KY": 7298, "HI": 6833, "SD": 5895, "NE": 5783, "MT": 3404, "AK": 2919, "NH": 2375, "DE": 1525, "VT": 778, "ND": 734, "RI": 658}}, "NY17_D": {"label": "Cait Conley (D) · NY-17", "home": "NY", "total": 3243335, "out": 1495405, "nstates": 45, "states": {"NY": 1747930, "CA": 427390, "MA": 214988, "DC": 108824, "CT": 106196, "VA": 102826, "FL": 66005, "TX": 61510, "NJ": 43608, "MD": 38845, "CO": 35588, "IL": 31580, "WY": 30222, "WA": 29523, "PA": 19938, "NC": 18185, "AZ": 16500, "OH": 15500, "KY": 14500, "GA": 13775, "MI": 9750, "NH": 8460, "IN": 8214, "OK": 7250, "NM": 7100, "TN": 6800, "OR": 6200, "VT": 5955, "SC": 3400, "ID": 3000, "MO": 2750, "MT": 2225, "ME": 2002, "WI": 1700, "MN": 1587, "HI": 1539, "DE": 1500, "AK": 1250, "KS": 1250, "NV": 1100, "LA": 1000, "AL": 750, "RI": 500, "UT": 370, "WV": 250}}, "NY17_R": {"label": "Mike Lawler (R) · NY-17", "home": "NY", "total": 5974792, "out": 3624993, "nstates": 51, "states": {"NY": 2349799, "FL": 828422, "TX": 554588, "CA": 418249, "NJ": 246889, "IL": 165216, "CT": 131007, "VA": 117784, "CO": 95820, "LA": 92490, "MA": 90160, "TN": 73933, "PA": 72571, "MN": 65402, "DC": 61511, "AZ": 50640, "MI": 48898, "NV": 47684, "MO": 47388, "MD": 43136, "OH": 39166, "AR": 35218, "GA": 28540, "ID": 27137, "WI": 25882, "IN": 20153, "WY": 17814, "NC": 16794, "AL": 14206, "UT": 13886, "OR": 13125, "NM": 12130, "VT": 11525, "SC": 11346, "WA": 10611, "NE": 8566, "NH": 7925, "IA": 7211, "KS": 6989, "OK": 6168, "SD": 6030, "MS": 4234, "KY": 4049, "RI": 2510, "MT": 2500, "ME": 1351, "AK": 736, "WV": 500, "DE": 288, "ND": 250, "HI": 116}}};
+const META = {"asof": "June 30 to Oct 14, 2026, depending on the candidate", "source": "Itemized gifts from individuals by donor state, from the FEC's candidate pages (pulled Oct 29)."};
+const WHO = [["party","The party (DCCC or NRCC)"],["self","Nobody: the donor read the news"],["group","An interest group (EMILY’s List, Club for Growth…)"],["cand","The candidate’s own fundraising emails"]];
+const BASE = "https://ntfy.sh/ucm-ftm-2026-k7q3vz";
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const ls = { get(k, d) { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch(e) { return d; } },
+             set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch(e) {} } };
+let voter = ls.get("ftm_voter", null); if (!voter) { voter = Math.random().toString(36).slice(2, 10); ls.set("ftm_voter", voter); }
+let mine = ls.get("ftm_mine", {});
+/* tabs */
+function show(s) { document.querySelectorAll(".tab").forEach(t => t.classList.toggle("on", t.dataset.s === s)); document.querySelectorAll(".step").forEach(x => x.classList.toggle("on", x.id === s)); ls.set("ftm_tab", s); }
+document.querySelectorAll(".tab").forEach(t => t.addEventListener("click", () => show(t.dataset.s)));
+const urlStep = new URLSearchParams(location.search).get("step"); show(urlStep ? "s" + urlStep : ls.get("ftm_tab", "s1"));
+async function send(obj, statusEl) {
+  try { const r = await fetch(BASE, {method: "POST", body: JSON.stringify(Object.assign({v: voter}, obj))});
+    if (statusEl) statusEl.textContent = r.ok ? "Got it." : "Couldn’t send; try again."; }
+  catch(e) { if (statusEl) statusEl.textContent = "Couldn’t send; check your connection."; }
+  refresh();
+}
+/* step 1 */
+const oos = document.getElementById("oos"), oosOut = document.getElementById("oosOut");
+if (mine.oos != null) oos.value = mine.oos;
+oosOut.textContent = oos.value + "%"; oos.addEventListener("input", () => oosOut.textContent = oos.value + "%");
+document.getElementById("oosBtn").addEventListener("click", () => { mine.oos = +oos.value; ls.set("ftm_mine", mine); send({q: "oos", a: +oos.value}, document.getElementById("oosStatus")); });
+function renderWho() {
+  document.getElementById("whoOpts").innerHTML = WHO.map(([k, t]) => `<button class="opt ${mine.who === k ? "on" : ""}" data-k="${k}">${esc(t)}</button>`).join("");
+  document.querySelectorAll("#whoOpts .opt").forEach(b => b.addEventListener("click", () => { mine.who = b.dataset.k; ls.set("ftm_mine", mine); renderWho(); send({q: "who", a: b.dataset.k}, document.getElementById("whoStatus")); }));
+}
+/* step 3 */
+const open = {};
+function renderCards() {
+  document.getElementById("raceCards").innerHTML = RACES.map(r => `
+    <div class="card"><div class="race-h tap ${open[r.id] ? "open" : ""}" data-x="${esc(r.id)}" role="button" aria-expanded="${open[r.id] ? "true" : "false"}"><span class="race-name">${esc(r.label)}</span><span class="race-note">${esc(r.rating)}</span></div>
+      <div class="race-note">${esc(r.blurb || "")}</div>
+      ${r.d_case ? `<div class="more-hint" data-x="${esc(r.id)}">${open[r.id] ? "Hide each side’s case" : "Tap for each side’s case"}</div>
+      <div class="cases ${open[r.id] ? "on" : ""}">
+        <div class="case d"><b>Why ${esc(r.d)} wins</b><ul>${r.d_case.map(s => `<li>${esc(s)}</li>`).join("")}</ul></div>
+        <div class="case r"><b>Why ${esc(r.r)} wins</b><ul>${r.r_case.map(s => `<li>${esc(s)}</li>`).join("")}</ul></div>
+      </div>` : ""}
+      <div class="picks">
+        <button class="pick d ${mine["r_" + r.id] === "D" ? "on" : ""}" data-r="${esc(r.id)}" data-p="D">${esc(r.d)}<small>Democrat</small></button>
+        <button class="pick r ${mine["r_" + r.id] === "R" ? "on" : ""}" data-r="${esc(r.id)}" data-p="R">${esc(r.r)}<small>Republican</small></button>
+      </div></div>`).join("");
+  document.querySelectorAll("#raceCards [data-x]").forEach(h => h.addEventListener("click", () => { open[h.dataset.x] = !open[h.dataset.x]; renderCards(); }));
+  document.querySelectorAll(".pick").forEach(b => b.addEventListener("click", () => { mine["r_" + b.dataset.r] = b.dataset.p; ls.set("ftm_mine", mine); renderCards(); send({q: "race", r: b.dataset.r, a: b.dataset.p}); }));
+}
+/* tallies */
+async function refresh() {
+  let rows = [];
+  try { const t = await (await fetch(BASE + "/json?poll=1&since=all")).text();
+    rows = t.split("\n").filter(Boolean).map(l => { try { return JSON.parse(l); } catch(e) { return null; } }).filter(m => m && m.event === "message"); }
+  catch(e) { document.getElementById("roomHunch").textContent = "Room results unavailable right now."; return; }
+  const last = {};
+  rows.sort((a, b) => a.time - b.time).forEach(m => { let x; try { x = JSON.parse(m.message); } catch(e) { return; }
+    if (!x || !x.v || !x.q) return; last[x.v + "|" + x.q + "|" + (x.r || "")] = x; });
+  const L = Object.values(last);
+  const g = L.filter(x => x.q === "oos" && typeof x.a === "number" && x.a >= 0 && x.a <= 100).map(x => x.a);
+  const w = L.filter(x => x.q === "who" && WHO.some(([k]) => k === x.a));
+  let h = "";
+  if (g.length) {
+    const bins = Array(11).fill(0); g.forEach(v => bins[Math.min(10, Math.floor(v / 10))]++); const mx = Math.max(...bins);
+    const sorted = g.slice().sort((a, b) => a - b); const med = sorted[Math.floor((sorted.length - 1) / 2)];
+    h += `<div><strong>${g.length}</strong> guess${g.length === 1 ? "" : "es"} · middle guess <strong>${med}%</strong></div>
+      <div class="hist">${bins.map(b => `<div style="height:${mx ? Math.max(2, 100 * b / mx) : 2}%"></div>`).join("")}</div><div class="histx"><span>0%</span><span>50%</span><span>100%</span></div>`;
+  }
+  if (w.length) {
+    const c = {}; w.forEach(x => c[x.a] = (c[x.a] || 0) + 1);
+    h += `<div style="margin-top:14px"><strong>Who pointed the donor?</strong> (${w.length})</div>` + WHO.map(([k, t]) => { const n = c[k] || 0, p = Math.round(100 * n / w.length);
+      return `<div class="hbar"><span>${esc(t.split(" (")[0])}</span><span class="t"><i style="width:${p}%"></i></span><span>${p}%</span></div>`; }).join("");
+  }
+  document.getElementById("roomHunch").innerHTML = h || "Waiting for guesses…";
+  const t = {}; const callers = new Set();
+  L.filter(x => x.q === "race" && (x.a === "D" || x.a === "R")).forEach(x => { t[x.r] = t[x.r] || {D: 0, R: 0}; t[x.r][x.a]++; callers.add(x.v); });
+  document.getElementById("tallyLede").textContent = callers.size + (callers.size === 1 ? " person has" : " people have") + " made calls.";
+  document.getElementById("tallyCards").innerHTML = RACES.map(r => { const c = t[r.id] || {D: 0, R: 0}; const n = c.D + c.R; const pd = n ? Math.round(100 * c.D / n) : 50;
+    const ln = s => esc(s.split(" ").slice(-1)[0]);
+    return `<div style="margin:10px 0"><div class="race-h"><span class="race-name" style="font-size:16px">${esc(r.label.split(" · ")[0])}</span><span class="race-note">${n} call${n === 1 ? "" : "s"}</span></div>
+      <div class="bar"><span class="bd" style="width:${pd}%">${n ? ln(r.d) + " " + pd + "%" : ""}</span><span class="br" style="width:${100 - pd}%">${n ? ln(r.r) + " " + (100 - pd) + "%" : ""}</span></div></div>`; }).join("");
+}
+/* step 2: tile map */
+const GRID = {AK:[0,0],ME:[0,11],VT:[1,10],NH:[1,11],WA:[2,1],ID:[2,2],MT:[2,3],ND:[2,4],MN:[2,5],IL:[2,6],WI:[2,7],MI:[2,8],NY:[2,9],RI:[2,10],MA:[2,11],OR:[3,1],NV:[3,2],WY:[3,3],SD:[3,4],IA:[3,5],IN:[3,6],OH:[3,7],PA:[3,8],NJ:[3,9],CT:[3,10],CA:[4,1],UT:[4,2],CO:[4,3],NE:[4,4],MO:[4,5],KY:[4,6],WV:[4,7],VA:[4,8],MD:[4,9],DE:[4,10],AZ:[5,2],NM:[5,3],KS:[5,4],AR:[5,5],TN:[5,6],NC:[5,7],SC:[5,8],DC:[5,9],OK:[6,4],LA:[6,5],MS:[6,6],AL:[6,7],GA:[6,8],HI:[7,0],TX:[7,4],FL:[7,9]};
+const fmt$ = x => x >= 1e6 ? "$" + (x / 1e6).toFixed(1) + "M" : "$" + Math.round(x / 1e3) + "K";
+function renderExplorer() {
+  const sel = document.getElementById("raceSel"); const keys = Object.keys(MONEY);
+  if (!keys.length) { sel.style.display = "none"; document.getElementById("explorer").innerHTML = '<p class="lede">This opens up during the talk.</p>'; return; }
+  sel.innerHTML = keys.map(k => `<option value="${esc(k)}">${esc(MONEY[k].label)}</option>`).join("");
+  const saved = ls.get("ftm_sel", null); if (saved && MONEY[saved]) sel.value = saved;
+  sel.onchange = () => { ls.set("ftm_sel", sel.value); draw(sel.value); }; draw(sel.value);
+}
+function draw(k) {
+  const m = MONEY[k]; const tot = m.total || 1;
+  const others = Object.entries(m.states).filter(([s]) => s !== m.home); const max = Math.max(1, ...others.map(([, v]) => v));
+  const cells = [];
+  for (let r = 0; r < 8; r++) for (let c = 0; c < 12; c++) {
+    const st = Object.keys(GRID).find(s => GRID[s][0] === r && GRID[s][1] === c);
+    if (!st) { cells.push("<div></div>"); continue; }
+    const v = m.states[st] || 0, home = st === m.home, a = home ? 0 : Math.sqrt(v / max);
+    const bg = home ? "var(--line)" : `color-mix(in srgb, var(--teal) ${Math.round(a * 100)}%, var(--paper))`;
+    cells.push(`<div class="tile ${home ? "home" : ""}" style="background:${bg};color:${!home && a > .55 ? "#fff" : "var(--ink)"}" title="${st}: ${fmt$(v)}">${st}</div>`);
+  }
+  const top = others.sort((a, b) => b[1] - a[1]).slice(0, 5);
+  document.getElementById("explorer").innerHTML = `<div class="card">
+    <div class="stats"><div class="stat"><div class="big">${fmt$(m.total)}</div><div class="lbl">itemized from individuals</div></div>
+      <div class="stat"><div class="big">${Math.round(100 * m.out / tot)}%</div><div class="lbl">from outside ${esc(m.home)}</div></div>
+      <div class="stat"><div class="big">${m.nstates}</div><div class="lbl">states giving</div></div></div>
+    <div class="tiles">${cells.join("")}</div><div class="legend">Less <i></i> More · outlined: home state</div>
+    <div class="toplist"><strong>Top states outside ${esc(m.home)}</strong>${top.map(([s, v]) => `<div><span>${s}</span><span>${fmt$(v)}</span></div>`).join("")}</div></div>`;
+}
+document.getElementById("foot").textContent = META.asof ? "Money: FEC filings through " + META.asof + ". " + META.source : "";
+renderWho(); renderCards(); renderExplorer(); refresh(); setInterval(refresh, 6000);
+</script>
+</body>
+</html>
