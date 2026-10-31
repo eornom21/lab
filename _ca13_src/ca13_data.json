@@ -1,0 +1,70 @@
+{
+  "built": "2026-10-30",
+  "candidates": {
+    "D": {"name": "Adam Gray", "party": "Democrat", "short": "Gray", "line": "Incumbent, elected in 2024. Spent 10 years in the state Assembly representing Merced and Stanislaus counties. Born and raised in Merced.", "src": "https://gray.house.gov/about"},
+    "R": {"name": "Kevin Lincoln", "party": "Republican", "short": "Lincoln", "line": "Mayor of Stockton, 2021–2024. Marine Corps veteran, pastor and security company executive. Ran in the 9th District in 2024.", "src": "https://news.ballotpedia.org/2026/07/20/redistricting-adds-stockton-to-ca-13-as-rep-gray-d-and-former-mayor-lincoln-r-face-off-on-nov-3/"}
+  },
+  "ratings": [["Cook Political Report", "Lean D"], ["Sabato's Crystal Ball", "Likely D"], ["Inside Elections", "Tilt D"]],
+  "ratings_asof": "Oct 29, 2026",
+  "history": [
+    {"year": 2022, "d": "Adam Gray", "r": "John Duarte", "dv": 66496, "rv": 67060, "note": "Duarte won by 564 votes"},
+    {"year": 2024, "d": "Adam Gray", "r": "John Duarte", "dv": 105554, "rv": 105367, "note": "Gray won by 187 votes"}
+  ],
+  "prop50": {
+    "line": "Prop 50 (Nov 2025) redrew the seat to add Stockton. Inside Elections moved its lean from even to D+6.",
+    "src": "https://news.ballotpedia.org/2026/07/20/redistricting-adds-stockton-to-ca-13-as-rep-gray-d-and-former-mayor-lincoln-r-face-off-on-nov-3/"
+  },
+  "counties": ["Merced", "Stanislaus", "San Joaquin", "Madera", "Fresno"],
+  "fips": {"Merced": "06047", "Stanislaus": "06099", "San Joaquin": "06077", "Madera": "06039", "Fresno": "06019"},
+  "slug": {"Merced": "merced", "Stanislaus": "stanislaus", "San Joaquin": "san-joaquin", "Madera": "madera", "Fresno": "fresno"},
+  "reg": {
+    "2026": {"asof": "Oct 19, 2026 (15-day report), new Prop 50 lines",
+      "Fresno": [7681, 3689, 1478, 1979], "Madera": [21912, 8735, 5322, 6062], "Merced": [137293, 54190, 40869, 32049],
+      "San Joaquin": [59269, 27799, 12002, 14884], "Stanislaus": [123667, 51199, 34860, 27420], "total": [349822, 145612, 94531, 82394]},
+    "2024": {"asof": "Oct 21, 2024 (15-day report), 2021 lines",
+      "Fresno": [36110, 14392, 10845, 8180], "Madera": [53124, 18696, 18349, 11731], "Merced": [132007, 53710, 39585, 28961],
+      "San Joaquin": [21937, 9338, 5716, 5294], "Stanislaus": [101000, 43391, 28060, 21267], "total": [344178, 139527, 102555, 75433]},
+    "2022": {"asof": "Oct 24, 2022 (15-day report), 2021 lines",
+      "Fresno": [34677, 14598, 9886, 7756], "Madera": [50079, 18409, 16720, 10980], "Merced": [124659, 53451, 35401, 27058],
+      "San Joaquin": [20221, 8992, 4968, 4750], "Stanislaus": [96518, 43978, 25690, 19490], "total": [326154, 139428, 92665, 70034]}
+  },
+  "reg_fields": ["Registered", "Democratic", "Republican", "No party preference"],
+  "county_reg_2026": {"Fresno": 530280, "Madera": 83662, "Merced": 137293, "San Joaquin": 415611, "Stanislaus": 301333},
+  "results": {
+    "2024": {"label": "2024 (final)", "lines": "2021", "d": "Adam Gray", "r": "John Duarte", "top": "President", "top_d": "Harris", "top_r": "Trump",
+      "by": {"Fresno": [9004, 11440, 9120, 11523], "Madera": [14410, 19187, 14037, 19790], "Merced": [42652, 40253, 40190, 43955],
+             "San Joaquin": [8064, 6995, 7775, 7387], "Stanislaus": [31424, 27492, 29437, 29778]},
+      "total": [105554, 105367, 100559, 112433]},
+    "2022": {"label": "2022 (final)", "lines": "2021", "d": "Adam Gray", "r": "John Duarte", "top": "Governor", "top_d": "Newsom", "top_r": "Dahle",
+      "by": {"Fresno": [6089, 7415, 5968, 7802], "Madera": [9011, 12642, 8660, 13432], "Merced": [28577, 26108, 25200, 30073],
+             "San Joaquin": [4597, 4092, 4590, 4258], "Stanislaus": [18222, 16803, 17842, 18064]},
+      "total": [66496, 67060, 62260, 73629]}
+  },
+  "results_note": "District race and the top-of-ticket race inside the district's part of each county, from the Secretary of State's Statement of Vote and its Supplement.",
+  "sources": {
+    "results_2024": "https://www.sos.ca.gov/elections/prior-elections/statewide-election-results/general-election-nov-5-2024/statement-vote",
+    "results_2022": "https://www.sos.ca.gov/elections/prior-elections/statewide-election-results/general-election-nov-8-2022/statement-vote",
+    "reg_2026": "https://www.sos.ca.gov/elections/report-registration/15day-general-2026",
+    "reg_2024": "https://www.sos.ca.gov/elections/report-registration/15day-gen-2024",
+    "reg_2022": "https://www.sos.ca.gov/elections/report-registration/15day-general-2022",
+    "live": "https://api.sos.ca.gov/returns/us-rep/district/13",
+    "lines_2026": "California Department of Education GIS, Legislative districts service, US Congressional layer (updated June 2026)",
+    "lines_2021": "Lewis et al., United States Congressional District Shapefiles (cdmaps.polisci.ucla.edu)"
+  },
+  "news": [
+    ["2026-10-29T03:27", "KCRA", "Rep. Adam Gray, Kevin Lincoln fight to be the valley's voice in Congressional District 13"],
+    ["2026-10-29T00:21", "ABC30 Fresno", "Adam Gray maintains fundraising edge in California's 13th Congressional District race"],
+    ["2026-10-28T10:30", "The Stockton Record", "Adam Gray faces Kevin Lincoln in Congressional District 13 race"],
+    ["2026-10-27T02:44", "FOX40", "A look into California’s 13th Congressional District race: Adam Gray vs. Kevin Lincoln"],
+    ["2026-10-25T20:00", "AOL.com", "Adam Gray and Kevin Lincoln battle for CA’s 13th District"],
+    ["2026-10-23T13:00", "Stocktonia", "Former Stockton Mayor Kevin Lincoln, backed by Trump, hopes to unseat U.S. Rep. Adam Gray in District 13"],
+    ["2026-10-22T23:26", "The Merced FOCUS", "WATCH | Rep. Adam Gray discusses local and foreign issues after GOP opponent Kevin Lincoln declines debate"],
+    ["2026-10-22T20:00", "Stocktonia", "US House Speaker Mike Johnson calls Kevin Lincoln race a top contest in GOP's midterm fight"],
+    ["2026-10-22T07:00", "The Modesto Focus", "Politics Focus | Big media can’t get enough of Adam Gray v. Kevin Lincoln House 13 race"],
+    ["2026-10-22T05:36", "CBS News", "House Speaker Mike Johnson campaigns for Kevin Lincoln in competitive Central Valley congressional race"],
+    ["2026-10-22T01:12", "ABC10", "House Speaker Mike Johnson campaigns for Kevin Lincoln in Stockton"],
+    ["2026-10-16T07:00", "The Sacramento Observer", "Adam Gray, Kevin Lincoln Vie For Central Valley House Seat"],
+    ["2026-10-08T07:00", "KQED", "Congressman Adam Gray Defends One of California’s Last Swing Districts After Redistricting"]
+  ],
+  "news_asof": "2026-10-31T06:50"
+}

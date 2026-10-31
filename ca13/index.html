@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>CA 13</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: one column for phones, two columns on a projector; tabs pinned under a dark header. */
+:root{
+  --bg:#F3F1EB; --paper:#FFFDF8; --ink:#1B2A41; --body:#3D4A5C; --muted:#6B7280; --line:#DCD5C8;
+  --head:#1B2A41; --head-ink:#F3F1EB; --accent:#2E6F8E; --live:#A85F00; --live-soft:#F7E7CF;
+  --dem:#2E5E9E; --rep:#B5451B; --dem-soft:#DCE5F3; --rep-soft:#F5DED4; --neutral:#E6E1D6;
+  --serif:'Source Serif 4',Georgia,serif; --sans:'IBM Plex Sans',system-ui,-apple-system,sans-serif; --mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#11161F; --paper:#18202C; --ink:#EEF1F5; --body:#C9D3DC; --muted:#93A0B0; --line:#2C3747;
+  --head:#0B1018; --head-ink:#EEF1F5; --accent:#6FB3CF; --live:#F2A93B; --live-soft:#3A2A12;
+  --dem:#6D9FE0; --rep:#E07E58; --dem-soft:#1D2D48; --rep-soft:#40241A; --neutral:#26303E; color-scheme:dark}}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--body);font:17px/1.5 var(--sans)}
+header{background:var(--head);color:var(--head-ink);padding:22px max(16px,env(safe-area-inset-left,0px)) 0 max(16px,env(safe-area-inset-right,0px))}
+.hwrap{max-width:1100px;margin:0 auto}
+.kicker{font:600 12px var(--sans);letter-spacing:.14em;text-transform:uppercase;opacity:.75}
+h1{font-family:var(--serif);font-weight:700;font-size:clamp(30px,7vw,48px);line-height:1.05;margin-top:4px}
+h1 .vs{font-weight:600;opacity:.6;font-size:.6em;margin:0 .25em}
+.tabs{display:flex;gap:2px;margin-top:16px;overflow-x:auto}
+.tab{flex:1;min-width:120px;background:transparent;color:var(--head-ink);border:0;border-bottom:4px solid transparent;padding:10px 6px 12px;font:600 15px var(--sans);cursor:pointer;opacity:.7}
+.tab[aria-selected="true"]{border-bottom-color:#E09A74;opacity:1}
+main{max-width:1100px;margin:0 auto;padding:18px max(16px,env(safe-area-inset-right,0px)) 64px max(16px,env(safe-area-inset-left,0px))}
+section[hidden]{display:none}
+h2{font-family:var(--serif);font-weight:700;font-size:26px;color:var(--ink);margin:6px 0 8px}
+h3{font:600 13px var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 8px}
+.lede{color:var(--muted);margin-bottom:12px;max-width:68ch}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:16px;min-width:0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.stack{display:flex;flex-direction:column;gap:14px}
+@media (max-width:760px){.grid2{grid-template-columns:1fr}}
+/* candidates */
+.cands{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.cand{border-top:5px solid var(--dem);padding-top:10px}
+.cand.R{border-top-color:var(--rep)}
+.mono{width:54px;height:54px;border-radius:50%;display:grid;place-items:center;font:700 22px var(--serif);color:#fff;background:var(--dem);margin-bottom:8px}
+.cand.R .mono{background:var(--rep)}
+.cand .nm{font:700 21px/1.15 var(--serif);color:var(--ink)}
+.cand .pt{font-size:14px;color:var(--muted);margin-bottom:6px}
+.cand p{font-size:15px;line-height:1.4}
+.src{font-size:12px;color:var(--muted)}
+.src a{color:inherit}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.chip{border:1px solid var(--line);border-radius:8px;padding:6px 10px;font-size:14px;background:var(--paper)}
+.chip b{color:var(--ink);font-weight:600}
+/* bars */
+.hist{display:flex;flex-direction:column;gap:12px}
+.hrow .t{display:flex;justify-content:space-between;font-size:14px;margin-bottom:4px}
+.hrow .t b{color:var(--ink)}
+.bar{display:flex;height:28px;border-radius:7px;overflow:hidden;gap:2px;background:var(--neutral)}
+.bar span{display:flex;align-items:center;font:600 13px var(--sans);color:#fff;padding:0 8px;white-space:nowrap;overflow:hidden;min-width:0}
+.bar .d{background:var(--dem)} .bar .r{background:var(--rep);justify-content:flex-end}
+.mid{position:relative}
+.mid::after{content:"";position:absolute;left:50%;top:-3px;bottom:-3px;border-left:2px dashed var(--ink);opacity:.35}
+/* map */
+.map svg{width:100%;height:auto;display:block}
+.map .cty{stroke:var(--paper);stroke-width:1.2;cursor:pointer}
+.map .cty.sel{stroke:var(--ink);stroke-width:2.5}
+.map .ghost{fill:none;stroke:var(--ink);stroke-width:1.5;stroke-dasharray:4 4;opacity:.55;pointer-events:none}
+.map .dist{fill:none;stroke:var(--ink);stroke-width:2.5;pointer-events:none}
+.map .lab{font:600 12px var(--sans);fill:var(--ink);pointer-events:none;paint-order:stroke;stroke:var(--paper);stroke-width:3px}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:13px;color:var(--muted);margin-top:8px;align-items:center}
+.legend i{display:inline-block;width:22px;height:0;border-top:2.5px solid var(--ink);vertical-align:middle;margin-right:6px}
+.legend i.dash{border-top:2px dashed var(--ink);opacity:.6}
+.legend .sw{display:inline-block;width:14px;height:14px;border-radius:3px;vertical-align:-2px;margin-right:6px}
+.detail{min-height:120px}
+.kv{display:grid;grid-template-columns:1fr auto;gap:4px 12px;font-size:15px}
+.kv span:nth-child(even){font-family:var(--mono);font-variant-numeric:tabular-nums;color:var(--ink);text-align:right}
+.kv .hf{display:none}
+.kv .h{grid-column:1/-1;font:600 12px var(--sans);letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-top:8px}
+/* election night */
+.ctrl{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:12px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--paper)}
+.seg button{border:0;background:none;color:var(--body);font:600 14px var(--sans);padding:9px 14px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.status{font-size:14px;color:var(--muted)}
+.pill{display:inline-block;font:600 12px var(--sans);letter-spacing:.06em;text-transform:uppercase;padding:4px 9px;border-radius:999px;background:var(--neutral);color:var(--body)}
+.pill.live{background:var(--live-soft);color:var(--live)}
+.big{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.bigc{border-left:5px solid var(--dem);padding-left:12px}
+.bigc.R{border-left-color:var(--rep)}
+.bigc .n{font:700 18px var(--serif);color:var(--ink)}
+.bigc .p{font:700 44px/1 var(--serif);color:var(--dem);font-variant-numeric:tabular-nums}
+.bigc.R .p{color:var(--rep)}
+.bigc .v{font-family:var(--mono);font-size:14px;color:var(--muted)}
+.wait{text-align:center;padding:26px 10px}
+.wait .w1{font:700 30px var(--serif);color:var(--ink)}
+table{border-collapse:collapse;width:100%;font-size:15px}
+th,td{padding:7px 8px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+th{font:600 12px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+th:first-child,td:first-child{text-align:left}
+.tw{overflow-x:auto}
+.plus{color:var(--dem);font-weight:600}.minus{color:var(--rep);font-weight:600}
+.flag{font-size:12px;color:var(--muted)}
+.note{font-size:13px;color:var(--muted);margin-top:8px;max-width:80ch}
+.tb{display:grid;grid-template-columns:110px 1fr 58px;gap:6px 10px;align-items:center;font-size:14px}
+.tb .track{height:14px;border-radius:7px;background:var(--neutral);position:relative;overflow:hidden}
+.tb .track i{position:absolute;left:0;top:0;bottom:0;background:var(--accent);border-radius:7px}
+.tb .track b{position:absolute;top:-2px;bottom:-2px;border-left:2px solid var(--ink);opacity:.6}
+.tb .track b.y24{border-left-style:dashed}
+.tb .num{font-family:var(--mono);text-align:right}
+/* news & room */
+.news a{display:block;padding:10px 0;border-bottom:1px solid var(--line);color:var(--ink);text-decoration:none}
+.news a:hover .hd{text-decoration:underline}
+.news .hd{font:600 17px/1.3 var(--serif)}
+.news .mt{font-size:13px;color:var(--muted);margin-top:2px}
+.picks{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pick{border:2px solid var(--line);background:transparent;color:var(--ink);border-radius:10px;padding:12px 8px;font:600 16px var(--sans);cursor:pointer;min-height:56px}
+.pick.D[aria-pressed="true"]{background:var(--dem);border-color:var(--dem);color:#fff}
+.pick.R[aria-pressed="true"]{background:var(--rep);border-color:var(--rep);color:#fff}
+.margins{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
+.margins button{border:2px solid var(--line);background:transparent;color:var(--ink);border-radius:10px;padding:10px 4px;font:600 14px var(--sans);cursor:pointer}
+.margins button[aria-pressed="true"]{border-color:var(--accent);background:var(--accent);color:#fff}
+.q{font:600 18px var(--sans);color:var(--ink);margin-bottom:10px}
+.dist-row{display:grid;grid-template-columns:90px 1fr 34px;gap:6px 8px;align-items:center;font-size:14px;margin:4px 0}
+.dist-row .track{height:16px;border-radius:5px;background:var(--neutral);overflow:hidden;display:flex}
+.dist-row .track i{display:block;height:100%}
+button:focus-visible,a:focus-visible,.cty:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+footer{max-width:1100px;margin:0 auto;padding:0 16px 40px;font-size:13px;color:var(--muted)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header><div class="hwrap">
+  <div class="kicker">California's 13th Congressional District · Nov 3, 2026</div>
+  <h1>Gray <span class="vs">vs.</span> Lincoln</h1>
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" data-t="race" aria-selected="true">The race</button>
+    <button class="tab" role="tab" data-t="night" aria-selected="false">Election night</button>
+    <button class="tab" role="tab" data-t="room" aria-selected="false">News &amp; the room</button>
+  </div>
+</div></header>
+<main>
+  <section id="t-race">
+    <div class="grid2">
+      <div class="stack">
+        <div class="card"><div class="cands" id="cands"></div></div>
+        <div class="card"><h3>Ratings</h3><div class="chips" id="ratings"></div><p class="src" id="ratAsof"></p></div>
+        <div class="card"><h3>The last two races</h3><div class="hist" id="history"></div><p class="note">Both on the 2021 lines, against John Duarte. Source: Secretary of State, Statement of Vote.</p></div>
+      </div>
+      <div class="stack">
+        <div class="card map"><h3>The district</h3><div id="raceMap"></div>
+          <div class="legend"><span><i></i>Prop 50 lines (2026)</span><span><i class="dash"></i>2021 lines (2022, 2024)</span></div>
+          <p class="note" id="p50"></p></div>
+        <div class="card detail" id="raceDetail"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="t-night" hidden>
+    <div class="ctrl">
+      <div class="seg" role="group" aria-label="Election" id="yearSeg">
+        <button data-y="2026">2026 (live)</button><button data-y="2024">2024 (final)</button><button data-y="2022">2022 (final)</button>
+      </div>
+      <span class="pill" id="livePill"></span><span class="status" id="liveStatus"></span>
+    </div>
+    <div class="grid2">
+      <div class="stack">
+        <div class="card" id="topline"></div>
+        <div class="card"><h3 id="perfH">Candidate vs. the top of the ticket</h3><div class="tw" id="perf"></div><p class="note" id="perfNote"></p></div>
+        <div class="card"><h3>Turnout: votes counted ÷ registered voters</h3><div id="turnout"></div><p class="note" id="turnNote"></p></div>
+      </div>
+      <div class="stack">
+        <div class="card map"><h3 id="nightMapH">Who's ahead where</h3><div id="nightMap"></div>
+          <div class="legend" id="nightLegend"></div></div>
+        <div class="card detail" id="nightDetail"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="t-room" hidden>
+    <div class="grid2">
+      <div class="card">
+        <h3>Your call</h3>
+        <p class="q">Who wins CA-13, and by how much?</p>
+        <div class="picks" id="picks"></div>
+        <div class="margins" id="margins"></div>
+        <p class="status" id="pickStatus">Change your mind anytime; your last pick counts.</p>
+        <h3 style="margin-top:18px">The room</h3><div id="room"><p class="status">Waiting for picks…</p></div>
+      </div>
+      <div class="card news"><h3>News on the race</h3><div id="news"></div><p class="note" id="newsAsof"></p></div>
+    </div>
+  </section>
+</main>
+<footer id="foot"></footer>
+<script>
+const D = {"built":"2026-10-30","candidates":{"D":{"name":"Adam Gray","party":"Democrat","short":"Gray","line":"Incumbent, elected in 2024. Spent 10 years in the state Assembly representing Merced and Stanislaus counties. Born and raised in Merced.","src":"https://gray.house.gov/about"},"R":{"name":"Kevin Lincoln","party":"Republican","short":"Lincoln","line":"Mayor of Stockton, 2021–2024. Marine Corps veteran, pastor and security company executive. Ran in the 9th District in 2024.","src":"https://news.ballotpedia.org/2026/07/20/redistricting-adds-stockton-to-ca-13-as-rep-gray-d-and-former-mayor-lincoln-r-face-off-on-nov-3/"}},"ratings":[["Cook Political Report","Lean D"],["Sabato's Crystal Ball","Likely D"],["Inside Elections","Tilt D"]],"ratings_asof":"Oct 29, 2026","history":[{"year":2022,"d":"Adam Gray","r":"John Duarte","dv":66496,"rv":67060,"note":"Duarte won by 564 votes"},{"year":2024,"d":"Adam Gray","r":"John Duarte","dv":105554,"rv":105367,"note":"Gray won by 187 votes"}],"prop50":{"line":"Prop 50 (Nov 2025) redrew the seat to add Stockton. Inside Elections moved its lean from even to D+6.","src":"https://news.ballotpedia.org/2026/07/20/redistricting-adds-stockton-to-ca-13-as-rep-gray-d-and-former-mayor-lincoln-r-face-off-on-nov-3/"},"counties":["Merced","Stanislaus","San Joaquin","Madera","Fresno"],"fips":{"Merced":"06047","Stanislaus":"06099","San Joaquin":"06077","Madera":"06039","Fresno":"06019"},"slug":{"Merced":"merced","Stanislaus":"stanislaus","San Joaquin":"san-joaquin","Madera":"madera","Fresno":"fresno"},"reg":{"2026":{"asof":"Oct 19, 2026 (15-day report), new Prop 50 lines","Fresno":[7681,3689,1478,1979],"Madera":[21912,8735,5322,6062],"Merced":[137293,54190,40869,32049],"San Joaquin":[59269,27799,12002,14884],"Stanislaus":[123667,51199,34860,27420],"total":[349822,145612,94531,82394]},"2024":{"asof":"Oct 21, 2024 (15-day report), 2021 lines","Fresno":[36110,14392,10845,8180],"Madera":[53124,18696,18349,11731],"Merced":[132007,53710,39585,28961],"San Joaquin":[21937,9338,5716,5294],"Stanislaus":[101000,43391,28060,21267],"total":[344178,139527,102555,75433]},"2022":{"asof":"Oct 24, 2022 (15-day report), 2021 lines","Fresno":[34677,14598,9886,7756],"Madera":[50079,18409,16720,10980],"Merced":[124659,53451,35401,27058],"San Joaquin":[20221,8992,4968,4750],"Stanislaus":[96518,43978,25690,19490],"total":[326154,139428,92665,70034]}},"reg_fields":["Registered","Democratic","Republican","No party preference"],"county_reg_2026":{"Fresno":530280,"Madera":83662,"Merced":137293,"San Joaquin":415611,"Stanislaus":301333},"results":{"2024":{"label":"2024 (final)","lines":"2021","d":"Adam Gray","r":"John Duarte","top":"President","top_d":"Harris","top_r":"Trump","by":{"Fresno":[9004,11440,9120,11523],"Madera":[14410,19187,14037,19790],"Merced":[42652,40253,40190,43955],"San Joaquin":[8064,6995,7775,7387],"Stanislaus":[31424,27492,29437,29778]},"total":[105554,105367,100559,112433]},"2022":{"label":"2022 (final)","lines":"2021","d":"Adam Gray","r":"John Duarte","top":"Governor","top_d":"Newsom","top_r":"Dahle","by":{"Fresno":[6089,7415,5968,7802],"Madera":[9011,12642,8660,13432],"Merced":[28577,26108,25200,30073],"San Joaquin":[4597,4092,4590,4258],"Stanislaus":[18222,16803,17842,18064]},"total":[66496,67060,62260,73629]}},"results_note":"District race and the top-of-ticket race inside the district's part of each county, from the Secretary of State's Statement of Vote and its Supplement.","sources":{"results_2024":"https://www.sos.ca.gov/elections/prior-elections/statewide-election-results/general-election-nov-5-2024/statement-vote","results_2022":"https://www.sos.ca.gov/elections/prior-elections/statewide-election-results/general-election-nov-8-2022/statement-vote","reg_2026":"https://www.sos.ca.gov/elections/report-registration/15day-general-2026","reg_2024":"https://www.sos.ca.gov/elections/report-registration/15day-gen-2024","reg_2022":"https://www.sos.ca.gov/elections/report-registration/15day-general-2022","live":"https://api.sos.ca.gov/returns/us-rep/district/13","lines_2026":"California Department of Education GIS, Legislative districts service, US Congressional layer (updated June 2026)","lines_2021":"Lewis et al., United States Congressional District Shapefiles (cdmaps.polisci.ucla.edu)"},"news":[["2026-10-29T03:27","KCRA","Rep. Adam Gray, Kevin Lincoln fight to be the valley's voice in Congressional District 13"],["2026-10-29T00:21","ABC30 Fresno","Adam Gray maintains fundraising edge in California's 13th Congressional District race"],["2026-10-28T10:30","The Stockton Record","Adam Gray faces Kevin Lincoln in Congressional District 13 race"],["2026-10-27T02:44","FOX40","A look into California’s 13th Congressional District race: Adam Gray vs. Kevin Lincoln"],["2026-10-25T20:00","AOL.com","Adam Gray and Kevin Lincoln battle for CA’s 13th District"],["2026-10-23T13:00","Stocktonia","Former Stockton Mayor Kevin Lincoln, backed by Trump, hopes to unseat U.S. Rep. Adam Gray in District 13"],["2026-10-22T23:26","The Merced FOCUS","WATCH | Rep. Adam Gray discusses local and foreign issues after GOP opponent Kevin Lincoln declines debate"],["2026-10-22T20:00","Stocktonia","US House Speaker Mike Johnson calls Kevin Lincoln race a top contest in GOP's midterm fight"],["2026-10-22T07:00","The Modesto Focus","Politics Focus | Big media can’t get enough of Adam Gray v. Kevin Lincoln House 13 race"],["2026-10-22T05:36","CBS News","House Speaker Mike Johnson campaigns for Kevin Lincoln in competitive Central Valley congressional race"],["2026-10-22T01:12","ABC10","House Speaker Mike Johnson campaigns for Kevin Lincoln in Stockton"],["2026-10-16T07:00","The Sacramento Observer","Adam Gray, Kevin Lincoln Vie For Central Valley House Seat"],["2026-10-08T07:00","KQED","Congressman Adam Gray Defends One of California’s Last Swing Districts After Redistricting"]],"news_asof":"2026-10-31T06:50"};
+const G = {"cd2026":[[-121.11,37.73],[-121.054,37.683],[-121.041,37.686],[-121.041,37.682],[-121.031,37.682],[-121.031,37.67],[-121.022,37.671],[-121.022,37.667],[-121.017,37.667],[-121.017,37.66],[-121.022,37.661],[-121.022,37.657],[-121.012,37.656],[-121.012,37.653],[-121.006,37.651],[-120.98,37.651],[-120.978,37.648],[-120.956,37.653],[-120.948,37.649],[-120.948,37.644],[-120.94,37.648],[-120.939,37.647],[-120.939,37.649],[-120.931,37.647],[-120.93,37.649],[-120.93,37.638],[-120.893,37.638],[-120.893,37.631],[-120.901,37.628],[-120.899,37.622],[-120.885,37.609],[-120.897,37.609],[-120.897,37.595],[-120.925,37.595],[-120.925,37.591],[-120.936,37.591],[-120.934,37.584],[-120.936,37.574],[-120.92,37.573],[-120.92,37.567],[-120.902,37.566],[-120.902,37.553],[-120.897,37.551],[-120.897,37.544],[-120.9,37.544],[-120.892,37.537],[-120.885,37.522],[-120.867,37.522],[-120.867,37.514],[-120.863,37.509],[-120.858,37.511],[-120.858,37.515],[-120.854,37.515],[-120.853,37.507],[-120.831,37.506],[-120.84,37.499],[-120.84,37.493],[-120.826,37.493],[-120.826,37.485],[-120.83,37.48],[-120.816,37.467],[-120.388,37.633],[-120.319,37.521],[-120.317,37.505],[-120.312,37.497],[-120.299,37.489],[-120.3,37.484],[-120.28,37.458],[-120.275,37.441],[-120.284,37.433],[-120.283,37.424],[-120.276,37.419],[-120.255,37.385],[-120.247,37.38],[-120.217,37.337],[-120.204,37.313],[-120.188,37.301],[-120.183,37.291],[-120.187,37.28],[-120.179,37.262],[-120.144,37.239],[-120.09,37.221],[-120.062,37.198],[-120.052,37.183],[-120.115,37.166],[-120.133,37.167],[-120.165,37.163],[-120.174,37.166],[-120.176,37.162],[-120.188,37.16],[-120.195,37.163],[-120.223,37.164],[-120.236,37.159],[-120.272,37.153],[-120.274,37.142],[-120.255,37.129],[-120.272,37.127],[-120.281,37.122],[-120.293,37.124],[-120.293,37.105],[-120.272,37.106],[-120.274,37.103],[-120.266,37.104],[-120.266,37.098],[-120.257,37.101],[-120.257,37.098],[-120.248,37.098],[-120.248,37.095],[-120.252,37.095],[-120.252,37.091],[-120.248,37.091],[-120.248,37.084],[-120.239,37.084],[-120.238,37.08],[-120.221,37.08],[-120.22,37.069],[-120.202,37.069],[-120.202,37.055],[-120.171,37.055],[-120.152,37.041],[-120.127,37.018],[-120.131,37.018],[-120.129,37.014],[-120.129,36.982],[-120.11,36.982],[-120.108,36.953],[-120.078,36.955],[-120.066,36.962],[-120.087,36.985],[-120.084,36.983],[-120.068,36.983],[-120.068,36.985],[-120.065,36.985],[-120.065,36.983],[-120.058,36.983],[-120.056,36.988],[-120.041,36.987],[-120.042,36.982],[-120.047,36.982],[-120.041,36.98],[-120.044,36.976],[-120.033,36.979],[-120.033,36.974],[-120.033,36.971],[-120.038,36.971],[-120.038,36.96],[-120.033,36.96],[-120.033,36.953],[-120.038,36.953],[-120.038,36.947],[-120.019,36.942],[-120.019,36.938],[-120.036,36.938],[-120.006,36.909],[-120.019,36.909],[-120.019,36.88],[-120.01,36.88],[-120.01,36.866],[-120.092,36.866],[-120.092,36.851],[-120.201,36.851],[-120.204,36.837],[-120.211,36.837],[-120.211,36.826],[-120.205,36.826],[-120.205,36.815],[-120.232,36.815],[-120.232,36.807],[-120.238,36.807],[-120.239,36.796],[-120.224,36.79],[-120.238,36.783],[-120.238,36.777],[-120.25,36.778],[-120.251,36.783],[-120.259,36.783],[-120.259,36.772],[-120.274,36.775],[-120.281,36.767],[-120.281,36.772],[-120.286,36.773],[-120.291,36.763],[-120.294,36.766],[-120.293,36.772],[-120.306,36.77],[-120.306,36.773],[-120.3,36.775],[-120.301,36.778],[-120.313,36.782],[-120.316,36.778],[-120.324,36.778],[-120.317,36.778],[-120.312,36.782],[-120.315,36.734],[-120.362,36.733],[-120.38,36.723],[-120.387,36.723],[-120.387,36.72],[-120.442,36.72],[-120.442,36.705],[-120.46,36.705],[-120.46,36.698],[-120.478,36.698],[-120.478,36.691],[-120.514,36.691],[-120.514,36.682],[-120.568,36.66],[-120.568,36.662],[-120.592,36.663],[-120.658,36.736],[-120.729,36.807],[-120.733,36.816],[-120.773,36.859],[-120.919,36.74],[-120.934,36.752],[-121.142,36.837],[-121.143,36.846],[-121.152,36.859],[-121.153,36.865],[-121.164,36.869],[-121.169,36.885],[-121.174,36.886],[-121.184,36.896],[-121.184,36.909],[-121.189,36.913],[-121.198,36.914],[-121.207,36.912],[-121.217,36.914],[-121.222,36.91],[-121.224,36.92],[-121.23,36.921],[-121.235,36.927],[-121.229,36.941],[-121.219,36.948],[-121.212,36.957],[-121.225,36.967],[-121.232,36.969],[-121.246,36.983],[-121.245,36.993],[-121.241,36.998],[-121.233,36.999],[-121.238,37.009],[-121.233,37.012],[-121.246,37.026],[-121.249,37.034],[-121.241,37.032],[-121.236,37.037],[-121.225,37.04],[-121.225,37.056],[-121.213,37.055],[-121.208,37.062],[-121.21,37.068],[-121.222,37.073],[-121.225,37.079],[-121.236,37.086],[-121.242,37.085],[-121.245,37.089],[-121.243,37.093],[-121.23,37.097],[-121.231,37.105],[-121.226,37.107],[-121.224,37.115],[-121.217,37.123],[-121.232,37.14],[-121.237,37.157],[-121.262,37.159],[-121.281,37.184],[-121.299,37.166],[-121.313,37.17],[-121.328,37.166],[-121.348,37.18],[-121.36,37.184],[-121.384,37.166],[-121.382,37.157],[-121.384,37.151],[-121.393,37.148],[-121.399,37.15],[-121.407,37.159],[-121.408,37.169],[-121.413,37.172],[-121.409,37.183],[-121.422,37.221],[-121.442,37.231],[-121.456,37.249],[-121.457,37.261],[-121.454,37.277],[-121.458,37.284],[-121.454,37.284],[-121.449,37.29],[-121.45,37.294],[-121.444,37.297],[-121.437,37.292],[-121.423,37.295],[-121.418,37.303],[-121.406,37.311],[-121.412,37.324],[-121.409,37.331],[-121.421,37.345],[-121.419,37.352],[-121.424,37.359],[-121.416,37.376],[-121.409,37.381],[-121.413,37.389],[-121.424,37.394],[-121.436,37.396],[-121.448,37.392],[-121.457,37.396],[-121.456,37.407],[-121.473,37.423],[-121.469,37.425],[-121.47,37.43],[-121.462,37.439],[-121.463,37.451],[-121.484,37.466],[-121.487,37.476],[-121.475,37.479],[-121.469,37.49],[-121.482,37.501],[-121.496,37.505],[-121.497,37.512],[-121.502,37.518],[-121.498,37.522],[-121.504,37.526],[-121.522,37.525],[-121.542,37.53],[-121.557,37.543],[-121.557,37.704],[-121.533,37.705],[-121.512,37.7],[-121.506,37.702],[-121.492,37.693],[-121.494,37.686],[-121.482,37.667],[-121.477,37.664],[-121.467,37.672],[-121.474,37.662],[-121.467,37.663],[-121.458,37.671],[-121.434,37.659],[-121.445,37.674],[-121.435,37.678],[-121.414,37.696],[-121.38,37.696],[-121.38,37.711],[-121.362,37.711],[-121.362,37.73],[-121.344,37.743],[-121.344,37.748],[-121.339,37.745],[-121.326,37.746],[-121.327,37.754],[-121.319,37.764],[-121.325,37.771],[-121.33,37.77],[-121.34,37.781],[-121.349,37.785],[-121.351,37.79],[-121.362,37.789],[-121.371,37.8],[-121.391,37.805],[-121.406,37.801],[-121.414,37.803],[-121.384,37.812],[-121.376,37.822],[-121.354,37.817],[-121.348,37.822],[-121.342,37.817],[-121.34,37.822],[-121.333,37.818],[-121.335,37.81],[-121.332,37.808],[-121.318,37.813],[-121.32,37.816],[-121.315,37.818],[-121.321,37.821],[-121.31,37.827],[-121.324,37.848],[-121.321,37.851],[-121.323,37.854],[-121.32,37.854],[-121.318,37.86],[-121.327,37.866],[-121.332,37.878],[-121.307,37.877],[-121.297,37.883],[-121.292,37.882],[-121.293,37.876],[-121.302,37.877],[-121.302,37.866],[-121.28,37.866],[-121.278,37.876],[-121.294,37.924],[-121.298,37.926],[-121.299,37.92],[-121.312,37.921],[-121.311,37.941],[-121.318,37.94],[-121.32,37.943],[-121.321,37.94],[-121.322,37.945],[-121.319,37.949],[-121.306,37.948],[-121.31,37.954],[-121.296,37.954],[-121.296,37.959],[-121.286,37.961],[-121.285,37.957],[-121.279,37.958],[-121.28,37.962],[-121.273,37.963],[-121.276,37.974],[-121.268,37.989],[-121.202,37.96],[-121.229,37.951],[-121.226,37.943],[-121.231,37.941],[-121.182,37.912],[-121.184,37.905],[-121.223,37.905],[-121.219,37.86],[-121.254,37.874],[-121.255,37.856],[-121.264,37.856],[-121.262,37.804],[-121.271,37.791],[-121.266,37.786],[-121.284,37.785],[-121.279,37.783],[-121.283,37.783],[-121.283,37.775],[-121.289,37.775],[-121.289,37.769],[-121.293,37.77],[-121.293,37.766],[-121.286,37.764],[-121.276,37.754],[-121.243,37.755],[-121.243,37.762],[-121.234,37.762],[-121.234,37.75],[-121.225,37.75],[-121.225,37.739],[-121.206,37.739],[-121.206,37.721],[-121.179,37.721],[-121.178,37.706],[-121.169,37.699],[-121.164,37.7],[-121.167,37.702],[-121.166,37.704],[-121.159,37.705],[-121.162,37.708],[-121.159,37.709],[-121.159,37.717],[-121.155,37.72],[-121.146,37.718],[-121.137,37.725],[-121.121,37.722],[-121.121,37.724],[-121.117,37.724],[-121.11,37.73]],"cd2021":[[-121.557,37.664],[-121.557,37.543],[-121.542,37.53],[-121.522,37.525],[-121.503,37.526],[-121.498,37.522],[-121.502,37.518],[-121.497,37.512],[-121.496,37.505],[-121.482,37.501],[-121.469,37.489],[-121.475,37.479],[-121.487,37.476],[-121.484,37.466],[-121.463,37.451],[-121.462,37.439],[-121.47,37.431],[-121.469,37.425],[-121.473,37.423],[-121.456,37.407],[-121.457,37.396],[-121.448,37.392],[-121.436,37.396],[-121.413,37.389],[-121.411,37.386],[-121.409,37.381],[-121.416,37.376],[-121.424,37.359],[-121.42,37.353],[-121.421,37.345],[-121.409,37.331],[-121.412,37.324],[-121.406,37.311],[-121.418,37.303],[-121.423,37.295],[-121.437,37.292],[-121.444,37.297],[-121.45,37.294],[-121.449,37.29],[-121.459,37.282],[-121.454,37.277],[-121.457,37.261],[-121.456,37.249],[-121.448,37.237],[-121.422,37.222],[-121.421,37.215],[-121.417,37.211],[-121.409,37.181],[-121.413,37.173],[-121.408,37.169],[-121.407,37.159],[-121.4,37.151],[-121.393,37.148],[-121.384,37.151],[-121.382,37.158],[-121.384,37.166],[-121.361,37.184],[-121.347,37.18],[-121.328,37.166],[-121.313,37.17],[-121.299,37.166],[-121.281,37.184],[-121.262,37.159],[-121.237,37.157],[-121.232,37.14],[-121.217,37.123],[-121.224,37.115],[-121.226,37.107],[-121.23,37.105],[-121.23,37.097],[-121.245,37.09],[-121.242,37.085],[-121.235,37.086],[-121.225,37.079],[-121.223,37.074],[-121.216,37.069],[-121.21,37.068],[-121.209,37.059],[-121.213,37.055],[-121.225,37.056],[-121.225,37.04],[-121.236,37.037],[-121.241,37.032],[-121.249,37.034],[-121.246,37.026],[-121.233,37.012],[-121.238,37.009],[-121.233,36.999],[-121.242,36.997],[-121.245,36.993],[-121.246,36.983],[-121.232,36.969],[-121.225,36.967],[-121.212,36.957],[-121.219,36.948],[-121.229,36.941],[-121.235,36.927],[-121.23,36.921],[-121.225,36.92],[-121.221,36.91],[-121.217,36.914],[-121.189,36.913],[-121.184,36.908],[-121.182,36.893],[-121.174,36.886],[-121.169,36.885],[-121.164,36.869],[-121.153,36.865],[-121.152,36.859],[-121.143,36.846],[-121.142,36.837],[-120.933,36.752],[-120.604,36.488],[-120.597,36.488],[-120.597,36.328],[-120.613,36.324],[-120.612,36.322],[-120.618,36.319],[-120.659,36.316],[-120.683,36.294],[-120.68,36.291],[-120.683,36.287],[-120.673,36.28],[-120.676,36.277],[-120.675,36.271],[-120.68,36.267],[-120.673,36.258],[-120.682,36.251],[-120.68,36.247],[-120.667,36.236],[-120.651,36.23],[-120.649,36.224],[-120.641,36.22],[-120.627,36.203],[-120.639,36.196],[-120.645,36.179],[-120.649,36.179],[-120.652,36.174],[-120.65,36.168],[-120.663,36.171],[-120.664,36.166],[-120.672,36.163],[-120.668,36.161],[-120.665,36.147],[-120.668,36.138],[-120.656,36.132],[-120.653,36.119],[-120.645,36.116],[-120.649,36.108],[-120.646,36.105],[-120.642,36.101],[-120.634,36.103],[-120.626,36.097],[-120.615,36.095],[-120.612,36.095],[-120.608,36.103],[-120.601,36.102],[-120.59,36.09],[-120.593,36.089],[-120.596,36.08],[-120.592,36.071],[-120.567,36.053],[-120.545,36.046],[-120.54,36.037],[-120.527,36.036],[-120.53,36.024],[-120.52,36.021],[-120.518,36.028],[-120.51,36.022],[-120.5,36.022],[-120.486,36.011],[-120.48,36.011],[-120.477,36.001],[-120.469,35.994],[-120.45,35.988],[-120.433,35.969],[-120.409,35.976],[-120.394,35.968],[-120.36,35.964],[-120.362,35.959],[-120.358,35.956],[-120.357,35.948],[-120.346,35.945],[-120.336,35.937],[-120.337,35.926],[-120.332,35.916],[-120.326,35.913],[-120.323,35.908],[-120.315,35.907],[-119.959,36.181],[-119.959,36.401],[-119.753,36.402],[-119.752,36.409],[-119.747,36.416],[-119.735,36.416],[-119.731,36.421],[-119.714,36.419],[-119.706,36.427],[-119.694,36.424],[-119.671,36.431],[-119.673,36.427],[-119.667,36.419],[-119.573,36.489],[-119.683,36.489],[-119.683,36.536],[-119.692,36.536],[-119.692,36.547],[-119.773,36.547],[-119.773,36.62],[-119.786,36.617],[-119.786,36.62],[-119.786,36.617],[-119.798,36.62],[-119.881,36.619],[-119.881,36.627],[-119.899,36.627],[-119.899,36.63],[-119.908,36.629],[-119.909,36.648],[-119.952,36.648],[-119.952,36.662],[-119.908,36.663],[-119.908,36.677],[-119.917,36.677],[-119.916,36.692],[-119.934,36.692],[-119.934,36.706],[-119.916,36.706],[-119.917,36.721],[-119.925,36.721],[-119.925,36.735],[-119.97,36.735],[-119.97,36.832],[-119.951,36.832],[-119.937,36.836],[-119.927,36.849],[-119.918,36.845],[-119.908,36.847],[-119.906,36.85],[-119.911,36.857],[-119.911,36.88],[-119.893,36.88],[-119.894,36.916],[-119.858,36.923],[-119.858,36.937],[-119.894,36.938],[-119.894,36.961],[-119.884,36.964],[-119.882,36.962],[-119.863,36.977],[-119.861,36.983],[-119.853,36.985],[-119.845,36.992],[-119.858,36.999],[-119.858,37.01],[-119.912,37.01],[-119.912,37.054],[-119.908,37.069],[-119.911,37.071],[-119.921,37.068],[-119.926,37.062],[-119.935,37.061],[-119.942,37.064],[-119.949,37.072],[-119.989,37.074],[-119.993,37.082],[-120.006,37.079],[-120.019,37.08],[-120.029,37.075],[-120.029,37.067],[-120.025,37.067],[-120.024,37.054],[-120.075,37.054],[-120.075,37.097],[-120.093,37.098],[-120.093,37.105],[-120.111,37.105],[-120.111,37.127],[-120.12,37.127],[-120.12,37.134],[-120.129,37.134],[-120.129,37.141],[-120.138,37.141],[-120.137,37.151],[-120.142,37.147],[-120.159,37.145],[-120.189,37.128],[-120.206,37.127],[-120.241,37.158],[-120.223,37.164],[-120.195,37.163],[-120.188,37.16],[-120.176,37.162],[-120.174,37.166],[-120.165,37.163],[-120.133,37.167],[-120.115,37.166],[-120.052,37.183],[-120.062,37.198],[-120.09,37.221],[-120.144,37.239],[-120.178,37.262],[-120.187,37.28],[-120.183,37.291],[-120.188,37.301],[-120.204,37.313],[-120.217,37.337],[-120.247,37.38],[-120.255,37.385],[-120.276,37.419],[-120.283,37.424],[-120.284,37.432],[-120.275,37.441],[-120.28,37.458],[-120.3,37.484],[-120.299,37.489],[-120.311,37.497],[-120.317,37.506],[-120.319,37.521],[-120.388,37.633],[-120.816,37.467],[-120.845,37.493],[-120.84,37.493],[-120.835,37.507],[-120.849,37.507],[-120.849,37.511],[-120.861,37.511],[-120.861,37.507],[-120.9,37.544],[-120.902,37.549],[-120.897,37.551],[-120.902,37.553],[-120.902,37.566],[-120.92,37.567],[-120.92,37.573],[-120.937,37.575],[-120.934,37.587],[-120.92,37.588],[-120.92,37.609],[-120.902,37.609],[-120.902,37.622],[-120.899,37.623],[-120.901,37.628],[-120.898,37.629],[-120.898,37.638],[-120.895,37.642],[-120.898,37.642],[-120.898,37.65],[-120.907,37.65],[-120.91,37.661],[-120.922,37.657],[-120.921,37.653],[-120.941,37.654],[-120.948,37.649],[-120.948,37.646],[-120.966,37.644],[-120.966,37.638],[-120.978,37.638],[-120.978,37.631],[-120.975,37.631],[-120.976,37.624],[-120.987,37.631],[-120.984,37.637],[-120.995,37.635],[-121.01,37.646],[-121.017,37.64],[-121.03,37.641],[-121.031,37.646],[-121.049,37.646],[-121.049,37.663],[-121.045,37.664],[-121.045,37.668],[-121.036,37.668],[-121.054,37.683],[-121.095,37.682],[-121.096,37.711],[-121.105,37.711],[-121.104,37.725],[-121.11,37.73],[-121.116,37.725],[-121.121,37.724],[-121.121,37.722],[-121.137,37.725],[-121.146,37.717],[-121.151,37.719],[-121.151,37.725],[-121.156,37.725],[-121.16,37.718],[-121.166,37.718],[-121.166,37.725],[-121.192,37.725],[-121.192,37.739],[-121.215,37.739],[-121.216,37.758],[-121.225,37.758],[-121.225,37.75],[-121.234,37.75],[-121.234,37.762],[-121.243,37.762],[-121.243,37.755],[-121.257,37.754],[-121.267,37.754],[-121.267,37.757],[-121.261,37.757],[-121.265,37.76],[-121.283,37.761],[-121.293,37.766],[-121.293,37.769],[-121.289,37.769],[-121.289,37.775],[-121.283,37.775],[-121.283,37.783],[-121.28,37.785],[-121.284,37.785],[-121.266,37.786],[-121.271,37.791],[-121.264,37.797],[-121.262,37.806],[-121.264,37.856],[-121.281,37.859],[-121.286,37.841],[-121.318,37.841],[-121.31,37.826],[-121.321,37.82],[-121.315,37.818],[-121.319,37.816],[-121.319,37.811],[-121.334,37.809],[-121.333,37.818],[-121.339,37.822],[-121.342,37.817],[-121.348,37.822],[-121.354,37.817],[-121.377,37.822],[-121.384,37.812],[-121.414,37.803],[-121.405,37.801],[-121.391,37.805],[-121.371,37.8],[-121.362,37.789],[-121.351,37.789],[-121.349,37.785],[-121.34,37.781],[-121.33,37.77],[-121.326,37.772],[-121.318,37.764],[-121.327,37.754],[-121.326,37.746],[-121.339,37.745],[-121.344,37.748],[-121.344,37.743],[-121.382,37.716],[-121.38,37.711],[-121.416,37.71],[-121.416,37.699],[-121.435,37.696],[-121.434,37.68],[-121.445,37.674],[-121.434,37.659],[-121.458,37.671],[-121.468,37.663],[-121.474,37.662],[-121.467,37.672],[-121.477,37.664],[-121.482,37.667],[-121.487,37.673],[-121.49,37.683],[-121.493,37.684],[-121.492,37.693],[-121.506,37.702],[-121.511,37.7],[-121.525,37.705],[-121.557,37.704],[-121.557,37.664]],"counties":[{"fips":"06069","name":"San Benito","core":false,"rings":[[[-121.643,36.894],[-121.629,36.912],[-121.561,36.897],[-121.489,36.983],[-121.453,36.988],[-121.417,36.961],[-121.216,36.961],[-121.234,36.927],[-121.198,36.915],[-121.152,36.866],[-121.141,36.836],[-120.933,36.752],[-120.602,36.488],[-120.595,36.329],[-120.66,36.316],[-120.678,36.268],[-120.746,36.311],[-120.717,36.26],[-120.706,36.204],[-120.76,36.203],[-120.864,36.293],[-120.925,36.309],[-120.954,36.275],[-120.986,36.293],[-121.012,36.267],[-121.037,36.275],[-121.04,36.31],[-121.076,36.354],[-121.23,36.477],[-121.241,36.506],[-121.313,36.502],[-121.295,36.529],[-121.327,36.555],[-121.32,36.61],[-121.363,36.656],[-121.467,36.685],[-121.485,36.713],[-121.453,36.723],[-121.478,36.763],[-121.521,36.771],[-121.597,36.837],[-121.622,36.846],[-121.643,36.894]]]},{"fips":"06019","name":"Fresno","core":true,"rings":[[[-120.541,37.044],[-120.509,37.007],[-120.452,36.911],[-120.455,36.863],[-120.369,36.811],[-120.369,36.785],[-120.229,36.769],[-120.078,36.825],[-120.028,36.815],[-119.985,36.841],[-119.942,36.834],[-119.885,36.859],[-119.813,36.85],[-119.791,36.896],[-119.734,36.946],[-119.741,36.97],[-119.701,37.005],[-119.669,37.009],[-119.651,37.042],[-119.619,37.027],[-119.605,37.071],[-119.561,37.067],[-119.536,37.105],[-119.565,37.116],[-119.551,37.145],[-119.526,37.128],[-119.49,37.139],[-119.483,37.11],[-119.429,37.164],[-119.386,37.15],[-119.328,37.209],[-119.335,37.313],[-119.314,37.352],[-119.023,37.586],[-118.976,37.557],[-118.915,37.55],[-118.851,37.476],[-118.797,37.488],[-118.775,37.463],[-118.761,37.435],[-118.786,37.386],[-118.779,37.336],[-118.693,37.3],[-118.668,37.257],[-118.686,37.23],[-118.646,37.14],[-118.596,37.138],[-118.531,37.11],[-118.438,37.055],[-118.42,36.992],[-118.366,36.895],[-118.366,36.84],[-118.391,36.833],[-118.359,36.744],[-118.984,36.742],[-118.984,36.657],[-119.303,36.66],[-119.307,36.574],[-119.465,36.575],[-119.666,36.419],[-119.673,36.431],[-119.748,36.416],[-119.755,36.402],[-119.96,36.401],[-119.96,36.182],[-120.315,35.907],[-120.358,35.964],[-120.434,35.969],[-120.48,36.01],[-120.541,36.037],[-120.592,36.072],[-120.602,36.102],[-120.649,36.108],[-120.671,36.165],[-120.627,36.203],[-120.681,36.251],[-120.66,36.316],[-120.595,36.329],[-120.602,36.488],[-120.918,36.74],[-120.656,36.953],[-120.592,36.952],[-120.599,36.999],[-120.541,37.044]]]},{"fips":"06005","name":"Amador","core":false,"rings":[[[-121.026,38.508],[-120.94,38.529],[-120.925,38.515],[-120.843,38.555],[-120.764,38.554],[-120.627,38.504],[-120.527,38.51],[-120.376,38.545],[-120.312,38.546],[-120.233,38.596],[-120.211,38.629],[-120.136,38.644],[-120.121,38.697],[-120.071,38.703],[-120.071,38.51],[-120.154,38.494],[-120.2,38.5],[-120.279,38.475],[-120.383,38.462],[-120.416,38.474],[-120.459,38.447],[-120.498,38.448],[-120.527,38.423],[-120.613,38.39],[-120.631,38.346],[-120.807,38.287],[-120.897,38.221],[-120.997,38.226],[-121.026,38.3],[-121.026,38.508]]]},{"fips":"06053","name":"Monterey","core":false,"rings":[[[-121.812,36.851],[-121.787,36.885],[-121.701,36.92],[-121.643,36.894],[-121.622,36.846],[-121.597,36.837],[-121.521,36.771],[-121.478,36.763],[-121.453,36.723],[-121.485,36.713],[-121.467,36.685],[-121.363,36.656],[-121.32,36.61],[-121.327,36.555],[-121.295,36.529],[-121.313,36.502],[-121.241,36.506],[-121.23,36.477],[-121.076,36.354],[-121.04,36.31],[-121.037,36.275],[-121.012,36.267],[-120.986,36.293],[-120.954,36.275],[-120.925,36.309],[-120.864,36.293],[-120.76,36.203],[-120.706,36.204],[-120.717,36.26],[-120.746,36.311],[-120.678,36.268],[-120.681,36.251],[-120.627,36.203],[-120.671,36.165],[-120.649,36.108],[-120.602,36.102],[-120.592,36.072],[-120.541,36.037],[-120.48,36.01],[-120.434,35.969],[-120.358,35.964],[-120.315,35.907],[-120.276,35.906],[-120.24,35.866],[-120.258,35.845],[-120.222,35.819],[-120.215,35.789],[-121.345,35.795],[-121.414,35.855],[-121.464,35.885],[-121.485,35.97],[-121.503,36.001],[-121.575,36.025],[-121.629,36.115],[-121.719,36.196],[-121.837,36.251],[-121.877,36.289],[-121.905,36.358],[-121.902,36.394],[-121.941,36.481],[-121.934,36.56],[-121.973,36.574],[-121.938,36.637],[-121.873,36.604],[-121.841,36.63],[-121.816,36.683],[-121.787,36.804],[-121.812,36.851]]]},{"fips":"06109","name":"Tuolumne","core":false,"rings":[[[-120.021,38.433],[-119.885,38.356],[-119.802,38.402],[-119.752,38.417],[-119.698,38.41],[-119.701,38.366],[-119.64,38.327],[-119.648,38.283],[-119.605,38.237],[-119.63,38.197],[-119.515,38.137],[-119.497,38.154],[-119.447,38.097],[-119.429,38.112],[-119.353,38.085],[-119.307,38.03],[-119.321,37.969],[-119.303,37.945],[-119.213,37.899],[-119.217,37.854],[-119.203,37.794],[-119.271,37.739],[-119.378,37.84],[-119.429,37.866],[-119.493,37.863],[-119.529,37.893],[-119.576,37.896],[-119.605,37.858],[-119.651,37.839],[-119.651,37.82],[-119.748,37.775],[-119.813,37.757],[-119.867,37.773],[-119.938,37.763],[-120.024,37.811],[-120.082,37.828],[-120.129,37.781],[-120.182,37.795],[-120.186,37.77],[-120.24,37.764],[-120.261,37.734],[-120.344,37.726],[-120.308,37.665],[-120.33,37.65],[-120.391,37.683],[-120.387,37.634],[-120.653,37.832],[-120.631,37.861],[-120.538,37.926],[-120.516,37.961],[-120.541,37.975],[-120.516,38.004],[-120.466,38.013],[-120.455,38.042],[-120.34,38.174],[-120.258,38.286],[-120.208,38.327],[-120.154,38.388],[-120.021,38.433]]]},{"fips":"06099","name":"Stanislaus","core":true,"rings":[[[-121.471,37.482],[-121.241,37.664],[-121.144,37.718],[-121.058,37.75],[-121.029,37.741],[-120.997,37.76],[-120.922,37.738],[-120.925,38.078],[-120.653,37.832],[-120.387,37.634],[-120.983,37.4],[-120.965,37.346],[-121.227,37.134],[-121.281,37.183],[-121.327,37.166],[-121.356,37.184],[-121.392,37.148],[-121.417,37.211],[-121.457,37.25],[-121.46,37.283],[-121.406,37.311],[-121.424,37.359],[-121.41,37.382],[-121.457,37.396],[-121.471,37.423],[-121.471,37.482]]]},{"fips":"06077","name":"San Joaquin","core":true,"rings":[[[-121.579,38.094],[-121.586,38.12],[-121.536,38.152],[-121.528,38.194],[-121.482,38.254],[-121.428,38.255],[-121.41,38.232],[-121.345,38.228],[-121.27,38.252],[-121.223,38.244],[-121.173,38.256],[-121.065,38.299],[-121.026,38.3],[-120.94,38.088],[-120.925,38.078],[-120.922,37.738],[-120.997,37.76],[-121.029,37.741],[-121.058,37.75],[-121.144,37.718],[-121.241,37.664],[-121.471,37.482],[-121.503,37.526],[-121.557,37.543],[-121.557,37.817],[-121.536,37.85],[-121.579,37.861],[-121.557,37.933],[-121.582,37.984],[-121.557,38.017],[-121.586,38.036],[-121.579,38.094]]]},{"fips":"06009","name":"Calaveras","core":false,"rings":[[[-120.071,38.51],[-120.071,38.447],[-120.021,38.433],[-120.154,38.388],[-120.208,38.327],[-120.258,38.286],[-120.34,38.174],[-120.455,38.042],[-120.466,38.013],[-120.516,38.004],[-120.541,37.975],[-120.516,37.961],[-120.538,37.926],[-120.631,37.861],[-120.653,37.832],[-120.94,38.088],[-120.997,38.226],[-120.897,38.221],[-120.807,38.287],[-120.631,38.346],[-120.613,38.39],[-120.527,38.423],[-120.498,38.448],[-120.459,38.447],[-120.416,38.474],[-120.383,38.462],[-120.279,38.475],[-120.2,38.5],[-120.154,38.494],[-120.071,38.51]]]},{"fips":"06039","name":"Madera","core":true,"rings":[[[-120.541,37.044],[-120.477,37.097],[-120.229,37.164],[-120.107,37.167],[-120.053,37.183],[-119.762,37.417],[-119.651,37.418],[-119.651,37.461],[-119.615,37.462],[-119.615,37.494],[-119.583,37.494],[-119.583,37.561],[-119.31,37.778],[-119.271,37.739],[-119.217,37.714],[-119.199,37.737],[-119.124,37.734],[-119.066,37.684],[-119.034,37.63],[-119.023,37.586],[-119.314,37.352],[-119.335,37.313],[-119.328,37.209],[-119.386,37.15],[-119.429,37.164],[-119.483,37.11],[-119.49,37.139],[-119.526,37.128],[-119.551,37.145],[-119.565,37.116],[-119.536,37.105],[-119.561,37.067],[-119.605,37.071],[-119.619,37.027],[-119.651,37.042],[-119.669,37.009],[-119.701,37.005],[-119.741,36.97],[-119.734,36.946],[-119.791,36.896],[-119.813,36.85],[-119.885,36.859],[-119.942,36.834],[-119.985,36.841],[-120.028,36.815],[-120.078,36.825],[-120.229,36.769],[-120.369,36.785],[-120.369,36.811],[-120.455,36.863],[-120.452,36.911],[-120.509,37.007],[-120.541,37.044]]]},{"fips":"06013","name":"Contra Costa","core":false,"rings":[[[-122.268,38.06],[-122.185,38.054],[-122.142,38.031],[-122.06,38.062],[-121.984,38.067],[-121.927,38.047],[-121.862,38.066],[-121.833,38.031],[-121.79,38.018],[-121.737,38.027],[-121.683,38.061],[-121.661,38.096],[-121.579,38.094],[-121.586,38.036],[-121.557,38.017],[-121.582,37.984],[-121.557,37.933],[-121.579,37.861],[-121.536,37.85],[-121.557,37.817],[-121.956,37.72],[-122.013,37.747],[-121.999,37.763],[-122.045,37.799],[-122.139,37.805],[-122.178,37.817],[-122.225,37.878],[-122.271,37.906],[-122.314,37.897],[-122.379,37.905],[-122.429,37.963],[-122.401,37.956],[-122.368,37.978],[-122.368,38.012],[-122.3,38.011],[-122.268,38.06]]]},{"fips":"06031","name":"Kings","core":false,"rings":[[[-120.315,35.907],[-119.96,36.182],[-119.96,36.401],[-119.755,36.402],[-119.748,36.416],[-119.673,36.431],[-119.666,36.419],[-119.572,36.488],[-119.526,36.488],[-119.529,36.402],[-119.475,36.401],[-119.475,36.269],[-119.529,36.269],[-119.536,36.138],[-119.536,35.789],[-120.215,35.789],[-120.222,35.819],[-120.258,35.845],[-120.24,35.866],[-120.276,35.906],[-120.315,35.907]]]},{"fips":"06047","name":"Merced","core":true,"rings":[[[-121.227,37.134],[-120.965,37.346],[-120.983,37.4],[-120.387,37.634],[-120.279,37.458],[-120.265,37.401],[-120.182,37.292],[-120.179,37.262],[-120.086,37.219],[-120.053,37.183],[-120.107,37.167],[-120.229,37.164],[-120.477,37.097],[-120.599,36.999],[-120.592,36.952],[-120.656,36.953],[-120.918,36.74],[-120.933,36.752],[-121.141,36.836],[-121.152,36.866],[-121.198,36.915],[-121.234,36.927],[-121.216,36.961],[-121.245,36.983],[-121.245,37.025],[-121.209,37.068],[-121.245,37.09],[-121.227,37.134]]]},{"fips":"06107","name":"Tulare","core":false,"rings":[[[-118.359,36.744],[-118.334,36.706],[-118.366,36.692],[-118.32,36.628],[-118.287,36.604],[-118.291,36.559],[-118.248,36.534],[-118.244,36.48],[-118.212,36.433],[-118.144,36.421],[-118.158,36.388],[-118.101,36.339],[-118.126,36.301],[-118.101,36.208],[-118.058,36.159],[-118.068,36.098],[-118.05,36.08],[-118.032,36.009],[-118.007,35.99],[-118.018,35.961],[-117.993,35.944],[-117.982,35.867],[-118.004,35.863],[-118.007,35.789],[-119.536,35.789],[-119.536,36.138],[-119.529,36.269],[-119.475,36.269],[-119.475,36.401],[-119.529,36.402],[-119.526,36.488],[-119.572,36.488],[-119.465,36.575],[-119.307,36.574],[-119.303,36.66],[-118.984,36.657],[-118.984,36.742],[-118.359,36.744]]]},{"fips":"06067","name":"Sacramento","core":false,"rings":[[[-121.593,38.313],[-121.582,38.332],[-121.521,38.36],[-121.532,38.429],[-121.503,38.441],[-121.507,38.469],[-121.543,38.477],[-121.554,38.514],[-121.525,38.519],[-121.51,38.601],[-121.554,38.603],[-121.564,38.642],[-121.593,38.644],[-121.632,38.686],[-121.604,38.736],[-121.485,38.735],[-121.141,38.712],[-121.119,38.717],[-121.026,38.508],[-121.026,38.3],[-121.065,38.299],[-121.173,38.256],[-121.223,38.244],[-121.27,38.252],[-121.345,38.228],[-121.41,38.232],[-121.428,38.255],[-121.482,38.254],[-121.528,38.194],[-121.536,38.152],[-121.586,38.12],[-121.579,38.094],[-121.661,38.096],[-121.683,38.061],[-121.737,38.027],[-121.79,38.018],[-121.833,38.031],[-121.862,38.066],[-121.798,38.061],[-121.744,38.087],[-121.711,38.085],[-121.686,38.159],[-121.615,38.195],[-121.593,38.313]]]},{"fips":"06043","name":"Mariposa","core":false,"rings":[[[-119.31,37.778],[-119.583,37.561],[-119.583,37.494],[-119.615,37.494],[-119.615,37.462],[-119.651,37.461],[-119.651,37.418],[-119.762,37.417],[-120.053,37.183],[-120.086,37.219],[-120.179,37.262],[-120.182,37.292],[-120.265,37.401],[-120.279,37.458],[-120.387,37.634],[-120.391,37.683],[-120.33,37.65],[-120.308,37.665],[-120.344,37.726],[-120.261,37.734],[-120.24,37.764],[-120.186,37.77],[-120.182,37.795],[-120.129,37.781],[-120.082,37.828],[-120.024,37.811],[-119.938,37.763],[-119.867,37.773],[-119.813,37.757],[-119.748,37.775],[-119.651,37.82],[-119.651,37.839],[-119.605,37.858],[-119.576,37.896],[-119.529,37.893],[-119.493,37.863],[-119.429,37.866],[-119.378,37.84],[-119.31,37.778]]]},{"fips":"06085","name":"Santa Clara","core":false,"rings":[[[-122.11,37.466],[-122.045,37.459],[-121.948,37.468],[-121.927,37.454],[-121.869,37.483],[-121.471,37.482],[-121.471,37.423],[-121.457,37.396],[-121.41,37.382],[-121.424,37.359],[-121.406,37.311],[-121.46,37.283],[-121.457,37.25],[-121.417,37.211],[-121.392,37.148],[-121.356,37.184],[-121.327,37.166],[-121.281,37.183],[-121.227,37.134],[-121.245,37.09],[-121.209,37.068],[-121.245,37.025],[-121.245,36.983],[-121.216,36.961],[-121.417,36.961],[-121.453,36.988],[-121.489,36.983],[-121.561,36.897],[-121.582,36.899],[-121.582,36.919],[-121.647,36.933],[-121.758,37.049],[-121.862,37.104],[-121.891,37.105],[-121.991,37.144],[-122.031,37.19],[-122.088,37.223],[-122.192,37.318],[-122.174,37.326],[-122.203,37.36],[-122.189,37.432],[-122.164,37.453],[-122.11,37.466]]]},{"fips":"06001","name":"Alameda","core":false,"rings":[[[-122.314,37.897],[-122.271,37.906],[-122.225,37.878],[-122.178,37.817],[-122.139,37.805],[-122.045,37.799],[-121.999,37.763],[-122.013,37.747],[-121.956,37.72],[-121.557,37.817],[-121.557,37.543],[-121.503,37.526],[-121.471,37.482],[-121.869,37.483],[-121.927,37.454],[-121.948,37.468],[-122.045,37.459],[-122.067,37.491],[-122.11,37.507],[-122.146,37.582],[-122.171,37.676],[-122.246,37.722],[-122.253,37.762],[-122.332,37.786],[-122.3,37.848],[-122.314,37.897]]]}]};
+const POLL = "https://ntfy.sh/ucm-ca13-2026-a6cfce";
+const API = "https://api.sos.ca.gov/returns/";
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt = n => n == null ? "–" : Math.round(n).toLocaleString("en-US");
+const pct = (x, d = 1) => x == null || !isFinite(x) ? "–" : (x * 100).toFixed(d) + "%";
+const ls = { get(k, d) { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch(e) { return d; } }, set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch(e) {} } };
+const C = D.counties, CD = D.candidates;
+
+/* ---------- tabs (hash: #race, #night, #room) ---------- */
+function showTab(t) {
+  document.querySelectorAll(".tab").forEach(b => b.setAttribute("aria-selected", String(b.dataset.t === t)));
+  for (const s of ["race", "night", "room"]) $("#t-" + s).hidden = s !== t;
+  if (t === "night") renderNight(); if (t === "room") refreshRoom();
+}
+document.querySelectorAll(".tab").forEach(b => b.onclick = () => { history.replaceState(null, "", "#" + b.dataset.t); showTab(b.dataset.t); });
+window.addEventListener("hashchange", () => showTab((location.hash || "#race").slice(1)));
+
+/* ---------- map ---------- */
+const ALL = [...G.cd2026, ...G.cd2021];
+const minX = Math.min(...ALL.map(p => p[0])) - 0.12, maxX = Math.max(...ALL.map(p => p[0])) + 0.12;
+const minY = Math.min(...ALL.map(p => p[1])) - 0.1, maxY = Math.max(...ALL.map(p => p[1])) + 0.1;
+const K = Math.cos(37.3 * Math.PI / 180), W = 600, H = Math.round(W * (maxY - minY) / ((maxX - minX) * K));
+const px = ([x, y]) => [((x - minX) / (maxX - minX) * W).toFixed(1), ((maxY - y) / (maxY - minY) * H).toFixed(1)];
+const path = r => "M" + r.map(p => px(p).join(",")).join("L") + "Z";
+const centroid = r => { let a = 0, cx = 0, cy = 0; for (let i = 0; i < r.length; i++) { const [x0, y0] = r[i], [x1, y1] = r[(i + 1) % r.length]; const f = x0 * y1 - x1 * y0; a += f; cx += (x0 + x1) * f; cy += (y0 + y1) * f; } a /= 2; return [cx / (6 * a), cy / (6 * a)]; };
+// label points: centroid of the county's part inside the district is approximated by averaging district vertices inside the county
+function inside([x, y], r) { let c = false; for (let i = 0, j = r.length - 1; i < r.length; j = i++) { const [xi, yi] = r[i], [xj, yj] = r[j]; if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) c = !c; } return c; }
+function labelPoint(cty, lines) {
+  const ring = cty.rings.slice().sort((a, b) => b.length - a.length)[0];
+  const pts = []; for (let x = minX; x < maxX; x += (maxX - minX) / 60) for (let y = minY; y < maxY; y += (maxY - minY) / 60) if (inside([x, y], ring) && inside([x, y], lines)) pts.push([x, y]);
+  if (!pts.length) return null; return [pts.reduce((s, p) => s + p[0], 0) / pts.length, pts.reduce((s, p) => s + p[1], 0) / pts.length];
+}
+const LBL = {}; for (const lines of ["cd2026", "cd2021"]) { LBL[lines] = {}; for (const c of G.counties) if (c.core) LBL[lines][c.name] = labelPoint(c, G[lines]); }
+function drawMap(el, { lines, fill, ghost, sel, onPick, idp }) {
+  const cid = "clip-" + idp;
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Map of the district and its counties"><defs><clipPath id="${cid}"><path d="${path(G[lines])}"/></clipPath></defs>`;
+  for (const c of G.counties) for (const r of c.rings) s += `<path d="${path(r)}" fill="var(--neutral)" stroke="var(--paper)" stroke-width="1" opacity="${c.core ? 0.9 : 0.45}"/>`;
+  s += `<g clip-path="url(#${cid})">`;
+  for (const c of G.counties.filter(c => c.core)) for (const r of c.rings) s += `<path class="cty ${sel === c.name ? "sel" : ""}" data-c="${esc(c.name)}" tabindex="0" role="button" aria-label="${esc(c.name)} County" d="${path(r)}" fill="${fill(c.name)}"/>`;
+  s += `</g>`;
+  if (ghost) s += `<path class="ghost" d="${path(G[ghost])}"/>`;
+  s += `<path class="dist" d="${path(G[lines])}"/>`;
+  for (const c of G.counties.filter(c => c.core)) { const p = LBL[lines][c.name]; if (p) { const [x, y] = px(p); s += `<text class="lab" x="${x}" y="${y}" text-anchor="middle">${esc(c.name)}</text>`; } }
+  el.innerHTML = s + "</svg>";
+  el.querySelectorAll(".cty").forEach(p => { const go = () => onPick(p.dataset.c); p.addEventListener("click", go); p.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(); } }); });
+}
+const mix = (v, c) => `color-mix(in srgb, var(${c}) ${Math.round(v * 100)}%, var(--paper))`;
+
+/* ---------- tab 1: the race ---------- */
+function renderCands() {
+  $("#cands").innerHTML = ["D", "R"].map(p => { const c = CD[p]; const ini = c.name.split(" ").map(w => w[0]).join("");
+    return `<div class="cand ${p}"><div class="mono" aria-hidden="true">${esc(ini)}</div><div class="nm">${esc(c.name)}</div><div class="pt">${esc(c.party)}</div><p>${esc(c.line)}</p><p class="src"><a href="${esc(c.src)}" target="_blank" rel="noopener">Source</a></p></div>`; }).join("");
+  $("#ratings").innerHTML = D.ratings.map(([w, r]) => `<span class="chip">${esc(w)}: <b>${esc(r)}</b></span>`).join("");
+  $("#ratAsof").textContent = "As of " + D.ratings_asof + ".";
+  $("#history").innerHTML = D.history.map(h => { const t = h.dv + h.rv, d = h.dv / t;
+    return `<div class="hrow"><div class="t"><b>${h.year}</b><span>${esc(h.note)}</span></div><div class="mid"><div class="bar"><span class="d" style="width:${d * 100}%">${esc(h.d.split(" ").pop())} ${pct(d)}</span><span class="r" style="flex:1">${esc(h.r.split(" ").pop())} ${pct(1 - d)}</span></div></div><div class="src" style="margin-top:3px">${fmt(h.dv)} to ${fmt(h.rv)}</div></div>`; }).join("");
+  const r24 = D.reg["2024"].total, r26 = D.reg["2026"].total;
+  const g24 = (r24[1] - r24[2]) / r24[0] * 100, g26 = (r26[1] - r26[2]) / r26[0] * 100;
+  $("#p50").innerHTML = `${esc(D.prop50.line)} Registered Democrats now outnumber Republicans by ${g26.toFixed(1)} points of the district's voters, up from ${g24.toFixed(1)} on the old lines. <a href="${esc(D.prop50.src)}" target="_blank" rel="noopener">Source</a>; registration from the Secretary of State's 15-day reports.`;
+}
+let raceSel = "Merced";
+function renderRaceMap() {
+  const reg = D.reg["2026"], tot = reg.total[0], mx = Math.max(...C.map(c => reg[c][0] / tot));
+  drawMap($("#raceMap"), { lines: "cd2026", ghost: "cd2021", sel: raceSel, idp: "race", fill: n => mix(0.18 + 0.72 * (reg[n][0] / tot) / mx, "--accent"), onPick: n => { raceSel = n; renderRaceMap(); } });
+  const r = reg[raceSel], cr = D.county_reg_2026[raceSel], share = r[0] / cr;
+  const old = n => { const out = []; for (const y of ["2022", "2024"]) { const v = D.results[y].by[n]; out.push(`<span>${y}: Gray ${fmt(v[0])}, Duarte ${fmt(v[1])}</span><span>${pct(v[0] / (v[0] + v[1]))} D</span>`); } return out.join(""); };
+  $("#raceDetail").innerHTML = `<h3>${esc(raceSel)} County</h3><div class="kv">
+    <span>Share of the district's registered voters</span><span>${pct(r[0] / tot)}</span>
+    <span>Share of the county inside the district</span><span>${share > 0.995 ? "all" : pct(share, 0)}</span>
+    <span class="h">Registered in the district, Oct 19, 2026</span><span class="hf"></span>
+    <span>Total</span><span>${fmt(r[0])}</span><span>Democratic</span><span>${fmt(r[1])} · ${pct(r[1] / r[0], 0)}</span><span>Republican</span><span>${fmt(r[2])} · ${pct(r[2] / r[0], 0)}</span><span>No party preference</span><span>${fmt(r[3])} · ${pct(r[3] / r[0], 0)}</span>
+    <span class="h">CD-13 in this county, on the 2021 lines</span><span class="hf"></span>${old(raceSel)}</div>
+    <p class="note">Tap another county on the map. Shading shows each county's share of the district's voters.</p>`;
+}
+
+/* ---------- tab 2: election night ---------- */
+const now = new Date();
+const POLLS_CLOSE = new Date("2026-11-04T04:00:00Z"); // 8:00pm PT, Nov 3
+let year = ls.get("ca13_year", null) || (now >= new Date("2026-11-04T00:00:00Z") ? "2026" : "2024");
+let nightSel = "Merced", LIVE = null, liveTimer = null, liveErr = null;
+document.querySelectorAll("#yearSeg button").forEach(b => b.onclick = () => { year = b.dataset.y; ls.set("ca13_year", year); renderNight(); });
+const num = s => +String(s ?? "0").replace(/[^0-9.]/g, "") || 0;
+async function pullLive() {
+  try {
+    const get = async p => { const r = await fetch(API + p, { cache: "no-store" }); if (!r.ok) throw new Error(r.status); return r.json(); };
+    const first = x => Array.isArray(x) ? x[0] : x;
+    const pick = (cands, party) => num((cands.find(c => c.Party === party) || {}).Votes);
+    const dist = first(await get("us-rep/district/13"));
+    const by = {}, gov = {}, rep = {};
+    await Promise.all(C.map(async n => {
+      const [h, g] = await Promise.all([get("us-rep/district/13/county/" + D.slug[n]), get("governor/county/" + D.slug[n])]);
+      const hh = first(h), gg = first(g);
+      by[n] = [pick(hh.candidates, "Dem"), pick(hh.candidates, "Rep"), pick(gg.candidates, "Dem"), pick(gg.candidates, "Rep")];
+      rep[n] = hh.Reporting; gov[n] = gg.candidates.map(c => c.Name);
+    }));
+    LIVE = { by, rep, gov, total: [pick(dist.candidates, "Dem"), pick(dist.candidates, "Rep")], reporting: dist.Reporting, time: dist.ReportingTime, govNames: gov[C[0]] };
+    LIVE.total.push(C.reduce((s, n) => s + by[n][2], 0), C.reduce((s, n) => s + by[n][3], 0));
+    liveErr = null;
+  } catch (e) { liveErr = "Couldn't reach the Secretary of State's results feed. Trying again in a minute."; }
+  if (year === "2026") renderNight();
+}
+function startLive() { if (liveTimer) return; pullLive(); liveTimer = setInterval(pullLive, 60000); }
+function stopLive() { clearInterval(liveTimer); liveTimer = null; }
+
+function yearData() {
+  if (year !== "2026") return D.results[year];
+  if (!LIVE) return null;
+  const names = LIVE.govNames || ["", ""];
+  return { label: "2026 (live)", lines: "2026", d: CD.D.name, r: CD.R.name, top: "Governor", top_d: (names[0] || "").split(" ").pop(), top_r: (names[1] || "").split(" ").pop(), by: LIVE.by, total: LIVE.total, live: true };
+}
+function renderNight() {
+  document.querySelectorAll("#yearSeg button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.y === year)));
+  if (year === "2026") startLive(); else stopLive();
+  const Y = yearData(), lines = year === "2026" ? "cd2026" : "cd2021";
+  const counted = Y ? Y.total[0] + Y.total[1] : 0;
+  const waiting = year === "2026" && (!Y || counted === 0);
+  $("#livePill").className = "pill" + (year === "2026" ? " live" : ""); $("#livePill").textContent = year === "2026" ? (waiting ? "Before results" : "Live") : "Final";
+  $("#liveStatus").textContent = year === "2026" ? (liveErr || (LIVE ? `${LIVE.reporting} · updated ${LIVE.time}` : "Checking the Secretary of State…")) : (year === "2024" ? "Certified results, 2021 lines" : "Certified results, 2021 lines");
+  // topline
+  if (waiting) {
+    $("#topline").innerHTML = `<div class="wait"><div class="w1">${now < POLLS_CLOSE ? "Polls close at 8pm" : "Waiting for the first count"}</div><p class="status">Tuesday, Nov 3. The first count is usually the mail ballots that arrived early, posted by each county soon after 8pm. This page checks the Secretary of State every minute.</p></div>`;
+  } else {
+    const d = Y.total[0] / counted;
+    $("#topline").innerHTML = `<div class="big"><div class="bigc"><div class="n">${esc(Y.d)}</div><div class="p">${pct(d)}</div><div class="v">${fmt(Y.total[0])} votes</div></div><div class="bigc R"><div class="n">${esc(Y.r)}</div><div class="p">${pct(1 - d)}</div><div class="v">${fmt(Y.total[1])} votes</div></div></div>
+      <div class="mid" style="margin-top:12px"><div class="bar"><span class="d" style="width:${d * 100}%"></span><span class="r" style="flex:1"></span></div></div>
+      <p class="note">${year === "2026" ? "Votes counted so far. California counts mail ballots for weeks, so the margin usually moves after election night." : "Margin: " + fmt(Math.abs(Y.total[0] - Y.total[1])) + " votes."}</p>`;
+  }
+  // map
+  const maxM = 0.25;
+  const fill = n => { if (!Y || waiting) return "var(--neutral)"; const v = Y.by[n], t = v[0] + v[1]; if (!t) return "var(--neutral)"; const m = (v[0] - v[1]) / t; return mix(0.2 + 0.75 * Math.min(1, Math.abs(m) / maxM), m >= 0 ? "--dem" : "--rep"); };
+  drawMap($("#nightMap"), { lines, sel: nightSel, idp: "night", fill, onPick: n => { nightSel = n; renderNight(); } });
+  $("#nightMapH").textContent = year === "2026" ? "Who's ahead where (Prop 50 lines)" : `Who led where in ${year} (2021 lines)`;
+  $("#nightLegend").innerHTML = `<span><span class="sw" style="background:${mix(.85, "--dem")}"></span>${esc((Y || {}).d || CD.D.name)} ahead</span><span><span class="sw" style="background:${mix(.85, "--rep")}"></span>${esc((Y || {}).r || CD.R.name)} ahead</span><span>Darker = wider lead. Only the district's part of each county is colored.</span>`;
+  // county detail
+  const reg = D.reg[year][nightSel], v = Y && Y.by[nightSel], t = v ? v[0] + v[1] : 0;
+  const rate = (yy) => { const vv = D.results[yy].by[nightSel], rr = D.reg[yy][nightSel]; return (vv[0] + vv[1]) / rr[0]; };
+  $("#nightDetail").innerHTML = `<h3>${esc(nightSel)} County · ${esc(year === "2026" ? "2026" : year)}</h3><div class="kv">
+    ${t ? `<span>${esc(Y.d)}</span><span>${fmt(v[0])} · ${pct(v[0] / t)}</span><span>${esc(Y.r)}</span><span>${fmt(v[1])} · ${pct(v[1] / t)}</span>` : `<span>Votes</span><span>none yet</span>`}
+    ${year === "2026" && LIVE ? `<span>Reporting</span><span>${esc((LIVE.rep[nightSel] || "").replace(" precincts reporting", ""))}</span>` : ""}
+    <span class="h">Turnout in the district's part of the county</span><span class="hf"></span>
+    ${year === "2026" ? `<span>So far</span><span>${t ? pct(t / reg[0]) : "–"} of ${fmt(reg[0])}</span>` : ""}
+    <span>2024 final</span><span>${pct(rate("2024"))}</span><span>2022 final</span><span>${pct(rate("2022"))}</span>
+    <span class="h">Registration, ${esc(D.reg[year].asof.split(" (")[0])}</span><span class="hf"></span>
+    <span>Democratic</span><span>${pct(reg[1] / reg[0], 0)}</span><span>Republican</span><span>${pct(reg[2] / reg[0], 0)}</span><span>No party preference</span><span>${pct(reg[3] / reg[0], 0)}</span></div>
+    ${year === "2026" ? `<p class="note">2026 turnout uses the new lines; 2022 and 2024 rates are for this county's part of the old district, so compare rates, not vote counts.</p>` : ""}`;
+  // candidate vs top of ticket
+  $("#perfH").textContent = Y ? `${Y.d.split(" ").pop()} vs. ${Y.top} (${Y.top_d}), ${Y.r.split(" ").pop()} vs. ${Y.top_r}` : "Candidate vs. the top of the ticket";
+  if (!Y || waiting) { $("#perf").innerHTML = `<p class="status">Fills in when counting starts.</p>`; }
+  else {
+    const rows = C.map(n => { const v = Y.by[n], h = v[0] + v[1], g = v[2] + v[3]; if (!h || !g) return `<tr><td>${esc(n)}</td><td colspan="3">–</td></tr>`;
+      const ds = v[0] / h, gs = v[2] / g, diff = (ds - gs) * 100;
+      const partial = year === "2026" && D.county_reg_2026[n] > D.reg["2026"][n][0] * 1.01;
+      return `<tr><td>${esc(n)}${partial ? ' <span class="flag">(whole county for governor)</span>' : ""}</td><td>${pct(ds)}</td><td>${pct(gs)}</td><td class="${diff >= 0 ? "plus" : "minus"}">${diff >= 0 ? "+" : "−"}${Math.abs(diff).toFixed(1)}</td></tr>`; }).join("");
+    const T = Y.total, ds = T[0] / (T[0] + T[1]), gs = T[2] / (T[2] + T[3]), diff = (ds - gs) * 100;
+    $("#perf").innerHTML = `<table><thead><tr><th>County</th><th>${esc(Y.d.split(" ").pop())}</th><th>${esc(Y.top_d)}</th><th>Gap</th></tr></thead><tbody>${rows}
+      <tr><td><b>District</b></td><td><b>${pct(ds)}</b></td><td><b>${pct(gs)}</b></td><td class="${diff >= 0 ? "plus" : "minus"}"><b>${diff >= 0 ? "+" : "−"}${Math.abs(diff).toFixed(1)}</b></td></tr></tbody></table>`;
+  }
+  $("#perfNote").textContent = year === "2026"
+    ? "Shares of the two-party vote. Gap: points the House Democrat runs ahead (+) or behind (−) the Democrat for governor; a minus means the Republican House candidate is running ahead of his party's governor candidate. Merced is entirely in the district; for the other counties the governor's numbers cover the whole county, so read those rows loosely."
+    : `Shares of the two-party vote, both races counted inside the district's part of each county (Statement of Vote Supplement). Gap: points ${Y ? Y.d.split(" ").pop() : ""} ran ahead (+) or behind (−) ${Y ? Y.top_d : ""}.`;
+  // turnout panel
+  $("#turnout").innerHTML = `<div class="tb">${C.map(n => { const rr = D.reg[year][n][0], vv = Y && Y.by[n], cnt = vv ? vv[0] + vv[1] : 0, r = cnt / rr;
+    const r22 = rate2("2022", n), r24 = rate2("2024", n);
+    return `<span>${esc(n)}</span><span class="track" title="${esc(n)}: ${pct(r)}"><i style="width:${Math.min(100, r * 100)}%"></i><b style="left:${r22 * 100}%" title="2022"></b><b class="y24" style="left:${r24 * 100}%" title="2024"></b></span><span class="num">${cnt ? pct(r, 0) : "–"}</span>`; }).join("")}</div>`;
+  $("#turnNote").innerHTML = "Votes in the House race ÷ registered voters in the district's part of each county. Solid tick: 2022 final. Dashed tick: 2024 final." + (year === "2026" ? " 2026 uses the new lines and the Oct 19 registration report." : "");
+}
+const rate2 = (yy, n) => { const vv = D.results[yy].by[n], rr = D.reg[yy][n]; return (vv[0] + vv[1]) / rr[0]; };
+
+/* ---------- tab 3: news & the room ---------- */
+let voter = ls.get("ca13_voter", null); if (!voter) { voter = Math.random().toString(36).slice(2, 10); ls.set("ca13_voter", voter); }
+let mine = ls.get("ca13_mine", {});
+const MARG = [["lt1", "Under 1 pt"], ["1-3", "1–3 pts"], ["3-6", "3–6 pts"], ["6p", "6+ pts"]];
+function renderPicks() {
+  $("#picks").innerHTML = ["D", "R"].map(p => `<button class="pick ${p}" data-p="${p}" aria-pressed="${mine.w === p}">${esc(CD[p].name)}</button>`).join("");
+  $("#margins").innerHTML = MARG.map(([k, t]) => `<button data-m="${k}" aria-pressed="${mine.m === k}">${t}</button>`).join("");
+  document.querySelectorAll("#picks .pick").forEach(b => b.onclick = () => { mine.w = b.dataset.p; save(); });
+  document.querySelectorAll("#margins button").forEach(b => b.onclick = () => { mine.m = b.dataset.m; save(); });
+}
+async function save() {
+  ls.set("ca13_mine", mine); renderPicks();
+  if (!mine.w) { $("#pickStatus").textContent = "Pick a winner too."; return; }
+  try { const r = await fetch(POLL, { method: "POST", body: JSON.stringify({ v: voter, w: mine.w, m: mine.m || null }) }); $("#pickStatus").textContent = r.ok ? "Got it. Change your mind anytime." : "Couldn't send; try again."; }
+  catch (e) { $("#pickStatus").textContent = "Couldn't send; check your connection."; }
+  refreshRoom();
+}
+async function refreshRoom() {
+  let rows = [];
+  try { const t = await (await fetch(POLL + "/json?poll=1&since=all")).text();
+    rows = t.split("\n").filter(Boolean).map(l => { try { return JSON.parse(l); } catch (e) { return null; } }).filter(m => m && m.event === "message"); }
+  catch (e) { $("#room").innerHTML = `<p class="status">Room results unavailable right now.</p>`; return; }
+  const last = {}; rows.sort((a, b) => a.time - b.time).forEach(m => { try { const x = JSON.parse(m.message); if (x && x.v && (x.w === "D" || x.w === "R")) last[x.v] = x; } catch (e) {} });
+  const L = Object.values(last), n = L.length;
+  if (!n) { $("#room").innerHTML = `<p class="status">No picks yet. Be the first.</p>`; return; }
+  const d = L.filter(x => x.w === "D").length, pd = d / n;
+  const cell = (w, k) => L.filter(x => x.w === w && x.m === k).length;
+  const mx = Math.max(1, ...MARG.flatMap(([k]) => [cell("D", k), cell("R", k)]));
+  $("#room").innerHTML = `<p class="status">${n} ${n === 1 ? "person has" : "people have"} picked.</p>
+    <div class="bar" style="margin:8px 0 12px"><span class="d" style="width:${pd * 100}%">${d ? CD.D.short + " " + pct(pd, 0) : ""}</span><span class="r" style="flex:1">${n - d ? CD.R.short + " " + pct(1 - pd, 0) : ""}</span></div>
+    ${MARG.map(([k, t]) => `<div class="dist-row"><span>${t}</span><span class="track"><i style="width:${cell("D", k) / mx * 50}%;background:var(--dem)"></i><i style="width:${cell("R", k) / mx * 50}%;background:var(--rep)"></i></span><span class="num">${cell("D", k) + cell("R", k)}</span></div>`).join("")}`;
+}
+function renderNews() {
+  $("#news").innerHTML = D.news.map(([d, s, t]) => `<a href="https://news.google.com/search?q=${encodeURIComponent('"' + t + '"')}" target="_blank" rel="noopener"><div class="hd">${esc(t)}</div><div class="mt">${esc(s)} · ${new Date(d + "Z").toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "America/Los_Angeles" })}</div></a>`).join("");
+  $("#newsAsof").textContent = "Headlines from Google News, gathered " + new Date(D.news_asof + "Z").toLocaleString("en-US", { month: "short", day: "numeric", hour: "numeric", minute: "2-digit", timeZone: "America/Los_Angeles" }) + " PT. Tap one to find the story.";
+}
+
+$("#foot").innerHTML = `Sources: <a href="${D.sources.results_2024}" target="_blank" rel="noopener">2024</a> and <a href="${D.sources.results_2022}" target="_blank" rel="noopener">2022</a> Statements of Vote; registration from the Secretary of State's <a href="${D.sources.reg_2026}" target="_blank" rel="noopener">15-day reports</a>; live results from the Secretary of State's results feed. District lines: ${esc(D.sources.lines_2026)}; 2021 lines: ${esc(D.sources.lines_2021)}. A public page from public records. lab.nathanwmonroe.com`;
+renderCands(); renderRaceMap(); renderPicks(); renderNews();
+showTab((location.hash || "#race").slice(1).replace(/[^a-z]/g, "") || "race");
+setInterval(() => { if (!$("#t-room").hidden) refreshRoom(); }, 10000);
+</script>
+</body>
+</html>
