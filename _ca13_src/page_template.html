@@ -99,6 +99,22 @@ h3{font:600 13px var(--sans);letter-spacing:.08em;text-transform:uppercase;color
 .prow .num{font-size:13px;line-height:1.35;text-align:right}
 .prow .num b{font-family:var(--mono)}
 @media (max-width:560px){.prow{grid-template-columns:1fr 1fr}.prow .scale{grid-column:1/-1;order:3}}
+/* pace chart */
+.pchart svg{width:100%;height:auto;display:block;overflow:visible}
+.pchart text{font:12px var(--mono);fill:var(--muted)}
+.pchart .gl{stroke:var(--line)}
+.pchart .l22{fill:none;stroke:var(--ink);stroke-width:2}
+.pchart .l24{fill:none;stroke:var(--ink);stroke-width:2;stroke-dasharray:6 4;opacity:.75}
+.pchart .l26{fill:none;stroke:var(--accent);stroke-width:3}
+.pchart .cur{stroke:var(--accent);stroke-width:1.5;stroke-dasharray:3 3}
+.pread{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:10px 0 4px}
+@media (max-width:560px){.pread{grid-template-columns:1fr}}
+.pread>div{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--paper)}
+.pread .yr{font:600 12px var(--sans);letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.pread .big{font:700 24px var(--serif);color:var(--ink)}
+.pread .sm{font-size:13px;color:var(--muted)}
+.pread>.now{border:2px solid var(--accent)}
+#paceNote a{color:inherit}
 /* simulator */
 .sim{border:2px solid var(--accent)}
 .simhead{display:flex;flex-wrap:wrap;gap:10px;align-items:baseline;justify-content:space-between}
@@ -409,25 +425,64 @@ $("#shareBtn").onclick = async () => {
 };
 function toast(t) { const d = document.createElement("div"); d.className = "toast"; d.textContent = t; document.body.appendChild(d); setTimeout(() => d.remove(), 2200); }
 
-/* ---------- pace: Gray's share so far vs his final share in the same place in 2022 and 2024 ---------- */
-let paceView = "district";
+/* ---------- pace: Gray's share at the same number of votes counted, tonight vs 2022 and 2024 ---------- */
+let paceView = "district", paceN = null, paceTouched = false;
 document.querySelectorAll("#pace [data-pv]").forEach(b => b.onclick = () => { paceView = b.dataset.pv; document.querySelectorAll("#pace [data-pv]").forEach(x => x.setAttribute("aria-pressed", String(x === b))); renderPace(); });
+const PACE = D.pace || {};
+const series = yy => ((PACE[yy] || {}).pts || []).map(p => ({ n: p[1] + p[2], s: p[1] / (p[1] + p[2]), g: p[1], r: p[2], when: p[0] }));
+function tonightSeries() {
+  const short = k => String(k || "").replace(/^(\w{3})\w* (\d+), \d{4}, (\d+:\d+) ([ap])\.m\./, "$1 $2, $3$4m");
+  const L = ls.get("ca13_log", []).map(e => ({ n: e.d + e.r, s: e.d / (e.d + e.r), g: e.d, r: e.r, when: short(e.k) }));
+  if (LIVE && counted()) { const c = { n: counted(), s: LIVE.total[0] / counted(), g: LIVE.total[0], r: LIVE.total[1], when: short(LIVE.time) }; if (!L.length || L[L.length - 1].n !== c.n) L.push(c); }
+  return L.filter(p => p.n > 0).sort((a, b) => a.n - b.n);
+}
+const atCount = (S, N) => { let best = null; for (const p of S) if (p.n <= N) best = p; return best; };
 function renderPace() {
+  if (paceView === "county") return renderPaceCounty();
+  const S22 = series("2022"), S24 = series("2024"), T = tonightSeries(), now = T.length ? T[T.length - 1] : null;
+  const maxN = Math.max(...[...S22, ...S24, ...T].map(p => p.n), 1);
+  const top = Math.ceil(maxN / 20000) * 20000;
+  if (!paceTouched) paceN = now ? now.n : (S22[0] ? S22[0].n : Math.round(top / 3));
+  paceN = Math.max(1000, Math.min(top, paceN));
+  const w = Math.max(300, Math.round(($("#paceBody").clientWidth || 640))), h = w < 500 ? 210 : 260, l = 40, r = 12, t = 12, b = 34, lo = 0.40, hi = 0.60;
+  const X = n => l + n / top * (w - l - r), Y = v => t + (hi - Math.max(lo, Math.min(hi, v))) / (hi - lo) * (h - t - b);
+  const step = S => S.length ? S.map((p, i) => (i ? `H${X(p.n).toFixed(1)}V${Y(p.s).toFixed(1)}` : `M${X(p.n).toFixed(1)},${Y(p.s).toFixed(1)}`)).join("") : "";
+  const dots = (S, cls, yy) => S.map(p => `<circle cx="${X(p.n).toFixed(1)}" cy="${Y(p.s).toFixed(1)}" r="${cls === "l26" ? 4.5 : 3}" fill="${cls === "l26" ? "var(--accent)" : "var(--paper)"}" stroke="${cls === "l26" ? "var(--paper)" : "var(--ink)"}" stroke-width="1.5"><title>${yy}, ${esc(p.when)}: ${fmt(p.n)} counted, Gray ${pct(p.s)}</title></circle>`).join("");
+  let g = "";
+  for (let v = lo; v <= hi + 1e-9; v += 0.05) g += `<line class="gl" x1="${l}" x2="${w - r}" y1="${Y(v)}" y2="${Y(v)}" ${Math.abs(v - 0.5) < 1e-9 ? 'stroke-dasharray="5 4" style="stroke:var(--muted)"' : ""}/><text x="${l - 6}" y="${Y(v) + 4}" text-anchor="end">${Math.round(v * 100)}%</text>`;
+  for (let n = 0; n <= top; n += top / (w < 500 ? 2 : 4)) g += `<text x="${X(n)}" y="${h - 12}" text-anchor="middle">${n ? Math.round(n / 1000) + "k" : "0"}</text>`;
+  const svg = `<svg viewBox="0 0 ${w} ${h}" role="img" aria-label="Gray's share of the two-party vote by number of votes counted: 2022, 2024 and tonight">${g}
+    <line class="cur" x1="${X(paceN)}" x2="${X(paceN)}" y1="${t}" y2="${h - b}"/>
+    <path class="l22" d="${step(S22)}"/><path class="l24" d="${step(S24)}"/><path class="l26" d="${step(T)}"/>${dots(S22, "l22", "2022")}${dots(S24, "l24", "2024")}${dots(T, "l26", "2026")}</svg>`;
+  const card = (yy, S, cls) => { const p = atCount(S, paceN), first = S[0];
+    if (!S.length) return `<div class="${cls}"><span class="yr">${yy}</span><div class="big">–</div><div class="sm">${yy === "2026" ? "Waiting for the first count (8pm Tuesday)" : "No running counts on record"}</div></div>`;
+    if (!p) return `<div class="${cls}"><span class="yr">${yy}</span><div class="big">–</div><div class="sm">Earliest count on record: ${fmt(first.n)} votes (${esc(first.when)})</div></div>`;
+    return `<div class="${cls}"><span class="yr">${yy}${yy === "2026" ? " tonight" : ""}</span><div class="big">${pct(p.s)}</div><div class="sm">Gray's share at ${fmt(p.n)} counted<br>${esc(p.when)}${p.g != null ? ` · Gray ${p.g >= p.r ? "+" : "−"}${fmt(Math.abs(p.g - p.r))} votes` : ""}</div></div>`; };
+  const tp = atCount(T, paceN), a = atCount(S22, paceN), b2 = atCount(S24, paceN);
+  const verdict = tp ? [a && `${sgn((tp.s - a.s) * 100)} pts vs 2022`, b2 && `${sgn((tp.s - b2.s) * 100)} pts vs 2024`].filter(Boolean).join(" · ") : "";
+  $("#paceBody").innerHTML = `<div class="legend" style="margin:0 0 4px"><span><span class="sw" style="background:var(--accent)"></span>Tonight</span><span><span class="sw" style="background:none;border-top:2px solid var(--ink);height:0;margin-top:6px"></span>2022</span><span><span class="sw" style="background:none;border-top:2px dashed var(--ink);height:0;margin-top:6px"></span>2024</span><span>Each dot is one update from the Secretary of State</span></div>
+    <div class="pchart">${svg}</div>
+    <div class="sl" style="margin-top:6px"><label for="paceSl">Compare at this many votes counted <output id="paceOut">${fmt(paceN)}</output></label>
+      <input type="range" id="paceSl" min="1000" max="${top}" step="500" value="${paceN}"><small>${now ? "Starts at tonight's count; slide to look back." : "Slide to see where Gray stood at each point in the count."}</small></div>
+    <div class="pread">${card("2026", T, "now")}${card("2022", S22, "")}${card("2024", S24, "")}</div>
+    ${verdict ? `<p style="margin:6px 0 0;font-weight:600;color:var(--ink)">Tonight at this count: ${verdict}</p>` : ""}`;
+  const sl = $("#paceSl"); sl.oninput = () => { paceTouched = true; paceN = +sl.value; renderPace(); const s2 = $("#paceSl"); s2 && s2.focus(); };
+  $("#paceNote").innerHTML = esc(PACE.note || "") + (PACE.src ? " Sources: " + PACE.src.map(([t2, u]) => `<a href="${esc(u)}" target="_blank" rel="noopener">${esc(t2)}</a>`).join(", ") + "." : "");
+}
+let paceRz = null; addEventListener("resize", () => { clearTimeout(paceRz); paceRz = setTimeout(() => paceView === "district" && renderPace(), 200); });
+function renderPaceCounty() {
   const Y = year === "2026" ? yearData() : null, live = Y && counted();
   const lo = 0.35, hi = 0.65, x = v => Math.max(0, Math.min(100, (v - lo) / (hi - lo) * 100));
-  const fin = (yy, n) => n ? share(yy, n) : D.results[yy].total[0] / (D.results[yy].total[0] + D.results[yy].total[1]);
-  const row = (label, sub, n) => { const v = live ? (n ? Y.by[n] : Y.total) : null, t = v ? v[0] + v[1] : 0, now = t ? v[0] / t : null;
-    const a = fin("2022", n), b = fin("2024", n);
+  const row = (label, sub, n) => { const v = live ? Y.by[n] : null, t = v ? v[0] + v[1] : 0, now = t ? v[0] / t : null;
+    const a = share("2022", n), b = share("2024", n);
     const vs = now == null ? `<span class="flag">waiting for votes</span>` : `<b>${pct(now)}</b> now<br>${sgn((now - a) * 100)} vs 2022 · ${sgn((now - b) * 100)} vs 2024`;
     return `<div class="prow"><div class="nm">${esc(label)}<small>${esc(sub)}</small></div>
       <div class="scale" role="img" aria-label="${esc(label)}: Gray ${now == null ? "no votes yet" : pct(now) + " now"}, ${pct(a)} in 2022, ${pct(b)} in 2024"><span class="ax"></span><span class="fifty" style="left:${x(0.5)}%"></span>
       <span class="mk" style="left:${x(a)}%" title="2022: ${pct(a)}"></span><span class="mk y24" style="left:${x(b)}%" title="2024: ${pct(b)}"></span>${now == null ? "" : `<span class="now" style="left:${x(now)}%" title="Now: ${pct(now)}"></span>`}</div>
       <div class="num">${vs}</div></div>`; };
-  const rows = paceView === "district"
-    ? row("District", live ? fmt(counted()) + " votes counted" : "2026 vs. past finals", null)
-    : C.map(n => row(n, live && Y.by[n][0] + Y.by[n][1] ? fmt(Y.by[n][0] + Y.by[n][1]) + " counted" : (n === "Merced" ? "same county, whole" : "different part of the county"), n)).join("");
-  $("#paceBody").innerHTML = `<div class="legend" style="margin:0 0 4px"><span><span class="sw" style="background:var(--accent);border-radius:50%"></span>Gray's share tonight</span><span><span class="sw" style="border:2px solid var(--ink);border-radius:50%;background:none"></span>2022 final</span><span><span class="sw" style="border:2px dashed var(--ink);border-radius:50%;background:none"></span>2024 final</span><span>Dashed line: 50%</span></div>` + rows;
-  $("#paceNote").textContent = "Gray's share of the two-party vote counted so far, against his final share in the same county in 2022 and 2024 (old lines). Early counts aren't final: in California the first mail ballots and the late ones can lean different ways, so treat the gap as a pulse, not a verdict. Merced is the cleanest comparison, since the whole county is in the district both times.";
+  $("#paceBody").innerHTML = `<div class="legend" style="margin:0 0 4px"><span><span class="sw" style="background:var(--accent);border-radius:50%"></span>Gray's share tonight</span><span><span class="sw" style="border:2px solid var(--ink);border-radius:50%;background:none"></span>2022 final</span><span><span class="sw" style="border:2px dashed var(--ink);border-radius:50%;background:none"></span>2024 final</span><span>Dashed line: 50%</span></div>` +
+    C.map(n => row(n, live && Y.by[n][0] + Y.by[n][1] ? fmt(Y.by[n][0] + Y.by[n][1]) + " counted" : (n === "Merced" ? "same county, whole" : "different part of the county"), n)).join("");
+  $("#paceNote").textContent = PACE.county_note || "By county, the comparison is with Gray's final share in each county in 2022 and 2024 (old lines).";
 }
 
 document.querySelectorAll("#yearSeg button").forEach(b => b.onclick = () => { year = b.dataset.y; render(); });
