@@ -199,8 +199,8 @@ footer a{color:inherit}
 </head>
 <body>
 <header><div class="wrap">
-  <div class="kicker">California's 13th Congressional District · Tuesday, Nov 3, 2026</div>
-  <h1>Gray <span class="vs">vs.</span> Lincoln</h1>
+  <div class="kicker" id="kick">California's 13th Congressional District · Tuesday, Nov 3, 2026</div>
+  <h1 id="h1">Gray <span class="vs">vs.</span> Lincoln</h1>
   <div class="hrow">
     <span class="pill" id="livePill">Before results</span>
     <span class="hstat" id="liveStatus">Checking the Secretary of State…</span>
@@ -242,7 +242,7 @@ footer a{color:inherit}
   </section>
 
   <section class="card sim" id="sim" aria-labelledby="simH">
-    <div class="simhead"><h2 id="simH">What would it take?</h2><span class="note" style="margin:0">Slide turnout and vote share in each county and watch the result.</span></div>
+    <div class="simhead"><h2 id="simH">What would it take this year?</h2><span class="note" style="margin:0">Slide turnout and vote share in each county and watch the result.</span></div>
     <div class="meta" data-sec="sim"></div>
     <div class="result" id="simResult" aria-live="polite"></div>
     <h3 style="margin-top:6px">Start from</h3>
@@ -353,6 +353,9 @@ const share = (yy, n) => { const v = D.results[yy].by[n]; return v[0] / (v[0] + 
 function renderTop() {
   document.querySelectorAll("#yearSeg button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.y === year)));
   const Y = yearData(), lines = year === "2026" ? "cd2026" : "cd2021", tot = Y ? Y.total[0] + Y.total[1] : 0, waiting = year === "2026" && !tot;
+  const OPP = year === "2026" ? "Lincoln" : "Duarte";
+  $("#kick").textContent = year === "2026" ? "California's 13th Congressional District · Tuesday, Nov 3, 2026" : `California's 13th District · ${year} result on the old lines · this year: Gray vs. Lincoln`;
+  $("#h1").innerHTML = `Gray <span class="vs">vs.</span> ${OPP}${year === "2026" ? "" : ` <span class="vs">${year}</span>`}`;
   $("#livePill").className = "pill" + (year === "2026" && tot ? " live" : "");
   $("#livePill").textContent = year === "2026" ? (tot ? "Live" : "Before results") : year + " final";
   $("#liveStatus").textContent = year === "2026" ? (liveErr || (LIVE ? `${LIVE.reporting}. Updated ${LIVE.time}.` : "Checking the Secretary of State…")) : `Certified result on the old (2021) lines, against John Duarte`;
@@ -375,7 +378,7 @@ function renderTop() {
       <div class="bar">${ds == null ? "" : `<span class="d" style="width:${ds * 100}%">${pct(ds, 0)}</span><span class="r" style="flex:1">${pct(1 - ds, 0)}</span>`}</div>
       <div class="num">${t ? sgn((v[0] - v[1]) / 1, 0).replace(/(\d)(?=(\d{3})+$)/g, "$1,") : "–"}</div></div>`; }).join("");
   $("#crows").querySelectorAll(".crow").forEach(r => { const go = () => { sel = r.dataset.c; render(); }; r.onclick = go; r.onkeydown = e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(); } }; });
-  $("#cntyNote").textContent = "Right column: Gray's net votes in the county (minus means Lincoln leads there)." + (year === "2026" ? " Only the district's part of each county counts." : "");
+  $("#cntyNote").textContent = `Right column: Gray's net votes in the county (minus means ${year === "2026" ? "Lincoln leads there" : "Duarte won there"}).` + (year === "2026" ? " Only the district's part of each county counts." : "");
   // map
   const fill = n => { if (!Y || waiting) return mix(0.25 + 0.6 * (R[n][0] / R.total[0]) / 0.4, "--accent"); const v = Y.by[n], t = v[0] + v[1]; if (!t) return "var(--neutral)"; const m = (v[0] - v[1]) / t; return mix(0.2 + 0.75 * Math.min(1, Math.abs(m) / 0.25), m >= 0 ? "--dem" : "--rep"); };
   drawMap($("#map"), { lines, sel, fill, onPick: n => { sel = n; render(); const c = $("#detCard"), r = c.getBoundingClientRect(); if (r.top > innerHeight - 140) c.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "nearest" }); } });
@@ -420,8 +423,8 @@ function renderTop() {
 /* ---------- simulator ---------- */
 // Per county: T = final turnout (share of registered voters), S = Gray's share (of the ballots still to count, once counting starts).
 const SC = {
-  y24: { label: "2024 replay", make: () => Object.fromEntries(C.map(n => [n, { T: rate("2024", n), S: share("2024", n) }])) },
-  y22: { label: "2022 replay", make: () => Object.fromEntries(C.map(n => [n, { T: rate("2022", n), S: share("2022", n) }])) },
+  y24: { label: "2024 replay (his race vs. Duarte)", make: () => Object.fromEntries(C.map(n => [n, { T: rate("2024", n), S: share("2024", n) }])) },
+  y22: { label: "2022 replay (his race vs. Duarte)", make: () => Object.fromEntries(C.map(n => [n, { T: rate("2022", n), S: share("2022", n) }])) },
   even: { label: "Dead even", make: () => Object.fromEntries(C.map(n => [n, { T: (rate("2022", n) + rate("2024", n)) / 2, S: 0.5 }])) },
   live: { label: "Tonight's count so far", make: () => Object.fromEntries(C.map(n => { const v = LIVE.by[n], t = v[0] + v[1]; return [n, { T: Math.max((rate("2022", n) + rate("2024", n)) / 2, t / REG[n][0]), S: t ? v[0] / t : share("2024", n) }]; })) },
 };
@@ -447,7 +450,7 @@ function renderSim() {
   $("#simCounties").innerHTML = C.map(n => { const e = eff(n), b = P.by[n], id = n.replace(/\s/g, "");
     return `<div class="cc"><div class="cn">${esc(n)}<small>${fmt(REG[n][0])} registered${P.isLive && b.c ? ` · ${fmt(b.c)} counted` : ""}</small></div>
       <div class="sl"><label for="t-${id}">Turnout <output>${pct(e.T, 0)}</output></label><input id="t-${id}" data-c="${esc(n)}" data-k="T" type="range" min="10" max="90" step="1" value="${Math.round(e.T * 100)}"><small>${fmt(b.exp)} votes${P.isLive ? `, ${fmt(b.left)} still to count` : ""}</small></div>
-      <div class="sl"><label for="s-${id}">${P.isLive && b.c ? "Gray, rest of count" : "Gray's share"} <output>${pct(e.S, 0)}</output></label><input class="share" id="s-${id}" data-c="${esc(n)}" data-k="S" type="range" min="20" max="80" step="0.5" value="${(e.S * 100).toFixed(1)}"><small>Lincoln ${pct(1 - e.S, 0)} · net ${sgn((b.d - b.r), 0).replace(/(\d)(?=(\d{3})+$)/g, "$1,")}</small></div></div>`; }).join("");
+      <div class="sl"><label for="s-${id}">${P.isLive && b.c ? "Gray, rest of count" : "Gray's share"} <output>${pct(e.S, 0)}</output></label><input class="share" id="s-${id}" data-c="${esc(n)}" data-k="S" type="range" min="20" max="80" step="0.5" value="${(e.S * 100).toFixed(1)}"><small>Lincoln ${pct(1 - e.S, 0)} in this what-if · net ${sgn((b.d - b.r), 0).replace(/(\d)(?=(\d{3})+$)/g, "$1,")}</small></div></div>`; }).join("");
   $("#simCounties").querySelectorAll("input").forEach(inp => inp.oninput = () => { const n = inp.dataset.c, k = inp.dataset.k, v = +inp.value / 100;
     edits[n] = Object.assign({}, edits[n] || {}); edits[n][k] = k === "T" ? v / (1 + tshift / 100) : v - swing / 100; scen = scen.endsWith("*") ? scen : scen; queue(); });
   const nets = C.map(n => [n, P.by[n].d - P.by[n].r]), mx = Math.max(500, ...nets.map(x => Math.abs(x[1])));
@@ -503,10 +506,10 @@ function renderPace() {
   const card = (yy, S, cls) => { const p = atCount(S, paceN), first = S[0];
     if (!S.length) return `<div class="${cls}"><span class="yr">${yy}</span><div class="big">–</div><div class="sm">${yy === "2026" ? "Waiting for the first count (8pm Tuesday)" : "No running counts on record"}</div></div>`;
     
-    return `<div class="${cls}"><span class="yr">${yy}${yy === "2026" ? " tonight" : ""}</span><div class="big">${p.approx ? "about " : ""}${pct(p.s)}</div><div class="sm">Gray's share at ${p.approx ? "about " : ""}${fmt(p.n)} counted${yy !== "2026" ? " (nearest update on record)" : ""}<br>${esc(p.when)}${p.g != null && !p.approx ? ` · Gray ${p.g >= p.r ? "+" : "−"}${fmt(Math.abs(p.g - p.r))} votes` : ""}</div></div>`; };
+    return `<div class="${cls}"><span class="yr">${yy === "2026" ? "2026 tonight · vs. Lincoln" : yy + " · vs. Duarte"}</span><div class="big">${p.approx ? "about " : ""}${pct(p.s)}</div><div class="sm">Gray's share at ${p.approx ? "about " : ""}${fmt(p.n)} counted${yy !== "2026" ? " (nearest update on record)" : ""}<br>${esc(p.when)}${p.g != null && !p.approx ? ` · Gray ${p.g >= p.r ? "+" : "−"}${fmt(Math.abs(p.g - p.r))} votes` : ""}</div></div>`; };
   const tp = atCount(T, paceN), a = atCount(S22, paceN), b2 = atCount(S24, paceN);
   const verdict = tp ? [a && `${sgn((tp.s - a.s) * 100)} pts vs 2022`, b2 && `${sgn((tp.s - b2.s) * 100)} pts vs 2024`].filter(Boolean).join(" · ") : "";
-  $("#paceBody").innerHTML = `<div class="legend" style="margin:0 0 4px"><span><span class="sw" style="background:var(--accent)"></span>Tonight</span><span><span class="sw" style="background:none;border-top:2px solid var(--ink);height:0;margin-top:6px"></span>2022</span><span><span class="sw" style="background:none;border-top:2px dashed var(--ink);height:0;margin-top:6px"></span>2024</span><span>Each dot is one reported update; the lines join them</span></div>
+  $("#paceBody").innerHTML = `<div class="legend" style="margin:0 0 4px"><span><span class="sw" style="background:var(--accent)"></span>Tonight (vs. Lincoln)</span><span><span class="sw" style="background:none;border-top:2px solid var(--ink);height:0;margin-top:6px"></span>2022 (vs. Duarte)</span><span><span class="sw" style="background:none;border-top:2px dashed var(--ink);height:0;margin-top:6px"></span>2024 (vs. Duarte)</span><span>Each dot is one reported update; the lines join them</span></div>
     <div class="pchart">${svg}</div>
     <div class="sl" style="margin-top:6px"><label for="paceSl">Compare at this many votes counted <output id="paceOut">${fmt(paceN)}</output></label>
       <input type="range" id="paceSl" min="1000" max="${top}" step="500" value="${paceN}"><small>${now ? "Starts at tonight's count; slide to look back." : "Slide to see where Gray stood at each point in the count."}</small></div>
@@ -526,7 +529,7 @@ function renderPaceCounty() {
       <div class="scale" role="img" aria-label="${esc(label)}: Gray ${now == null ? "no votes yet" : pct(now) + " now"}, ${pct(a)} in 2022, ${pct(b)} in 2024"><span class="ax"></span><span class="fifty" style="left:${x(0.5)}%"></span>
       <span class="mk" style="left:${x(a)}%" title="2022: ${pct(a)}"></span><span class="mk y24" style="left:${x(b)}%" title="2024: ${pct(b)}"></span>${now == null ? "" : `<span class="now" style="left:${x(now)}%" title="Now: ${pct(now)}"></span>`}</div>
       <div class="num">${vs}</div></div>`; };
-  $("#paceBody").innerHTML = `<div class="legend" style="margin:0 0 4px"><span><span class="sw" style="background:var(--accent);border-radius:50%"></span>Gray's share tonight</span><span><span class="sw" style="border:2px solid var(--ink);border-radius:50%;background:none"></span>2022 final</span><span><span class="sw" style="border:2px dashed var(--ink);border-radius:50%;background:none"></span>2024 final</span><span>Dashed line: 50%</span></div>` +
+  $("#paceBody").innerHTML = `<div class="legend" style="margin:0 0 4px"><span><span class="sw" style="background:var(--accent);border-radius:50%"></span>Gray's share tonight</span><span><span class="sw" style="border:2px solid var(--ink);border-radius:50%;background:none"></span>2022 final (vs. Duarte)</span><span><span class="sw" style="border:2px dashed var(--ink);border-radius:50%;background:none"></span>2024 final (vs. Duarte)</span><span>Dashed line: 50%</span></div>` +
     C.map(n => row(n, live && Y.by[n][0] + Y.by[n][1] ? fmt(Y.by[n][0] + Y.by[n][1]) + " counted" : (n === "Merced" ? "same county, whole" : "different part of the county"), n)).join("");
   $("#paceNote").textContent = PACE.county_note || "By county, the comparison is with Gray's final share in each county in 2022 and 2024 (old lines).";
 }
@@ -539,7 +542,7 @@ const HOW = {
     "It's the headline number. Early on it mostly reflects mail ballots that arrived before Election Day. Ballots counted later can lean differently, so the margin can move for weeks.",
     "keep it on the big screen and call out each new update, or flip to 2024 to show the room how close it was last time (187 votes) and how long it took to know.",
     "2026: " + FEED + " Merced County's posted schedule for Nov 3: mail ballots received through Nov 1 by 8:15pm, early in-person votes by 9:30pm, Election Day votes by 11:30pm, then the next update by 5pm Friday, Nov 6. 2024 and 2022: the certified Statement of Vote."],
-  county: ["Each of the five counties: the two candidates' shares in the district's part of that county, and Gray's net votes there (minus means Lincoln leads). Before results, the small line shows each county's share of the district's voters; once counting starts, precincts reporting.",
+  county: ["Each of the five counties: the two candidates' shares in the district's part of that county, and Gray's net votes there (minus means his Republican opponent leads: Lincoln this year, Duarte in 2022 and 2024). Before results, the small line shows each county's share of the district's voters; once counting starts, precincts reporting.",
     "A district race is won county by county. Merced and Stanislaus hold about three-quarters of the voters, Madera and Fresno leaned Republican in 2022 and 2024, and Stockton, new to the district, is the big unknown.",
     "watch whether Gray's net in Stanislaus outweighs Lincoln's in Madera, or tap a row to open that county's details.",
     "2026: " + FEED + " Registration: Secretary of State 15-day report, Oct 19, 2026."],
@@ -555,12 +558,12 @@ const HOW = {
     "Early numbers mislead because different kinds of ballots get counted at different times. Comparing at the same count asks a fairer question: is he running ahead of or behind his own past races at this point in the count?",
     "at 10pm, read tonight's share against 2024 at the same count, or slide to about 110,000 votes to see how much the 2024 race moved after election night (Duarte led by 3,189 the next morning; Gray won by 187).",
     "2022: every update in the Secretary of State's feed from the morning after the election to the end of the count, as archived by LAist/SCPR. 2024: updates reported by local news (sources under the chart). Both collected Oct 31, 2026, and fixed. Tonight: " + FEED + " This device keeps each count it sees, so a phone that opened the page late shows fewer of tonight's points."],
-  sim: ["A what-if calculator. Each county gets a turnout slider (the share of registered voters who vote) and a Gray-share slider. The page adds up the votes and calls the race. Starting points replay 2024 or 2022 on the new lines, set the race even, or start from tonight's count.",
+  sim: ["A what-if calculator. Each county gets a turnout slider (the share of registered voters who vote) and a Gray-share slider. The page adds up the votes and calls the race. Starting points replay Gray's 2024 or 2022 race against Duarte (each county's turnout and Gray's share) on the new lines, with Lincoln as tonight's opponent, set the race even, or start from tonight's count.",
     "Turns \"what has to happen?\" into numbers: which county's turnout matters most, and what a point of swing is worth.",
     "drop Stanislaus turnout 5 points and see what share Gray then needs in Merced, or, once counting starts, pick \"Tonight's count so far\" to see what share of the remaining ballots each candidate needs. Share sends your scenario as a link.",
     "Registration: Secretary of State report, Oct 19, 2026. Past results: certified 2022 and 2024 Statements of Vote. In \"Tonight's count\" mode it adds the live counted votes, refreshed every 60 seconds. It's arithmetic, not a forecast."],
   perf: ["Gray's share of the two-party vote next to the Democratic candidate for governor (president in 2024) in each county. The gap is how far the House Democrat runs ahead (+) or behind (−) the top of the ticket.",
-    "A positive gap means some voters split their tickets toward Gray; a negative one means Lincoln is winning voters who backed the Democrat at the top. Either way it measures the candidates, not just the parties.",
+    "A positive gap means some voters split their tickets toward Gray; a negative one means the Republican House candidate (Lincoln this year, Duarte in 2022 and 2024) is winning voters who backed the Democrat at the top. Either way it measures the candidates, not just the parties.",
     "check whether Gray's gap in Merced, his home county, is bigger than elsewhere.",
     "2026: the House and governor's races by county from " + FEED + " In counties split between districts, the governor numbers cover the whole county (starred rows), so read those loosely. 2024 and 2022: certified results inside the district's part of each county."],
   turnout: ["Votes in the House race ÷ registered voters, by county, with ticks at the 2022 and 2024 finals.",
