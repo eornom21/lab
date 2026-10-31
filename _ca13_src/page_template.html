@@ -429,14 +429,14 @@ function toast(t) { const d = document.createElement("div"); d.className = "toas
 let paceView = "district", paceN = null, paceTouched = false;
 document.querySelectorAll("#pace [data-pv]").forEach(b => b.onclick = () => { paceView = b.dataset.pv; document.querySelectorAll("#pace [data-pv]").forEach(x => x.setAttribute("aria-pressed", String(x === b))); renderPace(); });
 const PACE = D.pace || {};
-const series = yy => ((PACE[yy] || {}).pts || []).map(p => ({ n: p[1] + p[2], s: p[1] / (p[1] + p[2]), g: p[1], r: p[2], when: p[0] }));
+const series = yy => ((PACE[yy] || {}).pts || []).map(p => ({ n: p[1] + p[2], s: p[1] / (p[1] + p[2]), g: p[1], r: p[2], when: p[0], approx: !!p[3] }));
 function tonightSeries() {
   const short = k => String(k || "").replace(/^(\w{3})\w* (\d+), \d{4}, (\d+:\d+) ([ap])\.m\./, "$1 $2, $3$4m");
   const L = ls.get("ca13_log", []).map(e => ({ n: e.d + e.r, s: e.d / (e.d + e.r), g: e.d, r: e.r, when: short(e.k) }));
   if (LIVE && counted()) { const c = { n: counted(), s: LIVE.total[0] / counted(), g: LIVE.total[0], r: LIVE.total[1], when: short(LIVE.time) }; if (!L.length || L[L.length - 1].n !== c.n) L.push(c); }
   return L.filter(p => p.n > 0).sort((a, b) => a.n - b.n);
 }
-const atCount = (S, N) => { let best = null; for (const p of S) if (p.n <= N) best = p; return best; };
+const atCount = (S, N) => { let best = null; for (const p of S) if (!best || Math.abs(p.n - N) < Math.abs(best.n - N)) best = p; return best; }; // nearest reported count
 function renderPace() {
   if (paceView === "county") return renderPaceCounty();
   const S22 = series("2022"), S24 = series("2024"), T = tonightSeries(), now = T.length ? T[T.length - 1] : null;
@@ -446,8 +446,8 @@ function renderPace() {
   paceN = Math.max(1000, Math.min(top, paceN));
   const w = Math.max(300, Math.round(($("#paceBody").clientWidth || 640))), h = w < 500 ? 210 : 260, l = 40, r = 12, t = 12, b = 34, lo = 0.40, hi = 0.60;
   const X = n => l + n / top * (w - l - r), Y = v => t + (hi - Math.max(lo, Math.min(hi, v))) / (hi - lo) * (h - t - b);
-  const step = S => S.length ? S.map((p, i) => (i ? `H${X(p.n).toFixed(1)}V${Y(p.s).toFixed(1)}` : `M${X(p.n).toFixed(1)},${Y(p.s).toFixed(1)}`)).join("") : "";
-  const dots = (S, cls, yy) => S.map(p => `<circle cx="${X(p.n).toFixed(1)}" cy="${Y(p.s).toFixed(1)}" r="${cls === "l26" ? 4.5 : 3}" fill="${cls === "l26" ? "var(--accent)" : "var(--paper)"}" stroke="${cls === "l26" ? "var(--paper)" : "var(--ink)"}" stroke-width="1.5"><title>${yy}, ${esc(p.when)}: ${fmt(p.n)} counted, Gray ${pct(p.s)}</title></circle>`).join("");
+  const step = S => S.length ? S.map((p, i) => `${i ? "L" : "M"}${X(p.n).toFixed(1)},${Y(p.s).toFixed(1)}`).join("") : "";
+  const dots = (S, cls, yy) => S.map(p => `<circle cx="${X(p.n).toFixed(1)}" cy="${Y(p.s).toFixed(1)}" r="${cls === "l26" ? 4.5 : 3}" fill="${cls === "l26" ? "var(--accent)" : "var(--paper)"}" stroke="${cls === "l26" ? "var(--paper)" : "var(--ink)"}" stroke-width="1.5"${p.approx ? ' stroke-dasharray="2 2"' : ""}><title>${yy}, ${esc(p.when)}: ${fmt(p.n)} counted, Gray ${pct(p.s)}</title></circle>`).join("");
   let g = "";
   for (let v = lo; v <= hi + 1e-9; v += 0.05) g += `<line class="gl" x1="${l}" x2="${w - r}" y1="${Y(v)}" y2="${Y(v)}" ${Math.abs(v - 0.5) < 1e-9 ? 'stroke-dasharray="5 4" style="stroke:var(--muted)"' : ""}/><text x="${l - 6}" y="${Y(v) + 4}" text-anchor="end">${Math.round(v * 100)}%</text>`;
   for (let n = 0; n <= top; n += top / (w < 500 ? 2 : 4)) g += `<text x="${X(n)}" y="${h - 12}" text-anchor="middle">${n ? Math.round(n / 1000) + "k" : "0"}</text>`;
@@ -456,18 +456,18 @@ function renderPace() {
     <path class="l22" d="${step(S22)}"/><path class="l24" d="${step(S24)}"/><path class="l26" d="${step(T)}"/>${dots(S22, "l22", "2022")}${dots(S24, "l24", "2024")}${dots(T, "l26", "2026")}</svg>`;
   const card = (yy, S, cls) => { const p = atCount(S, paceN), first = S[0];
     if (!S.length) return `<div class="${cls}"><span class="yr">${yy}</span><div class="big">–</div><div class="sm">${yy === "2026" ? "Waiting for the first count (8pm Tuesday)" : "No running counts on record"}</div></div>`;
-    if (!p) return `<div class="${cls}"><span class="yr">${yy}</span><div class="big">–</div><div class="sm">Earliest count on record: ${fmt(first.n)} votes (${esc(first.when)})</div></div>`;
-    return `<div class="${cls}"><span class="yr">${yy}${yy === "2026" ? " tonight" : ""}</span><div class="big">${pct(p.s)}</div><div class="sm">Gray's share at ${fmt(p.n)} counted<br>${esc(p.when)}${p.g != null ? ` · Gray ${p.g >= p.r ? "+" : "−"}${fmt(Math.abs(p.g - p.r))} votes` : ""}</div></div>`; };
+    
+    return `<div class="${cls}"><span class="yr">${yy}${yy === "2026" ? " tonight" : ""}</span><div class="big">${p.approx ? "about " : ""}${pct(p.s)}</div><div class="sm">Gray's share at ${p.approx ? "about " : ""}${fmt(p.n)} counted${yy !== "2026" ? " (nearest update on record)" : ""}<br>${esc(p.when)}${p.g != null && !p.approx ? ` · Gray ${p.g >= p.r ? "+" : "−"}${fmt(Math.abs(p.g - p.r))} votes` : ""}</div></div>`; };
   const tp = atCount(T, paceN), a = atCount(S22, paceN), b2 = atCount(S24, paceN);
   const verdict = tp ? [a && `${sgn((tp.s - a.s) * 100)} pts vs 2022`, b2 && `${sgn((tp.s - b2.s) * 100)} pts vs 2024`].filter(Boolean).join(" · ") : "";
-  $("#paceBody").innerHTML = `<div class="legend" style="margin:0 0 4px"><span><span class="sw" style="background:var(--accent)"></span>Tonight</span><span><span class="sw" style="background:none;border-top:2px solid var(--ink);height:0;margin-top:6px"></span>2022</span><span><span class="sw" style="background:none;border-top:2px dashed var(--ink);height:0;margin-top:6px"></span>2024</span><span>Each dot is one update from the Secretary of State</span></div>
+  $("#paceBody").innerHTML = `<div class="legend" style="margin:0 0 4px"><span><span class="sw" style="background:var(--accent)"></span>Tonight</span><span><span class="sw" style="background:none;border-top:2px solid var(--ink);height:0;margin-top:6px"></span>2022</span><span><span class="sw" style="background:none;border-top:2px dashed var(--ink);height:0;margin-top:6px"></span>2024</span><span>Each dot is one reported update; the lines join them</span></div>
     <div class="pchart">${svg}</div>
     <div class="sl" style="margin-top:6px"><label for="paceSl">Compare at this many votes counted <output id="paceOut">${fmt(paceN)}</output></label>
       <input type="range" id="paceSl" min="1000" max="${top}" step="500" value="${paceN}"><small>${now ? "Starts at tonight's count; slide to look back." : "Slide to see where Gray stood at each point in the count."}</small></div>
     <div class="pread">${card("2026", T, "now")}${card("2022", S22, "")}${card("2024", S24, "")}</div>
     ${verdict ? `<p style="margin:6px 0 0;font-weight:600;color:var(--ink)">Tonight at this count: ${verdict}</p>` : ""}`;
   const sl = $("#paceSl"); sl.oninput = () => { paceTouched = true; paceN = +sl.value; renderPace(); const s2 = $("#paceSl"); s2 && s2.focus(); };
-  $("#paceNote").innerHTML = esc(PACE.note || "") + (PACE.src ? " Sources: " + PACE.src.map(([t2, u]) => `<a href="${esc(u)}" target="_blank" rel="noopener">${esc(t2)}</a>`).join(", ") + "." : "");
+  $("#paceNote").innerHTML = esc(PACE.note || "") + (PACE.src ? " Sources: " + PACE.src.map(([t2, u]) => `<a href="${esc(u)}" target="_blank" rel="noopener">${esc(t2)}</a>`).join("; ") + "." : "");
 }
 let paceRz = null; addEventListener("resize", () => { clearTimeout(paceRz); paceRz = setTimeout(() => paceView === "district" && renderPace(), 200); });
 function renderPaceCounty() {

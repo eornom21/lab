@@ -477,14 +477,127 @@
    ]
   },
   "2024": {
-   "pts": []
+   "pts": [
+    [
+     "Nov 5, election night (approx.: Gray +1,100 of almost 85,000)",
+     43050,
+     41950,
+     1
+    ],
+    [
+     "Nov 6, 9:30am",
+     53596,
+     56785
+    ],
+    [
+     "Nov 7, evening",
+     59987,
+     62760
+    ],
+    [
+     "Nov 7–13 (article undated)",
+     73563,
+     76685
+    ],
+    [
+     "Nov 13, evening",
+     75693,
+     79456
+    ],
+    [
+     "Nov 19, evening",
+     100658,
+     100885
+    ],
+    [
+     "Nov 20, 9pm",
+     100866,
+     101217
+    ],
+    [
+     "Nov 21",
+     101612,
+     101806
+    ],
+    [
+     "Nov 25, 6am",
+     102346,
+     102550
+    ],
+    [
+     "Nov 26, 4:30pm",
+     103790,
+     103685
+    ],
+    [
+     "Nov 26–27 (time unclear)",
+     104503,
+     104321
+    ],
+    [
+     "Nov 27, 5:16pm",
+     104643,
+     104409
+    ],
+    [
+     "Nov 27, 6pm",
+     104991,
+     104801
+    ],
+    [
+     "Dec 1, 3pm",
+     105083,
+     104856
+    ],
+    [
+     "Certified, Dec 2024",
+     105554,
+     105367
+    ]
+   ]
   },
-  "note": "Gray's share of the Gray-plus-opponent vote each time the Secretary of State updated the count. 2022 and 2024 were on the old lines (no Stockton, more of Madera and Fresno), so the same count means the same number of ballots, not the same voters. California counts early mail ballots first, then Election Day ballots, then late mail ballots over the following weeks, and each batch can lean differently.",
+  "note": "Gray's share of the Gray-plus-opponent vote at each update of the count. 2022 and 2024 were on the old lines (no Stockton, more of Madera and Fresno), so the same count means the same number of ballots, not the same voters. California counts early mail ballots first, then Election Day ballots, then late mail ballots over the following weeks, and each batch can lean differently. Gaps: no vote counts were reported on election night 2022 (the first one on record is the next morning), and 2024 has no counts on record for Nov 8–12, 14–18 and 22–24. The 2024 election-night point is approximate.",
   "county_note": "By county there are no running counts on record for 2022 or 2024, so this compares Gray's share so far with his final share in the same county (old lines). Merced is the cleanest comparison, since the whole county is in the district both times.",
   "src": [
    [
-    "2022 updates from Nov 9 on: Secretary of State feed as archived by LAist/SCPR",
+    "2022: Secretary of State feed as archived by LAist/SCPR",
     "https://github.com/SCPR/local-election-results-etl/tree/main/data/raw/ca_secretary_of_state/us-rep"
+   ],
+   [
+    "2024 election night: Turlock Journal",
+    "https://turlockjournal.com/news/government/gray-ahead-of-duarte-for-district-13-seat-in-early-results"
+   ],
+   [
+    "Nov 6, 19–25 and Dec 1: Merced FOCUS",
+    "https://themercedfocus.org/?p=13986"
+   ],
+   [
+    "Nov 7: Turlock Journal",
+    "https://www.turlockjournal.com/news/government/duarte-leading-in-13th-congressional-district-race"
+   ],
+   [
+    "Nov 7–13: Ceres Courier",
+    "https://www.cerescourier.com/news/local/duate-defeats-gray-in-congressional-race/"
+   ],
+   [
+    "Nov 13: California Globe",
+    "https://californiaglobe.com/fr/duarte-close-to-victory-in-close-house-district-13-race/"
+   ],
+   [
+    "Nov 19: Westside Connect",
+    "https://www.westsideconnect.com/news/government/race-for-ca-district-13-remains-close/"
+   ],
+   [
+    "Nov 20 and 27: GV Wire",
+    "https://gvwire.com/?p=157770"
+   ],
+   [
+    "Nov 26: KVPR",
+    "https://www.kvpr.org/government-politics/2024-11-26/adam-gray-pulls-ahead-of-john-duarte-in-congressional-district-13-race"
+   ],
+   [
+    "Nov 26–27 and Dec 1: Merced FOCUS",
+    "https://themercedfocus.org/?p=14139"
    ]
   ]
  }
