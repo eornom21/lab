@@ -64,12 +64,12 @@ h3{font:600 13px var(--sans);letter-spacing:.08em;text-transform:uppercase;color
 .wait .w1{font:700 34px var(--serif);color:var(--ink)}
 .wait .w2{font:600 18px var(--mono);color:var(--accent);margin-top:2px}
 /* map */
-.map svg{width:100%;height:auto;display:block}
+.map svg{width:100%;height:auto;display:block;max-height:min(62vh,480px)}
 .map .cty{stroke:var(--paper);stroke-width:1.2;cursor:pointer}
 .map .cty.sel{stroke:var(--ink);stroke-width:2.5}
 .map .dist{fill:none;stroke:var(--ink);stroke-width:2.5;pointer-events:none}
 .map .lab{font:600 12px var(--sans);fill:var(--ink);pointer-events:none;paint-order:stroke;stroke:var(--paper);stroke-width:3px}
-.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:13px;color:var(--muted);margin-top:8px;align-items:center}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;color:var(--muted);margin-top:6px;align-items:center}
 .legend .sw{display:inline-block;width:14px;height:14px;border-radius:3px;vertical-align:-2px;margin-right:6px}
 /* county rows */
 .crow{display:grid;grid-template-columns:118px 1fr auto;gap:4px 10px;align-items:center;padding:9px 0;border-bottom:1px solid var(--line);cursor:pointer}
@@ -115,6 +115,22 @@ h3{font:600 13px var(--sans);letter-spacing:.08em;text-transform:uppercase;color
 .pread .sm{font-size:13px;color:var(--muted)}
 .pread>.now{border:2px solid var(--accent)}
 #paceNote a{color:inherit}
+/* how-it-works rows and data stamps */
+.meta{display:grid;grid-template-columns:1fr auto;align-items:baseline;gap:2px 12px;margin:2px 0 10px;font-size:13px;color:var(--muted)}
+.meta.bottom{margin:12px 0 0}
+.asof{display:inline-flex;align-items:baseline;gap:6px}
+.asof::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--muted);opacity:.6;align-self:center;flex:none}
+.asof.live::before{background:var(--accent);opacity:1}
+.asof.err::before{background:var(--rep);opacity:1}
+details.how{justify-self:end}
+details.how summary{cursor:pointer;font:600 13px var(--sans);color:var(--ink);list-style:none;padding:2px 0}
+details.how summary::-webkit-details-marker{display:none}
+details.how summary::after{content:" ▾";color:var(--muted)}
+details.how[open]{grid-column:1/-1;justify-self:stretch}
+details.how[open] summary::after{content:" ▴"}
+details.how .hb{margin-top:6px;padding:10px 12px;border-left:3px solid var(--accent);background:color-mix(in srgb,var(--accent) 6%,var(--paper));border-radius:0 8px 8px 0;font-size:14px;color:var(--body);line-height:1.5}
+details.how .hb p{margin:0 0 8px}details.how .hb p:last-child{margin:0}
+details.how .hb b{color:var(--ink)}
 /* simulator */
 .sim{border:2px solid var(--accent)}
 .simhead{display:flex;flex-wrap:wrap;gap:10px;align-items:baseline;justify-content:space-between}
@@ -184,24 +200,26 @@ footer a{color:inherit}
 <main>
   <div class="grid2">
     <div class="stack">
-      <div class="card" id="topline"></div>
-      <div class="card"><h3 id="cntyH">County by county</h3><div id="crows"></div><p class="note" id="cntyNote"></p></div>
+      <div class="card"><h3>The count</h3><div class="meta" data-sec="top"></div><div id="topline"></div></div>
+      <div class="card"><h3 id="cntyH">County by county</h3><div class="meta" data-sec="county"></div><div id="crows"></div><p class="note" id="cntyNote"></p></div>
     </div>
     <div class="stack">
-      <div class="card map"><h3 id="mapH">Who's ahead where</h3><div id="map"></div><div class="legend" id="legend"></div></div>
-      <div class="card" id="detail"></div>
+      <div class="card map"><h3 id="mapH">Who's ahead where</h3><div class="meta" data-sec="map"></div><div id="map"></div><div class="legend" id="legend"></div></div>
+      <div class="card" id="detCard"><h3 id="detH"></h3><div id="detail"></div><div class="meta bottom" data-sec="detail"></div></div>
     </div>
   </div>
 
   <section class="card" id="pace" aria-labelledby="paceH">
     <div class="simhead"><h2 id="paceH">Ahead or behind his past races?</h2>
       <div class="seg2" role="group" aria-label="View"><button data-pv="district" aria-pressed="true">District</button><button data-pv="county" aria-pressed="false">By county</button></div></div>
+    <div class="meta" data-sec="pace"></div>
     <div id="paceBody"></div>
     <p class="note" id="paceNote"></p>
   </section>
 
   <section class="card sim" id="sim" aria-labelledby="simH">
     <div class="simhead"><h2 id="simH">What would it take?</h2><span class="note" style="margin:0">Slide turnout and vote share in each county and watch the result.</span></div>
+    <div class="meta" data-sec="sim"></div>
     <div class="result" id="simResult" aria-live="polite"></div>
     <h3 style="margin-top:6px">Start from</h3>
     <div class="chips" id="scen"></div>
@@ -217,10 +235,10 @@ footer a{color:inherit}
   </section>
 
   <div class="grid2">
-    <div class="card"><h3 id="perfH">Gray vs. the top of the ticket</h3><div class="tw" id="perf"></div><p class="note" id="perfNote"></p></div>
+    <div class="card"><h3 id="perfH">Gray vs. the top of the ticket</h3><div class="meta" data-sec="perf"></div><div class="tw" id="perf"></div><p class="note" id="perfNote"></p></div>
     <div class="stack">
-      <div class="card"><h3>Turnout: votes ÷ registered voters</h3><div id="turnout"></div><p class="note" id="turnNote"></p></div>
-      <div class="card spark" id="logCard" hidden><h3>The count tonight</h3><div id="log"></div><p class="note">Gray's lead (or deficit) each time the Secretary of State posted new numbers while this page was open on this device.</p></div>
+      <div class="card"><h3>Turnout: votes ÷ registered voters</h3><div class="meta" data-sec="turnout"></div><div id="turnout"></div><p class="note" id="turnNote"></p></div>
+      <div class="card spark" id="logCard" hidden><h3>The count tonight</h3><div class="meta" data-sec="log"></div><div id="log"></div><p class="note">Gray's lead (or deficit) each time the Secretary of State posted new numbers while this page was open on this device.</p></div>
     </div>
   </div>
 </main>
@@ -239,19 +257,22 @@ const C = D.counties, CD = D.candidates, REG = D.reg["2026"];
 const last = s => s.split(" ").pop();
 
 /* ---------- map ---------- */
-const ALL = [...G.cd2026, ...G.cd2021];
-const minX = Math.min(...ALL.map(p => p[0])) - 0.08, maxX = Math.max(...ALL.map(p => p[0])) + 0.08;
-const minY = Math.min(...ALL.map(p => p[1])) - 0.06, maxY = Math.max(...ALL.map(p => p[1])) + 0.06;
-const K = Math.cos(37.3 * Math.PI / 180), W = 600, H = Math.round(W * (maxY - minY) / ((maxX - minX) * K));
+// The map frames whichever district outline is shown (tight, so little empty county area around it).
+let minX, maxX, minY, maxY, H; const K = Math.cos(37.3 * Math.PI / 180), W = 600;
+function setBounds(l) { const P = G[l], xs = P.map(p => p[0]), ys = P.map(p => p[1]);
+  minX = Math.min(...xs) - 0.035; maxX = Math.max(...xs) + 0.035; minY = Math.min(...ys) - 0.03; maxY = Math.max(...ys) + 0.03;
+  H = Math.round(W * (maxY - minY) / ((maxX - minX) * K)); }
+setBounds("cd2026");
 const px = ([x, y]) => [((x - minX) / (maxX - minX) * W).toFixed(1), ((maxY - y) / (maxY - minY) * H).toFixed(1)];
 const path = r => "M" + r.map(p => px(p).join(",")).join("L") + "Z";
 function inside([x, y], r) { let c = false; for (let i = 0, j = r.length - 1; i < r.length; j = i++) { const [xi, yi] = r[i], [xj, yj] = r[j]; if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) c = !c; } return c; }
 function labelPoint(cty, lines) { const ring = cty.rings.slice().sort((a, b) => b.length - a.length)[0]; const pts = [];
   for (let x = minX; x < maxX; x += (maxX - minX) / 60) for (let y = minY; y < maxY; y += (maxY - minY) / 60) if (inside([x, y], ring) && inside([x, y], lines)) pts.push([x, y]);
   return pts.length ? [pts.reduce((s, p) => s + p[0], 0) / pts.length, pts.reduce((s, p) => s + p[1], 0) / pts.length] : null; }
-const LBL = {}; for (const l of ["cd2026", "cd2021"]) { LBL[l] = {}; for (const c of G.counties) if (c.core) LBL[l][c.name] = labelPoint(c, G[l]); }
+const LBL = {}; for (const l of ["cd2026", "cd2021"]) { setBounds(l); LBL[l] = {}; for (const c of G.counties) if (c.core) LBL[l][c.name] = labelPoint(c, G[l]); }
 const mix = (v, c) => `color-mix(in srgb, var(${c}) ${Math.round(v * 100)}%, var(--paper))`;
 function drawMap(el, { lines, fill, sel, onPick, label }) {
+  setBounds(lines);
   let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Map of the district by county"><defs><clipPath id="clip-${lines}"><path d="${path(G[lines])}"/></clipPath></defs>`;
   for (const c of G.counties) for (const r of c.rings) s += `<path d="${path(r)}" fill="var(--neutral)" stroke="var(--paper)" stroke-width="1" opacity="${c.core ? 0.9 : 0.45}"/>`;
   s += `<g clip-path="url(#clip-${lines})">`;
@@ -265,7 +286,7 @@ function drawMap(el, { lines, fill, sel, onPick, label }) {
 /* ---------- live feed ---------- */
 const POLLS_CLOSE = new Date("2026-11-04T04:00:00Z"); // 8:00pm PT, Nov 3
 let year = (() => { const q = new URLSearchParams(location.search).get("y"); return ["2026", "2024", "2022"].includes(q) ? q : (Date.now() >= new Date("2026-11-04T00:00:00Z") ? "2026" : "2024"); })();
-let sel = "Merced", LIVE = null, liveErr = null, timer = null;
+let sel = "Merced", LIVE = null, liveErr = null, timer = null, lastCheck = null;
 const num = s => +String(s ?? "0").replace(/[^0-9.]/g, "") || 0;
 async function pullLive() {
   try {
@@ -282,8 +303,8 @@ async function pullLive() {
     }));
     const total = [pick(dist.candidates, "Dem"), pick(dist.candidates, "Rep"), C.reduce((s, n) => s + by[n][2], 0), C.reduce((s, n) => s + by[n][3], 0)];
     LIVE = { by, rep, total, reporting: dist.Reporting, time: dist.ReportingTime, govNames };
-    liveErr = null; logCount();
-  } catch (e) { liveErr = "Can't reach the Secretary of State's results feed right now. Trying again in a minute."; }
+    liveErr = null; lastCheck = new Date(); logCount();
+  } catch (e) { lastCheck = new Date(); liveErr = "Can't reach the Secretary of State's results feed right now. Trying again in a minute."; }
   render();
 }
 function startLive() { if (!timer) { pullLive(); timer = setInterval(pullLive, 60000); } }
@@ -333,13 +354,14 @@ function renderTop() {
   $("#cntyNote").textContent = "Right column: Gray's net votes in the county (minus means Lincoln leads there)." + (year === "2026" ? " Only the district's part of each county counts." : "");
   // map
   const fill = n => { if (!Y || waiting) return mix(0.25 + 0.6 * (R[n][0] / R.total[0]) / 0.4, "--accent"); const v = Y.by[n], t = v[0] + v[1]; if (!t) return "var(--neutral)"; const m = (v[0] - v[1]) / t; return mix(0.2 + 0.75 * Math.min(1, Math.abs(m) / 0.25), m >= 0 ? "--dem" : "--rep"); };
-  drawMap($("#map"), { lines, sel, fill, onPick: n => { sel = n; render(); } });
+  drawMap($("#map"), { lines, sel, fill, onPick: n => { sel = n; render(); const c = $("#detCard"), r = c.getBoundingClientRect(); if (r.top > innerHeight - 140) c.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "nearest" }); } });
   $("#mapH").textContent = waiting ? "Where the voters are (Prop 50 lines)" : year === "2026" ? "Who's ahead where (Prop 50 lines)" : `Who led where in ${year} (2021 lines)`;
   $("#legend").innerHTML = waiting ? `<span>Darker = more of the district's registered voters. Merced holds ${pct(R.Merced[0] / R.total[0], 0)}, Stanislaus ${pct(R.Stanislaus[0] / R.total[0], 0)}, San Joaquin (Stockton) ${pct(R["San Joaquin"][0] / R.total[0], 0)}.</span>`
     : `<span><span class="sw" style="background:${mix(.85, "--dem")}"></span>${esc(last(Y.d))} ahead</span><span><span class="sw" style="background:${mix(.85, "--rep")}"></span>${esc(last(Y.r))} ahead</span><span>Darker = wider lead. Only the district's part of each county is colored.</span>`;
   // detail
   const r = R[sel], v = Y && Y.by[sel], t = v ? v[0] + v[1] : 0, whole = D.county_reg_2026[sel] <= D.reg["2026"][sel][0] * 1.01;
-  $("#detail").innerHTML = `<h3>${esc(sel)} County</h3><div class="kv">
+  $("#detH").textContent = `${sel} County`;
+  $("#detail").innerHTML = `<div class="kv">
     ${t ? `<span>${esc(Y.d)}</span><span class="v">${fmt(v[0])} · ${pct(v[0] / t)}</span><span>${esc(Y.r)}</span><span class="v">${fmt(v[1])} · ${pct(v[1] / t)}</span>` : `<span>Votes</span><span class="v">none yet</span>`}
     ${year === "2026" && LIVE ? `<span>Precincts reporting</span><span class="v">${esc(LIVE.rep[sel] || "–")}</span>` : ""}
     <span class="h">Turnout in the district's part of the county</span>
@@ -485,8 +507,72 @@ function renderPaceCounty() {
   $("#paceNote").textContent = PACE.county_note || "By county, the comparison is with Gray's final share in each county in 2022 and 2024 (old lines).";
 }
 
+
+/* ---------- "How this works" and "data as of" for every section ---------- */
+const FEED = "the California Secretary of State's live results feed (api.sos.ca.gov). Your browser asks it directly every 60 seconds while this page is open. Counties send new counts to the state on their own schedules: several times on election night, then usually once a weekday until counting ends, about a month later.";
+const HOW = {
+  top: ["The districtwide count for Gray and Lincoln: each one's share, votes and the margin. The 2024 and 2022 buttons at the top swap in those years' final results (Gray vs. Duarte, on the old lines).",
+    "It's the headline number. Early on it mostly reflects mail ballots that arrived before Election Day. Ballots counted later can lean differently, so the margin can move for weeks.",
+    "keep it on the big screen and call out each new update, or flip to 2024 to show the room how close it was last time (187 votes) and how long it took to know.",
+    "2026: " + FEED + " 2024 and 2022: the certified Statement of Vote."],
+  county: ["Each of the five counties: the two candidates' shares in the district's part of that county, and Gray's net votes there (minus means Lincoln leads). Before results, the small line shows each county's share of the district's voters; once counting starts, precincts reporting.",
+    "A district race is won county by county. Merced and Stanislaus hold about three-quarters of the voters, Madera and Fresno leaned Republican in 2022 and 2024, and Stockton, new to the district, is the big unknown.",
+    "watch whether Gray's net in Stanislaus outweighs Lincoln's in Madera, or tap a row to open that county's details.",
+    "2026: " + FEED + " Registration: Secretary of State 15-day report, Oct 19, 2026."],
+  map: ["The district's Prop 50 lines (the 2021 lines when you pick 2024 or 2022), with each county's part shaded. Before results, darker means more of the district's voters live there. Once counting starts, the color shows who leads and darker means a wider lead.",
+    "Shows at a glance where the votes are and where each side is building its margin.",
+    "tap a county to open its numbers in the panel, or switch between 2026 and 2024 to see how the new lines took in Stockton.",
+    "Lines: California Department of Education GIS (US Congressional layer, June 2026) and Lewis et al. for 2021. County outlines: U.S. Census. Colors come from the same live feed as the scoreboard, every 60 seconds."],
+  detail: ["One county up close: each candidate's votes, precincts reporting, turnout so far against the 2022 and 2024 finals, and party registration in the district's part of the county.",
+    "Puts tonight's numbers next to the county's history and makeup, so you can tell an unusual night from a normal one.",
+    "compare Merced's turnout so far with its 2024 final to judge how many ballots may still be out.",
+    "2026 votes: " + FEED + " Past turnout: certified Statements of Vote. Registration: Oct 19, 2026 report."],
+  pace: ["Gray's share of the two-candidate vote as the count went on, plotted against the number of votes counted, for 2022, 2024 and tonight. Pick a count with the slider and the cards show where he stood at the nearest reported update in each year. The By county view compares each county with its final share, because county running totals weren't published.",
+    "Early numbers mislead because different kinds of ballots get counted at different times. Comparing at the same count asks a fairer question: is he running ahead of or behind his own past races at this point in the count?",
+    "at 10pm, read tonight's share against 2024 at the same count, or slide to about 110,000 votes to see how much the 2024 race moved after election night (Duarte led by 3,189 the next morning; Gray won by 187).",
+    "2022: every update in the Secretary of State's feed from the morning after the election to the end of the count, as archived by LAist/SCPR. 2024: updates reported by local news (sources under the chart). Both collected Oct 31, 2026, and fixed. Tonight: " + FEED + " This device keeps each count it sees, so a phone that opened the page late shows fewer of tonight's points."],
+  sim: ["A what-if calculator. Each county gets a turnout slider (the share of registered voters who vote) and a Gray-share slider. The page adds up the votes and calls the race. Starting points replay 2024 or 2022 on the new lines, set the race even, or start from tonight's count.",
+    "Turns \"what has to happen?\" into numbers: which county's turnout matters most, and what a point of swing is worth.",
+    "drop Stanislaus turnout 5 points and see what share Gray then needs in Merced, or, once counting starts, pick \"Tonight's count so far\" to see what share of the remaining ballots each candidate needs. Share sends your scenario as a link.",
+    "Registration: Secretary of State report, Oct 19, 2026. Past results: certified 2022 and 2024 Statements of Vote. In \"Tonight's count\" mode it adds the live counted votes, refreshed every 60 seconds. It's arithmetic, not a forecast."],
+  perf: ["Gray's share of the two-party vote next to the Democratic candidate for governor (president in 2024) in each county. The gap is how far the House Democrat runs ahead (+) or behind (−) the top of the ticket.",
+    "A positive gap means some voters split their tickets toward Gray; a negative one means Lincoln is winning voters who backed the Democrat at the top. Either way it measures the candidates, not just the parties.",
+    "check whether Gray's gap in Merced, his home county, is bigger than elsewhere.",
+    "2026: the House and governor's races by county from " + FEED + " In counties split between districts, the governor numbers cover the whole county (starred rows), so read those loosely. 2024 and 2022: certified results inside the district's part of each county."],
+  turnout: ["Votes in the House race ÷ registered voters, by county, with ticks at the 2022 and 2024 finals.",
+    "Turnout decides close races here. Comparing with past finals shows which places are on pace, but only late in the count, since early in the night most ballots aren't counted yet.",
+    "late in the count, see which county is furthest below its 2024 mark: that's where uncounted ballots, or voters who stayed home, are.",
+    "Votes: " + FEED + " Registration: Oct 19, 2026 report."],
+  log: ["Gray's lead or deficit at each update this device has seen tonight.",
+    "Shows which way each new batch of ballots moved the margin.",
+    "leave the page open all night on the projector laptop so the log catches every update.",
+    FEED + " Saved only in this browser."]
+};
+document.querySelectorAll(".meta[data-sec]").forEach(m => { const h = HOW[m.dataset.sec];
+  m.innerHTML = `<span class="asof" aria-live="polite"></span><details class="how"><summary>How this works</summary><div class="hb">
+    <p><b>What it shows.</b> ${esc(h[0])}</p><p><b>Why it's useful.</b> ${esc(h[1])}</p><p><b>For example, you could</b> ${esc(h[2])}</p><p><b>Where the data comes from, and how often.</b> ${esc(h[3])}</p></div></details>`; });
+const ptTime = d => d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", timeZone: "America/Los_Angeles" }).replace(" AM", "am").replace(" PM", "pm");
+const sosShort = k => String(k || "").replace(/^(\w{3})\w* (\d+), \d{4}, (\d+:\d+) ([ap])\.m\./, "$1 $2, $3$4m");
+function liveStamp() {
+  if (liveErr) return [`Can't reach the state's feed · tried ${lastCheck ? ptTime(lastCheck) : "–"} PT`, "err"];
+  if (!lastCheck) return ["Checking for results…", ""];
+  if (!counted()) return [`No votes yet · checked ${ptTime(lastCheck)} PT`, "live"];
+  return [`Data as of ${sosShort(LIVE.time)} PT · checked ${ptTime(lastCheck)}`, "live"];
+}
+function renderStamps() {
+  const cert = [`Certified ${year} results (Statement of Vote)`, ""], L = liveStamp(), reg = "Registration Oct 19, 2026";
+  const yr = year === "2026" ? L : cert;
+  const S = {
+    top: yr, county: year === "2026" && !counted() ? [reg + " · " + L[0], L[1]] : yr, map: year === "2026" && !counted() ? [reg + " · " + L[0], L[1]] : yr,
+    detail: yr, perf: yr, turnout: yr, log: L,
+    pace: [`History collected Oct 31, 2026 · tonight: ${L[0].charAt(0).toLowerCase() + L[0].slice(1)}`, L[1]],
+    sim: year === "2026" && counted() ? [reg + " · count as of " + L[0].replace(/^Data as of /, ""), L[1]] : [reg + " · certified 2022 and 2024 results", ""]
+  };
+  document.querySelectorAll(".meta[data-sec]").forEach(m => { const [t, c] = S[m.dataset.sec] || ["", ""], a = m.querySelector(".asof"); if (a.textContent !== t) a.textContent = t; a.className = "asof" + (c ? " " + c : ""); });
+}
+
 document.querySelectorAll("#yearSeg button").forEach(b => b.onclick = () => { year = b.dataset.y; render(); });
-function render() { renderTop(); renderPace(); renderSim(); }
+function render() { renderTop(); renderPace(); renderSim(); renderStamps(); }
 $("#foot").innerHTML = `Live numbers from the California Secretary of State's results feed, checked every minute. Past results: <a href="${D.sources.results_2024}" target="_blank" rel="noopener">2024</a> and <a href="${D.sources.results_2022}" target="_blank" rel="noopener">2022</a> Statements of Vote. Registration: the Secretary of State's <a href="${D.sources.reg_2026}" target="_blank" rel="noopener">Oct 19, 2026 report</a>. District lines: ${esc(D.sources.lines_2026)}; old lines: ${esc(D.sources.lines_2021)}. The simulator is a what-if tool, not a forecast. A public page built from public records · lab.nathanwmonroe.com`;
 const qs = new URLSearchParams(location.search).get("s"); if (qs) decode(qs);
 syncGlobals(); render(); startLive();
