@@ -131,6 +131,19 @@ details.how[open] summary::after{content:" ▴"}
 details.how .hb{margin-top:6px;padding:10px 12px;border-left:3px solid var(--accent);background:color-mix(in srgb,var(--accent) 6%,var(--paper));border-radius:0 8px 8px 0;font-size:14px;color:var(--body);line-height:1.5}
 details.how .hb p{margin:0 0 8px}details.how .hb p:last-child{margin:0}
 details.how .hb b{color:var(--ink)}
+/* precincts */
+.pcgrid{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);gap:14px;align-items:start}
+@media (max-width:820px){.pcgrid{grid-template-columns:1fr}}
+.pcmap svg{max-height:min(70vh,560px)}
+.pcmap .pp{stroke:var(--paper);stroke-width:.35;cursor:pointer}
+.pcmap .pp.sel{stroke:var(--ink);stroke-width:2}
+.pcmap .cl{fill:none;stroke:var(--ink);stroke-width:.8;opacity:.45;pointer-events:none}
+.pcsum{font-size:15px;color:var(--ink);margin:4px 0 10px}
+.pcinfo{margin-top:10px;border:1px solid var(--line);border-radius:10px;padding:12px;font-size:14px;background:var(--paper)}
+.pcinfo h4{margin:0 0 6px;font:600 15px var(--sans);color:var(--ink)}
+.pcinfo .kv{font-size:14px}
+.ramp{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted)}
+.ramp i{display:block;width:150px;height:10px;border-radius:5px}
 /* simulator */
 .sim{border:2px solid var(--accent)}
 .simhead{display:flex;flex-wrap:wrap;gap:10px;align-items:baseline;justify-content:space-between}
@@ -208,6 +221,17 @@ footer a{color:inherit}
       <div class="card" id="detCard"><h3 id="detH"></h3><div id="detail"></div><div class="meta bottom" data-sec="detail"></div></div>
     </div>
   </div>
+
+  <section class="card" id="prec" aria-labelledby="precH">
+    <div class="simhead"><h2 id="precH">Precinct by precinct</h2>
+      <div class="seg2" role="group" aria-label="Election" id="pcYear"><button data-v="a" aria-pressed="true">2024</button><button data-v="b" aria-pressed="false">2022</button><button data-v="d" aria-pressed="false">Change</button><button data-v="live" aria-pressed="false" hidden>Tonight</button></div></div>
+    <div class="meta" data-sec="prec"></div>
+    <div class="chips" id="pcMeasure" role="group" aria-label="What to show"><button class="chipb" data-m="top" aria-pressed="true">Top of the ticket</button><button class="chipb" data-m="house" aria-pressed="false">House race</button><button class="chipb" data-m="turn" aria-pressed="false">Turnout</button></div>
+    <p class="pcsum" id="pcSum"></p>
+    <div class="pcgrid"><div class="map pcmap" id="pcMap"><p class="note">Loading precincts…</p></div>
+      <div><div class="legend" id="pcLegend"></div><div class="pcinfo" id="pcInfo" aria-live="polite"></div></div></div>
+    <p class="note" id="pcNote"></p>
+  </section>
 
   <section class="card" id="pace" aria-labelledby="paceH">
     <div class="simhead"><h2 id="paceH">Ahead or behind his past races?</h2>
@@ -514,7 +538,7 @@ const HOW = {
   top: ["The districtwide count for Gray and Lincoln: each one's share, votes and the margin. The 2024 and 2022 buttons at the top swap in those years' final results (Gray vs. Duarte, on the old lines).",
     "It's the headline number. Early on it mostly reflects mail ballots that arrived before Election Day. Ballots counted later can lean differently, so the margin can move for weeks.",
     "keep it on the big screen and call out each new update, or flip to 2024 to show the room how close it was last time (187 votes) and how long it took to know.",
-    "2026: " + FEED + " 2024 and 2022: the certified Statement of Vote."],
+    "2026: " + FEED + " Merced County's posted schedule for Nov 3: mail ballots received through Nov 1 by 8:15pm, early in-person votes by 9:30pm, Election Day votes by 11:30pm, then the next update by 5pm Friday, Nov 6. 2024 and 2022: the certified Statement of Vote."],
   county: ["Each of the five counties: the two candidates' shares in the district's part of that county, and Gray's net votes there (minus means Lincoln leads). Before results, the small line shows each county's share of the district's voters; once counting starts, precincts reporting.",
     "A district race is won county by county. Merced and Stanislaus hold about three-quarters of the voters, Madera and Fresno leaned Republican in 2022 and 2024, and Stockton, new to the district, is the big unknown.",
     "watch whether Gray's net in Stanislaus outweighs Lincoln's in Madera, or tap a row to open that county's details.",
@@ -543,6 +567,10 @@ const HOW = {
     "Turnout decides close races here. Comparing with past finals shows which places are on pace, but only late in the count, since early in the night most ballots aren't counted yet.",
     "late in the count, see which county is furthest below its 2024 mark: that's where uncounted ballots, or voters who stayed home, are.",
     "Votes: " + FEED + " Registration: Oct 19, 2026 report."],
+  prec: ["Every precinct inside the new district, colored by how it voted in 2024 or 2022, or by how much it moved between them. Choose the top of the ticket (president or governor), the House race, or turnout. Tap a precinct to compare its two elections side by side.",
+    "County totals hide a lot. Precincts show where each side's votes actually come from (Stockton neighborhoods, Modesto, Merced, the farm towns) and which places moved. They also show what the new Stockton part of the district looked like before it was in Gray's district.",
+    "pick House race and 2024 to see how Stockton precincts voted when Lincoln ran in the 9th District that year, or pick Change and Turnout to see which places turn out in presidential years but not midterms.",
+    "Certified precinct results from the Statewide Database at UC Berkeley, which also splits every precinct into census blocks. Precincts change from one election to the next, so 2022 results are carried through those blocks onto 2024's precincts, and only blocks inside the Prop 50 lines (the AB 604 block file) count. Its 2024 totals run slightly below the certified county totals (under 1%). Fixed; built Oct 31, 2026. Tonight: Merced County's results site lists votes by precinct, so this map can show Merced live, checked every 60 seconds once the county posts its results link. Merced's posted schedule: mail ballots received through Nov 1 by 8:15pm, early in-person votes by 9:30pm, Election Day votes by 11:30pm, then the next update by 5pm Friday, Nov 6. The other four counties aren't wired in."],
   log: ["Gray's lead or deficit at each update this device has seen tonight.",
     "Shows which way each new batch of ballots moved the margin.",
     "leave the page open all night on the projector laptop so the log catches every update.",
@@ -565,17 +593,112 @@ function renderStamps() {
   const S = {
     top: yr, county: year === "2026" && !counted() ? [reg + " · " + L[0], L[1]] : yr, map: year === "2026" && !counted() ? [reg + " · " + L[0], L[1]] : yr,
     detail: yr, perf: yr, turnout: yr, log: L,
+    prec: pcY === "live" ? (pcLiveErr ? [`${pcLiveErr} · tried ${ptTime(pcLiveCheck)} PT`, "err"] : [`Merced precincts · checked ${pcLiveCheck ? ptTime(pcLiveCheck) : "–"} PT`, "live"]) : ["Certified 2022 and 2024 precinct results (Statewide Database) · built Oct 31, 2026", ""],
     pace: [`History collected Oct 31, 2026 · tonight: ${L[0].charAt(0).toLowerCase() + L[0].slice(1)}`, L[1]],
     sim: year === "2026" && counted() ? [reg + " · count as of " + L[0].replace(/^Data as of /, ""), L[1]] : [reg + " · certified 2022 and 2024 results", ""]
   };
   document.querySelectorAll(".meta[data-sec]").forEach(m => { const [t, c] = S[m.dataset.sec] || ["", ""], a = m.querySelector(".asof"); if (a.textContent !== t) a.textContent = t; a.className = "asof" + (c ? " " + c : ""); });
 }
 
+
+/* ---------- precincts: 2022 and 2024 results on the new lines (Statewide Database, carried through census blocks) ---------- */
+const HOUSE = { a: { "13": ["Gray", "Duarte"], "9": ["Harder", "Lincoln"], "5": ["Barkley", "McClintock"] }, b: { "13": ["Gray", "Duarte"], "9": ["Harder", "Patti"], "5": ["Barkley", "McClintock"] } };
+const TOP = { a: ["Harris", "Trump", "President"], b: ["Newsom", "Dahle", "Governor"] };
+let PC = null, pcY = "a", pcM = "top", pcSel = null, pcLiveCfg = null, pcLive = null, pcLiveErr = null, pcLiveCheck = null;
+const iF = { reg: 0, vote: 1, hd: 2, hr: 3, td: 4, tr: 5 };
+function pcRings(r) { return r.map(ring => { let x = 0, y = 0; return ring.map(([dx, dy]) => { x += dx; y += dy; return [x / 1e4, y / 1e4]; }); }); }
+async function loadPrecincts() { try { const j = await (await fetch("precincts.json", { cache: "force-cache" })).json(); j.p.forEach(p => p.rings = pcRings(p.r)); PC = j; renderPrec(); } catch (e) { $("#pcMap").innerHTML = `<p class="note">Couldn't load the precinct map.</p>`; } }
+const two = (d, r) => d + r > 0 ? d / (d + r) : null;
+function pcVal(p, y, m) {
+  if (y === "live") { const L = pcLive && pcLive.by[p.id]; if (!L || p.c !== "Merced") return null; if (m === "turn") return p.a[0] ? (L[0] + L[1]) / p.a[0] : null; return L[0] + L[1] >= 5 ? two(L[0], L[1]) : null; }
+  if (y === "d") { const a = pcVal(p, "a", m), b = pcVal(p, "b", m); return a == null || b == null ? null : a - b; }
+  const v = p[y];
+  if (m === "turn") return v[0] >= 10 ? v[1] / v[0] : null;
+  const d = m === "top" ? v[4] : v[2], r = m === "top" ? v[5] : v[3];
+  return d + r >= 10 ? two(d, r) : null;
+}
+function pcColor(x) {
+  if (x == null) return "var(--neutral)";
+  if (pcY === "d") { const k = Math.min(1, Math.abs(x) / (pcM === "turn" ? 0.25 : 0.12)); return mix(0.12 + 0.8 * k, pcM === "turn" ? (x >= 0 ? "--accent" : "--muted") : (x >= 0 ? "--dem" : "--rep")); }
+  if (pcM === "turn") return mix(0.1 + 0.85 * Math.max(0, Math.min(1, (x - 0.2) / 0.65)), "--accent");
+  const m = x - 0.5; return mix(0.15 + 0.8 * Math.min(1, Math.abs(m) / 0.3), m >= 0 ? "--dem" : "--rep");
+}
+function renderPrec() {
+  if (!PC) return;
+  document.querySelectorAll("#pcYear button").forEach(b => { b.setAttribute("aria-pressed", String(b.dataset.v === pcY)); if (b.dataset.v === "live") b.hidden = !(pcLive && pcLive.n); });
+  document.querySelectorAll("#pcMeasure button").forEach(b => { b.setAttribute("aria-pressed", String(b.dataset.m === pcM)); b.disabled = pcY === "live" && b.dataset.m === "top"; });
+  if (pcY === "live" && pcM === "top") pcM = "house";
+  setBounds("cd2026");
+  let svg = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Precinct map of the district"><defs><clipPath id="clip-pc"><path d="${path(G.cd2026)}"/></clipPath></defs>`;
+  for (const c of G.counties) for (const r of c.rings) svg += `<path d="${path(r)}" fill="var(--neutral)" stroke="var(--paper)" stroke-width="1" opacity="${c.core ? 0.5 : 0.3}"/>`;
+  svg += `<g clip-path="url(#clip-pc)">`;
+  PC.p.forEach((p, i) => { const col = pcColor(pcVal(p, pcY, pcM)); for (const r of p.rings) svg += `<path class="pp${pcSel === i ? " sel" : ""}" data-i="${i}" d="${path(r)}" fill="${col}"/>`; });
+  for (const c of G.counties.filter(c => c.core)) for (const r of c.rings) svg += `<path class="cl" d="${path(r)}"/>`;
+  svg += `</g><path class="dist" d="${path(G.cd2026)}"/></svg>`;
+  const el = $("#pcMap"); el.innerHTML = svg;
+  el.querySelector("svg").addEventListener("click", e => { const t = e.target.closest(".pp"); if (!t) return; pcSel = +t.dataset.i; renderPrec(); });
+  // legend
+  const ramp = (a, b, l, r) => `<span class="ramp">${l}<i style="background:linear-gradient(90deg,${a},var(--paper),${b})"></i>${r}</span>`;
+  $("#pcLegend").innerHTML = pcY === "d"
+    ? (pcM === "turn" ? ramp(mix(.9, "--muted"), mix(.9, "--accent"), "turnout down", "up") : ramp(mix(.9, "--rep"), mix(.9, "--dem"), "toward R", "toward D")) + `<span>Grey: few or no voters</span>`
+    : pcM === "turn" ? `<span class="ramp">20%<i style="background:linear-gradient(90deg,var(--paper),${mix(.95, "--accent")})"></i>85%</span><span>Grey: few or no voters</span>`
+    : ramp(mix(.95, "--rep"), mix(.95, "--dem"), "R 80%", "D 80%") + `<span>Grey: few or no voters</span>`;
+  // district summary for the chosen year
+  if (pcY === "live") {
+    const t = pcLive.tot; $("#pcSum").innerHTML = `Merced County tonight, Gray's race: <b>${esc(pcLive.names[0])} ${pct(two(t[0], t[1]))}</b> – ${esc(pcLive.names[1])} ${pct(two(t[1], t[0]))}, ${fmt(t[0] + t[1])} votes in ${fmt(pcLive.n)} precincts with votes. Other counties don't publish precinct counts on election night.`;
+  } else {
+    const yk = pcY === "d" ? null : pcY, agg = y => { const t = [0, 0, 0, 0, 0, 0]; PC.p.forEach(p => p[y].forEach((v, i) => t[i] += v)); return t; };
+    const A = agg("a"), B = agg("b");
+    const line = (y, t) => `${y === "a" ? "2024" : "2022"}: ${TOP[y][0]} ${pct(two(t[4], t[5]))} – ${TOP[y][1]} ${pct(two(t[5], t[4]))}; ${fmt(t[1])} voted of ${fmt(t[0])} registered (${pct(t[1] / t[0], 0)})`;
+    $("#pcSum").innerHTML = yk ? `Inside the new lines, ${line(yk, yk === "a" ? A : B)}.` : `Inside the new lines, ${line("b", B)}. ${line("a", A)}.`;
+  }
+  // info box
+  const p = pcSel != null ? PC.p[pcSel] : null;
+  if (!p) { $("#pcInfo").innerHTML = `<p style="margin:0">Tap a precinct to compare how it voted in 2022 and 2024${pcLive && pcLive.n ? " and tonight" : ""}.</p>`; }
+  else {
+    const yrs = ["b", "a"].map(y => { const v = p[y], hs = HOUSE[y][p.cd] || ["D", "R"];
+      return `<span class="h">${y === "a" ? "2024" : "2022"}</span>
+        <span>${TOP[y][2]}: ${TOP[y][0]}–${TOP[y][1]}</span><span class="v">${v[4] + v[5] ? pct(two(v[4], v[5]), 0) + "–" + pct(two(v[5], v[4]), 0) : "–"}</span>
+        <span>House (District ${esc(p.cd)}): ${hs[0]}–${hs[1]}</span><span class="v">${v[2] + v[3] ? pct(two(v[2], v[3]), 0) + "–" + pct(two(v[3], v[2]), 0) : "–"}</span>
+        <span>Turnout</span><span class="v">${v[0] ? pct(v[1] / v[0], 0) + " of " + fmt(v[0]) : "–"}</span>`; }).join("");
+    const L = pcLive && pcLive.by[p.id] && p.c === "Merced" ? pcLive.by[p.id] : null;
+    $("#pcInfo").innerHTML = `<h4>Precinct ${esc(p.id)} · ${esc(p.c)} County</h4>${p.f < 0.995 ? `<p class="note" style="margin:0 0 6px">${pct(p.f, 0)} of its voters are inside the new district; numbers here cover that part.</p>` : ""}
+      <div class="kv">${yrs}${L ? `<span class="h">Tonight</span><span>${esc(pcLive.names[0])}–${esc(pcLive.names[1])}</span><span class="v">${L[0] + L[1] ? pct(two(L[0], L[1]), 0) + "–" + pct(two(L[1], L[0]), 0) + " · " + fmt(L[0] + L[1]) : "no votes yet"}</span>` : ""}</div>`;
+  }
+  $("#pcNote").textContent = pcY === "live" ? "Merced precincts only, from Merced County's results site. Shares of the two-candidate vote." :
+    pcY === "d" ? (pcM === "turn" ? "Change in turnout from 2022 (a midterm) to 2024 (a presidential year); almost every precinct is up." : pcM === "top" ? "Democratic share for president in 2024 minus Democratic share for governor in 2022. Different offices and candidates, so read it as a rough tide, not a like-for-like swing." : "Democratic share of the House vote, 2024 minus 2022, in whichever district the precinct was in.")
+    : pcM === "house" ? "House race in whichever district the precinct was in then: most were in the 13th (Gray vs. Duarte); Stockton was in the 9th (Harder vs. Patti in 2022, Harder vs. Lincoln in 2024); a few eastern precincts were in the 5th (Barkley vs. McClintock)."
+    : pcM === "top" ? `${pcY === "a" ? "President: Harris vs. Trump" : "Governor: Newsom vs. Dahle"}, share of the two-candidate vote.` : "Votes cast ÷ registered voters.";
+}
+document.querySelectorAll("#pcYear button").forEach(b => b.onclick = () => { pcY = b.dataset.v; renderPrec(); renderStamps(); });
+document.querySelectorAll("#pcMeasure button").forEach(b => b.onclick = () => { if (b.disabled) return; pcM = b.dataset.m; renderPrec(); });
+// Tonight: Merced County's results site (Clarity) allows cross-site reads and lists votes by precinct. The page reads its address from live.json.
+async function pullMercedPrecincts() {
+  try {
+    const cfg = await (await fetch("live.json?t=" + Date.now(), { cache: "no-store" })).json(); pcLiveCfg = cfg.merced_enr || "";
+    if (!pcLiveCfg) return;
+    const base = pcLiveCfg.replace(/\/web\.[^/]*\/?.*$/, "/").replace(/\/?$/, "/");
+    const ver = (await (await fetch(base + "current_ver.txt", { cache: "no-store" })).text()).trim();
+    const sm = await (await fetch(base + ver + "/json/en/summary.json", { cache: "no-store" })).json();
+    const k = sm.find(c => /REPRESENTATIVE/i.test(c.C) && /DISTRICT 13\b/i.test(c.C)); if (!k) throw new Error("contest");
+    const di = k.P.findIndex(x => /DEM/i.test(x)), ri = k.P.findIndex(x => /REP/i.test(x));
+    const all = await (await fetch(base + ver + "/json/ALL.json", { cache: "no-store" })).json();
+    const by = {}; let n = 0; const tot = [0, 0];
+    for (const p of all.Contests) { if (p.A === "-1") continue; const i = p.C.indexOf(k.K); if (i < 0) continue; const v = p.V[i]; by[p.A] = [v[di] || 0, v[ri] || 0]; if (by[p.A][0] + by[p.A][1]) { n++; tot[0] += by[p.A][0]; tot[1] += by[p.A][1]; } }
+    const nm = s => s.replace(/^(DEM|REP)\s+/i, "").split(" ").pop().replace(/^./, c => c.toUpperCase()).replace(/(?<=.)\w/g, c => c.toLowerCase());
+    pcLive = { by, n, tot, names: [nm(k.CH[di]), nm(k.CH[ri])], ver }; pcLiveErr = null; pcLiveCheck = new Date();
+    if (pcLive.n && pcY !== "live" && year === "2026" && !pcTouched) pcY = "live";
+  } catch (e) { pcLiveErr = "Can't reach Merced's results site"; pcLiveCheck = new Date(); }
+  renderPrec(); renderStamps();
+}
+let pcTouched = false; document.querySelectorAll("#pcYear button,#pcMeasure button").forEach(b => b.addEventListener("click", () => pcTouched = true));
+
 document.querySelectorAll("#yearSeg button").forEach(b => b.onclick = () => { year = b.dataset.y; render(); });
 function render() { renderTop(); renderPace(); renderSim(); renderStamps(); }
 $("#foot").innerHTML = `Live numbers from the California Secretary of State's results feed, checked every minute. Past results: <a href="${D.sources.results_2024}" target="_blank" rel="noopener">2024</a> and <a href="${D.sources.results_2022}" target="_blank" rel="noopener">2022</a> Statements of Vote. Registration: the Secretary of State's <a href="${D.sources.reg_2026}" target="_blank" rel="noopener">Oct 19, 2026 report</a>. District lines: ${esc(D.sources.lines_2026)}; old lines: ${esc(D.sources.lines_2021)}. The simulator is a what-if tool, not a forecast. A public page built from public records · lab.nathanwmonroe.com`;
 const qs = new URLSearchParams(location.search).get("s"); if (qs) decode(qs);
 syncGlobals(); render(); startLive();
+loadPrecincts(); pullMercedPrecincts(); setInterval(pullMercedPrecincts, 60000);
 setInterval(() => { if (year === "2026" && !counted()) renderTop(); }, 60000);
 </script>
 </body>

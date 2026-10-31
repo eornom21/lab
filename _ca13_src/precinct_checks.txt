@@ -1,0 +1,42 @@
+blocks in the five counties: 45486 | in new CD-13: 13889
+Fresno: 2024 block-map rows 13679, ids not in AB604 file 0
+  2022 votes in district blocks with no 2024 precinct to land in: 9
+Madera: 2024 block-map rows 3014, ids not in AB604 file 0
+  2022 votes in district blocks with no 2024 precinct to land in: 8
+Merced: 2024 block-map rows 4630, ids not in AB604 file 0
+  2022 votes in district blocks with no 2024 precinct to land in: 408
+San Joaquin: 2024 block-map rows 8993, ids not in AB604 file 0
+  2022 votes in district blocks with no 2024 precinct to land in: 14
+Stanislaus: 2024 block-map rows 6962, ids not in AB604 file 0
+  2022 votes in district blocks with no 2024 precinct to land in: 72
+
+Old-lines check: CD-13 race summed from precinct files vs. the page's county results (Gray, Duarte)
+  2024 Fresno: precincts 8994/11424 vs page 9004/11440
+  2024 Madera: precincts 14382/19147 vs page 14410/19187
+  2024 Merced: precincts 42416/39807 vs page 42652/40253
+  2024 San Joaquin: precincts 8062/6984 vs page 8064/6995
+  2024 Stanislaus: precincts 31411/27479 vs page 31424/27492
+  2022 Fresno: precincts 6089/7415 vs page 6089/7415
+  2022 Madera: precincts 9011/12642 vs page 9011/12642
+  2022 Merced: precincts 28577/26108 vs page 28577/26108
+  2022 San Joaquin: precincts 4597/4092 vs page 4597/4092
+  2022 Stanislaus: precincts 18222/16803 vs page 18222/16803
+
+New CD-13 total, 2024: registered 331648, voted 210584, top of ticket D 101281 R 100173 (D two-party 0.503), House D 106097 R 93398
+   Fresno: reg 7265, voted 3782, top D share 0.541
+   Madera: reg 20560, voted 12062, top D share 0.502
+   Merced: reg 132016, voted 87468, top D share 0.479
+   San Joaquin: reg 52132, voted 32925, top D share 0.574
+   Stanislaus: reg 119675, voted 74347, top D share 0.497
+
+New CD-13 total, 2022: registered 317063, voted 127988, top of ticket D 62887 R 63858 (D two-party 0.496), House D 67210 R 57367
+   Fresno: reg 6830, voted 2334, top D share 0.573
+   Madera: reg 19058, voted 6944, top D share 0.509
+   Merced: reg 123594, voted 55442, top D share 0.456
+   San Joaquin: reg 53017, voted 18249, top D share 0.610
+   Stanislaus: reg 114565, voted 45020, top D share 0.494
+
+Precincts with any part in new CD-13: 846 | fully inside: 768
+2024 House districts these precincts were in: {'13': 766, '5': 40, '9': 40}
+features written: 846 | points: 13728
+bytes: 213001
