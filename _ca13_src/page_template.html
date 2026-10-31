@@ -645,7 +645,7 @@ function renderPrec() {
     : ramp(mix(.95, "--rep"), mix(.95, "--dem"), "R 80%", "D 80%") + `<span>Grey: few or no voters</span>`;
   // district summary for the chosen year
   if (pcY === "live") {
-    const t = pcLive.tot; $("#pcSum").innerHTML = `Merced County tonight, Gray's race: <b>${esc(pcLive.names[0])} ${pct(two(t[0], t[1]))}</b> – ${esc(pcLive.names[1])} ${pct(two(t[1], t[0]))}, ${fmt(t[0] + t[1])} votes in ${fmt(pcLive.n)} precincts with votes. Other counties don't publish precinct counts on election night.`;
+    const t = pcLive.tot; $("#pcSum").innerHTML = `Merced County tonight, Gray's race: <b>${esc(pcLive.names[0])} ${pct(two(t[0], t[1]))}</b> – ${esc(pcLive.names[1])} ${pct(two(t[1], t[0]))}, ${fmt(t[0] + t[1])} votes in ${fmt(pcLive.n)} precincts with votes. Only Merced is wired in for precincts tonight.`;
   } else {
     const yk = pcY === "d" ? null : pcY, agg = y => { const t = [0, 0, 0, 0, 0, 0]; PC.p.forEach(p => p[y].forEach((v, i) => t[i] += v)); return t; };
     const A = agg("a"), B = agg("b");
