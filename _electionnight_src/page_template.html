@@ -32,6 +32,7 @@ main{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px
     <button class="tab on" data-s="s1" role="tab"><b>Races</b>Who wins?</button>
     <button class="tab" data-s="s2" role="tab"><b>Money</b>Where it comes from</button>
     <button class="tab" data-s="s3" role="tab"><b>Results</b>The room's calls</button>
+    <button class="tab" data-s="s4" role="tab"><b>Ask</b>Question for the lab</button>
   </div>
 </header>
 <main>
@@ -48,6 +49,19 @@ main{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px
     <div class="subsel"><select id="candSel" aria-label="Choose a candidate"></select></div>
     <div id="explorer"></div>
   </section>
+  <section class="step" id="s4">
+    <h2>Ask the lab</h2>
+    <p class="lede">Send a question about tonight's numbers. It goes to Nate, not straight to the big screen; he picks which questions to put to the lab.</p>
+    <div class="card">
+      <label for="qText" style="font-weight:600;color:var(--ink)">Your question</label>
+      <textarea id="qText" maxlength="280" rows="4" placeholder="e.g. Is turnout up more in Democratic or Republican counties than in 2022?" style="width:100%;margin-top:6px;font:16px 'IBM Plex Sans',sans-serif;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--paper);color:var(--ink)"></textarea>
+      <label for="qName" style="display:block;margin-top:10px;font-weight:600;color:var(--ink)">Your first name <span style="font-weight:400;color:var(--muted)">(optional)</span></label>
+      <input id="qName" maxlength="30" autocomplete="given-name" style="width:100%;margin-top:6px;font:16px 'IBM Plex Sans',sans-serif;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--paper);color:var(--ink)">
+      <button id="qSend" class="chipbtn on" style="margin-top:12px;padding:10px 18px;font-size:16px">Send to Nate</button>
+      <p class="status" id="qStatus" aria-live="polite"></p>
+    </div>
+    <div id="qMine"></div>
+  </section>
   <section class="step" id="s3">
     <h2>The room's calls</h2>
     <p class="lede" id="resLede">Winners get marked here as races are called tonight.</p>
@@ -60,6 +74,7 @@ main{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px
 const RACES = /*RACES*/[];
 const MONEY = /*MONEY*/{};
 const BASE = "https://ntfy.sh/ucm-eln-2026-a03f51";
+const QBASE = "https://ntfy.sh/ucm-eln-2026-q-6525225a";  // questions for the lab; Nate reads them at /electionnight/questions.html
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const ls = { get(k, d) { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch(e) { return d; } },
              set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch(e) {} } };
@@ -70,7 +85,7 @@ const short = r => r.label.split(" · ")[0];
 function show(s) { document.querySelectorAll(".tab").forEach(t => t.classList.toggle("on", t.dataset.s === s)); document.querySelectorAll(".step").forEach(x => x.classList.toggle("on", x.id === s)); ls.set("eln_tab", s); }
 document.querySelectorAll(".tab").forEach(t => t.addEventListener("click", () => show(t.dataset.s)));
 const urlStep = new URLSearchParams(location.search).get("step"); show(urlStep ? "s" + urlStep : ls.get("eln_tab", "s1"));
-async function send(obj) { try { await fetch(BASE, {method: "POST", body: JSON.stringify(Object.assign({v: voter}, obj))}); } catch(e) {} refresh(); }
+async function send(obj) { try { await fetch(BASE, {method: "POST", body: JSON.stringify(Object.assign({v: voter}, obj))}); } catch(e) {} }
 
 /* races */
 const GROUPS = [["all","All 32"],["talk","Talk races"],["rheld","Republican seats"],["dheld","Democratic seats"],["open","Open seats"]];
@@ -159,7 +174,35 @@ function draw(k) {
     <p class="status">Donor states cover ${esc(m.cov)}, the latest the FEC has processed for this candidate, so compare shares, not dollars.</p></div>`;
 }
 document.getElementById("foot").textContent = "Money: FEC.gov candidate and election pages, pulled Oct 30, 2026. Ratings: Cook, Sabato's Crystal Ball, Inside Elections. Each side's case links to its source.";
-renderFilters(); renderCards(); renderExplorer(); refresh(); loadResults(); setInterval(refresh, 8000); setInterval(loadResults, 60000);
+/* ask the lab */
+let qMine = ls.get("eln_q", []), qBusy = false;
+function renderQMine() { document.getElementById("qMine").innerHTML = qMine.length ? `<div class="card"><strong>You've sent</strong>${qMine.slice().reverse().map(q => `<p style="margin:8px 0 0">${esc(q.t)} <span class="status">· ${q.ok ? "sent" : "waiting to send"}</span></p>`).join("")}</div>` : ""; }
+async function sendQ(item, tries = 0) {
+  const st = document.getElementById("qStatus");
+  try {
+    const r = await fetch(QBASE, { method: "POST", body: JSON.stringify({ v: voter, n: item.n, t: item.t }) });
+    if (!r.ok) throw new Error(r.status);
+    item.ok = true; ls.set("eln_q", qMine); renderQMine(); st.textContent = "Sent. Thanks!";
+  } catch (e) {
+    if (tries < 6) { st.textContent = "The network is busy; trying again in a few seconds…"; setTimeout(() => sendQ(item, tries + 1), 8000 + tries * 6000); }
+    else { st.textContent = "Couldn't send it. Check your connection and tap Send again."; }
+  }
+}
+document.getElementById("qName").value = ls.get("eln_qname", "");
+document.getElementById("qSend").onclick = () => {
+  const t = document.getElementById("qText").value.trim(), n = document.getElementById("qName").value.trim().slice(0, 30);
+  if (!t) { document.getElementById("qStatus").textContent = "Type a question first."; return; }
+  if (qBusy) return; qBusy = true; setTimeout(() => qBusy = false, 15000);
+  ls.set("eln_qname", n); const item = { t: t.slice(0, 280), n, at: Date.now(), ok: false }; qMine.push(item); ls.set("eln_q", qMine);
+  document.getElementById("qText").value = ""; renderQMine(); sendQ(item);
+};
+renderQMine();
+
+// The poll service limits requests per internet connection, and a room full of phones on one Wi-Fi shares one. So the room's tally
+// refreshes only while the Results tab is open and the phone is awake, every 45-60 seconds.
+function tallyTick() { if (document.visibilityState === "visible" && document.getElementById("s3").classList.contains("on")) refresh(); }
+renderFilters(); renderCards(); renderExplorer(); refresh(); loadResults(); setInterval(tallyTick, 45000 + Math.random() * 15000); setInterval(loadResults, 60000);
+document.querySelectorAll(".tab").forEach(t => t.addEventListener("click", () => { if (t.dataset.s === "s3") refresh(); }));
 </script>
 </body>
 </html>

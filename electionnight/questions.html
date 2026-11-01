@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Room Questions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600&family=IBM+Plex+Mono&display=swap">
+<style>
+:root{--bg:#F2F3F6;--paper:#fff;--ink:#141A24;--body:#3E4757;--muted:#6B7486;--line:#D5D9E2;--accent:#B86E00;--accent-soft:#FBEBD2;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0E131B;--paper:#151C27;--ink:#E9EDF3;--body:#C2CAD6;--muted:#8B95A6;--line:#2A3445;--accent:#F2A93B;--accent-soft:#3A2A12;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0E131B;--paper:#151C27;--ink:#E9EDF3;--body:#C2CAD6;--muted:#8B95A6;--line:#2A3445;--accent:#F2A93B;--accent-soft:#3A2A12;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--body);font:18px/1.45 'IBM Plex Sans',system-ui,sans-serif}
+main{max-width:900px;margin:0 auto;padding:20px 16px 60px}
+h1{font-size:30px;color:var(--ink);margin:0 0 4px}
+.sub{color:var(--muted);font-size:15px;margin:0 0 16px}
+.bar{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;margin-bottom:14px;font-size:15px}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--muted);margin-right:6px}
+.dot.on{background:var(--accent)}
+button{font:600 15px 'IBM Plex Sans',sans-serif;border-radius:10px;border:1px solid var(--line);background:var(--paper);color:var(--ink);padding:8px 14px;cursor:pointer}
+button.main{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.q{background:var(--paper);border:1px solid var(--line);border-left:5px solid var(--accent);border-radius:12px;padding:14px 16px;margin:10px 0}
+.q.done{opacity:.45;border-left-color:var(--line)}
+.q .t{font-size:22px;color:var(--ink);margin:0 0 8px;overflow-wrap:anywhere}
+.q .m{font-size:14px;color:var(--muted);display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.q .m span{margin-right:auto}
+.empty{color:var(--muted);font-size:17px;padding:24px 0}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-weight:600}
+</style>
+</head>
+<body>
+<main>
+  <h1>Questions from the room</h1>
+  <p class="sub">What guests send from the phone page's Ask tab, newest first. Copy one, then paste it into the dashboard's Ask box. This page isn't linked anywhere, but anyone with the address can see it.</p>
+  <div class="bar"><span id="conn"><span class="dot"></span>Connecting…</span><span id="count"></span><span style="flex:1"></span>
+    <button id="hideDone" aria-pressed="false">Hide done</button></div>
+  <div id="list"><p class="empty">No questions yet.</p></div>
+</main>
+<script>
+const QBASE = "https://ntfy.sh/ucm-eln-2026-q-6525225a";
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const ls = { get(k, d) { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } }, set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} } };
+let Q = {}, done = ls.get("eln_q_done", {}), hide = false;
+const $ = s => document.querySelector(s);
+function add(m) {
+  if (!m || m.event !== "message" || Q[m.id]) return;
+  let x; try { x = JSON.parse(m.message); } catch (e) { return; }
+  const t = String(x && x.t || "").trim().slice(0, 280); if (!t) return;
+  Q[m.id] = { id: m.id, time: m.time, t, n: String(x.n || "").trim().slice(0, 30) };
+}
+function render() {
+  const all = Object.values(Q).sort((a, b) => b.time - a.time), open = all.filter(q => !done[q.id]).length;
+  $("#count").textContent = all.length ? `${all.length} question${all.length === 1 ? "" : "s"} · ${open} not done` : "";
+  const rows = all.filter(q => !(hide && done[q.id]));
+  $("#list").innerHTML = rows.length ? rows.map(q => `<div class="q ${done[q.id] ? "done" : ""}"><p class="t">${esc(q.t)}</p>
+    <div class="m"><span>${q.n ? esc(q.n) + " · " : ""}${new Date(q.time * 1000).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", timeZone: "America/Los_Angeles" })} PT</span>
+    <button class="main" data-copy="${q.id}">Copy</button><button data-done="${q.id}">${done[q.id] ? "Undo" : "Done"}</button></div></div>`).join("") : `<p class="empty">${all.length ? "All done." : "No questions yet."}</p>`;
+  document.querySelectorAll("[data-copy]").forEach(b => b.onclick = async () => { try { await navigator.clipboard.writeText(Q[b.dataset.copy].t); toast("Copied. Paste it into the dashboard's Ask box."); } catch (e) { toast("Couldn't copy; select the text instead."); } });
+  document.querySelectorAll("[data-done]").forEach(b => b.onclick = () => { const id = b.dataset.done; if (done[id]) delete done[id]; else done[id] = 1; ls.set("eln_q_done", done); render(); });
+}
+function toast(t) { const d = document.createElement("div"); d.className = "toast"; d.textContent = t; document.body.appendChild(d); setTimeout(() => d.remove(), 2200); }
+$("#hideDone").onclick = e => { hide = !hide; e.target.setAttribute("aria-pressed", String(hide)); e.target.textContent = hide ? "Show done" : "Hide done"; render(); };
+// One long-lived connection (not repeated requests), so this page barely uses the room's shared allowance.
+let es = null, lastTime = 0;
+function connect() {
+  try { es && es.close(); } catch (e) {}
+  es = new EventSource(QBASE + "/sse?since=" + (lastTime ? lastTime : "all"));
+  es.onopen = () => { $("#conn").innerHTML = `<span class="dot on"></span>Live`; };
+  es.onmessage = e => { try { const m = JSON.parse(e.data); if (m.time) lastTime = Math.max(lastTime, m.time); add(m); render(); } catch (err) {} };
+  es.onerror = () => { $("#conn").innerHTML = `<span class="dot"></span>Reconnecting…`; };
+}
+connect(); render();
+</script>
+</body>
+</html>
