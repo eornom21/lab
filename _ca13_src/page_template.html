@@ -688,7 +688,7 @@ async function pullMercedPrecincts() {
     const all = await (await fetch(base + ver + "/json/ALL.json", { cache: "no-store" })).json();
     const by = {}; let n = 0; const tot = [0, 0];
     for (const p of all.Contests) { if (p.A === "-1") continue; const i = p.C.indexOf(k.K); if (i < 0) continue; const v = p.V[i]; by[p.A] = [v[di] || 0, v[ri] || 0]; if (by[p.A][0] + by[p.A][1]) { n++; tot[0] += by[p.A][0]; tot[1] += by[p.A][1]; } }
-    const nm = s => s.replace(/^(DEM|REP)\s+/i, "").split(" ").pop().replace(/^./, c => c.toUpperCase()).replace(/(?<=.)\w/g, c => c.toLowerCase());
+    const nm = s => { const w = s.replace(/^(DEM|REP)\s+/i, "").split(" ").pop(); return w.charAt(0).toUpperCase() + w.slice(1).toLowerCase(); };
     pcLive = { by, n, tot, names: [nm(k.CH[di]), nm(k.CH[ri])], ver }; pcLiveErr = null; pcLiveCheck = new Date();
     if (pcLive.n && pcY !== "live" && year === "2026" && !pcTouched) pcY = "live";
   } catch (e) { pcLiveErr = "Can't reach Merced's results site"; pcLiveCheck = new Date(); }
