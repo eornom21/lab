@@ -23,7 +23,7 @@
   --head:#0B1018; --head-ink:#EEF1F5; --accent:#6FB3CF; --live:#F2A93B; --live-soft:#3A2A12;
   --dem:#6D9FE0; --rep:#E07E58; --neutral:#26303E; --win:#4CC28A; color-scheme:dark}}
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--body);font:17px/1.5 var(--sans)}
+body{background:var(--bg);color:var(--body);font:17px/1.5 var(--sans);overflow-x:hidden}
 header{background:var(--head);color:var(--head-ink);padding:18px max(16px,env(safe-area-inset-right,0px)) 16px max(16px,env(safe-area-inset-left,0px))}
 .wrap{max-width:1180px;margin:0 auto}
 .kicker{font:600 12px var(--sans);letter-spacing:.14em;text-transform:uppercase;opacity:.75}
@@ -309,6 +309,11 @@ function drawMap(el, { lines, fill, sel, onPick, label }) {
 
 /* ---------- live feed ---------- */
 const POLLS_CLOSE = new Date("2026-11-04T04:00:00Z"); // 8:00pm PT, Nov 3
+// Before polls close the state sometimes posts test numbers (it did on Oct 31). Ignore any votes until 7:55pm PT Nov 3; ?test=1 shows them anyway.
+const TESTOK = new URLSearchParams(location.search).has("test");
+const realTime = () => TESTOK || Date.now() >= POLLS_CLOSE - 5 * 60e3;
+let testSeen = false;
+try { if (!TESTOK) { const L0 = JSON.parse(localStorage.getItem("ca13_log") || "[]"); const L1 = L0.filter(e => e.t >= POLLS_CLOSE - 5 * 60e3); if (L1.length !== L0.length) localStorage.setItem("ca13_log", JSON.stringify(L1)); } } catch (e) {}
 let year = (() => { const q = new URLSearchParams(location.search).get("y"); return ["2026", "2024", "2022"].includes(q) ? q : (Date.now() >= new Date("2026-11-04T00:00:00Z") ? "2026" : "2024"); })();
 let sel = "Merced", LIVE = null, liveErr = null, timer = null, lastCheck = null;
 const num = s => +String(s ?? "0").replace(/[^0-9.]/g, "") || 0;
@@ -325,7 +330,9 @@ async function pullLive() {
       by[n] = [pick(hh.candidates, "Dem"), pick(hh.candidates, "Rep"), pick(gg.candidates, "Dem"), pick(gg.candidates, "Rep")];
       rep[n] = (hh.Reporting || "").replace(" precincts reporting", ""); govNames = gg.candidates.map(c => c.Name);
     }));
-    const total = [pick(dist.candidates, "Dem"), pick(dist.candidates, "Rep"), C.reduce((s, n) => s + by[n][2], 0), C.reduce((s, n) => s + by[n][3], 0)];
+    let total = [pick(dist.candidates, "Dem"), pick(dist.candidates, "Rep"), C.reduce((s, n) => s + by[n][2], 0), C.reduce((s, n) => s + by[n][3], 0)];
+    testSeen = false;
+    if (!realTime() && total.some(v => v > 0)) { testSeen = true; total = [0, 0, 0, 0]; C.forEach(n => by[n] = [0, 0, 0, 0]); }
     LIVE = { by, rep, total, reporting: dist.Reporting, time: dist.ReportingTime, govNames };
     liveErr = null; lastCheck = new Date(); logCount();
   } catch (e) { lastCheck = new Date(); liveErr = "Can't reach the Secretary of State's results feed right now. Trying again in a minute."; }
@@ -358,7 +365,7 @@ function renderTop() {
   $("#h1").innerHTML = `Gray <span class="vs">vs.</span> ${OPP}${year === "2026" ? "" : ` <span class="vs">${year}</span>`}`;
   $("#livePill").className = "pill" + (year === "2026" && tot ? " live" : "");
   $("#livePill").textContent = year === "2026" ? (tot ? "Live" : "Before results") : year + " final";
-  $("#liveStatus").textContent = year === "2026" ? (liveErr || (LIVE ? `${LIVE.reporting}. Updated ${LIVE.time}.` : "Checking the Secretary of State…")) : `Certified result on the old (2021) lines, against John Duarte`;
+  $("#liveStatus").textContent = year === "2026" ? (liveErr || (testSeen ? "The state's feed is showing test numbers; this page ignores them until polls close." : LIVE ? `${LIVE.reporting}. Updated ${String(LIVE.time).replace(/\.$/, "")}.` : "Checking the Secretary of State…")) : `Certified result on the old (2021) lines, against John Duarte`;
   if (waiting) {
     const ms = POLLS_CLOSE - Date.now(), h = Math.floor(ms / 3.6e6), m = Math.floor(ms % 3.6e6 / 6e4);
     $("#topline").innerHTML = `<div class="wait"><div class="w1">${ms > 0 ? "Polls close at 8pm" : "Waiting for the first count"}</div>${ms > 0 ? `<div class="w2">${h >= 24 ? Math.floor(h / 24) + "d " + (h % 24) + "h" : h + "h " + m + "m"} to go</div>` : ""}<p class="note" style="margin:8px auto 0">The first numbers are usually the mail ballots that arrived early, posted soon after 8pm. This page checks the Secretary of State every minute. Until then, play with the simulator below.</p></div>`;
@@ -679,7 +686,7 @@ document.querySelectorAll("#pcMeasure button").forEach(b => b.onclick = () => { 
 async function pullMercedPrecincts() {
   try {
     const cfg = await (await fetch("live.json?t=" + Date.now(), { cache: "no-store" })).json(); pcLiveCfg = cfg.merced_enr || "";
-    if (!pcLiveCfg) return;
+    if (!pcLiveCfg || !realTime()) return;
     const base = pcLiveCfg.replace(/\/web\.[^/]*\/?.*$/, "/").replace(/\/?$/, "/");
     const ver = (await (await fetch(base + "current_ver.txt", { cache: "no-store" })).text()).trim();
     const sm = await (await fetch(base + ver + "/json/en/summary.json", { cache: "no-store" })).json();
