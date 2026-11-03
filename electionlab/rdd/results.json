@@ -1,0 +1,51 @@
+{
+ "run_at": "2026-11-03T21:42:08.949027+00:00",
+ "run_at_pt": "1:42 PM PT",
+ "sample": false,
+ "feed": {
+  "races": 436,
+  "fetched": 436,
+  "rain_asof": "2026-11-03T21:42:08.949027+00:00"
+ },
+ "hypotheses": [
+  {
+   "id": "H1",
+   "title": "Rain lowers Election-Day turnout",
+   "claim": "Each inch of rain cuts turnout by about one percentage point (Gomez, Hansford & Krause 2007, Journal of Politics).",
+   "design": "All counties with votes counted. Turnout surprise (live expected vote vs. pre-election expectation, in points) regressed on today's precipitation, with state fixed effects, standard errors clustered by state.",
+   "verdict": "Too early",
+   "reading": "Needs more counties reporting (0 with votes, 0 with at least 1 mm of rain)."
+  },
+  {
+   "id": "H2",
+   "title": "Easy mail and early voting blunt the rain effect",
+   "claim": "Where most votes are cast before Election Day, a rainy Tuesday matters less (the convenience-voting argument: Gronke et al. 2008; Gomez, Hansford & Krause 2007 on absentee states; Thompson, Wu, Yoder & Hall 2020 on vote-by-mail).",
+   "design": "Counties within 100 km of a state line where the mail rule changes (no-excuse or all-mail on one side, excuse-required on the other). Turnout surprise regressed on which side of the line the county is on, distance to the line (separately on each side), rain, and side x rain, with a fixed effect for each state pair; standard errors clustered by state pair. The side x rain term is the test: a negative number means rain costs more turnout on the restrictive side of the same storm.",
+   "verdict": "Too early",
+   "reading": "Border sample so far: 0 counties with votes within 100 km of a rules line, 0 of them wet. Needs about 60 and 15."
+  },
+  {
+   "id": "H3",
+   "title": "Rain helps Republicans",
+   "claim": "Rain shifts the vote toward Republicans because the voters it keeps home lean Democratic (Gomez, Hansford & Krause 2007); the newer argument is that the effect shrinks or reverses where Democrats vote by mail.",
+   "design": "Counties with votes counted. The county's Democratic two-way share in the House race tonight minus Harris's 2024 two-way share, regressed on rain and rain x convenience-voting state, with state fixed effects; errors clustered by state. A negative rain coefficient means rain is moving the count toward Republicans in excuse-required states.",
+   "verdict": "Too early",
+   "reading": "Needs about 150 counties with both parties' votes counted (0 so far)."
+  }
+ ],
+ "data": {
+  "counties_in_feed": 3045,
+  "counties_with_votes": 0,
+  "counties_wet_1mm": 0,
+  "rain_asof": "2026-11-03T21:42:08.949027+00:00",
+  "states_with_votes": 0,
+  "border_sample": 0,
+  "border_pairs": 0
+ },
+ "figures": {
+  "H1": "fig_h1.svg",
+  "H2": "fig_h2.svg",
+  "H3": "fig_h3.svg"
+ },
+ "seconds": 81.4
+}
