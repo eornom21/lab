@@ -716,8 +716,9 @@ function scoreTwo(A, Bc, x, opts = {}) {
     ${x.pct != null ? `<p class="note" style="font-size:15px">${x.pct}% of precincts reporting.</p>` : ""}`;
 }
 function fullCard(r, x) {
-  if (!r.b) return `<div class="ccard"><h3>${esc(r.office)}</h3><div class="who">${esc(r.a.name)} (${esc(ab(r.a.party))}${r.a.inc ? ", incumbent" : ""}) is the only candidate on the ballot${r.counties && r.counties.length ? " · " + esc(r.counties.join(", ")) : ""}</div>${r.note ? `<p class="note" style="font-size:15px">${esc(r.note)}</p>` : ""}</div>`;
-  return `<div class="ccard"><h3>${esc(r.office)}${r.alum ? ` <span class="flip" style="font-size:13px;vertical-align:middle">CAPE alum: ${esc(r.alum)}</span>` : ""}</h3>
+  const dl = `<a class="detail" href="https://lab.nathanwmonroe.com/electionlab/race/#${esc(r.id)}" target="_blank" rel="noopener" style="font-size:13px;font-weight:600;color:var(--live);text-decoration:none;margin-left:10px;vertical-align:middle">full details ↗</a>`;
+  if (!r.b) return `<div class="ccard"><h3>${esc(r.office)}${dl}</h3><div class="who">${esc(r.a.name)} (${esc(ab(r.a.party))}${r.a.inc ? ", incumbent" : ""}) is the only candidate on the ballot${r.counties && r.counties.length ? " · " + esc(r.counties.join(", ")) : ""}</div>${r.note ? `<p class="note" style="font-size:15px">${esc(r.note)}</p>` : ""}</div>`;
+  return `<div class="ccard"><h3>${esc(r.office)}${r.alum ? ` <span class="flip" style="font-size:13px;vertical-align:middle">CAPE alum: ${esc(r.alum)}</span>` : ""}${dl}</h3>
     <div class="who">${esc(r.a.name)} (${esc(ab(r.a.party))}${r.a.inc ? ", incumbent" : ""}) vs. ${esc(r.b.name)} (${esc(ab(r.b.party))}${r.b.inc ? ", incumbent" : ""})${r.open ? " · open seat" : ""}${r.counties && r.counties.length ? " · " + esc(r.counties.join(", ")) : ""}</div>
     ${scoreTwo(r.a, r.b, x)}
     ${r.a_case && r.a_case.length ? `<div class="vs" style="margin-top:12px"><div class="side ${pcol(r.a.party) === "rep" ? "r" : ""}"><h3>Why ${esc(r.a.name)} wins</h3><ul>${caseList2(r.a_case)}</ul></div><div class="side ${pcol(r.b.party) === "rep" ? "r" : ""}"><h3>Why ${esc(r.b.name)} wins</h3><ul>${caseList2(r.b_case)}</ul></div></div>` : ""}
@@ -742,7 +743,7 @@ function renderCA(v) {
     document.querySelectorAll("[data-leg]").forEach(el => { const go = () => { legOpen = legOpen === el.dataset.leg ? null : el.dataset.leg; renderCA("leg"); }; el.onclick = go; el.onkeydown = e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(); } }; });
   }
   if (v === "props") $("#propsBody").innerHTML = CA.props.length ? `<div class="cagrid">${CA.props.map(p => { const x = L.props[p.num], tot = x ? (x.yes || 0) + (x.no || 0) : 0, y = tot ? x.yes / tot : null;
-      return `<div class="ccard"><h3>Prop ${esc(p.num)}</h3><div class="who">${esc(p.title)}</div>
+      return `<div class="ccard"><h3>Prop ${esc(p.num)} <a class="detail" href="https://lab.nathanwmonroe.com/electionlab/race/#P${esc(String(+p.num))}" target="_blank" rel="noopener" style="font-size:13px;font-weight:600;color:var(--live);text-decoration:none;margin-left:10px;vertical-align:middle">full details ↗</a></h3><div class="who">${esc(p.title)}</div>
         ${tot ? `<div class="big2"><div class="c Y"><div class="n">Yes</div><div class="p" style="font-size:54px">${pct(y, 1)}</div><div class="v">${fmt(x.yes)}</div></div><div class="c R"><div class="n">No</div><div class="p" style="font-size:54px">${pct(1 - y, 1)}</div><div class="v">${fmt(x.no)}</div></div></div>
           <div class="bigbar"><i style="width:${y * 100}%;background:var(--good)"></i><i style="flex:1;background:var(--rep)"></i></div><div class="lead2" style="font-size:18px">${x.called ? (x.called === "yes" ? "Passes" : "Fails") : y > 0.5 ? "Passing so far" : y < 0.5 ? "Failing so far" : "Tied"}${x.pct != null ? ` · ${x.pct}% reporting` : ""}${p.needs ? ` · needs ${esc(p.needs)}` : ""}</div>` : `<div class="wait2" style="font-size:22px">Waiting for the first count</div>`}
         <p class="yn"><b>Yes:</b> ${esc(p.yes)}</p><p class="yn"><b>No:</b> ${esc(p.no)}</p>

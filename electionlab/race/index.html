@@ -218,6 +218,7 @@ function raceKey() { const h = decodeURIComponent(location.hash.slice(1)).trim()
 async function init() {
   try { DATA = await getJSON("data.json"); } catch (e) { $("#err").hidden = false; $("#err").textContent = "Couldn't load the race data. Try again in a minute."; return; }
   const k = raceKey();
+  if (/^(SD\d+|AD\d+|GOV|P\d+)$/.test(k)) return initCA(k);
   R = DATA.races[k] || DATA.races[k.replace(/^([A-Z]{2})(\d+|AL)$/, "$1-$2")];
   if (!R) { $("#title").textContent = "Pick a race"; $("#err").hidden = false; $("#err").innerHTML = "No race called <b>" + esc(k || "(none)") + "</b>. Try one of these: " + Object.keys(DATA.races).sort().map(x => `<a href="#${x}" onclick="location.reload()">${x}</a>`).join(" · "); return; }
   $("#pickOther").onclick = e => { e.preventDefault(); const x = prompt("Which race? e.g. PA-10, CA-13, WI-3", R.id); if (x) { location.hash = x.trim().toUpperCase(); location.reload(); } };
@@ -482,6 +483,102 @@ function renderBlueDog(T) {
     <div class="note">Shares are two-way (Democrat vs. Republican), weighted by this race's votes in each county, so the big counties count most. Where only part of a county is in the district, the comparison uses the whole county's statewide vote.</div>
     ${blocks.map(b => `<details style="margin-top:10px"><summary style="cursor:pointer;color:var(--accent);font-weight:600">${b.title}, county by county</summary><div class="wrap"><table><thead><tr><th>County</th><th class="n">${b.cols[0]}</th><th class="n">${b.cols[1]}</th><th class="n">Diff</th></tr></thead><tbody>${b.rowsHtml}</tbody></table></div></details>`).join("")}
   </div>`;
+}
+// ---------- California races and propositions (state feed) ----------
+const SOS = "https://api.sos.ca.gov/returns/", POLLS_CLOSE = Date.parse("2026-11-04T04:00:00Z");
+const realTime = () => TEST || Date.now() >= POLLS_CLOSE - 5 * 60e3;
+const VALLEY = ["Merced", "Stanislaus", "San Joaquin", "Fresno", "Madera", "Mariposa", "Tuolumne"];
+const slug = n => n.toLowerCase().replace(/[^a-z ]/g, "").trim().replace(/ +/g, "-");
+const num = v => +String(v ?? "0").replace(/[^0-9.]/g, "") || 0;
+const first = x => Array.isArray(x) ? x[0] : x;
+let CAK = null, CAR = null, CAHOW = null;
+async function initCA(k) {
+  CAK = k; const CA = DATA.ca;
+  let item = null, kind = null;
+  if (k === "GOV") { kind = "gov"; item = CA.gov; }
+  else if (k.startsWith("P")) { kind = "prop"; item = (CA.props || []).find(p => String(+p.num) === k.slice(1)); }
+  else { kind = "leg"; item = [...(CA.cape || []), ...(CA.leg || [])].find(r => r.id === k); }
+  if (!item) { $("#title").textContent = "Pick a race"; $("#err").hidden = false; $("#err").textContent = "No California item called " + k; return; }
+  CAR = { kind, item };
+  document.title = (kind === "prop" ? "Prop " + item.num : item.office || "Governor") + " · Election Night Lab";
+  $("#pickOther").onclick = e => { e.preventDefault(); const x = prompt("Which? e.g. SD4, AD22, GOV, P50", k); if (x) { location.hash = x.trim().toUpperCase(); location.reload(); } };
+  // header
+  if (kind === "prop") { $("#title").textContent = "Proposition " + item.num; $("#kicker").textContent = item.title; $("#chips").innerHTML = `<span class="chip">California statewide</span>${item.poll ? `<span class="chip">${esc(item.poll)}</span>` : ""}`; }
+  else { const a = item.a, b = item.b; $("#title").textContent = kind === "gov" ? "Governor of California" : item.office; $("#kicker").innerHTML = `${esc(a.name)} (${esc(a.party)})${b ? ` vs. ${esc(b.name)} (${esc(b.party)})` : " · unopposed"}${item.open ? " · open seat" : ""}`; $("#chips").innerHTML = `${item.alum ? `<span class="chip">CAPE alum: ${esc(item.alum)}</span>` : ""}${item.primary ? `<span class="chip">June primary: ${esc(item.primary)}</span>` : ""}${item.polls_line ? `<span class="chip">${esc(item.polls_line.replace("Latest polls: ", ""))}</span>` : ""}`; }
+  // sections that don't apply
+  ["s-take", "s-types", "s-traj", "s-bd", "s-past", "s-money", "s-watch"].forEach(id => $("#" + id).hidden = true);
+  $("#scoreH").textContent = kind === "prop" ? "The vote" : "The count";
+  const whereSub = kind === "leg" ? "The counties in the district, from the state's county-level returns." : "The Valley counties (Merced, Stanislaus, San Joaquin, Fresno, Madera, Mariposa, Tuolumne), from the state's county-level returns, against the statewide result.";
+  $("#s-where").querySelector(".sub").textContent = whereSub;
+  $("#how-score").innerHTML = `<p><b>What it shows.</b> The state's count: votes and shares, percent of precincts reporting, and when the state last posted.</p><p><b>Why it's useful.</b> California counts slowly; the first batch after 8pm is mostly mail ballots received before Election Day, and the later batches lean differently.</p><p><b>For example, you could</b> compare the first post-8pm batch with the final result from past years before reading too much into it.</p><p><b>Where the data comes from, and how often.</b> The California Secretary of State's results feed, read by this page every minute. The state posts test numbers before polls close, so this page ignores any votes before 7:55pm PT.</p>`;
+  $("#how-where").innerHTML = `<p><b>What it shows.</b> The same count broken out by county.</p><p><b>Why it's useful.</b> It shows where each side's votes are coming from, and which counties are still mostly uncounted.</p><p><b>For example, you could</b> check whether a Valley county is running ahead of or behind the statewide share.</p><p><b>Where the data comes from, and how often.</b> The Secretary of State's county returns, every minute.</p>`;
+  // cases
+  if (kind === "prop") { $("#s-cases").hidden = false; $("#s-cases h2").textContent = "What a yes and a no mean"; $("#s-cases .sub").textContent = "From the Legislative Analyst's summary, and who is on each side.";
+    $("#cases").innerHTML = `<div class="case D"><b>Yes</b><p>${esc(item.yes)}</p><div class="tiny">For: ${esc(item.yes_side || "")}</div></div><div class="case R"><b>No</b><p>${esc(item.no)}</p><div class="tiny">Against: ${esc(item.no_side || "")}</div></div>${item.source ? `<div class="tiny" style="grid-column:1/-1">Source: <a href="${esc(item.source)}" target="_blank" rel="noopener">${esc(item.source)}</a></div>` : ""}`; }
+  else if ((item.a_case && item.a_case.length) || (item.b_case && item.b_case.length)) { $("#s-cases").hidden = false;
+    const c = (p, name, list) => `<div class="case ${p}"><b>Why ${esc(name)} wins</b><ul>${(list || []).map(x => `<li>${esc(x.text || x)}${x.url ? ` <a href="${esc(x.url)}" target="_blank" rel="noopener">source</a>` : ""}</li>`).join("")}</ul></div>`;
+    $("#cases").innerHTML = c(item.a.party === "Republican" ? "R" : "D", item.a.name, item.a_case) + (item.b ? c(item.b.party === "Republican" ? "R" : item.b.party === "Democratic" ? "D" : "O", item.b.name, item.b_case) : ""); }
+  if (kind !== "prop" && item.money) { $("#s-money").hidden = false; $("#s-money .sub").textContent = "From state filings and news reports."; $("#money").innerHTML = `<div class="card" style="grid-column:1/-1">${esc(item.money)}${item.note ? `<div class="tiny" style="margin-top:6px">${esc(item.note)}</div>` : ""}</div>`; $("#moneyStamp").textContent = ""; }
+  $("#foot").textContent = "Live results: California Secretary of State (api.sos.ca.gov), read by this page every minute; votes before 7:55pm PT Nov 3 are ignored because the state posts test data. Candidates, cases and polls researched Nov 2, 2026. Built by the Election Night Lab, UC Merced CAPE.";
+  try { GEO = await getJSON("../geo/06.json"); } catch (e) {}
+  await refreshCA();
+  setInterval(() => { if (!document.hidden) refreshCA(); }, 60e3);
+}
+async function refreshCA() {
+  const { kind, item } = CAR;
+  const get = async p => { const r = await fetch(SOS + p, { cache: "no-store" }); if (!r.ok) throw new Error(r.status); return first(await r.json()); };
+  const path = kind === "gov" ? "governor" : kind === "prop" ? "ballot-measures" : (CAK.startsWith("SD") ? "state-senate" : "state-assembly") + "/district/" + CAK.replace(/\D/g, "");
+  const counties = kind === "leg" ? (item.counties || []).filter(n => !/parts of|other|and /i.test(n)) : VALLEY;
+  let st, by = {};
+  try { st = await get(path); } catch (e) { $("#scoreStamp").textContent = "Couldn't reach the state's feed; trying again in a minute"; return; }
+  await Promise.all(counties.map(async n => { try { by[n] = await get(path + "/county/" + slug(n)); } catch (e) {} }));
+  const live = realTime();
+  const rt = st.ReportingTime || "", repPct = (st.Reporting || "").match(/[\d.]+%/); 
+  $("#scoreStamp").textContent = !live ? "The state's feed is showing test numbers; this page ignores them until polls close at 8pm PT" : `State results as of ${esc(rt)}${repPct ? " · " + repPct[0] + " of precincts" : ""}`;
+  $("#scoreStamp").className = live ? "live" : "";
+  $("#whereStamp").textContent = live ? `As of ${esc(rt)}` : ""; 
+  const zero = v => live ? num(v) : 0;
+  if (kind === "prop") {
+    const row = (x) => (x["ballot-measures"] || x.measures || []).find(m => String(+m.Number) === String(+item.num)) || {};
+    const m = row(st), yes = zero(m.yesVotes), no = zero(m.noVotes), tot = yes + no;
+    $("#score").innerHTML = `<div class="score"><div class="cand D"><div class="nm">Yes</div><div class="big">${tot ? pct(yes / tot) : "–"}</div><div class="v">${fmt(yes)} votes</div></div><div class="cand R"><div class="nm">No</div><div class="big">${tot ? pct(no / tot) : "–"}</div><div class="v">${fmt(no)} votes</div></div></div>${tot ? `<div class="bigbar"><i style="width:${yes / tot * 100}%;background:var(--dem)"></i><i style="flex:1;background:var(--rep)"></i></div><div class="lead">${yes > no ? "Passing" : yes < no ? "Failing" : "Tied"} so far · ${pts(Math.abs(yes - no) / tot * 100).replace("+", "")} points</div>` : `<div class="wait">Waiting for the first count</div>`}`;
+    $("#scoreStats").innerHTML = "";
+    const rows = counties.map(n => { const r = row(by[n] || {}); const y = zero(r.yesVotes), nn = zero(r.noVotes); return { name: n, a: y, b: nn, rep: ((by[n] || {}).Reporting || "").match(/[\d.]+%/) }; });
+    caWhere(rows, "Yes", "No", "D", "R", tot ? yes / tot : null);
+  } else {
+    const cands = (st.candidates || []).map(c => ({ name: c.Name, party: c.Party, votes: zero(c.Votes) })).sort((x, y) => y.votes - x.votes);
+    const find = who => cands.find(c => c.name.toLowerCase().includes(who.name.split(" ").slice(-1)[0].toLowerCase())) || { name: who.name, party: who.party, votes: 0 };
+    const A = find(item.a), Bc = item.b ? find(item.b) : null, two = A.votes + (Bc ? Bc.votes : 0);
+    const pl = p => /Rep/i.test(p) ? "R" : /Dem/i.test(p) ? "D" : "O";
+    const card = (c, who) => `<div class="cand ${pl(who.party)}"><div class="nm">${esc(who.name)} <small>${esc(who.party)}${who.inc ? " · incumbent" : ""}</small></div><div class="big">${two ? pct(c.votes / two) : "–"}</div><div class="v">${fmt(c.votes)} votes</div></div>`;
+    $("#score").innerHTML = `<div class="score">${card(A, item.a)}${Bc ? card(Bc, item.b) : ""}</div>${two && Bc ? `<div class="bigbar"><i style="width:${A.votes / two * 100}%;background:var(--${pl(item.a.party) === "R" ? "rep" : pl(item.a.party) === "D" ? "dem" : "oth"})"></i><i style="flex:1;background:var(--${pl(item.b.party) === "R" ? "rep" : pl(item.b.party) === "D" ? "dem" : "oth"})"></i></div><div class="lead">${A.votes === Bc.votes ? "Tied" : `${esc((A.votes > Bc.votes ? item.a : item.b).name.split(" ").slice(-1)[0])} leads by ${pts(Math.abs(A.votes - Bc.votes) / two * 100).replace("+", "")} points`} · ${fmt(Math.abs(A.votes - Bc.votes))} votes</div>` : !Bc ? `<div class="lead">Unopposed on the ballot</div>` : `<div class="wait">Waiting for the first count</div>`}`;
+    $("#scoreStats").innerHTML = cands.length > 2 ? `<div class="stat"><div class="k">Others on the ballot</div><div class="s">${cands.filter(c => c !== A && c !== Bc).map(c => `${esc(c.name)} (${esc(c.party)}) ${fmt(c.votes)}`).join(" · ")}</div></div>` : "";
+    const rows = counties.map(n => { const cs = ((by[n] || {}).candidates || []); const f = who => zero((cs.find(c => c.Name && c.Name.toLowerCase().includes(who.name.split(" ").slice(-1)[0].toLowerCase())) || {}).Votes); return { name: n, a: f(item.a), b: Bc ? f(item.b) : 0, rep: ((by[n] || {}).Reporting || "").match(/[\d.]+%/) }; });
+    caWhere(rows, item.a.name.split(" ").slice(-1)[0], Bc ? item.b.name.split(" ").slice(-1)[0] : "", pl(item.a.party), Bc ? pl(item.b.party) : "O", two ? A.votes / two : null);
+  }
+}
+function caWhere(rows, an, bn, pa, pb, stateShare) {
+  const tbl = $("#ctable"), any = rows.some(r => r.a + r.b > 0);
+  tbl.innerHTML = `<thead><tr><th>County</th><th class="n">${esc(an)}</th><th class="n">${esc(bn)}</th><th class="n">Counted</th><th class="n">Precincts</th><th class="n">vs. statewide</th></tr></thead><tbody>${rows.map(r => { const t = r.a + r.b, sh = t ? r.a / t : null; return `<tr><td>${esc(r.name)}</td><td class="n ${sh != null && sh > 0.5 ? pa : ""}">${sh == null ? "–" : pct(sh)}</td><td class="n ${sh != null && sh < 0.5 ? pb : ""}">${sh == null ? "–" : pct(1 - sh)}</td><td class="n">${fmt(t)}</td><td class="n">${r.rep ? r.rep[0] : "–"}</td><td class="n">${sh == null || stateShare == null ? "–" : `<span class="${sh - stateShare >= 0 ? "plus" : "minus"}">${pts((sh - stateShare) * 100)}</span>`}</td></tr>`; }).join("")}</tbody>`;
+  if (!any) tbl.insertAdjacentHTML("beforeend", `<tfoot><tr><td colspan="6" class="tiny">County numbers appear after 8pm PT. "vs. statewide" is this county's ${esc(an)} share minus the statewide (or district-wide) share.</td></tr></tfoot>`);
+  // map of these counties
+  if (!GEO) { $("#map").innerHTML = ""; return; }
+  const byName = {}; for (const f of GEO.features) byName[f.properties.n.toLowerCase()] = f;
+  const feats = rows.map(r => byName[r.name.toLowerCase()]).filter(Boolean); if (!feats.length) { $("#map").innerHTML = ""; return; }
+  const rings = f => f.geometry.type === "Polygon" ? [f.geometry.coordinates[0]] : f.geometry.coordinates.map(p => p[0]);
+  let minX = 1e9, maxX = -1e9, minY = 1e9, maxY = -1e9;
+  for (const f of feats) for (const rg of rings(f)) for (const [x, y] of rg) { if (x < minX) minX = x; if (x > maxX) maxX = x; if (y < minY) minY = y; if (y > maxY) maxY = y; }
+  const padX = (maxX - minX) * 0.04 || 0.1, padY = (maxY - minY) * 0.04 || 0.1; minX -= padX; maxX += padX; minY -= padY; maxY += padY;
+  const K = Math.cos((minY + maxY) / 2 * Math.PI / 180), W = 640, H = Math.max(200, Math.round(W * (maxY - minY) / ((maxX - minX) * K)));
+  const px = ([x, y]) => [((x - minX) / (maxX - minX) * W).toFixed(1), ((maxY - y) / (maxY - minY) * H).toFixed(1)];
+  const mix = (v, c) => `color-mix(in srgb, var(${c}) ${Math.round(v * 100)}%, var(--paper))`;
+  let s = `<svg class="map" viewBox="0 0 ${W} ${H}">`;
+  for (const f of feats) { const r = rows.find(r => r.name.toLowerCase() === f.properties.n.toLowerCase()), t = r.a + r.b, sh = t ? r.a / t : null; let fill = "var(--neutral)";
+    if (sh != null) { const m = Math.abs(sh - 0.5) * 2; fill = mix(0.25 + 0.75 * Math.min(1, m * 2.5), sh > 0.5 ? (pa === "R" ? "--rep" : pa === "D" ? "--dem" : "--oth") : (pb === "R" ? "--rep" : pb === "D" ? "--dem" : "--oth")); }
+    s += `<path d="${rings(f).map(rg => "M" + rg.map(p => px(p).join(",")).join("L") + "Z").join(" ")}" fill="${fill}"><title>${esc(r.name)}</title></path>`;
+    const rg = rings(f).sort((a, b) => b.length - a.length)[0]; const cx = rg.reduce((s, p) => s + +px(p)[0], 0) / rg.length, cy = rg.reduce((s, p) => s + +px(p)[1], 0) / rg.length; s += `<text x="${cx.toFixed(0)}" y="${cy.toFixed(0)}" text-anchor="middle">${esc(r.name)}</text>`; }
+  $("#map").innerHTML = s + "</svg>";
+  $("#legend").innerHTML = `<span><i style="background:var(--${pa === "R" ? "rep" : pa === "D" ? "dem" : "oth"})"></i>${esc(an)} ahead</span>${bn ? `<span><i style="background:var(--${pb === "R" ? "rep" : pb === "D" ? "dem" : "oth"})"></i>${esc(bn)} ahead</span>` : ""}<span><i style="background:var(--neutral)"></i>no votes yet</span>`;
 }
 window.addEventListener("hashchange", () => location.reload());
 init();
