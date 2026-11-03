@@ -218,7 +218,7 @@ function raceKey() { const h = decodeURIComponent(location.hash.slice(1)).trim()
 async function init() {
   try { DATA = await getJSON("data.json"); } catch (e) { $("#err").hidden = false; $("#err").textContent = "Couldn't load the race data. Try again in a minute."; return; }
   const k = raceKey();
-  if (/^(SD\d+|AD\d+|GOV|P\d+)$/.test(k)) return initCA(k);
+  if (/^(SD\d+|AD\d+|GOV|BOE1|P\d+)$/.test(k)) return initCA(k);
   R = DATA.races[k] || DATA.races[k.replace(/^([A-Z]{2})(\d+|AL)$/, "$1-$2")];
   if (!R) { $("#title").textContent = "Pick a race"; $("#err").hidden = false; $("#err").innerHTML = "No race called <b>" + esc(k || "(none)") + "</b>. Try one of these: " + Object.keys(DATA.races).sort().map(x => `<a href="#${x}" onclick="location.reload()">${x}</a>`).join(" · "); return; }
   $("#pickOther").onclick = e => { e.preventDefault(); const x = prompt("Which race? e.g. PA-10, CA-13, WI-3", R.id); if (x) { location.hash = x.trim().toUpperCase(); location.reload(); } };
@@ -496,6 +496,7 @@ async function initCA(k) {
   CAK = k; const CA = DATA.ca;
   let item = null, kind = null;
   if (k === "GOV") { kind = "gov"; item = CA.gov; }
+  else if (k === "BOE1") { kind = "boe"; item = CA.boe; }
   else if (k.startsWith("P")) { kind = "prop"; item = (CA.props || []).find(p => String(+p.num) === k.slice(1)); }
   else { kind = "leg"; item = [...(CA.cape || []), ...(CA.leg || [])].find(r => r.id === k); }
   if (!item) { $("#title").textContent = "Pick a race"; $("#err").hidden = false; $("#err").textContent = "No California item called " + k; return; }
@@ -504,7 +505,8 @@ async function initCA(k) {
   $("#pickOther").onclick = e => { e.preventDefault(); const x = prompt("Which? e.g. SD4, AD22, GOV, P50", k); if (x) { location.hash = x.trim().toUpperCase(); location.reload(); } };
   // header
   if (kind === "prop") { $("#title").textContent = "Proposition " + item.num; $("#kicker").textContent = item.title; $("#chips").innerHTML = `<span class="chip">California statewide</span>${item.poll ? `<span class="chip">${esc(item.poll)}</span>` : ""}`; }
-  else { const a = item.a, b = item.b; $("#title").textContent = kind === "gov" ? "Governor of California" : item.office; $("#kicker").innerHTML = `${esc(a.name)} (${esc(a.party)})${b ? ` vs. ${esc(b.name)} (${esc(b.party)})` : " · unopposed"}${item.open ? " · open seat" : ""}`; $("#chips").innerHTML = `${item.alum ? `<span class="chip">CAPE alum: ${esc(item.alum)}</span>` : ""}${item.primary ? `<span class="chip">June primary: ${esc(item.primary)}</span>` : ""}${item.polls_line ? `<span class="chip">${esc(item.polls_line.replace("Latest polls: ", ""))}</span>` : ""}`; }
+  else { const a = item.a, b = item.b; $("#title").textContent = kind === "gov" ? "Governor of California" : item.office;
+    if (kind === "boe") $("#s-where").querySelector(".sub").textContent = "The Valley counties, from the state's county-level returns, against the district-wide result."; $("#kicker").innerHTML = `${esc(a.name)} (${esc(a.party)})${b ? ` vs. ${esc(b.name)} (${esc(b.party)})` : " · unopposed"}${item.open ? " · open seat" : ""}`; $("#chips").innerHTML = `${item.alum ? `<span class="chip">CAPE alum: ${esc(item.alum)}</span>` : ""}${item.primary ? `<span class="chip">June primary: ${esc(item.primary)}</span>` : ""}${item.polls_line ? `<span class="chip">${esc(item.polls_line.replace("Latest polls: ", ""))}</span>` : ""}`; }
   // sections that don't apply
   ["s-take", "s-types", "s-traj", "s-bd", "s-past", "s-money", "s-watch"].forEach(id => $("#" + id).hidden = true);
   $("#scoreH").textContent = kind === "prop" ? "The vote" : "The count";
@@ -527,7 +529,7 @@ async function initCA(k) {
 async function refreshCA() {
   const { kind, item } = CAR;
   const get = async p => { const r = await fetch(SOS + p, { cache: "no-store" }); if (!r.ok) throw new Error(r.status); return first(await r.json()); };
-  const path = kind === "gov" ? "governor" : kind === "prop" ? "ballot-measures" : (CAK.startsWith("SD") ? "state-senate" : "state-assembly") + "/district/" + CAK.replace(/\D/g, "");
+  const path = kind === "gov" ? "governor" : kind === "boe" ? "board-of-equalization/district/1" : kind === "prop" ? "ballot-measures" : (CAK.startsWith("SD") ? "state-senate" : "state-assembly") + "/district/" + CAK.replace(/\D/g, "");
   const counties = kind === "leg" ? (item.counties || []).filter(n => !/parts of|other|and /i.test(n)) : VALLEY;
   let st, by = {};
   try { st = await get(path); } catch (e) { $("#scoreStamp").textContent = "Couldn't reach the state's feed; trying again in a minute"; return; }
