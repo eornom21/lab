@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Blue Dog scoreboard · Election Night Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+:root{--bg:#F3F1EB;--paper:#FFFDF8;--ink:#1B2A41;--body:#3D4A5C;--muted:#6B7280;--line:#DCD5C8;--head:#1B2A41;--head-ink:#F3F1EB;--accent:#2E6F8E;--live:#A85F00;--dem:#2E5E9E;--rep:#B5451B;--neutral:#E6E1D6;--win:#1F7A4D;--serif:'Source Serif 4',Georgia,serif;--sans:'IBM Plex Sans',system-ui,sans-serif;--mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#11161F;--paper:#18202C;--ink:#EEF1F5;--body:#C9D3DC;--muted:#93A0B0;--line:#2C3747;--head:#0E1520;--head-ink:#EEF1F5;--accent:#6FB3CF;--live:#F2A93B;--dem:#6D9FE0;--rep:#E07E58;--neutral:#26303E;--win:#4CC28A;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#11161F;--paper:#18202C;--ink:#EEF1F5;--body:#C9D3DC;--muted:#93A0B0;--line:#2C3747;--head:#0E1520;--head-ink:#EEF1F5;--accent:#6FB3CF;--live:#F2A93B;--dem:#6D9FE0;--rep:#E07E58;--neutral:#26303E;--win:#4CC28A;color-scheme:dark}
+*{box-sizing:border-box} html{overflow-x:hidden}
+body{margin:0;background:var(--bg);color:var(--body);font:16px/1.5 var(--sans);overflow-x:hidden}
+a{color:var(--accent)}
+header.top{background:var(--head);color:var(--head-ink);padding:14px max(16px,env(safe-area-inset-left)) 18px}
+header.top .brand{font:600 12px var(--sans);letter-spacing:.08em;text-transform:uppercase;opacity:.8;display:flex;gap:14px;flex-wrap:wrap}
+header.top .brand a{color:inherit;text-decoration:none;border-bottom:1px solid rgba(255,255,255,.35)}
+h1{font-family:var(--serif);font-weight:700;font-size:clamp(28px,6vw,44px);line-height:1.05;margin:6px 0 2px;color:var(--head-ink)}
+.kicker{font-size:15px;opacity:.9;margin:0;max-width:80ch}
+main{max-width:1180px;margin:0 auto;padding:16px max(16px,env(safe-area-inset-left)) 60px}
+section{margin:22px 0}
+h2{font-family:var(--serif);font-weight:700;font-size:26px;color:var(--ink);line-height:1.15;margin:0 0 4px}
+.sub{color:var(--muted);margin:0 0 10px;font-size:15px;max-width:80ch}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:16px;min-width:0}
+.meta{display:flex;gap:8px 14px;flex-wrap:wrap;align-items:center;font-size:13px;color:var(--muted);margin:0 0 10px}
+.meta .live::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--live);margin-right:6px;vertical-align:1px}
+details.how{font-size:14px;margin-left:auto} details.how summary{cursor:pointer;color:var(--accent);font-weight:600;list-style:none} details.how summary::after{content:" ▾"} details.how[open] summary::after{content:" ▴"}
+details.how .hbx{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin-top:8px;max-width:70ch} details.how p{margin:6px 0}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:10px}
+.stat{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.stat .k{font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.stat .v{font-family:var(--serif);font-weight:700;font-size:30px;line-height:1.1;color:var(--ink);font-variant-numeric:tabular-nums}
+.stat .s{font-size:13px}
+.D{color:var(--dem)} .R{color:var(--rep)} .plus{color:var(--win);font-weight:600} .minus{color:var(--rep);font-weight:600}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{text-align:left;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:6px 8px;border-bottom:1px solid var(--line);white-space:nowrap;cursor:pointer}
+th.on{color:var(--ink)}
+td{padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top;font-variant-numeric:tabular-nums}
+td.n,th.n{text-align:right}
+.wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.tiny{font-size:12px;color:var(--muted)}
+.won{display:inline-block;background:var(--win);color:#fff;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:1px 6px;border-radius:5px}
+.lost{display:inline-block;background:var(--rep);color:#fff;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:1px 6px;border-radius:5px}
+.bars{display:grid;gap:6px;margin-top:10px}
+.brow{display:grid;grid-template-columns:150px 1fr 70px;gap:10px;align-items:center;font-size:14px}
+.brow .lbl{color:var(--ink);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brow .trk{position:relative;height:18px;background:var(--neutral);border-radius:4px}
+.brow .trk i{position:absolute;top:0;height:100%;border-radius:4px}
+.brow .trk .zero{position:absolute;top:-2px;bottom:-2px;width:1px;background:var(--ink);left:50%}
+.lead{font-family:var(--serif);font-size:21px;color:var(--ink);margin:6px 0}
+footer{color:var(--muted);font-size:13px;margin-top:30px;border-top:1px solid var(--line);padding-top:12px}
+@media (max-width:640px){.brow{grid-template-columns:110px 1fr 60px}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand"><span>Election Night Lab · Blue Dog scoreboard</span><a href="../">← Back to the big screen</a></div>
+  <h1>How the Blue Dogs are running</h1>
+  <p class="kicker">All 32 races the Blue Dog Coalition is tracking tonight, ranked by how far each Blue Dog is running ahead of (or behind) the other Democrats on the same ballots, Harris in 2024, and the district's registration. Live, every minute.</p>
+</header>
+<main>
+  <section>
+    <h2>The night for the Blue Dogs</h2>
+    <div class="meta"><span id="stamp">Loading…</span><details class="how"><summary>How this works</summary><div class="hbx" id="how"></div></details></div>
+    <div class="stats" id="stats"></div>
+    <div class="card" id="lead" style="margin-top:10px"></div>
+  </section>
+  <section>
+    <h2>Ahead of the ticket, race by race</h2>
+    <p class="sub">Each Blue Dog's two-way share minus the Democratic candidate for Senate or governor in the same counties (weighted by this race's votes), in points. Blue bars run ahead; the line is even. Races in states with no Senate or governor race this year fall back to the Harris 2024 comparison, marked with *.</p>
+    <div class="card"><div class="bars" id="bars"></div></div>
+  </section>
+  <section>
+    <h2>The full table</h2>
+    <p class="sub">Tap a column to sort. Tap a district for its full page.</p>
+    <div class="wrap card"><table id="tbl"></table></div>
+  </section>
+  <footer id="foot"></footer>
+</main>
+<script>
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const fmt = n => n == null || !isFinite(n) ? "–" : Math.round(n).toLocaleString("en-US");
+const pct = (x, d = 1) => x == null || !isFinite(x) ? "–" : (x * 100).toFixed(d) + "%";
+const pts = x => x == null || !isFinite(x) ? "–" : (x > 0 ? "+" : "") + x.toFixed(1);
+const $ = s => document.querySelector(s);
+const ptT = s => { const d = new Date(s); return isNaN(d) ? "" : d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", timeZone: "America/Los_Angeles" }) + " PT"; };
+let DATA = null, ROWS = [], sortKey = "ticket", sortDir = -1;
+async function getJSON(u) { const r = await fetch(u, { cache: "no-store" }); if (!r.ok) throw new Error(r.status); return r.json(); }
+$("#how").innerHTML = `<p><b>What it shows.</b> For each Blue Dog race: the Blue Dog's share and margin, how much of the expected vote is counted, and three comparisons: against the Democrat for Senate or governor in the same counties tonight, against Harris's 2024 share in those counties, and against Democrats' share of two-party registration there.</p><p><b>Why it's useful.</b> Blue Dogs make their case on winning voters the rest of the party can't. This measures that claim live, race by race, and across the whole group.</p><p><b>For example, you could</b> see whether the Blue Dogs as a group are running ahead of the ticket, and which ones are doing it in the hardest seats.</p><p><b>Where the data comes from, and how often.</b> Decision Desk HQ's public feed for this House race and the state's Senate and governor races, matched county by county, read every minute. Partial counties are compared whole-county. 2024 lean from the county presidential results archive; registration from the states as compiled by Decision Desk HQ.</p>`;
+const dShare = (race, who) => { // county -> two-way share for a named side ("DEM" party, or a last name)
+  const tl = race.raceData.toplineResults || []; const dem = typeof who === "string" && who !== "DEM" ? tl.find(c => String(c.lastName).toLowerCase().includes(who)) : tl.find(c => c.party && c.party.abbrev === "DEM");
+  if (!dem) return null; const opp = tl.filter(c => c !== dem).sort((x, y) => y.votes - x.votes)[0]; if (!opp) return null;
+  const by = {}, cnt = {}; for (const v of race.vcuData || []) { const f = v.vcu.countyFips || v.vcu.fips, cr = {}; for (const c of v.candidateResults || []) cr[c.id] = c; const a = (cr[dem.candId] || {}).votes || 0, b = (cr[opp.candId] || {}).votes || 0; if (a + b) { by[f] = a / (a + b); cnt[f] = a + b; } }
+  return { name: dem.firstName + " " + dem.lastName, oppName: opp.firstName + " " + opp.lastName, dem, opp, by, cnt, votes: dem.votes, oppVotes: opp.votes, winner: dem.winner ? "W" : opp.winner ? "L" : null };
+};
+const wavg = pairs => { let w = 0, s = 0; for (const [a, b, wt] of pairs) if (a != null && b != null && wt) { w += wt; s += (a - b) * wt; } return w ? s / w * 100 : null; };
+async function tick() {
+  const races = Object.values(DATA.races).filter(r => r.bluedog);
+  const swIds = [...new Set(races.flatMap(r => [...r.statewide.senate.map(id => ["senate", id]), r.statewide.governor ? ["gov", r.statewide.governor] : null].filter(Boolean).map(x => x.join(":"))))];
+  const [H, SW] = await Promise.all([Promise.all(races.map(r => getJSON(DATA.ddhq_base + "/house/" + r.ddhq).catch(() => null))), Promise.all(swIds.map(k => getJSON(DATA.ddhq_base + "/" + k.replace(":", "/")).catch(() => null)))]);
+  const swBy = {}; swIds.forEach((k, i) => { if (SW[i]) swBy[k] = SW[i]; });
+  ROWS = races.map((r, i) => { const h = H[i]; if (!h) return { r, none: true };
+    const who = r.bluedog.party === "D" ? "DEM" : r.bluedog.cand.split(" ").slice(-1)[0].toLowerCase();
+    const me = dShare(h, who); if (!me) return { r, none: true };
+    const tu = h.raceData.turnout || {}, tot = (h.raceData.toplineResults || []).reduce((s, c) => s + (c.votes || 0), 0), exp = tu.estimated_votes_mid || null;
+    const two = me.votes + me.oppVotes, share = two ? me.votes / two : null;
+    // ticket comparison: Senate first, then governor
+    let ticket = null, ticketWho = null;
+    for (const k of [...r.statewide.senate.map(id => "senate:" + id), r.statewide.governor ? "gov:" + r.statewide.governor : null].filter(Boolean)) { const s = swBy[k] && dShare(swBy[k], "DEM"); if (!s) continue; const d = wavg(Object.keys(me.by).map(f => [me.by[f], s.by[f], me.cnt[f]])); if (d != null) { ticket = d; ticketWho = s.name + (k.startsWith("senate") ? " (Senate)" : " (governor)"); break; } }
+    const harris = wavg(Object.keys(me.by).map(f => { const l = DATA.county_lean[f]; return [me.by[f], l ? 0.5 - l[2] / 200 : null, me.cnt[f]]; }));
+    let regD = 0, regR = 0; for (const v of h.vcuData || []) { const g = v.voteGoal || {}; regD += g.democraticRegistration || 0; regR += g.republicanRegistration || 0; }
+    const reg = share != null && regD + regR ? (share - regD / (regD + regR)) * 100 : null;
+    return { r, me, tot, exp, inPct: exp ? Math.min(1, tot / exp) : null, share, margin: share == null ? null : (share - 0.5) * 200, ticket, ticketWho, harris, reg, called: me.winner, lastUpdated: h.raceData.lastUpdated };
+  });
+  render();
+}
+function render() {
+  const live = ROWS.filter(x => !x.none && x.tot > 0);
+  const won = ROWS.filter(x => x.called === "W").length, lost = ROWS.filter(x => x.called === "L").length, lead = live.filter(x => !x.called && x.share > 0.5).length, trail = live.filter(x => !x.called && x.share < 0.5).length;
+  const withT = live.filter(x => x.ticket != null), avgT = withT.length ? withT.reduce((s, x) => s + x.ticket, 0) / withT.length : null, aheadT = withT.filter(x => x.ticket > 0).length;
+  const withH = live.filter(x => x.harris != null), avgH = withH.length ? withH.reduce((s, x) => s + x.harris, 0) / withH.length : null, aheadH = withH.filter(x => x.harris > 0).length;
+  const gains = live.filter(x => x.r.bluedog.held === "R" && (x.called === "W" || (!x.called && x.share > 0.5))).length, losses = live.filter(x => x.r.bluedog.held === "D" && x.r.bluedog.opp_party !== "D" && (x.called === "L" || (!x.called && x.share < 0.5))).length;
+  const newest = ROWS.map(x => x.lastUpdated).filter(Boolean).sort().slice(-1)[0];
+  $("#stamp").textContent = live.length ? `Results as of ${ptT(newest)} · Decision Desk HQ` : "Waiting for the first count"; $("#stamp").className = live.length ? "live" : "";
+  const st = (k, v, s, c) => `<div class="stat"><div class="k">${k}</div><div class="v ${c || ""}">${v}</div><div class="s">${s || ""}</div></div>`;
+  $("#stats").innerHTML = st("Won", won, "", "D") + st("Lost", lost, "", "R") + st("Leading", lead, "not called") + st("Trailing", trail, "not called") + st("Ahead of the ticket", withT.length ? `${aheadT} of ${withT.length}` : "–", avgT == null ? "" : `average ${pts(avgT)} pts`, avgT > 0 ? "plus" : avgT < 0 ? "minus" : "") + st("Ahead of Harris 2024", withH.length ? `${aheadH} of ${withH.length}` : "–", avgH == null ? "" : `average ${pts(avgH)} pts`, avgH > 0 ? "plus" : avgH < 0 ? "minus" : "") + st("Pick-ups / losses", `${gains} / ${losses}`, "if every leader holds");
+  $("#lead").innerHTML = `<div class="lead">${!live.length ? "Nothing counted yet. The first Blue Dog races to report are in the East: FL, GA, NC, NJ, NY, PA, SC and WI." : avgT == null ? `${live.length} Blue Dog races have votes; waiting for the statewide races to report before comparing.` : `Across the ${withT.length} Blue Dog races with a statewide Democrat to compare with, the Blue Dogs are running ${Math.abs(avgT).toFixed(1)} points ${avgT >= 0 ? "ahead of" : "behind"} the ticket on average; ${aheadT} of ${withT.length} are ahead.`}</div>`;
+  const ranked = ROWS.filter(x => !x.none).map(x => ({ x, v: x.ticket != null ? x.ticket : x.harris, star: x.ticket == null && x.harris != null })).filter(y => y.v != null).sort((a, b) => b.v - a.v);
+  const mx = Math.max(5, ...ranked.map(y => Math.abs(y.v)));
+  $("#bars").innerHTML = ranked.length ? ranked.map(({ x, v, star }) => `<div class="brow"><a class="lbl" href="../race/#${x.r.id}" title="${esc(x.r.bluedog.cand)}">${x.r.id} · ${esc(x.r.bluedog.cand.split(" ").slice(-1)[0])}${star ? "*" : ""}</a><div class="trk"><span class="zero"></span><i style="${v >= 0 ? `left:50%;width:${v / mx * 50}%;background:var(--dem)` : `right:50%;width:${-v / mx * 50}%;background:var(--rep)`}"></i></div><span class="n ${v >= 0 ? "plus" : "minus"}">${pts(v)}</span></div>`).join("") : `<div class="tiny">Fills in as the Blue Dog and statewide races report.</div>`;
+  const cols = [["id", "District", r => r.r.id], ["cand", "Blue Dog", r => r.r.bluedog.cand], ["opp", "Opponent", r => r.r.bluedog.opp], ["held", "Seat", r => r.r.bluedog.held], ["share", "Share", r => r.share], ["margin", "Margin", r => r.margin], ["inPct", "Counted", r => r.inPct], ["ticket", "vs. ticket", r => r.ticket], ["harris", "vs. Harris '24", r => r.harris], ["reg", "vs. registration", r => r.reg]];
+  const rows = ROWS.filter(x => !x.none).slice().sort((a, b) => { const c = cols.find(c => c[0] === sortKey)[2]; const va = c(a), vb = c(b); if (va == null && vb == null) return 0; if (va == null) return 1; if (vb == null) return -1; return (typeof va === "string" ? va.localeCompare(vb, "en", { numeric: true }) : va - vb) * sortDir; });
+  $("#tbl").innerHTML = `<thead><tr>${cols.map(c => `<th class="${["share", "margin", "inPct", "ticket", "harris", "reg"].includes(c[0]) ? "n" : ""} ${sortKey === c[0] ? "on" : ""}" data-k="${c[0]}">${c[1]}${sortKey === c[0] ? (sortDir > 0 ? " ▴" : " ▾") : ""}</th>`).join("")}</tr></thead><tbody>${rows.map(x => `<tr><td><a href="../race/#${x.r.id}"><b>${x.r.id}</b></a>${x.called === "W" ? ` <span class="won">Won</span>` : x.called === "L" ? ` <span class="lost">Lost</span>` : ""}</td><td>${esc(x.r.bluedog.cand)}${x.r.bluedog.inc ? " <span class='tiny'>inc.</span>" : ""}</td><td>${esc(x.r.bluedog.opp)} (${esc(x.r.bluedog.opp_party)})</td><td class="${x.r.bluedog.held}">${x.r.bluedog.held}</td><td class="n">${pct(x.share)}</td><td class="n ${x.margin > 0 ? "plus" : x.margin < 0 ? "minus" : ""}">${x.margin == null ? "–" : pts(x.margin)}</td><td class="n">${x.inPct == null ? "–" : Math.round(x.inPct * 100) + "%"}</td><td class="n ${x.ticket > 0 ? "plus" : x.ticket < 0 ? "minus" : ""}" title="${esc(x.ticketWho || "")}">${pts(x.ticket)}${x.ticketWho ? `<div class="tiny">${esc(x.ticketWho.split(" (")[0].split(" ").slice(-1)[0])}</div>` : ""}</td><td class="n ${x.harris > 0 ? "plus" : x.harris < 0 ? "minus" : ""}">${pts(x.harris)}</td><td class="n ${x.reg > 0 ? "plus" : x.reg < 0 ? "minus" : ""}">${pts(x.reg)}</td></tr>`).join("")}</tbody>`;
+  $("#tbl").querySelectorAll("th").forEach(th => th.onclick = () => { const k = th.dataset.k; if (sortKey === k) sortDir = -sortDir; else { sortKey = k; sortDir = ["id", "cand", "opp", "held"].includes(k) ? 1 : -1; } render(); });
+  $("#foot").textContent = "Live results: Decision Desk HQ's public feed (this race and the state's Senate and governor races, matched by county). 2024 lean: county presidential results archive. Registration: state figures as compiled by Decision Desk HQ. Race list: the Blue Dog Coalition's tracker. Built by the Election Night Lab, UC Merced CAPE.";
+}
+(async () => { try { DATA = await getJSON("../race/data.json"); } catch (e) { $("#stamp").textContent = "Couldn't load race data."; return; } try { await tick(); } catch (e) { $("#stamp").textContent = "Couldn't reach the results feed; retrying."; } setInterval(() => { if (!document.hidden) tick().catch(() => {}); }, 60e3); })();
+</script>
+</body>
+</html>

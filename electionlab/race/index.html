@@ -143,6 +143,12 @@ footer{color:var(--muted);font-size:13px;margin-top:30px;border-top:1px solid va
     <div id="take" class="card"></div>
   </section>
 
+  <section id="s-watch" hidden>
+    <h2>County to watch</h2>
+    <p class="sub">Where the most votes are still out, and what the count there needs to look like.</p>
+    <div id="watch" class="card"></div>
+  </section>
+
   <section id="s-where">
     <h2>Where the votes are</h2>
     <p class="sub">County by county: counted so far, what's expected, who's ahead, and how each county compares with its benchmark and with 2024.</p>
@@ -318,6 +324,7 @@ function renderLive() {
     ${R.tide && R.tide["2024"] ? `<div class="stat"><div class="k">2024 result here</div><div class="v ${R.tide["2024"][0] > R.tide["2024"][1] ? "D" : "R"}">${R.tide["2024"][0] > R.tide["2024"][1] ? "D" : "R"} ${pts(Math.abs(R.tide["2024"][0] - R.tide["2024"][1]) / (R.tide["2024"][0] + R.tide["2024"][1]) * 100).replace("+", "+")}</div><div class="s">${fmt(R.tide["2024"][0] + R.tide["2024"][1])} two-party votes${R.redrawn_state ? " · old lines" : ""}</div></div>` : ""}`;
   renderTake(T, tot, expMid, expLo, expHi, called);
   renderWhere();
+  renderWatch(T, called);
   renderTypes(T);
   renderTraj(expMid);
   if (R.bluedog) renderBlueDog(T);
@@ -346,6 +353,22 @@ function renderTake(T, tot, expMid, expLo, expHi, called) {
     <div class="lead" style="margin-top:12px">${verdict}</div>
     <div class="note">"Expected vote" is Decision Desk HQ's estimate of the total that will be cast; it moves as the count develops. The share needed assumes the rest is a two-way vote.</div>`;
 }
+function renderWatch(T, called) {
+  const rows = countyRows().filter(r => r.est);
+  $("#s-watch").hidden = !rows.length || !!called; if (!rows.length || called) return;
+  const { a, b, pa } = T;
+  const big = rows.slice().sort((x, y) => (y.rem || 0) - (x.rem || 0))[0];
+  const tot = rows.reduce((s, r) => s + r.tot, 0);
+  if (!big || !big.rem) { $("#watch").innerHTML = `<div class="lead">Every county is essentially counted.</div>`; return; }
+  const distM = R.tide && R.tide["2024"] ? (R.tide["2024"][0] - R.tide["2024"][1]) / (R.tide["2024"][0] + R.tide["2024"][1]) * 100 : null;
+  const bell = distM == null ? null : rows.filter(r => r.m24 != null && r.est > 5000).sort((x, y) => Math.abs(-x.m24 - distM) - Math.abs(-y.m24 - distM))[0];
+  const shareLine = r => r.ash == null ? `no votes yet` : `${esc(a.lastName)} ${pct(r.ash)}, ${esc(b.lastName)} ${pct(1 - r.ash)} with ${r.pin != null ? Math.round(r.pin * 100) + "% of precincts" : fmt(r.tot) + " counted"}`;
+  const benchLine = r => r.bench == null ? "" : r.ash == null ? ` ${esc(pa === "D" ? a.lastName : b.lastName)} needs about ${pct(r.bench, 0)} here.` : ` ${esc(pa === "D" ? a.lastName : b.lastName)} needs about ${pct(r.bench, 0)} here and has ${pct(pa === "D" ? r.ash : 1 - r.ash, 0)}: <b class="${(pa === "D" ? r.ash : 1 - r.ash) >= r.bench ? "plus" : "minus"}">${(pa === "D" ? r.ash : 1 - r.ash) >= r.bench ? "on pace" : "behind pace"}</b>.`;
+  $("#watch").innerHTML = `<div class="lead"><b>${esc(big.name)}</b>: about ${fmt(big.rem)} votes still out, ${pct(big.rem / Math.max(1, rows.reduce((s, r) => s + (r.rem || 0), 0)), 0)} of everything left in the district.</div>
+    <div>${shareLine(big)}.${benchLine(big)}${big.m24 != null ? ` In 2024 it went ${big.m24 > 0 ? "Trump" : "Harris"} +${Math.abs(big.m24).toFixed(0)}.` : ""}${big.whole ? "" : " Only part of the county is in this district."}</div>
+    ${bell && bell.fips !== big.fips ? `<div style="margin-top:10px"><b>Bellwether: ${esc(bell.name)}.</b> Its 2024 presidential margin (${bell.m24 > 0 ? "Trump" : "Harris"} +${Math.abs(bell.m24).toFixed(0)}) is the closest in the district to how the whole district voted for the House (${distM > 0 ? "D" : "R"} +${Math.abs(distM).toFixed(1)}), so its count tends to look like the district's. ${shareLine(bell)}.${benchLine(bell)}</div>` : ""}
+    <div class="tiny" style="margin-top:8px">Votes still out = Decision Desk HQ's expected total for the county minus what's counted. "On pace" compares the count so far with the county benchmark from its vote-goal model.</div>`;
+}
 function countyRows() {
   if (!LIVE) return [];
   const T = tops(); if (!T) return [];
@@ -356,7 +379,7 @@ function countyRows() {
     const est = (v.liveTurnoutEstimate || {}).estimatedVotesMid || (v.voteGoal || {}).preElectionMid || null;
     const goal = (v.voteGoal || {}); const bench = T.pa === "D" ? goal.demVoteGoal : T.pa === "R" ? goal.repVoteGoal : null;
     const bl = base[fips] || {};
-    return { fips, name: v.vcu.county || v.vcu.name, whole: bl.whole !== false, av, bv, two, tot, est, rem: est ? Math.max(0, est - tot) : null, ash: two ? av / two : null, bench, m24: bl.m24, v22: bl.v22, v24: bl.v24, done: !!(v.liveTurnoutEstimate || {}).completedCounty, pin: (v.liveTurnoutEstimate || {}).precinctsTot ? (v.liveTurnoutEstimate.precinctsIn / v.liveTurnoutEstimate.precinctsTot) : null, regD: goal.democraticRegistration, regR: goal.republicanRegistration, regT: goal.totalRegistration, types: { mail: (cr[a.candId] || {}).absenteeVotes || 0, early: (cr[a.candId] || {}).earlyVotes || 0, eday: (cr[a.candId] || {}).electionDayVotes || 0, prov: (cr[a.candId] || {}).provisionalVotes || 0, bmail: (cr[b.candId] || {}).absenteeVotes || 0, bearly: (cr[b.candId] || {}).earlyVotes || 0, beday: (cr[b.candId] || {}).electionDayVotes || 0, bprov: (cr[b.candId] || {}).provisionalVotes || 0 } };
+    return { fips, name: v.vcu.county || v.vcu.name, whole: bl.whole !== false, av, bv, two, tot, est, rem: est ? Math.max(0, est - tot) : null, ash: two ? av / two : null, bench, m24: bl.m24 ?? ((DATA.county_lean || {})[fips] || [])[2] ?? null, v22: bl.v22, v24: bl.v24, done: !!(v.liveTurnoutEstimate || {}).completedCounty, pin: (v.liveTurnoutEstimate || {}).precinctsTot ? (v.liveTurnoutEstimate.precinctsIn / v.liveTurnoutEstimate.precinctsTot) : null, regD: goal.democraticRegistration, regR: goal.republicanRegistration, regT: goal.totalRegistration, types: { mail: (cr[a.candId] || {}).absenteeVotes || 0, early: (cr[a.candId] || {}).earlyVotes || 0, eday: (cr[a.candId] || {}).electionDayVotes || 0, prov: (cr[a.candId] || {}).provisionalVotes || 0, bmail: (cr[b.candId] || {}).absenteeVotes || 0, bearly: (cr[b.candId] || {}).earlyVotes || 0, beday: (cr[b.candId] || {}).electionDayVotes || 0, bprov: (cr[b.candId] || {}).provisionalVotes || 0 } };
   });
 }
 let sortBy = "rem";

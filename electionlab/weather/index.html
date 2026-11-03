@@ -119,7 +119,7 @@ function counties() { // one row per tracked county (a county in two districts c
   const rows = [];
   for (const r of Object.values(DATA.races)) { const L = LIVE[r.ddhq]; if (!L) continue;
     for (const v of L.vcuData || []) { const fips = v.vcu.countyFips || v.vcu.fips, g = v.voteGoal || {}, t = v.liveTurnoutEstimate || {};
-      rows.push({ fips, name: v.vcu.county || v.vcu.name, st: r.st, race: r.id, pre: g.preElectionMid || null, live: t.estimatedVotesMid || null, counted: t.totalVotes || 0, done: !!t.completedCounty, m24: (base[fips] || {}).m24, alerts: countyAlerts[fips] || [] }); } }
+      rows.push({ fips, name: v.vcu.county || v.vcu.name, st: r.st, race: r.id, pre: g.preElectionMid || null, live: t.estimatedVotesMid || null, counted: t.totalVotes || 0, done: !!t.completedCounty, m24: (base[fips] || {}).m24 ?? ((DATA.county_lean || {})[fips] || [])[2] ?? null, alerts: countyAlerts[fips] || [] }); } }
   return rows;
 }
 function render() {
@@ -149,7 +149,7 @@ function render() {
   const AD = grp(r => r.alerts.length && lean(r) === "D"), AR = grp(r => r.alerts.length && lean(r) === "R"), ND = grp(r => !r.alerts.length && lean(r) === "D"), NR = grp(r => !r.alerts.length && lean(r) === "R");
   $("#whoStats").innerHTML = st("Harris counties, under alert", AD) + st("Trump counties, under alert", AR) + st("Harris counties, dry", ND) + st("Trump counties, dry", NR);
   const lostD = AD.pre && AD.live != null ? AD.live - AD.pre : null, lostR = AR.pre && AR.live != null ? AR.live - AR.pre : null;
-  $("#whoLead").innerHTML = `<div class="lead">${!anyCount ? "Waiting for the first counts." : lostD == null && lostR == null ? "No 2024-lean data for the counties under alerts (that's available for the 32 board races' counties)." : `Against expectations, Harris counties under alerts are ${lostD == null ? "n/a" : (lostD >= 0 ? "+" : "") + fmt(lostD)} votes and Trump counties under alerts are ${lostR == null ? "n/a" : (lostR >= 0 ? "+" : "") + fmt(lostR)} votes.${lostD != null && lostR != null ? (lostD < lostR - 500 ? " The weather is costing Democrats more raw votes so far." : lostR < lostD - 500 ? " The weather is costing Republicans more raw votes so far." : " About even.") : ""}`}</div><div class="tiny">Lean is the county's 2024 presidential margin (whole county). Only counties in the 32 board races carry it.</div>`;
+  $("#whoLead").innerHTML = `<div class="lead">${!anyCount ? "Waiting for the first counts." : lostD == null && lostR == null ? "No 2024-lean data for the counties under alerts (that's available for the 32 board races' counties)." : `Against expectations, Harris counties under alerts are ${lostD == null ? "n/a" : (lostD >= 0 ? "+" : "") + fmt(lostD)} votes and Trump counties under alerts are ${lostR == null ? "n/a" : (lostR >= 0 ? "+" : "") + fmt(lostR)} votes.${lostD != null && lostR != null ? (lostD < lostR - 500 ? " The weather is costing Democrats more raw votes so far." : lostR < lostD - 500 ? " The weather is costing Republicans more raw votes so far." : " About even.") : ""}`}</div><div class="tiny">Lean is the county's 2024 presidential margin (whole county).</div>`;
   // pairs
   const alertRaces = new Set(Object.keys(byRace));
   const pairs = NEIGHBORS.filter(([a, b]) => alertRaces.has(a) && alertRaces.has(b) && a.slice(0, 2) !== b.slice(0, 2));
