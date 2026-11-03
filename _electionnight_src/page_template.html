@@ -21,24 +21,34 @@ main{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px
 .result .w.D{background:var(--dem)} .result .w.R{background:var(--rep)}
 .case a{color:var(--muted);font-size:12px}
 .subsel{margin-top:10px}
+.qa .q{font-family:'Source Serif 4',Georgia,serif;font-size:20px;font-weight:700;color:var(--ink);margin:0 0 6px;line-height:1.3}
+.qa .a{margin:0;color:var(--body);white-space:pre-wrap}
+.qa .m{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center;margin-top:10px;font-size:13px;color:var(--muted)}
+.qa .tg{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:999px;border:1px solid var(--line);color:var(--muted)}
+.qa .tg.up{border-color:var(--teal);color:var(--teal)}
+.qa .src{font-size:13px;color:var(--muted);margin-top:8px} .qa .src a{color:var(--muted)}
+.hb{margin-top:12px} .hb .t{font-weight:600;color:var(--ink);font-size:14px;margin-bottom:6px}
+.hb .r{display:grid;grid-template-columns:minmax(0,38%) 1fr;gap:8px;align-items:center;margin:5px 0;font-size:13px}
+.hb .l{color:var(--body);overflow-wrap:anywhere;text-align:right}
+.hb .b{display:flex;align-items:center;gap:6px;min-width:0} .hb .b i{display:block;height:14px;border-radius:4px;background:var(--muted);min-width:2px}
+.hb .b i.D{background:var(--dem)} .hb .b i.R{background:var(--rep)} .hb .b span{white-space:nowrap;color:var(--ink)}
 .score{font-family:'Source Serif 4',Georgia,serif;font-size:34px;font-weight:700;color:var(--ink)}
 </style>
 </head>
 <body>
 <header>
   <h1>Election Night 2026</h1>
-  <div class="sub">The 32 House races to watch. Pick your winners, follow the money, check your calls as results come in.</div>
+  <div class="sub">Ask the lab a question, see what it found, and look up the 32 House races to watch.</div>
   <div class="tabs" role="tablist">
-    <button class="tab on" data-s="s1" role="tab"><b>Races</b>Who wins?</button>
+    <button class="tab on" data-s="s4" role="tab"><b>Ask the lab</b>Questions &amp; answers</button>
+    <button class="tab" data-s="s1" role="tab"><b>Races</b>The 32 to watch</button>
     <button class="tab" data-s="s2" role="tab"><b>Money</b>Where it comes from</button>
-    <button class="tab" data-s="s3" role="tab"><b>Results</b>The room's calls</button>
-    <button class="tab" data-s="s4" role="tab"><b>Ask</b>Question for the lab</button>
   </div>
 </header>
 <main>
-  <section class="step on" id="s1">
-    <h2>Who wins?</h2>
-    <p class="lede">Every race at least one forecaster calls a toss-up, plus CA-13. Tap a race for each side's case, then make your call. Change your mind anytime; your last pick counts.</p>
+  <section class="step" id="s1">
+    <h2>The 32 races to watch</h2>
+    <p class="lede">Every race at least one forecaster calls a toss-up, plus CA-13. Tap a race for each side's case. Winners get marked here as races are called tonight.</p>
     <div class="filters" id="filters"></div>
     <div id="raceCards"></div>
   </section>
@@ -49,9 +59,9 @@ main{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px
     <div class="subsel"><select id="candSel" aria-label="Choose a candidate"></select></div>
     <div id="explorer"></div>
   </section>
-  <section class="step" id="s4">
+  <section class="step on" id="s4">
     <h2>Ask the lab</h2>
-    <p class="lede">Send a question about tonight's numbers. It goes to Nate, not straight to the big screen; he picks which questions to put to the lab.</p>
+    <p class="lede">Send a question about tonight's numbers. It goes to Nate; he picks which questions to put to the lab, and the answers show up below.</p>
     <div class="card">
       <label for="qText" style="font-weight:600;color:var(--ink)">Your question</label>
       <textarea id="qText" maxlength="280" rows="4" placeholder="e.g. Is turnout up more in Democratic or Republican counties than in 2022?" style="width:100%;margin-top:6px;font:16px 'IBM Plex Sans',sans-serif;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--paper);color:var(--ink)"></textarea>
@@ -61,31 +71,25 @@ main{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px
       <p class="status" id="qStatus" aria-live="polite"></p>
     </div>
     <div id="qMine"></div>
-  </section>
-  <section class="step" id="s3">
-    <h2>The room's calls</h2>
-    <p class="lede" id="resLede">Winners get marked here as races are called tonight.</p>
-    <div class="card room" id="scoreCard" hidden></div>
-    <div id="tallyCards"></div>
+    <h2 style="margin-top:22px">Asked &amp; answered</h2>
+    <p class="status" id="ansStamp">Checking for answers…</p>
+    <div id="ansFeed"></div>
   </section>
 </main>
 <footer id="foot"></footer>
 <script>
 const RACES = /*RACES*/[];
 const MONEY = /*MONEY*/{};
-const BASE = "https://ntfy.sh/ucm-eln-2026-a03f51";
 const QBASE = "https://ntfy.sh/ucm-eln-2026-q-6525225a";  // questions for the lab; Nate reads them at /electionnight/questions.html
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const ls = { get(k, d) { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch(e) { return d; } },
              set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch(e) {} } };
 let voter = ls.get("eln_voter", null); if (!voter) { voter = Math.random().toString(36).slice(2, 10); ls.set("eln_voter", voter); }
-let mine = ls.get("eln_mine", {});
 let RESULTS = { races: {} };
 const short = r => r.label.split(" · ")[0];
 function show(s) { document.querySelectorAll(".tab").forEach(t => t.classList.toggle("on", t.dataset.s === s)); document.querySelectorAll(".step").forEach(x => x.classList.toggle("on", x.id === s)); ls.set("eln_tab", s); }
 document.querySelectorAll(".tab").forEach(t => t.addEventListener("click", () => show(t.dataset.s)));
-const urlStep = new URLSearchParams(location.search).get("step"); show(urlStep ? "s" + urlStep : ls.get("eln_tab", "s1"));
-async function send(obj) { try { await fetch(BASE, {method: "POST", body: JSON.stringify(Object.assign({v: voter}, obj))}); } catch(e) {} }
+const urlStep = new URLSearchParams(location.search).get("step"), savedTab = ls.get("eln_tab", "s4"); show(urlStep && ["1","2","4"].includes(urlStep) ? "s" + urlStep : ["s1","s2","s4"].includes(savedTab) ? savedTab : "s4");
 
 /* races */
 const GROUPS = [["all","All 32"],["talk","Talk races"],["rheld","Republican seats"],["dheld","Democratic seats"],["open","Open seats"]];
@@ -96,7 +100,7 @@ function renderFilters() {
   document.querySelectorAll("#filters .chipbtn").forEach(b => b.onclick = () => { grp = b.dataset.g; ls.set("eln_grp", grp); renderFilters(); renderCards(); });
 }
 function resultLine(r) { const x = RESULTS.races[r.id]; if (!x || !x.called) return x && x.pct_in != null ? `<div class="result">${x.pct_in}% counted · ${esc(r.d.split(" ").slice(-1)[0])} ${x.d_pct ?? "–"}%, ${esc(r.r.split(" ").slice(-1)[0])} ${x.r_pct ?? "–"}%</div>` : "";
-  return `<div class="result"><span class="w ${x.called}">Winner</span>${esc(x.called === "D" ? r.d : r.r)}${mine["r_" + r.id] ? (mine["r_" + r.id] === x.called ? " · you called it" : " · you picked the other side") : ""}</div>`; }
+  return `<div class="result"><span class="w ${x.called}">Winner</span>${esc(x.called === "D" ? r.d : r.r)}</div>`; }
 function renderCards() {
   document.getElementById("raceCards").innerHTML = RACES.filter(inGroup).map(r => `
     <div class="card"><div class="race-h tap ${open[r.id] ? "open" : ""}" data-x="${esc(r.id)}" role="button" aria-expanded="${open[r.id] ? "true" : "false"}"><span class="race-name">${esc(r.label)}</span><span class="race-note">${esc(r.incumbent || "")}</span></div>
@@ -106,41 +110,12 @@ function renderCards() {
       <div class="cases ${open[r.id] ? "on" : ""}">
         <div class="case d"><b>Why ${esc(r.d)} wins</b><ul>${r.d_case.map(s => `<li>${esc(s.text)}${s.url ? ` <a href="${esc(s.url)}" target="_blank" rel="noopener">source</a>` : ""}</li>`).join("")}</ul></div>
         <div class="case r"><b>Why ${esc(r.r)} wins</b><ul>${r.r_case.map(s => `<li>${esc(s.text)}${s.url ? ` <a href="${esc(s.url)}" target="_blank" rel="noopener">source</a>` : ""}</li>`).join("")}</ul></div>
-      </div>
-      <div class="picks">
-        <button class="pick d ${mine["r_" + r.id] === "D" ? "on" : ""}" data-r="${esc(r.id)}" data-p="D">${esc(r.d)}<small>Democrat</small></button>
-        <button class="pick r ${mine["r_" + r.id] === "R" ? "on" : ""}" data-r="${esc(r.id)}" data-p="R">${esc(r.r)}<small>Republican</small></button>
       </div>${resultLine(r)}</div>`).join("");
   document.querySelectorAll("#raceCards [data-x]").forEach(h => h.addEventListener("click", () => { open[h.dataset.x] = !open[h.dataset.x]; renderCards(); }));
-  document.querySelectorAll(".pick").forEach(b => b.addEventListener("click", () => { mine["r_" + b.dataset.r] = b.dataset.p; ls.set("eln_mine", mine); renderCards(); send({q: "race", r: b.dataset.r, a: b.dataset.p}); }));
 }
 
-/* room tally + results */
-let tally = {}, callers = 0;
-async function refresh() {
-  try { const t = await (await fetch(BASE + "/json?poll=1&since=all")).text();
-    const last = {}; t.split("\n").filter(Boolean).map(l => { try { return JSON.parse(l); } catch(e) { return null; } }).filter(m => m && m.event === "message").sort((a, b) => a.time - b.time)
-      .forEach(m => { let x; try { x = JSON.parse(m.message); } catch(e) { return; } if (x && x.v && x.q === "race" && (x.a === "D" || x.a === "R") && RACES.some(r => r.id === x.r)) last[x.v + "|" + x.r] = x; });
-    tally = {}; const who = new Set(); Object.values(last).forEach(x => { tally[x.r] = tally[x.r] || {D: 0, R: 0}; tally[x.r][x.a]++; who.add(x.v); }); callers = who.size;
-  } catch(e) {}
-  renderTally();
-}
-async function loadResults() { try { const r = await fetch("results.json?t=" + Date.now()); if (r.ok) { RESULTS = await r.json(); renderCards(); renderTally(); } } catch(e) {} }
-function renderTally() {
-  const called = RACES.filter(r => RESULTS.races[r.id] && RESULTS.races[r.id].called);
-  const roomRight = called.filter(r => { const c = tally[r.id]; return c && c.D + c.R && ((c.D >= c.R ? "D" : "R") === RESULTS.races[r.id].called); }).length;
-  const myCalled = called.filter(r => mine["r_" + r.id]); const myRight = myCalled.filter(r => mine["r_" + r.id] === RESULTS.races[r.id].called).length;
-  const sc = document.getElementById("scoreCard");
-  sc.hidden = !called.length;
-  sc.innerHTML = called.length ? `<div class="stats"><div class="stat"><div class="score">${called.length} / ${RACES.length}</div><div class="lbl">races called</div></div>
-    <div class="stat"><div class="score">${roomRight} / ${called.length}</div><div class="lbl">the room got right</div></div>
-    <div class="stat"><div class="score">${myRight} / ${myCalled.length}</div><div class="lbl">you got right</div></div></div>` : "";
-  document.getElementById("resLede").textContent = `${callers} ${callers === 1 ? "person has" : "people have"} made calls. Winners get marked as races are called tonight.`;
-  document.getElementById("tallyCards").innerHTML = RACES.map(r => { const c = tally[r.id] || {D: 0, R: 0}; const n = c.D + c.R; const pd = n ? Math.round(100 * c.D / n) : 50; const x = RESULTS.races[r.id];
-    const ln = s => esc(s.split(" ").slice(-1)[0]);
-    return `<div style="margin:12px 0"><div class="race-h"><span class="race-name" style="font-size:16px">${esc(short(r))}${x && x.called ? ` <span class="race-note">· winner: ${esc(x.called === "D" ? r.d : r.r)}</span>` : ""}</span><span class="race-note">${n} call${n === 1 ? "" : "s"}</span></div>
-      <div class="bar"><span class="bd" style="width:${pd}%">${n ? ln(r.d) + " " + pd + "%" : ""}</span><span class="br" style="width:${100 - pd}%">${n ? ln(r.r) + " " + (100 - pd) + "%" : ""}</span></div></div>`; }).join("");
-}
+/* winners (Nate's working chat edits results.json) */
+async function loadResults() { try { const r = await fetch("results.json?t=" + Date.now()); if (r.ok) { RESULTS = await r.json(); renderCards(); } } catch(e) {} }
 
 /* money explorer */
 const GRID = {AK:[0,0],ME:[0,11],VT:[1,10],NH:[1,11],WA:[2,1],ID:[2,2],MT:[2,3],ND:[2,4],MN:[2,5],IL:[2,6],WI:[2,7],MI:[2,8],NY:[2,9],RI:[2,10],MA:[2,11],OR:[3,1],NV:[3,2],WY:[3,3],SD:[3,4],IA:[3,5],IN:[3,6],OH:[3,7],PA:[3,8],NJ:[3,9],CT:[3,10],CA:[4,1],UT:[4,2],CO:[4,3],NE:[4,4],MO:[4,5],KY:[4,6],WV:[4,7],VA:[4,8],MD:[4,9],DE:[4,10],AZ:[5,2],NM:[5,3],KS:[5,4],AR:[5,5],TN:[5,6],NC:[5,7],SC:[5,8],DC:[5,9],OK:[6,4],LA:[6,5],MS:[6,6],AL:[6,7],GA:[6,8],HI:[7,0],TX:[7,4],FL:[7,9]};
@@ -198,11 +173,30 @@ document.getElementById("qSend").onclick = () => {
 };
 renderQMine();
 
-// The poll service limits requests per internet connection, and a room full of phones on one Wi-Fi shares one. So the room's tally
-// refreshes only while the Results tab is open and the phone is awake, every 45-60 seconds.
-function tallyTick() { if (document.visibilityState === "visible" && document.getElementById("s3").classList.contains("on")) refresh(); }
-renderFilters(); renderCards(); renderExplorer(); refresh(); loadResults(); setInterval(tallyTick, 45000 + Math.random() * 15000); setInterval(loadResults, 60000);
-document.querySelectorAll(".tab").forEach(t => t.addEventListener("click", () => { if (t.dataset.s === "s3") refresh(); }));
+/* asked & answered: the lab's answers, copied here from the big-screen dashboard by Nate's working chat (answers.json on this site) */
+let ANS = null;
+const ptT = iso => { try { return new Date(iso).toLocaleTimeString("en-US", {hour: "numeric", minute: "2-digit", timeZone: "America/Los_Angeles"}) + " PT"; } catch(e) { return ""; } };
+const num = (v, u) => u === "$" ? fmt$(v) : (+v).toLocaleString("en-US", {maximumFractionDigits: 1}) + (u || "");
+function chartHTML(c) {
+  if (!c || !c.bars || !c.bars.length) return "";
+  const mx = Math.max(1, ...c.bars.map(b => Math.abs(+b.value || 0)));
+  return `<div class="hb"><div class="t">${esc(c.title)}</div>${c.bars.map(b => `<div class="r"><span class="l">${esc(b.label)}</span><span class="b"><i class="${b.party === "D" || b.party === "R" ? b.party : ""}" style="width:${Math.max(1, Math.abs(+b.value || 0) / mx * 72)}%"></i><span>${esc(num(b.value, c.unit))}</span></span></div>`).join("")}</div>`;
+}
+function renderAnswers() {
+  const st = document.getElementById("ansStamp"), el = document.getElementById("ansFeed");
+  if (!ANS) { st.textContent = "Answers will show up here once the lab starts taking questions."; el.innerHTML = ""; return; }
+  const items = (ANS.items || []).filter(a => a && a.q);
+  st.textContent = items.length ? `${items.length} answered · checked for new answers every minute · last update ${ptT(ANS.updated)}` : "Nothing answered yet. Answers show up here as the lab takes questions.";
+  el.innerHTML = items.map(a => `<div class="card qa"><p class="q">${esc(a.q)}</p><p class="a">${esc(a.a)}</p>${chartHTML(a.chart)}
+    ${a.src && a.src.length ? `<div class="src">Sources: ${a.src.map(x => `<a href="${esc(x.u)}" target="_blank" rel="noopener">${esc(x.t || x.u)}</a>`).join(" · ")}</div>` : ""}
+    <div class="m">${a.by === "lab" ? `<span class="tg">Researched by the lab</span>` : ""}${a.keep ? `<span class="tg up">Updates every 10 min</span>` : ""}<span>${a.updated && a.updated !== a.at ? "Updated " + ptT(a.updated) : "Answered " + ptT(a.at)}</span></div></div>`).join("");
+}
+async function loadAnswers() { try { const r = await fetch("answers.json?t=" + Date.now()); if (r.ok) ANS = await r.json(); } catch(e) {} renderAnswers(); }
+// One small file from this site (not the poll service), checked every minute while the phone is awake.
+const visible = () => document.visibilityState === "visible";
+renderFilters(); renderCards(); renderExplorer(); loadResults(); loadAnswers();
+setInterval(() => { if (visible()) { loadAnswers(); loadResults(); } }, 60000);
+document.addEventListener("visibilitychange", () => { if (visible()) loadAnswers(); });
 </script>
 </body>
 </html>
