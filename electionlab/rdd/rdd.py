@@ -356,4 +356,11 @@ if __name__ == "__main__":
     hist.append({"t": R["run_at"], "n": R["data"]["counties_with_votes"], "H1": (R["hypotheses"][0].get("table") or [{}])[0].get("est"), "H2": next((x["est"] for x in R["hypotheses"][1].get("table", []) if x["term"].startswith("restrictive x rain")), None), "H3": (R["hypotheses"][2].get("table") or [{}])[0].get("est")})
     json.dump(hist[-200:], open(hist_p, "w"))
     json.dump(R, open(os.path.join(OUT, "results.json"), "w"), indent=1)
+    # every county's count tonight, for the dashboard's Turnout view and the mirror: fips -> [votes counted, done, D votes, R votes, % of live expected vote]
+    # (D and R votes are blank for counties touched by a race without both major parties)
+    try:
+        cl = {f: [int(a["counted"]), 1 if a["done"] else 0, None if a.get("uncontested") else int(a["dem"]), None if a.get("uncontested") else int(a["rep"]), int(round(100 * a["counted"] / a["live"])) if a["live"] else 0]
+              for f, a in agg.items() if a["counted"] > 0}
+        json.dump({"at": R["run_at"], "n": len(cl), "c": cl}, open(os.path.join(OUT, "..", "counties_live.json"), "w"), separators=(",", ":"))
+    except Exception as e: print("counties_live failed", e, file=sys.stderr)
     print(json.dumps({"counties": R["data"], "verdicts": [h.get("verdict") for h in R["hypotheses"]], "seconds": R["seconds"]}))

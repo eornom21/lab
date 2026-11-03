@@ -187,8 +187,8 @@ function renderCards() {
       <div class="rating"><span>Cook: ${esc(r.cook)}</span><span>Sabato: ${esc(r.sabato)}</span><span>Inside Elections: ${esc(r.inside)}</span></div>
       <div class="more-hint" data-x="${esc(r.id)}">${open[r.id] ? "Hide each side’s case" : "Tap for each side’s case"}</div>
       <div class="cases ${open[r.id] ? "on" : ""}">
-        <div class="case d"><b>Why ${esc(r.d)} wins</b><ul>${r.d_case.map(s => `<li>${esc(s.text)}${s.url ? ` <a href="${esc(s.url)}" target="_blank" rel="noopener">source</a>` : ""}</li>`).join("")}</ul></div>
-        <div class="case r"><b>Why ${esc(r.r)} wins</b><ul>${r.r_case.map(s => `<li>${esc(s.text)}${s.url ? ` <a href="${esc(s.url)}" target="_blank" rel="noopener">source</a>` : ""}</li>`).join("")}</ul></div>
+        <div class="case d"><b>The case for ${esc(r.d)}</b><ul>${r.d_case.map(s => `<li>${esc(s.text)}${s.url ? ` <a href="${esc(s.url)}" target="_blank" rel="noopener">source</a>` : ""}</li>`).join("")}</ul></div>
+        <div class="case r"><b>The case for ${esc(r.r)}</b><ul>${r.r_case.map(s => `<li>${esc(s.text)}${s.url ? ` <a href="${esc(s.url)}" target="_blank" rel="noopener">source</a>` : ""}</li>`).join("")}</ul></div>
       </div>${resultLine(r)}</div>`).join("");
   document.querySelectorAll("#raceCards [data-x]").forEach(h => h.addEventListener("click", () => { open[h.dataset.x] = !open[h.dataset.x]; renderCards(); }));
 }

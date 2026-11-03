@@ -411,7 +411,9 @@ function renderTop() {
   else {
     const row = (n, v, b) => { const h = v[0] + v[1], g = v[2] + v[3]; if (!h || !g) return `<tr><td>${n}</td><td colspan="3">–</td></tr>`; const ds = v[0] / h, gs = v[2] / g, df = (ds - gs) * 100;
       return `<tr><td>${b ? "<b>" + n + "</b>" : n}</td><td>${pct(ds)}</td><td>${pct(gs)}</td><td class="${df >= 0 ? "plus" : "minus"}">${sgn(df)}</td></tr>`; };
-    $("#perf").innerHTML = `<table><thead><tr><th>County</th><th>${esc(last(Y.d))}</th><th>${esc(Y.top_d)}</th><th>Gap</th></tr></thead><tbody>${C.map(n => row(esc(n) + (year === "2026" && D.county_reg_2026[n] > D.reg["2026"][n][0] * 1.01 ? ' <span class="flag">*</span>' : ""), Y.by[n])).join("")}${row("District", Y.total, true)}</tbody></table>`;
+    // District row: the governor numbers are whole-county, so weight each county's governor share by the in-district House vote
+    const wG = (() => { let hs = 0, gs = 0; for (const n of C) { const v = Y.by[n], h = v[0] + v[1], g = v[2] + v[3]; if (h && g) { hs += h; gs += v[2] / g * h; } } return hs ? [Y.total[0], Y.total[1], gs, hs - gs] : Y.total; })();
+    $("#perf").innerHTML = `<table><thead><tr><th>County</th><th>${esc(last(Y.d))}</th><th>${esc(Y.top_d)}</th><th>Gap</th></tr></thead><tbody>${C.map(n => row(esc(n) + (year === "2026" && D.county_reg_2026[n] > D.reg["2026"][n][0] * 1.01 ? ' <span class="flag">*</span>' : ""), Y.by[n])).join("")}${row("District (governor shares weighted by in-district House votes)", wG, true)}</tbody></table>`;
   }
   $("#perfNote").textContent = year === "2026"
     ? "Shares of the two-party vote. Gap: points the Democratic House candidate runs ahead (+) or behind (−) the Democrat for governor. * The governor's numbers cover the whole county while the House numbers cover only the district's part, so read starred rows loosely. Merced is entirely in the district."
@@ -521,7 +523,7 @@ function renderPace() {
     <div class="sl" style="margin-top:6px"><label for="paceSl">Compare at this many votes counted <output id="paceOut">${fmt(paceN)}</output></label>
       <input type="range" id="paceSl" min="1000" max="${top}" step="500" value="${paceN}"><small>${now ? "Starts at tonight's count; slide to look back." : "Slide to see where Gray stood at each point in the count."}</small></div>
     <div class="pread">${card("2026", T, "now")}${card("2022", S22, "")}${card("2024", S24, "")}</div>
-    ${verdict ? `<p style="margin:6px 0 0;font-weight:600;color:var(--ink)">Tonight at this count: ${verdict}</p>` : ""}`;
+    ${verdict ? `<p style="margin:6px 0 0;font-weight:600;color:var(--ink)">Tonight at this count: ${verdict}</p><p class="note" style="margin:4px 0 0">The 2026 district is new lines (Stockton added), about 4 points bluer by registration than 2024's, so part of any gain is the map, not the candidate; Merced is the one like-for-like county in the By county view.</p>` : ""}`;
   const sl = $("#paceSl"); sl.oninput = () => { paceTouched = true; paceN = +sl.value; renderPace(); const s2 = $("#paceSl"); s2 && s2.focus(); };
   $("#paceNote").innerHTML = esc(PACE.note || "") + (PACE.src ? " Sources: " + PACE.src.map(([t2, u]) => `<a href="${esc(u)}" target="_blank" rel="noopener">${esc(t2)}</a>`).join("; ") + "." : "");
 }

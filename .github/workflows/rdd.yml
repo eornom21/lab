@@ -40,7 +40,7 @@ jobs:
             git pull --rebase -q origin main || true
             python3 electionlab/caucus/build_live.py || echo "caucus build failed; keeping the old live.json"
             python3 electionlab/rdd/rdd.py || echo "rdd failed; keeping the old results"
-            git add electionlab/caucus/live.json electionlab/weather/counties.json electionlab/rdd/results.json electionlab/rdd/history.json electionlab/rdd/rain_cache.json electionlab/rdd/fig_h1.svg electionlab/rdd/fig_h2.svg electionlab/rdd/fig_h3.svg 2>/dev/null || true
+            git add electionlab/caucus/live.json electionlab/weather/counties.json electionlab/counties_live.json electionlab/rdd/results.json electionlab/rdd/history.json electionlab/rdd/rain_cache.json electionlab/rdd/fig_h1.svg electionlab/rdd/fig_h2.svg electionlab/rdd/fig_h3.svg 2>/dev/null || true
             if git diff --cached --quiet; then echo "no change $(date -u +%H:%MZ)"; else
               git commit -q -m "loop: results $(date -u +%H:%MZ)"
               for i in 1 2 3; do git pull --rebase -q origin main && git push -q origin main && break || sleep 5; done

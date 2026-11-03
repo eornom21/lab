@@ -259,7 +259,7 @@ function fillHow() {
 function renderStatic() {
   // each side's case
   if (R.d_case && R.d_case.length) { $("#s-cases").hidden = false;
-    const c = (p, name, list) => `<div class="case ${p}"><b>Why ${esc(name)} wins</b><ul>${list.map(s => `<li>${esc(s.text)}${s.url ? ` <a href="${esc(s.url)}" target="_blank" rel="noopener">source</a>` : ""}</li>`).join("")}</ul></div>`;
+    const c = (p, name, list) => `<div class="case ${p}"><b>The case for ${esc(name)}</b><ul>${list.map(s => `<li>${esc(s.text)}${s.url ? ` <a href="${esc(s.url)}" target="_blank" rel="noopener">source</a>` : ""}</li>`).join("")}</ul></div>`;
     $("#cases").innerHTML = c("D", R.d, R.d_case) + c("R", R.r, R.r_case); }
   // money
   if (R.money && (R.money.D || R.money.R)) { $("#s-money").hidden = false;
@@ -270,9 +270,9 @@ function renderStatic() {
        <div class="tiny" style="margin-top:8px">Itemized gifts cover ${esc(x.cov || "the latest filings")}.</div></div>`;
     $("#money").innerHTML = m("D", R.d || "Democrat", R.money.D) + m("R", R.r || "Republican", R.money.R); $("#moneyStamp").textContent = "FEC, pulled Oct 30, 2026"; }
   // past results
-  const yrs = Object.keys(R.past || {});
+  const yrs = Object.keys(R.past || {}).filter(y => +y >= 2022);  // earlier cycles used the pre-2020-census lines: same number, often different voters
   if (yrs.length) { $("#s-past").hidden = false;
-    $("#pastSub").textContent = "House results for " + R.id + " in past general elections. District lines changed after the 2020 census" + (R.redrawn_state ? ", and again for 2026" : "") + ", so earlier years are the same district number, not always the same voters.";
+    $("#pastSub").textContent = "House results for " + R.id + " under the lines drawn after the 2020 census" + (R.redrawn_state ? ". The lines changed again for 2026, so these are the previous district's voters, not exactly tonight's." : ".");
     $("#past").innerHTML = yrs.map(y => { const p = R.past[y], t = p.d + p.r, ds = t ? p.d / t : null;
       return `<div class="yr"><div class="y">${y}${+y % 4 ? " · midterm" : " · presidential"}</div><div class="w ${p.win || ""}">${p.win === "D" ? "D" : p.win === "R" ? "R" : "–"} ${ds != null ? pts((ds - 0.5) * 200 * (p.win === "R" ? -1 : 1)).replace("+", "+") : ""}</div><div class="s">${ds != null ? `<span class="D">${pct(ds)}</span> · <span class="R">${pct(1 - ds)}</span>` : "no D vs R race"}</div><div class="tiny">${esc(p.win === "D" ? p.dn : p.win === "R" ? p.rn : "")}</div></div>`; }).join(""); }
   $("#foot").innerHTML = `Live results: Decision Desk HQ's public feed, read by this page every minute. County baselines: ${esc(DATA.sources.counties)}. Past results: ${esc(DATA.sources.past)}. Money: ${esc(DATA.sources.money)}. Built by the UC Merced CAPE Election Lab.`;
@@ -324,6 +324,7 @@ function renderLive() {
   $("#scoreStats").innerHTML = `<div class="stat"><div class="k">Expected vote counted</div><div class="v">${inPct == null ? "–" : Math.round(inPct * 100) + "%"}</div><div class="s">${fmt(tot)} of about ${fmt(expMid)}</div></div>
     <div class="stat"><div class="k">Precincts reporting</div><div class="v">${tu.precincts_tot ? Math.round(100 * tu.precincts_in / tu.precincts_tot) + "%" : "–"}</div><div class="s">${tu.precincts_tot ? fmt(tu.precincts_in) + " of " + fmt(tu.precincts_tot) : "not reported"}</div></div>
     <div class="stat"><div class="k">Votes left (est.)</div><div class="v">${expMid ? fmt(Math.max(0, expMid - tot)) : "–"}</div><div class="s">${expLo && expHi && expLo !== expHi ? `between ${fmt(Math.max(0, expLo - tot))} and ${fmt(Math.max(0, expHi - tot))}` : "Decision Desk HQ estimate"}</div></div>
+    ${capeStat(a, pa, two)}
     ${R.tide && R.tide["2024"] ? `<div class="stat"><div class="k">2024 result here</div><div class="v ${R.tide["2024"][0] > R.tide["2024"][1] ? "D" : "R"}">${R.tide["2024"][0] > R.tide["2024"][1] ? "D" : "R"} ${pts(Math.abs(R.tide["2024"][0] - R.tide["2024"][1]) / (R.tide["2024"][0] + R.tide["2024"][1]) * 100).replace("+", "+")}</div><div class="s">${fmt(R.tide["2024"][0] + R.tide["2024"][1])} two-party votes${R.redrawn_state ? " · old lines" : ""}</div></div>` : ""}`;
   renderTake(T, tot, expMid, expLo, expHi, called);
   renderWhere();
@@ -332,22 +333,33 @@ function renderLive() {
   renderTraj(expMid);
   if (R.bluedog) renderBlueDog(T);
 }
+// CAPE score: a's two-way margin tonight minus Decision Desk HQ's pre-election forecast margin for a's party, in points
+function capeStat(a, pa, two) {
+  const fc = (LIVE && LIVE.forecast) || {}; if (!two || !(pa === "D" || pa === "R")) return "";
+  const mine = (fc.parties || []).find(p => p.abbrev === (pa === "D" ? "DEM" : "GOP"));
+  let exp = mine && mine.margin != null ? mine.margin : null;
+  if (exp == null && fc.margin != null && fc.leadingParty) exp = ((fc.leadingParty.abbrev === "DEM") === (pa === "D")) ? fc.margin : -fc.margin;
+  if (exp == null) return "";
+  const m = (a.votes / two - 0.5) * 200, cape = m - exp;
+  return `<div class="stat"><div class="k">CAPE score</div><div class="v ${cape > 0 ? "plus" : cape < 0 ? "minus" : ""}">${pts(cape)}</div><div class="s">${esc(a.lastName)}'s two-way margin vs. Decision Desk HQ's pre-election forecast (${esc(fc.ratingWithParty || "")}, ${pa} ${pts(exp)}): points better or worse than expected</div></div>`;
+}
 function renderTake(T, tot, expMid, expLo, expHi, called) {
   const { a, b } = T;
   if (called) { $("#take").innerHTML = `<div class="lead">The race is called. ${esc(called.firstName + " " + called.lastName)} wins.</div>`; return; }
   if (!tot || !expMid) { $("#take").innerHTML = `<div class="wait">Nothing counted yet. This fills in with the first results.</div>`; return; }
   const lead = a.votes >= b.votes ? a : b, trail = lead === a ? b : a, gap = Math.abs(a.votes - b.votes);
+  const twoF = tot ? (a.votes + b.votes) / tot : 1;  // the two candidates' share of all votes so far: remaining votes are scaled to two-way
   const need = rem => rem > 0 ? (gap + rem) / (2 * rem) : null;  // share of the remaining two-way vote the trailer needs to tie
-  const rem = Math.max(0, expMid - tot), remLo = expLo ? Math.max(0, expLo - tot) : null, remHi = expHi ? Math.max(0, expHi - tot) : null;
+  const rem = Math.max(0, expMid - tot) * twoF, remLo = expLo ? Math.max(0, expLo - tot) * twoF : null, remHi = expHi ? Math.max(0, expHi - tot) * twoF : null;
   const n = need(rem), nLo = remHi ? need(remHi) : null, nHi = remLo ? need(remLo) : null;  // more votes left → smaller share needed
-  const trailShare = tot ? trail.votes / (a.votes + b.votes) : 0;
+  const trailShare = tot ? trail.votes / (a.votes + b.votes) : 0, pace = n == null ? null : n - trailShare;  // how far above the trailer's pace so far
   let verdict;
   if (rem <= 0) verdict = "By the expected-vote estimate the count is essentially done.";
   else if (n == null || n > 1) verdict = `${esc(trail.lastName)} can't catch up even with every remaining vote, if the estimate holds.`;
-  else if (n > 0.75) verdict = `${esc(trail.lastName)} would need a landslide of what's left. Very hard.`;
-  else if (n > 0.6) verdict = `A long shot: ${esc(trail.lastName)} would have to run far ahead of the current pace in what's left.`;
-  else if (n > 0.52) verdict = `Possible but uphill: it depends on where the remaining votes are.`;
-  else verdict = `Wide open: ${esc(trail.lastName)} needs only a little better than a split of what's left.`;
+  else if (pace > 0.15 || n > 0.75) verdict = `Very hard: ${esc(trail.lastName)} needs ${Math.round(n * 100)}% of what's left after getting ${Math.round(trailShare * 100)}% so far.`;
+  else if (pace > 0.05) verdict = `A long shot: ${esc(trail.lastName)} needs ${Math.round(n * 100)}% of what's left, well above the ${Math.round(trailShare * 100)}% so far.`;
+  else if (pace > 0) verdict = `Uphill but close: ${esc(trail.lastName)} needs ${Math.round(n * 100)}% of what's left, a bit above the ${Math.round(trailShare * 100)}% so far.`;
+  else verdict = `Within reach: ${esc(trail.lastName)} is already winning the count at the rate needed; it depends on which ballots remain.`;
   $("#take").innerHTML = `<div class="stats" style="margin-top:0">
       <div class="stat"><div class="k">${esc(lead.lastName)} leads by</div><div class="v">${fmt(gap)}</div><div class="s">votes</div></div>
       <div class="stat"><div class="k">Votes left (est.)</div><div class="v">${fmt(rem)}</div><div class="s">${remLo != null && remHi != null && remLo !== remHi ? `${fmt(remLo)} to ${fmt(remHi)}` : ""}</div></div>
@@ -363,13 +375,13 @@ function renderWatch(T, called) {
   const big = rows.slice().sort((x, y) => (y.rem || 0) - (x.rem || 0))[0];
   const tot = rows.reduce((s, r) => s + r.tot, 0);
   if (!big || !big.rem) { $("#watch").innerHTML = `<div class="lead">Every county is essentially counted.</div>`; return; }
-  const distM = R.tide && R.tide["2024"] ? (R.tide["2024"][0] - R.tide["2024"][1]) / (R.tide["2024"][0] + R.tide["2024"][1]) * 100 : null;
+  const distM = !R.redrawn_state && R.tide && R.tide["2024"] ? (R.tide["2024"][0] - R.tide["2024"][1]) / (R.tide["2024"][0] + R.tide["2024"][1]) * 100 : null;  // not for redrawn districts: the 2024 House result is for different lines
   const bell = distM == null ? null : rows.filter(r => r.m24 != null && r.est > 5000).sort((x, y) => Math.abs(-x.m24 - distM) - Math.abs(-y.m24 - distM))[0];
   const shareLine = r => r.ash == null ? `no votes yet` : `${esc(a.lastName)} ${pct(r.ash)}, ${esc(b.lastName)} ${pct(1 - r.ash)} with ${r.pin != null ? Math.round(r.pin * 100) + "% of precincts" : fmt(r.tot) + " counted"}`;
-  const benchLine = r => r.bench == null ? "" : r.ash == null ? ` ${esc(pa === "D" ? a.lastName : b.lastName)} needs about ${pct(r.bench, 0)} here.` : ` ${esc(pa === "D" ? a.lastName : b.lastName)} needs about ${pct(r.bench, 0)} here and has ${pct(pa === "D" ? r.ash : 1 - r.ash, 0)}: <b class="${(pa === "D" ? r.ash : 1 - r.ash) >= r.bench ? "plus" : "minus"}">${(pa === "D" ? r.ash : 1 - r.ash) >= r.bench ? "on pace" : "behind pace"}</b>.`;
+  const benchLine = r => r.bench == null || pa === "O" ? "" : r.ash == null ? ` ${esc(a.lastName)} needs about ${pct(r.bench, 0)} here.` : ` ${esc(a.lastName)} needs about ${pct(r.bench, 0)} here and has ${pct(r.ash, 0)}: <b class="${r.ash >= r.bench ? "plus" : "minus"}">${r.ash >= r.bench ? "on pace" : "behind pace"}</b>.`;
   $("#watch").innerHTML = `<div class="lead"><b>${esc(big.name)}</b>: about ${fmt(big.rem)} votes still out, ${pct(big.rem / Math.max(1, rows.reduce((s, r) => s + (r.rem || 0), 0)), 0)} of everything left in the district.</div>
     <div>${shareLine(big)}.${benchLine(big)}${big.m24 != null ? ` In 2024 it went ${big.m24 > 0 ? "Trump" : "Harris"} +${Math.abs(big.m24).toFixed(0)}.` : ""}${big.whole ? "" : " Only part of the county is in this district."}</div>
-    ${bell && bell.fips !== big.fips ? `<div style="margin-top:10px"><b>Bellwether: ${esc(bell.name)}.</b> Its 2024 presidential margin (${bell.m24 > 0 ? "Trump" : "Harris"} +${Math.abs(bell.m24).toFixed(0)}) is the closest in the district to how the whole district voted for the House (${distM > 0 ? "D" : "R"} +${Math.abs(distM).toFixed(1)}), so its count tends to look like the district's. ${shareLine(bell)}.${benchLine(bell)}</div>` : ""}
+    ${bell && bell.fips !== big.fips ? `<div style="margin-top:10px"><b>Bellwether: ${esc(bell.name)}.</b> Its 2024 presidential margin (${bell.m24 > 0 ? "Trump" : "Harris"} +${Math.abs(bell.m24).toFixed(0)}) is the closest of any county here to the district's 2024 House result (${distM > 0 ? "D" : "R"} +${Math.abs(distM).toFixed(1)}); a rough guide to how the district leans, not a model. ${shareLine(bell)}.${benchLine(bell)}</div>` : ""}
     <div class="tiny" style="margin-top:8px">Votes still out = Decision Desk HQ's expected total for the county minus what's counted. "On pace" compares the count so far with the county benchmark from its vote-goal model.</div>`;
 }
 function countyRows() {
@@ -481,7 +493,7 @@ function renderBlueDog(T) {
   $("#bd").innerHTML = `<div class="bd">
     ${blocks.length ? blocks.map(b => line(b.diff, b.title.replace("vs. ", "") + ` across the ${b.n} count${b.n === 1 ? "y" : "ies"} with votes`)).join("") : comps.length ? `<div class="lead">Waiting for the first votes to compare with ${comps.map(c => esc(c.name) + " for " + c.office).join(" and ")}.</div>` : `<div class="lead">No Senate or governor race in ${esc(R.st)} this year, so no statewide Democrat to compare with.</div>`}
     ${line(hd, `Harris's 2024 share in the same ${hn} count${hn === 1 ? "y" : "ies"}`)}
-    ${line(rd, `Democrats' share of two-party registration in these counties`)}
+    ${line(rd, `Democrats' share of two-party registration in these counties (context, not a benchmark: party registration where the state has it)`)}
     <div class="note">Shares are two-way (Democrat vs. Republican), weighted by this race's votes in each county, so the big counties count most. Where only part of a county is in the district, the comparison uses the whole county's statewide vote.</div>
     ${blocks.map(b => `<details style="margin-top:10px"><summary style="cursor:pointer;color:var(--accent);font-weight:600">${b.title}, county by county</summary><div class="wrap"><table><thead><tr><th>County</th><th class="n">${b.cols[0]}</th><th class="n">${b.cols[1]}</th><th class="n">Diff</th></tr></thead><tbody>${b.rowsHtml}</tbody></table></div></details>`).join("")}
   </div>`;
@@ -520,7 +532,7 @@ async function initCA(k) {
   if (kind === "prop") { $("#s-cases").hidden = false; $("#s-cases h2").textContent = "What a yes and a no mean"; $("#s-cases .sub").textContent = "From the Legislative Analyst's summary, and who is on each side.";
     $("#cases").innerHTML = `<div class="case D"><b>Yes</b><p>${esc(item.yes)}</p><div class="tiny">For: ${esc(item.yes_side || "")}</div></div><div class="case R"><b>No</b><p>${esc(item.no)}</p><div class="tiny">Against: ${esc(item.no_side || "")}</div></div>${item.source ? `<div class="tiny" style="grid-column:1/-1">Source: <a href="${esc(item.source)}" target="_blank" rel="noopener">${esc(item.source)}</a></div>` : ""}`; }
   else if ((item.a_case && item.a_case.length) || (item.b_case && item.b_case.length)) { $("#s-cases").hidden = false;
-    const c = (p, name, list) => `<div class="case ${p}"><b>Why ${esc(name)} wins</b><ul>${(list || []).map(x => `<li>${esc(x.text || x)}${x.url ? ` <a href="${esc(x.url)}" target="_blank" rel="noopener">source</a>` : ""}</li>`).join("")}</ul></div>`;
+    const c = (p, name, list) => `<div class="case ${p}"><b>The case for ${esc(name)}</b><ul>${(list || []).map(x => `<li>${esc(x.text || x)}${x.url ? ` <a href="${esc(x.url)}" target="_blank" rel="noopener">source</a>` : ""}</li>`).join("")}</ul></div>`;
     $("#cases").innerHTML = c(item.a.party === "Republican" ? "R" : "D", item.a.name, item.a_case) + (item.b ? c(item.b.party === "Republican" ? "R" : item.b.party === "Democratic" ? "D" : "O", item.b.name, item.b_case) : ""); }
   if (kind !== "prop" && item.money) { $("#s-money").hidden = false; $("#s-money .sub").textContent = "From state filings and news reports."; $("#money").innerHTML = `<div class="card" style="grid-column:1/-1">${esc(item.money)}${item.note ? `<div class="tiny" style="margin-top:6px">${esc(item.note)}</div>` : ""}</div>`; $("#moneyStamp").textContent = ""; }
   $("#foot").textContent = "Live results: California Secretary of State (api.sos.ca.gov), read by this page every minute; votes before 7:55pm PT Nov 3 are ignored because the state posts test data. Candidates, cases and polls researched Nov 2, 2026. Built by the UC Merced CAPE Election Lab.";
