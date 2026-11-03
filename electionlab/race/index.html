@@ -227,7 +227,7 @@ function renderHeader() {
   const dn = R.d ? `<span class="D">${esc(R.d)} (D)</span>` : "", rn = R.r ? `<span class="R">${esc(R.r)} (R)</span>` : "";
   let vs = bd && bd.party !== "D" ? `${esc(bd.cand)} (${esc(bd.party)}) vs. ${esc(bd.opp)} (${esc(bd.opp_party)})` : (R.d && R.r ? `${esc(R.d)} (D) vs. ${esc(R.r)} (R)` : bd ? `${esc(bd.cand)} (${esc(bd.party)}) vs. ${esc(bd.opp)} (${esc(bd.opp_party)})` : "");
   $("#title").textContent = R.label && R.label !== R.id ? R.label : R.id;
-  $("#kicker").innerHTML = vs + (R.incumbent ? ` · ${esc(R.incumbent)}` : R.open ? " · open seat" : R.inc_party ? ` · seat held by ${R.inc_party === "D" ? "Democrats" : "Republicans"}` : "");
+  $("#kicker").innerHTML = vs + (R.open ? " · open seat" : R.inc_party ? ` · seat held by ${R.inc_party === "D" ? "Democrats" : "Republicans"}` : "");
   const chips = [];
   if (rt) chips.push(`Cook ${esc(rt.cook)}`, `Sabato ${esc(rt.sabato)}`, `Inside Elections ${esc(rt.inside)}`);
   if (bd) chips.push("Blue Dog race" + (bd.inc ? " · Blue Dog incumbent" : ""));
@@ -453,7 +453,7 @@ function renderBlueDog(T) {
   const regPairs = rows.map(r => [bdShare(r), r.regD && r.regR ? r.regD / (r.regD + r.regR) : null, r.two]); const rd = wavg(regPairs), rn = regPairs.filter(p => p[0] != null && p[1] != null).length;
   const line = (d, what) => d == null ? "" : `<div class="lead">${esc(R.bluedog.cand.split(" ").slice(-1)[0])} is running <b class="${d >= 0 ? "plus" : "minus"}">${Math.abs(d).toFixed(1)} points ${d >= 0 ? "ahead of" : "behind"}</b> ${what}.</div>`;
   $("#bd").innerHTML = `<div class="bd">
-    ${blocks.length ? blocks.map(b => line(b.diff, b.title.replace("vs. ", "") + ` across the ${b.n} count${b.n === 1 ? "y" : "ies"} with votes`)).join("") : `<div class="lead">No statewide Democrat on the ballot here to compare with${comps.length ? "" : " yet"}.</div>`}
+    ${blocks.length ? blocks.map(b => line(b.diff, b.title.replace("vs. ", "") + ` across the ${b.n} count${b.n === 1 ? "y" : "ies"} with votes`)).join("") : comps.length ? `<div class="lead">Waiting for the first votes to compare with ${comps.map(c => esc(c.name) + " for " + c.office).join(" and ")}.</div>` : `<div class="lead">No Senate or governor race in ${esc(R.st)} this year, so no statewide Democrat to compare with.</div>`}
     ${line(hd, `Harris's 2024 share in the same ${hn} count${hn === 1 ? "y" : "ies"}`)}
     ${line(rd, `Democrats' share of two-party registration in these counties`)}
     <div class="note">Shares are two-way (Democrat vs. Republican), weighted by this race's votes in each county, so the big counties count most. Where only part of a county is in the district, the comparison uses the whole county's statewide vote.</div>
