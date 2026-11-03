@@ -198,6 +198,8 @@ td.d{color:var(--dem)} td.r{color:var(--rep)}
 .bdcard .chip{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:2px 8px;border-radius:999px;background:var(--panel2);color:var(--ink2)}
 .bdcard .chip.w{background:var(--dem-soft);color:var(--dem)} .bdcard .chip.l{background:var(--rep-soft);color:var(--rep)}
 .bdcard .note{font-size:13px;color:var(--muted);margin-top:6px}
+.bdcard .note a.detail{color:var(--live);font-weight:600}
+a.hbtn.detail{border-color:var(--ink);color:var(--ink)}
 .acard{background:var(--panel);border:1px solid var(--rule);border-radius:12px;padding:16px 20px;margin:0 0 14px;max-width:110ch}
 .acard .aq{font-family:var(--display,inherit);font-size:24px;font-weight:700;color:var(--ink);margin:0 0 8px}
 .acard .aa{font-size:20px;line-height:1.45;color:var(--ink2);white-space:pre-wrap;margin:0}
@@ -328,7 +330,7 @@ td.d{color:var(--dem)} td.r{color:var(--rep)}
     </section>
 
     <section id="v-race" hidden>
-      <div class="row"><select id="raceSel" aria-label="Race"></select></div>
+      <div class="row"><select id="raceSel" aria-label="Race"></select><a class="hbtn detail" id="raceDetail" href="#" target="_blank" rel="noopener" style="text-decoration:none">Get the full details ↗</a></div>
       <div class="meta2" data-sec="race"></div>
       <div id="raceBody"></div>
     </section>
@@ -551,6 +553,7 @@ function renderTurnout() {
 }
 
 function renderRace() {
+  { const a = $("#raceDetail"); if (a) a.href = "https://lab.nathanwmonroe.com/electionlab/race/#" + raceId.replace(/^([A-Z]{2})(\d+|AL)$/, "$1-$2"); }
   const r = raceById[raceId], x = live().races[r.id], md = B.money[r.money?.D || r.id + "_D"], mr = B.money[r.money?.R || r.id + "_R"];
   const tot = x ? x.d + x.r : 0, ds = tot ? x.d / tot : null, m = x ? x.d - x.r : 0;
   const caseList = (arr) => arr.map(c => `<li>${esc(c.text)}${c.url ? ` <a href="${esc(c.url)}" target="_blank" rel="noopener">source</a>` : ""}</li>`).join("");
@@ -906,7 +909,7 @@ function renderBlueDogs() {
       <div class="nm"><span class="${sh != null && sh > 0.5 ? "win" : ""}">${esc(r.bd)} (${esc(r.bp)})</span><span>${sh == null ? "" : pct(sh, 1)}</span>
       <span class="${sh != null && sh < 0.5 ? "win" : ""}">${esc(r.opp)} (${esc(r.op)})</span><span>${sh == null ? "" : pct(1 - sh, 1)}</span></div>
       <div class="bar">${sh == null ? "" : `<i style="width:${sh * 100}%;background:${pc(r.bp)}"></i><i style="flex:1;background:${pc(r.op)}"></i>`}</div>
-      <div class="note">${v ? (v[2] ?? "–") + "% counted" : "No votes yet"}${r.note ? " · " + esc(r.note) : ""}</div></div>`; }).join("")}</div>`;
+      <div class="note">${v ? (v[2] ?? "–") + "% counted" : "No votes yet"}${r.note ? " · " + esc(r.note) : ""} · <a class="detail" href="https://lab.nathanwmonroe.com/electionlab/race/#${esc(r.k)}" target="_blank" rel="noopener">full details ↗</a></div></div>`; }).join("")}</div>`;
 }
 
 // ---------- public mirror ----------

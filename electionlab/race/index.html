@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Race detail · Election Night Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* One race, all the way down: scoreboard, what it would take, where the votes are left (map + counties), mail vs. in person,
+   the count as it came in, the Blue Dog read, each side's case, the money, past results. Same desk as /ca13. */
+:root{
+  --bg:#F3F1EB; --paper:#FFFDF8; --ink:#1B2A41; --body:#3D4A5C; --muted:#6B7280; --line:#DCD5C8;
+  --head:#1B2A41; --head-ink:#F3F1EB; --accent:#2E6F8E; --live:#A85F00; --live-soft:#F7E7CF;
+  --dem:#2E5E9E; --rep:#B5451B; --oth:#6B7280; --neutral:#E6E1D6; --win:#1F7A4D; --good-soft:#DDEFE4;
+  --serif:'Source Serif 4',Georgia,serif; --sans:'IBM Plex Sans',system-ui,-apple-system,sans-serif; --mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
+  color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#11161F; --paper:#18202C; --ink:#EEF1F5; --body:#C9D3DC; --muted:#93A0B0; --line:#2C3747;
+  --head:#0E1520; --head-ink:#EEF1F5; --accent:#6FB3CF; --live:#F2A93B; --live-soft:#3A2A12;
+  --dem:#6D9FE0; --rep:#E07E58; --oth:#93A0B0; --neutral:#26303E; --win:#4CC28A; --good-soft:#163526; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#11161F; --paper:#18202C; --ink:#EEF1F5; --body:#C9D3DC; --muted:#93A0B0; --line:#2C3747;
+  --head:#0E1520; --head-ink:#EEF1F5; --accent:#6FB3CF; --live:#F2A93B; --live-soft:#3A2A12;
+  --dem:#6D9FE0; --rep:#E07E58; --oth:#93A0B0; --neutral:#26303E; --win:#4CC28A; --good-soft:#163526; color-scheme:dark}
+*{box-sizing:border-box}
+html{overflow-x:hidden}
+body{margin:0;background:var(--bg);color:var(--body);font:16px/1.5 var(--sans);overflow-x:hidden}
+a{color:var(--accent)}
+header.top{background:var(--head);color:var(--head-ink);padding:14px max(16px,env(safe-area-inset-left)) 18px}
+header.top .brand{font:600 12px var(--sans);letter-spacing:.08em;text-transform:uppercase;opacity:.8;display:flex;gap:14px;flex-wrap:wrap}
+header.top .brand a{color:inherit;text-decoration:none;border-bottom:1px solid rgba(255,255,255,.35)}
+h1{font-family:var(--serif);font-weight:700;font-size:clamp(28px,6vw,46px);line-height:1.05;margin:6px 0 2px;color:var(--head-ink)}
+.kicker{font-size:15px;opacity:.9;margin:0}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.chip{font-size:12px;font-weight:600;letter-spacing:.04em;padding:3px 9px;border-radius:999px;background:rgba(255,255,255,.14);color:var(--head-ink)}
+main{max-width:1180px;margin:0 auto;padding:16px max(16px,env(safe-area-inset-left)) 60px}
+section{margin:22px 0}
+h2{font-family:var(--serif);font-weight:700;font-size:26px;color:var(--ink);line-height:1.15;margin:0 0 4px}
+.sub{color:var(--muted);margin:0 0 10px;font-size:15px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:16px;min-width:0}
+.meta{display:flex;gap:8px 14px;flex-wrap:wrap;align-items:center;font-size:13px;color:var(--muted);margin:0 0 10px}
+.meta .live::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--live);margin-right:6px;vertical-align:1px}
+details.how{font-size:14px;margin-left:auto}
+details.how summary{cursor:pointer;color:var(--accent);font-weight:600;list-style:none}
+details.how summary::after{content:" ▾"}
+details.how[open] summary::after{content:" ▴"}
+details.how .hbx{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin-top:8px;color:var(--body);max-width:70ch}
+details.how p{margin:6px 0}
+.score{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.cand{padding:14px 16px;border-radius:12px;border:1px solid var(--line);background:var(--paper);border-top:5px solid var(--oth)}
+.cand.D{border-top-color:var(--dem)} .cand.R{border-top-color:var(--rep)}
+.cand .nm{font:600 17px var(--sans);color:var(--ink);display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.cand .nm small{font-weight:500;color:var(--muted);font-size:13px}
+.cand .big{font-family:var(--serif);font-weight:700;font-size:clamp(34px,8vw,56px);line-height:1;color:var(--ink);margin:6px 0 2px;font-variant-numeric:tabular-nums}
+.cand .v{font-family:var(--mono);font-size:14px;color:var(--muted)}
+.won{display:inline-block;background:var(--win);color:#fff;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:6px}
+.bigbar{display:flex;height:16px;border-radius:8px;overflow:hidden;background:var(--neutral);margin:12px 0 6px}
+.bigbar i{display:block;height:100%}
+.lead{font-family:var(--serif);font-size:22px;color:var(--ink);margin:4px 0 0}
+.wait{font-family:var(--serif);font-size:24px;color:var(--muted)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:12px}
+.stat{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.stat .k{font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.stat .v{font-family:var(--serif);font-weight:700;font-size:30px;line-height:1.1;color:var(--ink);font-variant-numeric:tabular-nums}
+.stat .s{font-size:13px;color:var(--body)}
+.stat.D .v{color:var(--dem)} .stat.R .v{color:var(--rep)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media (max-width:860px){.two{grid-template-columns:1fr}}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{text-align:left;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:6px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top;font-variant-numeric:tabular-nums}
+td.n,th.n{text-align:right}
+tr.sel td{background:color-mix(in srgb,var(--accent) 12%,var(--paper))}
+tbody tr{cursor:pointer}
+.tiny{font-size:12px;color:var(--muted)}
+.D{color:var(--dem)} .R{color:var(--rep)}
+.plus{color:var(--win);font-weight:600} .minus{color:var(--rep);font-weight:600}
+.wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+svg.map{width:100%;height:auto;display:block;background:var(--paper);border:1px solid var(--line);border-radius:12px}
+svg.map path{stroke:var(--paper);stroke-width:1;cursor:pointer}
+svg.map path.sel{stroke:var(--ink);stroke-width:2}
+svg.map path.part{stroke-dasharray:3 2}
+svg.map text{font:600 11px var(--sans);fill:var(--ink);pointer-events:none;paint-order:stroke;stroke:var(--paper);stroke-width:3px;stroke-linejoin:round}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:6px;align-items:center}
+.legend i{display:inline-block;width:14px;height:10px;border-radius:2px;vertical-align:-1px;margin-right:4px}
+.types{display:grid;gap:10px}
+.trow{display:grid;grid-template-columns:150px 1fr;gap:10px;align-items:center}
+.trow .bar{display:flex;height:22px;border-radius:6px;overflow:hidden;background:var(--neutral)}
+.trow .bar i{display:block;height:100%}
+.trow .lbl{font-weight:600;color:var(--ink)}
+.cases{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:720px){.cases{grid-template-columns:1fr}}
+.case{padding:14px 16px;border-radius:12px;border:1px solid var(--line);background:var(--paper);border-top:5px solid var(--oth)}
+.case.D{border-top-color:var(--dem)} .case.R{border-top-color:var(--rep)}
+.case b{display:block;margin-bottom:6px;color:var(--ink);font-size:17px}
+.case ul{margin:0;padding-left:18px} .case li{margin:5px 0} .case a{font-size:12px;color:var(--muted)}
+.money{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:720px){.money{grid-template-columns:1fr}}
+.mcard .nm{font-weight:600;color:var(--ink)}
+.mrow{display:flex;justify-content:space-between;gap:8px;font-size:14px;border-bottom:1px solid var(--line);padding:5px 0}
+.hist{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px}
+.yr{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.yr .y{font-size:12px;font-weight:600;letter-spacing:.06em;color:var(--muted)}
+.yr .w{font-family:var(--serif);font-weight:700;font-size:22px;color:var(--ink)}
+.yr .s{font-size:13px}
+.bd{border:1px solid var(--line);border-left:5px solid var(--dem);border-radius:12px;padding:14px 16px;background:var(--paper)}
+.bd .headline{font-family:var(--serif);font-size:22px;color:var(--ink);margin:0 0 8px}
+.note{font-size:14px;color:var(--muted);margin-top:8px}
+.btnrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.btn{font:600 14px var(--sans);border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:999px;padding:7px 12px;cursor:pointer;text-decoration:none}
+.btn.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.status{font-size:14px;color:var(--muted);margin:6px 0 0}
+.status.warn{color:var(--live);font-weight:600}
+footer{color:var(--muted);font-size:13px;margin-top:30px;border-top:1px solid var(--line);padding-top:12px}
+.err{background:var(--live-soft);color:var(--live);padding:12px 16px;border-radius:10px;font-weight:600}
+@media (max-width:640px){.score{grid-template-columns:1fr}.trow{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand"><span>Election Night Lab · Race detail</span><a href="../">← Back to the big screen</a><a href="#" id="pickOther">Another race</a></div>
+  <h1 id="title">Loading…</h1>
+  <p class="kicker" id="kicker"></p>
+  <div class="chips" id="chips"></div>
+</header>
+<main id="main">
+  <div id="err" class="err" hidden></div>
+
+  <section id="s-score">
+    <h2 id="scoreH">The count</h2>
+    <div class="meta"><span id="scoreStamp">Waiting for the first count</span><details class="how"><summary>How this works</summary><div class="hbx" id="how-score"></div></details></div>
+    <div id="score"></div>
+    <div class="stats" id="scoreStats"></div>
+  </section>
+
+  <section id="s-take">
+    <h2>What would it take?</h2>
+    <p class="sub">How much of the vote is left, and what share of it the trailing candidate needs.</p>
+    <div class="meta"><span id="takeStamp"></span><details class="how"><summary>How this works</summary><div class="hbx" id="how-take"></div></details></div>
+    <div id="take" class="card"></div>
+  </section>
+
+  <section id="s-where">
+    <h2>Where the votes are</h2>
+    <p class="sub">County by county: counted so far, what's expected, who's ahead, and how each county compares with its benchmark and with 2024.</p>
+    <div class="meta"><span id="whereStamp"></span><details class="how"><summary>How this works</summary><div class="hbx" id="how-where"></div></details></div>
+    <div class="two">
+      <div><div id="map"></div><div class="legend" id="legend"></div></div>
+      <div class="wrap"><table id="ctable"></table></div>
+    </div>
+  </section>
+
+  <section id="s-types" hidden>
+    <h2>Mail and early vs. Election Day</h2>
+    <p class="sub">Which kind of ballot each candidate's votes come from, where the state reports it. Mail ballots often lean one way and day-of ballots the other, so the margin can swing as each batch lands.</p>
+    <div class="meta"><span id="typesStamp"></span><details class="how"><summary>How this works</summary><div class="hbx" id="how-types"></div></details></div>
+    <div class="card types" id="types"></div>
+  </section>
+
+  <section id="s-traj" hidden>
+    <h2>The count as it came in</h2>
+    <p class="sub">The margin at each update tonight, against how much of the expected vote was counted.</p>
+    <div class="meta"><span id="trajStamp"></span><details class="how"><summary>How this works</summary><div class="hbx" id="how-traj"></div></details></div>
+    <div class="card" id="traj"></div>
+  </section>
+
+  <section id="s-bd" hidden>
+    <h2>The Blue Dog read</h2>
+    <p class="sub">How the Blue Dog candidate is running compared with the other Democrats on the same ballots, with Harris in 2024, and with the district's registration.</p>
+    <div class="meta"><span id="bdStamp"></span><details class="how"><summary>How this works</summary><div class="hbx" id="how-bd"></div></details></div>
+    <div id="bd"></div>
+  </section>
+
+  <section id="s-cases" hidden>
+    <h2>Each side's case</h2>
+    <p class="sub">The strongest reasons each camp gives for why it wins, with a source for each.</p>
+    <div class="cases" id="cases"></div>
+  </section>
+
+  <section id="s-money" hidden>
+    <h2>The money</h2>
+    <p class="sub">What each campaign raised and where the itemized gifts came from, as filed with the FEC.</p>
+    <div class="meta"><span id="moneyStamp"></span><details class="how"><summary>How this works</summary><div class="hbx" id="how-money"></div></details></div>
+    <div class="money" id="money"></div>
+  </section>
+
+  <section id="s-past" hidden>
+    <h2>This seat before tonight</h2>
+    <p class="sub" id="pastSub"></p>
+    <div class="hist" id="past"></div>
+  </section>
+
+  <footer id="foot"></footer>
+</main>
+<script>
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const fmt = n => n == null || !isFinite(n) ? "–" : Math.round(n).toLocaleString("en-US");
+const pct = (x, d = 1) => x == null || !isFinite(x) ? "–" : (x * 100).toFixed(d) + "%";
+const pts = x => x == null || !isFinite(x) ? "–" : (x > 0 ? "+" : "") + x.toFixed(1);
+const money = x => x == null ? "–" : x >= 1e6 ? "$" + (x / 1e6).toFixed(1) + "M" : "$" + Math.round(x / 1e3) + "K";
+const ptT = (s, opts = {}) => { if (!s) return ""; const d = new Date(String(s).includes("T") || /\+00|Z$/.test(s) ? s : s.replace(" ", "T") + "Z"); return isNaN(d) ? "" : d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", timeZone: "America/Los_Angeles", ...opts }) + " PT"; };
+const $ = s => document.querySelector(s);
+const TEST = new URLSearchParams(location.search).has("test");
+let DATA = null, R = null, LIVE = null, GEO = null, HIST = null, SW = { senate: [], governor: null }, selFips = null;
+
+async function getJSON(u) { const r = await fetch(u, { cache: "no-store" }); if (!r.ok) throw new Error(r.status + " " + u); return r.json(); }
+function raceKey() { const h = decodeURIComponent(location.hash.slice(1)).trim().toUpperCase(); return h || new URLSearchParams(location.search).get("r") || ""; }
+
+async function init() {
+  try { DATA = await getJSON("data.json"); } catch (e) { $("#err").hidden = false; $("#err").textContent = "Couldn't load the race data. Try again in a minute."; return; }
+  const k = raceKey();
+  R = DATA.races[k] || DATA.races[k.replace(/^([A-Z]{2})(\d+|AL)$/, "$1-$2")];
+  if (!R) { $("#title").textContent = "Pick a race"; $("#err").hidden = false; $("#err").innerHTML = "No race called <b>" + esc(k || "(none)") + "</b>. Try one of these: " + Object.keys(DATA.races).sort().map(x => `<a href="#${x}" onclick="location.reload()">${x}</a>`).join(" · "); return; }
+  $("#pickOther").onclick = e => { e.preventDefault(); const x = prompt("Which race? e.g. PA-10, CA-13, WI-3", R.id); if (x) { location.hash = x.trim().toUpperCase(); location.reload(); } };
+  document.title = R.id + " · Election Night Lab";
+  renderHeader(); fillHow(); renderStatic();
+  loadGeo();
+  await refresh();
+  setInterval(() => { if (!document.hidden) refresh(); }, 60e3);
+  document.addEventListener("visibilitychange", () => { if (!document.hidden) refresh(); });
+}
+function renderHeader() {
+  const bd = R.bluedog, rt = R.ratings;
+  const dn = R.d ? `<span class="D">${esc(R.d)} (D)</span>` : "", rn = R.r ? `<span class="R">${esc(R.r)} (R)</span>` : "";
+  let vs = bd && bd.party !== "D" ? `${esc(bd.cand)} (${esc(bd.party)}) vs. ${esc(bd.opp)} (${esc(bd.opp_party)})` : (R.d && R.r ? `${esc(R.d)} (D) vs. ${esc(R.r)} (R)` : bd ? `${esc(bd.cand)} (${esc(bd.party)}) vs. ${esc(bd.opp)} (${esc(bd.opp_party)})` : "");
+  $("#title").textContent = R.label && R.label !== R.id ? R.label : R.id;
+  $("#kicker").innerHTML = vs + (R.incumbent ? ` · ${esc(R.incumbent)}` : R.open ? " · open seat" : R.inc_party ? ` · seat held by ${R.inc_party === "D" ? "Democrats" : "Republicans"}` : "");
+  const chips = [];
+  if (rt) chips.push(`Cook ${esc(rt.cook)}`, `Sabato ${esc(rt.sabato)}`, `Inside Elections ${esc(rt.inside)}`);
+  if (bd) chips.push("Blue Dog race" + (bd.inc ? " · Blue Dog incumbent" : ""));
+  if (R.redrawn_state) chips.push("New district lines for 2026");
+  if (R.board) chips.push("On the lab's board of 32");
+  $("#chips").innerHTML = chips.map(c => `<span class="chip">${c}</span>`).join("");
+}
+function fillHow() {
+  const H = {
+    score: ["Each candidate's votes and share, the margin, and how much of the expected vote has been counted (Decision Desk HQ's estimate of how many votes will be cast here in all).", "Percent of precincts can mislead, because precincts differ in size and mail ballots arrive outside them. Percent of expected vote is the better clock.", "say 'with about 60% counted, she leads by 2' and know whether that's a lot of vote left or a little.", "Decision Desk HQ's public results feed, read directly by this page every minute while it's open."],
+    take: ["The estimated votes still to count (expected total minus counted so far), and what share of them the trailing candidate would need just to pull even.", "It turns 'down by 4,000' into 'needs 54% of what's left', which is the number that tells you whether a comeback is realistic.", "check the remaining-vote share against how the trailing candidate is doing in the counties that still have the most votes out.", "Computed from the live count and Decision Desk HQ's expected-vote estimate (low and high bounds shown when they differ)."],
+    where: ["Every county in the district: how many votes are expected, how many are counted, each candidate's share, the benchmark share Democrats need in that county to win the district, and the county's Harris–Trump margin in 2024.", "Districts are won county by county. A candidate can be behind overall and still be on track if they're beating their benchmarks where most of the vote is still out.", "sort by votes remaining, tap the biggest county, and see whether the leader is ahead or behind the benchmark there.", "Live counts and benchmarks from Decision Desk HQ (its vote-goal model); 2024 presidential margins by county from the county results archive; the map from the Census county outlines. Dashed outlines mean only part of the county is in this district, and the benchmark and 2024 margin are for the whole county."],
+    types: ["Each candidate's votes split by how the ballot was cast: by mail or absentee, early in person, on Election Day, or provisional, where the state reports that split.", "Different kinds of ballots get counted at different times and lean different ways, so an early lead can be a 'mirage'. Seeing the split shows which batch is still to come.", "if the mail vote favors one side and most of it is in, expect the margin to move toward the other side as Election Day ballots are added.", "Decision Desk HQ's county feed; many states don't separate ballot types, in which case this section stays hidden."],
+    traj: ["The margin at each update tonight, plotted against the share of the expected vote counted at that moment.", "A line that keeps bending one way means one kind of area or ballot is being counted; a flat line means the rest of the vote looks like what's in.", "compare the shape here with the Blue Dog or Board races nearby to see if the same pattern is playing out everywhere.", "Recorded by the lab's feed every few minutes tonight for the races on the board and the Blue Dog list."],
+    bd: ["Three comparisons for a Blue Dog candidate: their share in each county against the Democratic candidate for Senate or governor in the same county (same voters, same night); against Harris's 2024 share in those counties; and against Democrats' share of party registration there.", "Blue Dogs make their case on running ahead of the party in tough places. This is that claim measured in real time.", "see if the candidate is beating the top of the ticket where it matters, in the counties with the most votes.", "Live from Decision Desk HQ: this House race and the state's Senate and governor races, matched county by county. Partial counties are compared whole-county, so read big differences, not small ones. Registration from the state as compiled by Decision Desk HQ."],
+    money: ["Total raised and cash on hand for each campaign, and the share of itemized individual gifts that came from outside the home state, with the top donor states.", "Where the money comes from says who the race matters to beyond the district.", "compare the out-of-state share for the two sides.", "FEC filings through the latest processed report (dates shown)."]
+  };
+  for (const k in H) { const el = $("#how-" + k); if (el) el.innerHTML = `<p><b>What it shows.</b> ${esc(H[k][0])}</p><p><b>Why it's useful.</b> ${esc(H[k][1])}</p><p><b>For example, you could</b> ${esc(H[k][2])}</p><p><b>Where the data comes from, and how often.</b> ${esc(H[k][3])}</p>`; }
+}
+function renderStatic() {
+  // each side's case
+  if (R.d_case && R.d_case.length) { $("#s-cases").hidden = false;
+    const c = (p, name, list) => `<div class="case ${p}"><b>Why ${esc(name)} wins</b><ul>${list.map(s => `<li>${esc(s.text)}${s.url ? ` <a href="${esc(s.url)}" target="_blank" rel="noopener">source</a>` : ""}</li>`).join("")}</ul></div>`;
+    $("#cases").innerHTML = c("D", R.d, R.d_case) + c("R", R.r, R.r_case); }
+  // money
+  if (R.money && (R.money.D || R.money.R)) { $("#s-money").hidden = false;
+    const m = (p, name, x) => !x ? `<div class="card mcard"><div class="nm ${p}">${esc(name)}</div><div class="tiny">No FEC summary yet.</div></div>` :
+      `<div class="card mcard"><div class="nm ${p}">${esc(name)}</div>
+       <div class="stats" style="margin-top:8px"><div class="stat"><div class="k">Raised</div><div class="v">${money(x.receipts)}</div></div><div class="stat"><div class="k">Cash on hand</div><div class="v">${money(x.cash)}</div></div><div class="stat"><div class="k">From outside ${esc(x.home)}</div><div class="v">${x.out == null ? "–" : Math.round(x.out * 100) + "%"}</div><div class="s">of itemized gifts</div></div></div>
+       ${x.top && x.top.length ? `<div style="margin-top:10px"><div class="tiny" style="margin-bottom:4px">Top states outside ${esc(x.home)}</div>${x.top.slice(0, 5).map(([s, v]) => `<div class="mrow"><span>${esc(s)}</span><span>${money(v)}</span></div>`).join("")}</div>` : ""}
+       <div class="tiny" style="margin-top:8px">Itemized gifts cover ${esc(x.cov || "the latest filings")}.</div></div>`;
+    $("#money").innerHTML = m("D", R.d || "Democrat", R.money.D) + m("R", R.r || "Republican", R.money.R); $("#moneyStamp").textContent = "FEC, pulled Oct 30, 2026"; }
+  // past results
+  const yrs = Object.keys(R.past || {});
+  if (yrs.length) { $("#s-past").hidden = false;
+    $("#pastSub").textContent = "House results for " + R.id + " in past general elections. District lines changed after the 2020 census" + (R.redrawn_state ? ", and again for 2026" : "") + ", so earlier years are the same district number, not always the same voters.";
+    $("#past").innerHTML = yrs.map(y => { const p = R.past[y], t = p.d + p.r, ds = t ? p.d / t : null;
+      return `<div class="yr"><div class="y">${y}${+y % 4 ? " · midterm" : " · presidential"}</div><div class="w ${p.win || ""}">${p.win === "D" ? "D" : p.win === "R" ? "R" : "–"} ${ds != null ? pts((ds - 0.5) * 200 * (p.win === "R" ? -1 : 1)).replace("+", "+") : ""}</div><div class="s">${ds != null ? `<span class="D">${pct(ds)}</span> · <span class="R">${pct(1 - ds)}</span>` : "no D vs R race"}</div><div class="tiny">${esc(p.win === "D" ? p.dn : p.win === "R" ? p.rn : "")}</div></div>`; }).join(""); }
+  $("#foot").innerHTML = `Live results: Decision Desk HQ's public feed, read by this page every minute. County baselines: ${esc(DATA.sources.counties)}. Past results: ${esc(DATA.sources.past)}. Money: ${esc(DATA.sources.money)}. Built by the Election Night Lab, UC Merced CAPE.`;
+}
+async function loadGeo() {
+  const st = R.st, fipsSt = { AK: "02", AL: "01", AZ: "04", CA: "06", CO: "08", FL: "12", GA: "13", IA: "19", KS: "20", KY: "21", MI: "26", MN: "27", MO: "29", MT: "30", NC: "37", NJ: "34", NY: "36", OH: "39", PA: "42", SC: "45", TN: "47", TX: "48", VA: "51", WA: "53", WI: "55" }[st];
+  if (!fipsSt) return;
+  try { GEO = await getJSON("../geo/" + fipsSt + ".json"); renderWhere(); } catch (e) {}
+}
+
+// ---------- live ----------
+async function refresh() {
+  if (!R.ddhq) { $("#scoreStamp").textContent = "No live feed for this race"; return; }
+  try {
+    const [h, ...sw] = await Promise.all([getJSON(DATA.ddhq_base + "/house/" + R.ddhq)].concat(R.bluedog ? [...R.statewide.senate.map(id => getJSON(DATA.ddhq_base + "/senate/" + id).catch(() => null)), R.statewide.governor ? getJSON(DATA.ddhq_base + "/gov/" + R.statewide.governor).catch(() => null) : Promise.resolve(null)] : []));
+    LIVE = h; if (R.bluedog) { SW = { senate: sw.slice(0, R.statewide.senate.length).filter(Boolean), governor: sw[R.statewide.senate.length] || null }; }
+  } catch (e) { $("#scoreStamp").textContent = "Couldn't reach the results feed; trying again in a minute"; return; }
+  try { HIST = await getJSON("../history.json"); } catch (e) { HIST = HIST || null; }
+  renderLive();
+}
+function tops() { // two candidates to show: D and R (or the Blue Dog and the top opponent)
+  const tl = (LIVE.raceData.toplineResults || []).slice();
+  const party = c => c.party && c.party.abbrev === "DEM" ? "D" : c.party && c.party.abbrev === "GOP" ? "R" : "O";
+  let a, b;
+  if (R.bluedog) { const ln = R.bluedog.cand.split(" ").slice(-1)[0].toLowerCase(); a = tl.find(c => String(c.lastName).toLowerCase().includes(ln) || ln.includes(String(c.lastName).toLowerCase())); b = tl.filter(c => c !== a).sort((x, y) => y.votes - x.votes)[0]; }
+  if (!a || !b) { a = tl.find(c => party(c) === "D") || tl[0]; b = tl.find(c => party(c) === "R" && c !== a) || tl.filter(c => c !== a).sort((x, y) => y.votes - x.votes)[0]; }
+  if (!a || !b) return null;
+  // put the Democrat / Blue Dog first for color consistency
+  const pa = R.bluedog ? (R.bluedog.party === "D" ? "D" : R.bluedog.party === "R" ? "R" : "O") : party(a), pb = party(b) === pa && pa !== "O" ? "O" : party(b);
+  return { a, b, pa, pb, all: tl };
+}
+function renderLive() {
+  const T = tops(), rd = LIVE.raceData, tu = rd.turnout || {};
+  if (!T) { $("#score").innerHTML = `<div class="wait">Waiting for the first count</div>`; return; }
+  const { a, b, pa, pb } = T;
+  const tot = (rd.toplineResults || []).reduce((s, c) => s + (c.votes || 0), 0), two = a.votes + b.votes;
+  const expMid = tu.estimated_votes_mid || tu.pre_election_mid || null, expLo = tu.estimated_votes_low || null, expHi = tu.estimated_votes_high || null;
+  const inPct = expMid ? Math.min(1, tot / expMid) : null;
+  const called = a.winner ? a : b.winner ? b : (rd.toplineResults || []).find(c => c.winner);
+  const stamp = tot ? `Results as of ${ptT(rd.lastUpdated)} · Decision Desk HQ` : "Waiting for the first count · polls close " + ptT(rd.pollCloseTime);
+  $("#scoreStamp").textContent = stamp; $("#scoreStamp").className = tot ? "live" : "";
+  ["take", "where", "types", "traj", "bd"].forEach(k => { const el = $("#" + k + "Stamp"); if (el) { el.textContent = tot ? `As of ${ptT(rd.lastUpdated)}` : ""; el.className = tot ? "live" : ""; } });
+  const cand = (c, p) => `<div class="cand ${p}"><div class="nm">${esc(c.firstName + " " + c.lastName)} <small>${p === "D" ? "Democrat" : p === "R" ? "Republican" : esc(c.party && c.party.name || "")}${c.incumbent ? " · incumbent" : ""}</small>${c.winner ? `<span class="won">Winner</span>` : ""}</div>
+    <div class="big">${tot ? pct(c.votes / tot) : "–"}</div><div class="v">${fmt(c.votes)} votes${two && tot !== two ? ` · ${pct(c.votes / two)} of the two-way vote` : ""}</div></div>`;
+  const margin = two ? (a.votes - b.votes) / two : null;
+  $("#score").innerHTML = `<div class="score">${cand(a, pa)}${cand(b, pb)}</div>
+    ${two ? `<div class="bigbar"><i style="width:${a.votes / two * 100}%;background:var(--${pa === "O" ? "oth" : pa === "D" ? "dem" : "rep"})"></i><i style="flex:1;background:var(--${pb === "O" ? "oth" : pb === "D" ? "dem" : "rep"})"></i></div>
+    <div class="lead">${called ? `${esc(called.firstName + " " + called.lastName)} wins` : margin === 0 ? "Tied" : `${esc(margin > 0 ? a.lastName : b.lastName)} leads by ${pts(Math.abs(margin) * 100).replace("+", "")} points`}${two ? ` · ${fmt(Math.abs(a.votes - b.votes))} votes` : ""}</div>` : `<div class="wait">No votes reported yet</div>`}`;
+  $("#scoreStats").innerHTML = `<div class="stat"><div class="k">Expected vote counted</div><div class="v">${inPct == null ? "–" : Math.round(inPct * 100) + "%"}</div><div class="s">${fmt(tot)} of about ${fmt(expMid)}</div></div>
+    <div class="stat"><div class="k">Precincts reporting</div><div class="v">${tu.precincts_tot ? Math.round(100 * tu.precincts_in / tu.precincts_tot) + "%" : "–"}</div><div class="s">${tu.precincts_tot ? fmt(tu.precincts_in) + " of " + fmt(tu.precincts_tot) : "not reported"}</div></div>
+    <div class="stat"><div class="k">Votes left (est.)</div><div class="v">${expMid ? fmt(Math.max(0, expMid - tot)) : "–"}</div><div class="s">${expLo && expHi && expLo !== expHi ? `between ${fmt(Math.max(0, expLo - tot))} and ${fmt(Math.max(0, expHi - tot))}` : "Decision Desk HQ estimate"}</div></div>
+    ${R.tide && R.tide["2024"] ? `<div class="stat"><div class="k">2024 result here</div><div class="v ${R.tide["2024"][0] > R.tide["2024"][1] ? "D" : "R"}">${R.tide["2024"][0] > R.tide["2024"][1] ? "D" : "R"} ${pts(Math.abs(R.tide["2024"][0] - R.tide["2024"][1]) / (R.tide["2024"][0] + R.tide["2024"][1]) * 100).replace("+", "+")}</div><div class="s">${fmt(R.tide["2024"][0] + R.tide["2024"][1])} two-party votes${R.redrawn_state ? " · old lines" : ""}</div></div>` : ""}`;
+  renderTake(T, tot, expMid, expLo, expHi, called);
+  renderWhere();
+  renderTypes(T);
+  renderTraj(expMid);
+  if (R.bluedog) renderBlueDog(T);
+}
+function renderTake(T, tot, expMid, expLo, expHi, called) {
+  const { a, b } = T;
+  if (called) { $("#take").innerHTML = `<div class="lead">The race is called. ${esc(called.firstName + " " + called.lastName)} wins.</div>`; return; }
+  if (!tot || !expMid) { $("#take").innerHTML = `<div class="wait">Nothing counted yet. This fills in with the first results.</div>`; return; }
+  const lead = a.votes >= b.votes ? a : b, trail = lead === a ? b : a, gap = Math.abs(a.votes - b.votes);
+  const need = rem => rem > 0 ? (gap + rem) / (2 * rem) : null;  // share of the remaining two-way vote the trailer needs to tie
+  const rem = Math.max(0, expMid - tot), remLo = expLo ? Math.max(0, expLo - tot) : null, remHi = expHi ? Math.max(0, expHi - tot) : null;
+  const n = need(rem), nLo = remHi ? need(remHi) : null, nHi = remLo ? need(remLo) : null;  // more votes left → smaller share needed
+  const trailShare = tot ? trail.votes / (a.votes + b.votes) : 0;
+  let verdict;
+  if (rem <= 0) verdict = "By the expected-vote estimate the count is essentially done.";
+  else if (n == null || n > 1) verdict = `${esc(trail.lastName)} can't catch up even with every remaining vote, if the estimate holds.`;
+  else if (n > 0.75) verdict = `${esc(trail.lastName)} would need a landslide of what's left. Very hard.`;
+  else if (n > 0.6) verdict = `A long shot: ${esc(trail.lastName)} would have to run far ahead of the current pace in what's left.`;
+  else if (n > 0.52) verdict = `Possible but uphill: it depends on where the remaining votes are.`;
+  else verdict = `Wide open: ${esc(trail.lastName)} needs only a little better than a split of what's left.`;
+  $("#take").innerHTML = `<div class="stats" style="margin-top:0">
+      <div class="stat"><div class="k">${esc(lead.lastName)} leads by</div><div class="v">${fmt(gap)}</div><div class="s">votes</div></div>
+      <div class="stat"><div class="k">Votes left (est.)</div><div class="v">${fmt(rem)}</div><div class="s">${remLo != null && remHi != null && remLo !== remHi ? `${fmt(remLo)} to ${fmt(remHi)}` : ""}</div></div>
+      <div class="stat"><div class="k">${esc(trail.lastName)} needs</div><div class="v">${n == null || n > 1 ? "more than 100%" : Math.round(n * 100) + "%"}</div><div class="s">of what's left, just to tie${nLo != null && nHi != null && nLo <= 1 && Math.abs(nLo - nHi) > 0.005 ? ` (${Math.round(nLo * 100)}–${Math.min(100, Math.round(nHi * 100))}% across the estimate range)` : ""}</div></div>
+      <div class="stat"><div class="k">${esc(trail.lastName)} so far</div><div class="v">${pct(trailShare, 0)}</div><div class="s">of the two-way vote counted</div></div></div>
+    <div class="lead" style="margin-top:12px">${verdict}</div>
+    <div class="note">"Expected vote" is Decision Desk HQ's estimate of the total that will be cast; it moves as the count develops. The share needed assumes the rest is a two-way vote.</div>`;
+}
+function countyRows() {
+  if (!LIVE) return [];
+  const T = tops(); if (!T) return [];
+  const { a, b } = T, base = {}; for (const c of R.counties || []) base[c.fips] = c;
+  return (LIVE.vcuData || []).map(v => {
+    const fips = v.vcu.countyFips || v.vcu.fips, cr = {}; for (const c of v.candidateResults || []) cr[c.id] = c;
+    const av = (cr[a.candId] || {}).votes || 0, bv = (cr[b.candId] || {}).votes || 0, two = av + bv, tot = (v.liveTurnoutEstimate || {}).totalVotes || (v.candidateResults || []).reduce((s, c) => s + (c.votes || 0), 0);
+    const est = (v.liveTurnoutEstimate || {}).estimatedVotesMid || (v.voteGoal || {}).preElectionMid || null;
+    const goal = (v.voteGoal || {}); const bench = T.pa === "D" ? goal.demVoteGoal : T.pa === "R" ? goal.repVoteGoal : null;
+    const bl = base[fips] || {};
+    return { fips, name: v.vcu.county || v.vcu.name, whole: bl.whole !== false, av, bv, two, tot, est, rem: est ? Math.max(0, est - tot) : null, ash: two ? av / two : null, bench, m24: bl.m24, v22: bl.v22, v24: bl.v24, done: !!(v.liveTurnoutEstimate || {}).completedCounty, pin: (v.liveTurnoutEstimate || {}).precinctsTot ? (v.liveTurnoutEstimate.precinctsIn / v.liveTurnoutEstimate.precinctsTot) : null, regD: goal.democraticRegistration, regR: goal.republicanRegistration, regT: goal.totalRegistration, types: { mail: (cr[a.candId] || {}).absenteeVotes || 0, early: (cr[a.candId] || {}).earlyVotes || 0, eday: (cr[a.candId] || {}).electionDayVotes || 0, prov: (cr[a.candId] || {}).provisionalVotes || 0, bmail: (cr[b.candId] || {}).absenteeVotes || 0, bearly: (cr[b.candId] || {}).earlyVotes || 0, beday: (cr[b.candId] || {}).electionDayVotes || 0, bprov: (cr[b.candId] || {}).provisionalVotes || 0 } };
+  });
+}
+let sortBy = "rem";
+function renderWhere() {
+  const rows = countyRows(), T = tops();
+  if (!rows.length) { $("#ctable").innerHTML = `<tbody><tr><td class="tiny">${LIVE ? "No county detail yet." : "Loading…"}</td></tr></tbody>`; drawMap([], null); return; }
+  const pa = T.pa, pb = T.pb, an = T.a.lastName, bn = T.b.lastName;
+  rows.sort((x, y) => sortBy === "rem" ? (y.rem ?? -1) - (x.rem ?? -1) : sortBy === "name" ? x.name.localeCompare(y.name) : (y.est ?? 0) - (x.est ?? 0));
+  const hdr = `<thead><tr><th>County</th><th class="n">Counted</th><th class="n">Expected</th><th class="n">Left</th><th class="n">${esc(an)}</th><th class="n">${esc(bn)}</th><th class="n">vs. benchmark</th><th class="n" title="Harris (H) or Trump (T) margin in 2024">2024</th></tr></thead>`;
+  const body = rows.map(r => { const sh = r.ash, vb = sh != null && r.bench != null ? (sh - r.bench) * 100 : null;
+    return `<tr data-fips="${r.fips}" class="${selFips === r.fips ? "sel" : ""}"><td>${esc(r.name)}${r.whole ? "" : ` <span class="tiny">part</span>`}${r.done ? ` <span class="tiny">✓</span>` : ""}</td><td class="n">${fmt(r.tot)}${r.pin != null && r.tot ? `<div class="tiny">${Math.round(r.pin * 100)}% of precincts</div>` : ""}</td><td class="n">${fmt(r.est)}</td><td class="n">${fmt(r.rem)}</td>
+      <td class="n ${sh != null && sh > 0.5 ? pa : ""}">${sh == null ? "–" : pct(sh)}</td><td class="n ${sh != null && sh < 0.5 ? pb : ""}">${sh == null ? "–" : pct(1 - sh)}</td>
+      <td class="n">${vb == null ? (r.bench != null ? `<span class="tiny">needs ${pct(r.bench, 0)}</span>` : "–") : `<span class="${vb >= 0 ? "plus" : "minus"}">${pts(vb)}</span><div class="tiny">needs ${pct(r.bench, 0)}</div>`}</td>
+      <td class="n">${r.m24 == null ? "–" : `<span class="${r.m24 > 0 ? "R" : "D"}">${r.m24 > 0 ? "T" : "H"} +${Math.abs(r.m24).toFixed(0)}</span>`}</td></tr>`; }).join("");
+  const sum = rows.reduce((s, r) => ({ tot: s.tot + r.tot, est: s.est + (r.est || 0), rem: s.rem + (r.rem || 0) }), { tot: 0, est: 0, rem: 0 });
+  $("#ctable").innerHTML = hdr + `<tbody>${body}</tbody><tfoot><tr><td><b>All counties</b></td><td class="n"><b>${fmt(sum.tot)}</b></td><td class="n"><b>${fmt(sum.est)}</b></td><td class="n"><b>${fmt(sum.rem)}</b></td><td colspan="4" class="tiny">Benchmark: the share ${pa === "D" ? "Democrats" : "Republicans"} need in that county to win the district, by Decision Desk HQ's model. Sort: <a href="#" data-sort="rem">votes left</a> · <a href="#" data-sort="est">size</a> · <a href="#" data-sort="name">name</a></td></tr></tfoot>`;
+  $("#ctable").querySelectorAll("tbody tr").forEach(tr => tr.onclick = () => { selFips = selFips === tr.dataset.fips ? null : tr.dataset.fips; renderWhere(); });
+  $("#ctable").querySelectorAll("[data-sort]").forEach(a => a.onclick = e => { e.preventDefault(); sortBy = a.dataset.sort; renderWhere(); });
+  drawMap(rows, T);
+}
+function drawMap(rows, T) {
+  if (!GEO) { $("#map").innerHTML = `<div class="card tiny">Map loading…</div>`; return; }
+  const want = new Set((rows.length ? rows : (R.counties || [])).map(r => r.fips));
+  const feats = GEO.features.filter(f => want.has(f.id)); if (!feats.length) { $("#map").innerHTML = ""; return; }
+  const rings = f => f.geometry.type === "Polygon" ? [f.geometry.coordinates[0]] : f.geometry.coordinates.map(p => p[0]);
+  let minX = 1e9, maxX = -1e9, minY = 1e9, maxY = -1e9;
+  for (const f of feats) for (const rg of rings(f)) for (const [x, y] of rg) { if (x < minX) minX = x; if (x > maxX) maxX = x; if (y < minY) minY = y; if (y > maxY) maxY = y; }
+  const padX = (maxX - minX) * 0.04 || 0.1, padY = (maxY - minY) * 0.04 || 0.1; minX -= padX; maxX += padX; minY -= padY; maxY += padY;
+  const K = Math.cos((minY + maxY) / 2 * Math.PI / 180), W = 640, H = Math.max(200, Math.round(W * (maxY - minY) / ((maxX - minX) * K)));
+  const px = ([x, y]) => [((x - minX) / (maxX - minX) * W).toFixed(1), ((maxY - y) / (maxY - minY) * H).toFixed(1)];
+  const byF = {}; for (const r of rows) byF[r.fips] = r;
+  const mix = (v, c) => `color-mix(in srgb, var(${c}) ${Math.round(v * 100)}%, var(--paper))`;
+  let s = `<svg class="map" viewBox="0 0 ${W} ${H}" role="img" aria-label="County map of ${esc(R.id)}">`;
+  for (const f of feats) { const r = byF[f.id]; let fill = "var(--neutral)";
+    if (r && r.ash != null) { const m = Math.abs(r.ash - 0.5) * 2; fill = mix(0.25 + 0.75 * Math.min(1, m * 2.5), r.ash > 0.5 ? (T.pa === "R" ? "--rep" : T.pa === "D" ? "--dem" : "--oth") : (T.pb === "R" ? "--rep" : T.pb === "D" ? "--dem" : "--oth")); }
+    const d = rings(f).map(rg => "M" + rg.map(p => px(p).join(",")).join("L") + "Z").join(" ");
+    s += `<path d="${d}" fill="${fill}" class="${selFips === f.id ? "sel" : ""} ${r && !r.whole ? "part" : ""}" data-fips="${f.id}"><title>${esc((r && r.name) || f.properties.n)}</title></path>`; }
+  // labels for the biggest few by expected vote
+  const big = rows.slice().sort((a, b) => (b.est || 0) - (a.est || 0)).slice(0, 8).map(r => r.fips);
+  for (const f of feats) if (big.includes(f.id)) { const rg = rings(f).sort((a, b) => b.length - a.length)[0]; const cx = rg.reduce((s, p) => s + +px(p)[0], 0) / rg.length, cy = rg.reduce((s, p) => s + +px(p)[1], 0) / rg.length; s += `<text x="${cx.toFixed(0)}" y="${cy.toFixed(0)}" text-anchor="middle">${esc(byF[f.id].name)}</text>`; }
+  $("#map").innerHTML = s + "</svg>";
+  $("#map").querySelectorAll("path").forEach(p => p.onclick = () => { selFips = selFips === p.dataset.fips ? null : p.dataset.fips; renderWhere(); const tr = $("#ctable").querySelector(`tr[data-fips="${selFips}"]`); if (tr) tr.scrollIntoView({ block: "nearest" }); });
+  $("#legend").innerHTML = T ? `<span><i style="background:var(--${T.pa === "R" ? "rep" : T.pa === "D" ? "dem" : "oth"})"></i>${esc(T.a.lastName)} ahead</span><span><i style="background:var(--${T.pb === "R" ? "rep" : T.pb === "D" ? "dem" : "oth"})"></i>${esc(T.b.lastName)} ahead</span><span><i style="background:var(--neutral)"></i>no votes yet</span><span>darker = bigger margin · dashed = part of the county</span>` : "";
+}
+function renderTypes(T) {
+  const rows = countyRows(); const sum = { mail: 0, early: 0, eday: 0, prov: 0, bmail: 0, bearly: 0, beday: 0, bprov: 0 };
+  for (const r of rows) for (const k in sum) sum[k] += r.types[k] || 0;
+  const any = sum.mail + sum.early + sum.eday + sum.bmail + sum.bearly + sum.beday;
+  $("#s-types").hidden = !any; if (!any) return;
+  const bar = (name, p, m, e, d, pr) => { const t = m + e + d + pr || 1; return `<div class="trow"><div class="lbl ${p}">${esc(name)}</div><div><div class="bar"><i style="width:${m / t * 100}%;background:var(--${p === "D" ? "dem" : p === "R" ? "rep" : "oth"});opacity:.95" title="mail"></i><i style="width:${e / t * 100}%;background:var(--${p === "D" ? "dem" : p === "R" ? "rep" : "oth"});opacity:.65" title="early in person"></i><i style="width:${d / t * 100}%;background:var(--${p === "D" ? "dem" : p === "R" ? "rep" : "oth"});opacity:.4" title="Election Day"></i><i style="width:${pr / t * 100}%;background:var(--oth);opacity:.5" title="provisional"></i></div><div class="tiny">mail ${fmt(m)} (${pct(m / t, 0)}) · early ${fmt(e)} (${pct(e / t, 0)}) · Election Day ${fmt(d)} (${pct(d / t, 0)})${pr ? ` · provisional ${fmt(pr)}` : ""}</div></div></div>`; };
+  const shareIn = (x, y) => x + y ? x / (x + y) : null;
+  const mailSh = shareIn(sum.mail + sum.early, sum.bmail + sum.bearly), edaySh = shareIn(sum.eday, sum.beday);
+  $("#types").innerHTML = bar(T.a.firstName + " " + T.a.lastName, T.pa, sum.mail, sum.early, sum.eday, sum.prov) + bar(T.b.firstName + " " + T.b.lastName, T.pb, sum.bmail, sum.bearly, sum.beday, sum.bprov)
+    + `<div class="lead" style="font-size:18px">${mailSh != null && edaySh != null ? `${esc(T.a.lastName)} has ${pct(mailSh, 0)} of the mail-and-early vote and ${pct(edaySh, 0)} of the Election Day vote so far.` : mailSh != null ? `${esc(T.a.lastName)} has ${pct(mailSh, 0)} of the mail-and-early vote so far.` : ""}</div>`;
+}
+function renderTraj(expMid) {
+  const h = HIST && (HIST[R.id] || HIST[R.id.replace("-", "")]);
+  $("#s-traj").hidden = !(h && h.length > 1); if (!h || h.length < 2) return;
+  const W = 640, H = 240, L = 46, B = 28, T0 = 14;
+  const pts2 = h.map(p => { const [t, d, r, pc, tot] = p; const two = d + r; return { x: expMid && tot ? Math.min(1, tot / expMid) : (pc || 0) / 100, m: two ? (d - r) / two * 100 : 0, t }; });
+  const mx = Math.max(5, ...pts2.map(p => Math.abs(p.m)));
+  const X = x => L + x * (W - L - 10), Y = m => T0 + (mx - m) / (2 * mx) * (H - T0 - B);
+  let s = `<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;display:block">`;
+  s += `<rect x="${L}" y="${T0}" width="${W - L - 10}" height="${(H - T0 - B) / 2}" fill="var(--dem)" opacity=".07"/><rect x="${L}" y="${T0 + (H - T0 - B) / 2}" width="${W - L - 10}" height="${(H - T0 - B) / 2}" fill="var(--rep)" opacity=".07"/>`;
+  s += `<line x1="${L}" x2="${W - 10}" y1="${Y(0)}" y2="${Y(0)}" stroke="var(--line)"/>`;
+  for (const v of [mx, mx / 2, 0, -mx / 2, -mx]) s += `<text x="${L - 6}" y="${Y(v) + 4}" text-anchor="end" style="font:11px var(--mono);fill:var(--muted)">${v > 0 ? "D +" + v.toFixed(0) : v < 0 ? "R +" + (-v).toFixed(0) : "0"}</text>`;
+  for (const v of [0, .25, .5, .75, 1]) s += `<text x="${X(v)}" y="${H - 8}" text-anchor="middle" style="font:11px var(--mono);fill:var(--muted)">${Math.round(v * 100)}%</text>`;
+  s += `<polyline fill="none" stroke="var(--ink)" stroke-width="2" points="${pts2.map(p => X(p.x).toFixed(1) + "," + Y(p.m).toFixed(1)).join(" ")}"/>`;
+  const last = pts2[pts2.length - 1]; s += `<circle cx="${X(last.x)}" cy="${Y(last.m)}" r="4" fill="var(--live)"/>`;
+  s += `<text x="${W / 2}" y="${H - 20}" text-anchor="middle" style="font:11px var(--sans);fill:var(--muted)">share of expected vote counted →</text></svg>`;
+  $("#traj").innerHTML = s + `<div class="tiny">${pts2.length} updates since ${ptT(h[0][0])}; latest ${ptT(last.t)}.</div>`;
+}
+function renderBlueDog(T) {
+  $("#s-bd").hidden = false;
+  const rows = countyRows(); if (!rows.length || !T) { $("#bd").innerHTML = `<div class="card wait">Waiting for the first count</div>`; return; }
+  const bdParty = T.pa;  // the Blue Dog's party letter on this page ("D" normally)
+  // statewide Democratic shares by county, from the Senate and governor races
+  const swShares = race => { if (!race) return null; const tl = race.raceData.toplineResults || [], dem = tl.find(c => c.party && c.party.abbrev === "DEM"), rep = tl.filter(c => c.party && c.party.abbrev === "GOP").sort((x, y) => y.votes - x.votes)[0]; if (!dem || !rep) return null;
+    const out = { name: dem.firstName + " " + dem.lastName, office: /Senate/i.test(race.raceData.office) ? "Senate" : "governor", by: {}, tot: 0, d: 0 };
+    for (const v of race.vcuData || []) { const f = v.vcu.countyFips || v.vcu.fips, cr = {}; for (const c of v.candidateResults || []) cr[c.id] = c; const dv = (cr[dem.candId] || {}).votes || 0, rv = (cr[rep.candId] || {}).votes || 0; if (dv + rv) out.by[f] = dv / (dv + rv); }
+    return out; };
+  const comps = [...SW.senate.map(swShares), swShares(SW.governor)].filter(Boolean);
+  const bdShare = r => bdParty === "D" ? r.ash : r.ash == null ? null : 1 - r.ash;  // Blue Dog's two-way share; if the Blue Dog isn't the D (AK-AL), compare them anyway
+  const blocks = [];
+  const wavg = (pairs) => { let w = 0, s = 0; for (const [sh, ref, wt] of pairs) if (sh != null && ref != null && wt) { w += wt; s += (sh - ref) * wt; } return w ? s / w * 100 : null; };
+  for (const c of comps) {
+    const pairs = rows.map(r => [bdShare(r), c.by[r.fips], r.two]); const diff = wavg(pairs), n = pairs.filter(p => p[0] != null && p[1] != null).length;
+    if (!n) continue;
+    blocks.push({ title: `vs. ${esc(c.name)} for ${c.office}`, diff, n, rowsHtml: rows.filter(r => bdShare(r) != null && c.by[r.fips] != null).sort((x, y) => y.two - x.two).slice(0, 10).map(r => `<tr><td>${esc(r.name)}${r.whole ? "" : " <span class='tiny'>part</span>"}</td><td class="n">${pct(bdShare(r))}</td><td class="n">${pct(c.by[r.fips])}</td><td class="n ${bdShare(r) - c.by[r.fips] >= 0 ? "plus" : "minus"}">${pts((bdShare(r) - c.by[r.fips]) * 100)}</td></tr>`).join(""), cols: [esc(R.bluedog.cand.split(" ").slice(-1)[0]), esc(c.name.split(" ").slice(-1)[0])] });
+  }
+  // vs Harris 2024 (two-way share from the county margin)
+  const hp = rows.map(r => [bdShare(r), r.m24 == null ? null : (0.5 - r.m24 / 200), r.two]); const hd = wavg(hp), hn = hp.filter(p => p[0] != null && p[1] != null).length;
+  // registration
+  const regPairs = rows.map(r => [bdShare(r), r.regD && r.regR ? r.regD / (r.regD + r.regR) : null, r.two]); const rd = wavg(regPairs), rn = regPairs.filter(p => p[0] != null && p[1] != null).length;
+  const line = (d, what) => d == null ? "" : `<div class="lead">${esc(R.bluedog.cand.split(" ").slice(-1)[0])} is running <b class="${d >= 0 ? "plus" : "minus"}">${Math.abs(d).toFixed(1)} points ${d >= 0 ? "ahead of" : "behind"}</b> ${what}.</div>`;
+  $("#bd").innerHTML = `<div class="bd">
+    ${blocks.length ? blocks.map(b => line(b.diff, b.title.replace("vs. ", "") + ` across the ${b.n} count${b.n === 1 ? "y" : "ies"} with votes`)).join("") : `<div class="lead">No statewide Democrat on the ballot here to compare with${comps.length ? "" : " yet"}.</div>`}
+    ${line(hd, `Harris's 2024 share in the same ${hn} count${hn === 1 ? "y" : "ies"}`)}
+    ${line(rd, `Democrats' share of two-party registration in these counties`)}
+    <div class="note">Shares are two-way (Democrat vs. Republican), weighted by this race's votes in each county, so the big counties count most. Where only part of a county is in the district, the comparison uses the whole county's statewide vote.</div>
+    ${blocks.map(b => `<details style="margin-top:10px"><summary style="cursor:pointer;color:var(--accent);font-weight:600">${b.title}, county by county</summary><div class="wrap"><table><thead><tr><th>County</th><th class="n">${b.cols[0]}</th><th class="n">${b.cols[1]}</th><th class="n">Diff</th></tr></thead><tbody>${b.rowsHtml}</tbody></table></div></details>`).join("")}
+  </div>`;
+}
+window.addEventListener("hashchange", () => location.reload());
+init();
+</script>
+</body>
+</html>
