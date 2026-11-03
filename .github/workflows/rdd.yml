@@ -1,0 +1,32 @@
+name: Election-night RDD (weather, rules, turnout)
+# Runs electionlab/rdd/rdd.py every ~10 minutes on election night and commits its results.json and figures,
+# which lab.nathanwmonroe.com/electionlab/weather/ reads. Set up Nov 3, 2026 by the Election Night Lab thread.
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: rdd
+  cancel-in-progress: false
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install --quiet numpy matplotlib
+      - name: Run the analysis
+        run: python3 electionlab/rdd/rdd.py
+      - name: Commit results
+        run: |
+          git config user.name "election-night-lab"
+          git config user.email "noreply@nathanwmonroe.com"
+          git add electionlab/rdd/results.json electionlab/rdd/history.json electionlab/rdd/rain_cache.json electionlab/rdd/fig_h1.svg electionlab/rdd/fig_h2.svg electionlab/rdd/fig_h3.svg || true
+          if git diff --cached --quiet; then echo "no change"; exit 0; fi
+          git commit -q -m "rdd: results $(date -u +%H:%MZ)"
+          for i in 1 2 3; do git pull --rebase -q origin main && git push -q origin main && break || sleep 5; done
