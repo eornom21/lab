@@ -55,7 +55,7 @@ def turnout():
             eff = -0.35 * rain * (1.0 if r["mail"] == 0 else 0.4) + random.gauss(0, 2.5)
             live = pre * (1 + eff / 100); frac = random.random()
             dsh = 0.5 - (c["m24"] or 0) / 200 + (0.0008 * rain * (1.0 if r["mail"] == 0 else 0.3)) * -1 + random.gauss(0, 0.02)
-            cnt = int(live * frac); agg[c["fips"]] = {"pre": pre, "live": live, "counted": cnt, "dem": cnt * dsh, "rep": cnt * (1 - dsh), "parts": 1, "done": frac > 0.95, "uncontested": False}
+            cnt = int(live * frac); ed = 0.45 * (1 - 0.012 * rain * (1.0 if r["mail"] == 0 else 0.4)); agg[c["fips"]] = {"pre": pre, "live": live, "counted": cnt, "dem": cnt * dsh, "rep": cnt * (1 - dsh), "parts": 1, "done": frac > 0.95, "uncontested": False, "mail": int(cnt * 0.35), "early": int(cnt * 0.2), "eday": int(cnt * ed)}
         return agg, {"races": 435, "fetched": 435}
     idx = fetch(DDHQ + "/house")
     ids = [r["raceId"] for r in idx.get("races", []) if r.get("raceId")]
@@ -77,7 +77,10 @@ def turnout():
                 pre = g.get("preElectionMid") or 0; live = t.get("estimatedVotesMid") or pre; cnt = t.get("totalVotes") or 0
                 dem = sum((c.get("votes") or 0) for c in v.get("candidateResults") or [] if party.get(c.get("id")) == "DEM")
                 rep = sum((c.get("votes") or 0) for c in v.get("candidateResults") or [] if party.get(c.get("id")) == "GOP")
-                a = agg.setdefault(f, {"pre": 0, "live": 0, "counted": 0, "dem": 0, "rep": 0, "parts": 0, "done": True, "uncontested": False})
+                cr = v.get("candidateResults") or []
+                mail = sum((c.get("absentee_votes") or c.get("absenteeVotes") or 0) for c in cr); early = sum((c.get("early_votes") or c.get("earlyVotes") or 0) for c in cr); eday = sum((c.get("election_day_votes") or c.get("electionDayVotes") or 0) for c in cr)
+                a = agg.setdefault(f, {"pre": 0, "live": 0, "counted": 0, "dem": 0, "rep": 0, "parts": 0, "done": True, "uncontested": False, "mail": 0, "early": 0, "eday": 0})
+                a["mail"] += mail; a["early"] += early; a["eday"] += eday
                 a["pre"] += pre; a["live"] += live; a["counted"] += cnt; a["parts"] += 1; a["done"] = a["done"] and bool(t.get("completedCounty"))
                 if contested: a["dem"] += dem; a["rep"] += rep
                 else: a["uncontested"] = True  # a county touched by a race without both major parties: no partisan comparison
@@ -203,7 +206,7 @@ def build(agg, mm):
         if not a or not r or not a["pre"]: continue
         rain_mm = mm.get(c["fips"]);
         rows.append({"fips": c["fips"], "st": c["st"], "name": c["name"], "lat": c["lat"], "lon": c["lon"], "m24": c["m24"], "pre": a["pre"], "live": a["live"], "counted": a["counted"],
-                     "dem": a["dem"], "rep": a["rep"], "rain": rain_mm, "mail": r["mail"], "early": r["early_days"], "conv": conv_of(r), "borders": c["borders"]})
+                     "dem": a["dem"], "rep": a["rep"], "rain": rain_mm, "mail": r["mail"], "early": r["early_days"], "conv": conv_of(r), "borders": c["borders"], "v_mail": a.get("mail", 0), "v_early": a.get("early", 0), "v_eday": a.get("eday", 0), "v24": c.get("v24")})
     return rows
 
 def analyze(rows, meta):
@@ -272,6 +275,54 @@ def analyze(rows, meta):
                        "clusters": res["clusters"], "reading": f"In states without convenience voting, each centimeter of rain goes with a {b['est']:+.2f}-point move in the Democratic share against its 2024 baseline ({sig(b)}" + (f"; 95% CI {b['ci'][0]:+.2f} to {b['ci'][1]:+.2f})" if b.get('ci') else ")") + f"; in convenience-voting states the rain term is {b['est'] + i['est']:+.2f} points per cm."})
     else: h3.update({"verdict": "Too early", "reading": f"Needs about 150 counties at least half counted in two-party races ({len(h3s)} so far)."})
     R["hypotheses"].append(h3)
+    # ----- H4: rain by ballot type, within the same county -----
+    h4 = {"id": "H4", "title": "Rain hits Election-Day ballots, not ballots already cast", "claim": "If rain really keeps people home, it should show up in Election-Day votes and not in the mail and early in-person votes that were cast before it rained. The within-county contrast is the cleanest test of the mechanism behind H1; early in-person votes are the placebo (cast before today, so rain today should not touch them).",
+          "design": "Counties at least half counted whose feed splits votes by type. One row per county and ballot type (mail, early in-person, Election Day); the outcome is log votes of that type. County fixed effects absorb each county's size and overall turnout; state x type fixed effects absorb how each state's count brings in each type; the terms of interest are Election Day x rain and early in-person x rain. A negative Election Day x rain term with an early-vote term near zero is the pattern the claim predicts. Standard errors clustered by state."}
+    typed = [r for r in have if (r["v_mail"] + r["v_early"] + r["v_eday"]) >= 0.9 * r["counted"] and r["v_eday"] > 0 and (r["v_mail"] > 0 or r["v_early"] > 0)]
+    R["data"]["counties_with_vote_types"] = len(typed)
+    if not early and len(typed) >= 150 and sum(1 for r in typed if r["rain"] >= 1) >= 25:
+        rows4 = []
+        for r in typed:
+            for t, v in (("mail", r["v_mail"]), ("early", r["v_early"]), ("eday", r["v_eday"])):
+                if v > 0: rows4.append({"fips": r["fips"], "st": r["st"], "t": t, "y": math.log(v), "rain_cm": r["rain_cm"]})
+        # within-county transformation (county fixed effects)
+        by = {}
+        for q in rows4: by.setdefault(q["fips"], []).append(q)
+        keep = [q for q in rows4 if len(by[q["fips"]]) >= 2]
+        for f, g in by.items():
+            if len(g) < 2: continue
+            m = sum(q["y"] for q in g) / len(g)
+            for q in g: q["yd"] = q["y"] - m
+        cols = {"eday x rain (per cm)": [q["rain_cm"] * (q["t"] == "eday") for q in keep], "early in-person x rain (per cm)": [q["rain_cm"] * (q["t"] == "early") for q in keep]}
+        X = [[1.0] * len(keep)] + list(cols.values()) + fe(None, [q["st"] + ":" + q["t"] for q in keep])
+        # demean the regressors by county too (same transformation as y)
+        Xa = np.array(X, float)
+        idx = {}
+        for i, q in enumerate(keep): idx.setdefault(q["fips"], []).append(i)
+        for f, ii in idx.items():
+            Xa[1:, ii] = Xa[1:, ii] - Xa[1:, ii].mean(axis=1, keepdims=True)
+        res = ols([q["yd"] for q in keep], Xa.T, ["const"] + list(cols.keys()) + [None] * (len(X) - 1 - len(cols)), cluster=[q["st"] for q in keep])
+        if res:
+            key = next(x for x in res["rows"] if x["term"].startswith("eday")); pl = next(x for x in res["rows"] if x["term"].startswith("early"))
+            h4.update({"n": res["n"], "counties": len(idx), "clusters": res["clusters"], "r2": res["r2"], "table": [x for x in res["rows"] if x["term"] != "const"], "verdict": verdict(key, expect="neg"),
+                       "reading": f"Within the same county ({len(idx)} counties, {res['n']} county-type rows), each centimeter of rain goes with {key['est']*100:+.1f}% Election-Day votes relative to the county's other ballots ({sig(key)}" + (f"; 95% CI {key['ci'][0]*100:+.1f}% to {key['ci'][1]*100:+.1f}%" if key.get('ci') else "") + f"). The placebo, early in-person votes cast before today: {pl['est']*100:+.1f}% per cm ({sig(pl)})."})
+    else: h4.update({"verdict": "Too early", "reading": f"Needs about 150 counties at least half counted whose feed splits votes by type ({len(typed)} so far, {sum(1 for r in typed if r['rain'] >= 1)} wet). Some states' feeds never split by type; those counties stay out."})
+    R["hypotheses"].append(h4)
+    # ----- H5: rain x county size (where the rain effect lands) -----
+    h5 = {"id": "H5", "title": "The rain effect is larger in small, rural counties", "claim": "Gomez, Hansford & Krause (2007) found the turnout cost of rain concentrated outside big metropolitan counties, where polling places are farther apart and more voters drive. Here county size (log 2024 presidential votes) stands in for rural vs. urban.",
+          "design": "H1 with one more term: rain x county size, where size is the log of the county's 2024 presidential vote, centered at the average county. The rain term is then the effect at an average-sized county; a positive interaction means the rain penalty shrinks as counties get bigger (that is, it is larger in small counties). State fixed effects; standard errors clustered by state."}
+    sized = [r for r in have if r.get("v24")]
+    if not early and len(sized) >= 150 and len(set(r["st"] for r in sized)) >= 2:
+        lv = [math.log(r["v24"]) for r in sized]; mu = sum(lv) / len(lv)
+        X = [[1.0] * len(sized), [r["rain_cm"] for r in sized], [r["rain_cm"] * (l - mu) for r, l in zip(sized, lv)], [l - mu for l in lv]] + fe(None, [r["st"] for r in sized])
+        res = ols([r["short"] for r in sized], np.array(X).T, ["const", "rain (per cm, average-sized county)", "rain x county size (per log unit)", "county size (log 2024 votes)"] + [None] * (len(X) - 4), cluster=[r["st"] for r in sized])
+        if res:
+            b = next(x for x in res["rows"] if x["term"].startswith("rain (per cm")); i = next(x for x in res["rows"] if x["term"].startswith("rain x county size"))
+            small = b["est"] - 1.5 * i["est"]; big = b["est"] + 1.5 * i["est"]  # ±1.5 log units ≈ a county a quarter / four times the average size
+            h5.update({"n": res["n"], "clusters": res["clusters"], "r2": res["r2"], "table": [x for x in res["rows"] if x["term"] != "const"], "verdict": verdict(i, expect="pos"),
+                       "reading": f"Across {res['n']} counties, each centimeter of rain goes with {b['est']:+.2f}% votes vs. expectation at an average-sized county; the rain term moves {i['est']:+.2f} per log unit of size ({sig(i)}" + (f"; 95% CI {i['ci'][0]:+.2f} to {i['ci'][1]:+.2f}" if i.get('ci') else "") + f"), so about {small:+.2f}% per cm in a county a quarter the average size and {big:+.2f}% in one four times it."})
+    else: h5.update({"verdict": "Too early", "reading": f"Needs about 150 counties at least half counted ({len(sized)} so far)."})
+    R["hypotheses"].append(h5)
     return R, have, bs, h3s
 
 def sig(b):
@@ -339,6 +390,31 @@ def figures(have, bs, h3s):
     else: ax.text(.5, .5, "Waiting for counties to report", ha="center", va="center", transform=ax.transAxes, color=MUTED)
     ax.axhline(0, color=MUTED, lw=.8); ax.set_xlabel("precipitation today (mm)"); ax.set_ylabel("Democratic share vs. Harris 2024 (points)"); ax.set_title("H3 · Rain and the partisan shift, by voting rules", loc="left", color=INK)
     fig.tight_layout(); fig.savefig(os.path.join(OUT, "fig_h3.svg")); plt.close(fig)
+    # F4: rain and each ballot type, within county (raw version: Election-Day share of the county's votes, wet vs dry)
+    fig, ax = plt.subplots(figsize=(7, 4.2))
+    typed = [r for r in have if (r["v_mail"] + r["v_early"] + r["v_eday"]) >= 0.9 * r["counted"] and r["v_eday"] > 0]
+    if len(typed) >= 10:
+        for lab, col, key in [("Election Day", Rc, "v_eday"), ("mail", D, "v_mail"), ("early in-person", INK, "v_early")]:
+            xs = [r["rain"] for r in typed]; ys = [100 * r[key] / max(1, r["v_mail"] + r["v_early"] + r["v_eday"]) for r in typed]
+            mx, my, ms = binned(xs, ys, 8)
+            if mx: ax.errorbar(mx, my, yerr=ms, fmt="o-", color=col, label=f"{lab} share of the county's votes")
+        ax.legend(frameon=False, fontsize=9)
+    else: ax.text(.5, .5, "Waiting for counties whose feed splits votes by type", ha="center", va="center", transform=ax.transAxes, color=MUTED)
+    ax.set_xlabel("precipitation today (mm)"); ax.set_ylabel("share of the county's votes so far (%)"); ax.set_title("H4 · Which ballots the rain touches (raw shares; the test uses county fixed effects)", loc="left", color=INK, fontsize=10.5)
+    fig.tight_layout(); fig.savefig(os.path.join(OUT, "fig_h4.svg")); plt.close(fig)
+    # F5: rain and turnout by county size
+    fig, ax = plt.subplots(figsize=(7, 4.2))
+    sized = [r for r in have if r.get("v24")]
+    if len(sized) >= 15:
+        vs = sorted(r["v24"] for r in sized); t1, t2 = vs[len(vs) // 3], vs[2 * len(vs) // 3]
+        for lab, col, sel in [("small counties (bottom third by 2024 votes)", Rc, lambda r: r["v24"] < t1), ("middle third", MUTED, lambda r: t1 <= r["v24"] < t2), ("large counties (top third)", D, lambda r: r["v24"] >= t2)]:
+            sub = [r for r in sized if sel(r)]
+            mx, my, ms = binned([r["rain"] for r in sub], [r["short"] for r in sub], 8)
+            if mx: ax.errorbar(mx, my, yerr=ms, fmt="o-", color=col, label=f"{lab}, n={len(sub)}")
+        ax.legend(frameon=False, fontsize=9)
+    else: ax.text(.5, .5, "Waiting for counties to report", ha="center", va="center", transform=ax.transAxes, color=MUTED)
+    ax.axhline(0, color=MUTED, lw=.8); ax.set_xlabel("precipitation today (mm)"); ax.set_ylabel("votes vs. expectation (% of expected)"); ax.set_title("H5 · Rain and turnout by county size", loc="left", color=INK)
+    fig.tight_layout(); fig.savefig(os.path.join(OUT, "fig_h5.svg")); plt.close(fig)
 
 if __name__ == "__main__":
     t0 = time.time()
@@ -346,7 +422,7 @@ if __name__ == "__main__":
     mm, asof = rain(); meta["rain_asof"] = asof
     rows = build(agg, mm)
     R, have, bs, h3s = analyze(rows, meta)
-    try: figures(have, bs, h3s); R["figures"] = {"H1": "fig_h1.svg", "H2": "fig_h2.svg", "H3": "fig_h3.svg"}
+    try: figures(have, bs, h3s); R["figures"] = {"H1": "fig_h1.svg", "H2": "fig_h2.svg", "H3": "fig_h3.svg", "H4": "fig_h4.svg", "H5": "fig_h5.svg"}
     except Exception as e: R["figure_error"] = str(e)
     R["seconds"] = round(time.time() - t0, 1)
     # a compact per-run history of the headline coefficients, for the page's "how the estimate moved tonight" strip

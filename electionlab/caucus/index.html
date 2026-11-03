@@ -102,7 +102,8 @@ const normTs = s => { if (!s) return s; let x = String(s).trim().replace(" ", "T
 const ptT = s => { const d = new Date(normTs(s)); return isNaN(d) ? "" : d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", timeZone: "America/Los_Angeles" }) + " PT"; };
 const LIVE_URL = "https://raw.githubusercontent.com/eornom21/lab/main/electionlab/caucus/live.json";
 const STALE_MS = 20 * 60e3;
-let DATA = null, GROUPS = null, G = null, ROWS = [], LIVE = null, sortKey = "ticket", sortDir = -1, IDX = null, MODE = "live";
+let DATA = null, GROUPS = null, G = null, ROWS = [], LIVE = null, sortKey = "ticket", sortDir = -1, IDX = null, MODE = "live", RAINTAX = null;
+async function loadRainTax() { try { const R = await getJSON("https://raw.githubusercontent.com/eornom21/lab/main/electionlab/rdd/results.json?t=" + Math.floor(Date.now() / 60e3)); const t = ((R.hypotheses || [])[0] || {}).table, row = t && t.find(x => /per inch/.test(x.term)); RAINTAX = row ? row.est : null; } catch (e) { } }
 const P = () => G.party, PARTY = () => P() === "D" ? "DEM" : "GOP", pres24 = () => P() === "D" ? "Harris" : "Trump";
 const pname = p => p === "D" ? "Democrat" : "Republican";
 async function getJSON(u) { const r = await fetch(u, { cache: "no-store" }); if (!r.ok) throw new Error(r.status); return r.json(); }
@@ -158,6 +159,7 @@ async function tickDirect() {
 async function tick() {
   let fromLive = false;
   try { await loadLive(); fromLive = true; } catch (e) { /* fall through */ }
+  if (G.id === "all") await loadRainTax();
   if (G.id === "all") { renderOverview(); return; }
   if (fromLive && LIVE.groups[G.id]) { ROWS = LIVE.groups[G.id]; MODE = "live"; }
   else { ROWS = await tickDirect(); MODE = "direct"; }
@@ -190,7 +192,7 @@ function renderOverview() {
   $("#olead").innerHTML = `<div class="lead">${!any ? `Nothing counted yet. ${gs.reduce((s, x) => s + x.s.n, 0)} races across ${gs.length} lists.` : scored.length ? `Best CAPE score so far: the ${esc(scored[0].g.name)}, ${pts(scored[0].s.cape.avg)} points against the pre-election forecast across ${scored[0].s.cape.n} races${scored.length > 1 ? `; the ${esc(scored[scored.length - 1].g.name)} are at ${pts(scored[scored.length - 1].s.cape.avg)}` : ""}.` : "Votes are in; forecast comparisons fill in as counties report."}</div>`;
   const t = LIVE.tide || {};
   const st = (k, v, s, c) => `<div class="stat"><div class="k">${k}</div><div class="v ${c || ""}">${v}</div><div class="s">${s || ""}</div></div>`;
-  $("#ostats").innerHTML = st("Tide so far", t.value == null ? "–" : (t.value > 0 ? "D" : "R") + Math.abs(t.value).toFixed(1), t.value == null ? "fills in as counties report" : `vs. 2024 presidential, ${fmt(t.counties)} counties on these lists`, t.value > 0 ? "D" : t.value < 0 ? "R" : "") + st("Races on the lists", gs.reduce((s, x) => s + x.s.n, 0), "some appear on more than one") + st("Called so far", gs.reduce((s, x) => s + x.s.won + x.s.lost, 0), "list candidates won or lost") + st("Rain tax", "see weather", `<a href="../weather/">turnout vs. rain, live</a>`);
+  $("#ostats").innerHTML = st("Tide so far", t.value == null ? "–" : (t.value > 0 ? "D" : "R") + Math.abs(t.value).toFixed(1), t.value == null ? "fills in as counties report" : `vs. 2024 presidential, ${fmt(t.counties)} counties on these lists`, t.value > 0 ? "D" : t.value < 0 ? "R" : "") + st("Races on the lists", gs.reduce((s, x) => s + x.s.n, 0), "some appear on more than one") + st("Called so far", gs.reduce((s, x) => s + x.s.won + x.s.lost, 0), "list candidates won or lost") + st("CAPE Rain Tax", RAINTAX == null ? "–" : (RAINTAX > 0 ? "+" : "") + RAINTAX.toFixed(1) + "%", `<a href="../weather/">of the expected vote per inch of rain; live on the weather page</a>`);
 }
 // ---------- one group ----------
 function render() {
