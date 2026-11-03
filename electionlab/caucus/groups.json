@@ -1,1 +1,890 @@
-{"note":"Caucus scoreboards for election night 2026. Each race: district, the caucus's candidate, their party, who holds the seat now, whether the candidate is the incumbent, note. Opponents and live numbers come from Decision Desk HQ at view time.","groups":[{"id":"bluedogs","name":"Blue Dogs","party":"D","short":"The House's centrist Democrats","blurb":"The 31 races the Blue Dog Coalition is tracking tonight: its members defending seats and its candidates trying to take seats from Republicans.","source":"Blue Dog Coalition tracker (2026bluedogselectionresults.netlify.app), Nov 3; OH-7 left off at the lab's request","races":[["AK-AL","Bill Hill","I","R",false,"Hill is on the ballot without a party label; Democrat Eric Hafner is also running"],["AZ-6","JoAnna Mendoza","D","R",false,""],["CA-4","Mike Thompson","D","D",true,"Two Democrats (top-two primary)"],["CA-13","Adam Gray","D","D",true,""],["CA-21","Jim Costa","D","D",true,""],["CA-46","Lou Correa","D","D",true,""],["CO-3","Dwayne Romero","D","R",false,""],["CO-4","Eileen Laubacher","D","R",false,""],["FL-2","Amanda Green","D","R",false,"Open seat (Neal Dunn, R)"],["FL-7","Bale Dalton","D","R",false,"Open seat (Cory Mills, R)"],["FL-13","Leela Gray","D","R",false,""],["GA-2","Sanford Bishop","D","D",true,""],["KS-2","Don Coover","D","R",false,""],["KY-6","Zach Dembo","D","R",false,"Open seat (Andy Barr, R)"],["MN-1","Jake Johnson","D","R",false,""],["MT-1","Sam Forstag","D","R",false,"Open seat (Ryan Zinke, R)"],["NJ-2","Zack Mullock","D","R",false,""],["NJ-5","Josh Gottheimer","D","D",true,""],["NY-21","Blake Gendebien","D","R",false,"Open seat (Elise Stefanik, R)"],["NC-11","Jamie Ager","D","R",false,"Open seat (Chuck Edwards, R)"],["NC-13","Paul Barringer","D","R",false,""],["PA-7","Bob Brooks","D","R",false,""],["SC-1","Nancy Lacore","D","R",false,"Open seat (Nancy Mace, R)"],["TN-5","Chaz Molder","D","R",false,"Open seat (Andy Ogles, R); new lines"],["TX-15","Bobby Pulido","D","R",false,""],["TX-28","Henry Cuellar","D","D",true,""],["TX-34","Vicente Gonzalez","D","D",true,""],["TX-35","Johnny Garcia","D","D",false,"Open seat (Greg Casar, D, now in TX-37); new lines"],["WA-3","Marie Gluesenkamp Perez","D","D",true,""],["WI-1","Mitchell Berman","D","R",false,""],["WI-3","Rebecca Cooke","D","R",false,""]]},{"id":"progressives","name":"Progressives","party":"D","short":"Congressional Progressive Caucus PAC's Red-to-Blue slate","blurb":"The nine candidates the CPC PAC endorsed in Republican-held or swing seats, from its Nov 3 memo. Three of them (Brooks, Poindexter, Forstag) are also on the Blue Dog list.","source":"CPC PAC memo, Nov 3, 2026 (mailchi.mp/weareprogressives)","races":[["CA-22","Randy Villegas","D","R",false,"vs. David Valadao; among the most expensive House races"],["PA-7","Bob Brooks","D","R",false,"also on the Blue Dog list"],["MT-1","Sam Forstag","D","R",false,"open seat (Zinke); also on the Blue Dog list"],["OH-7","Brian Poindexter","D","R",false,"also on the Blue Dog list"],["MI-7","Will Lawrence","D","R",false,"vs. Tom Barrett; memo calls it the most expensive House race"],["VA-5","Tom Perriello","D","R",false,"former congressman"],["ME-2","Matt Dunlap","D","D",false,"open seat (Jared Golden)"],["TN-9","Justin Pearson","D","D",false,"Memphis; open seat (Steve Cohen)"],["TX-23","Katy Padilla Stout","D","R",false,"vs. Tony Gonzales"]]},{"id":"mainstreet","name":"Main Street Republicans","party":"R","short":"Republican Governance Group / Main Street members in competitive seats","blurb":"Republican incumbents in competitive seats who belong to the Republican Governance Group or the Republican Main Street Partnership, the House GOP's pragmatic wing. Membership as the groups list it; tell the lab if one is wrong.","source":"Republican Governance Group and Main Street Partnership membership lists, compiled by the lab Nov 3","races":[["NY-17","Mike Lawler","R","R",true,""],["AZ-6","Juan Ciscomani","R","R",true,""],["VA-2","Jen Kiggans","R","R",true,""],["CA-22","David Valadao","R","R",true,""],["PA-1","Brian Fitzpatrick","R","R",true,"Governance Group chair"],["PA-7","Ryan Mackenzie","R","R",true,""],["PA-8","Rob Bresnahan","R","R",true,""],["CO-8","Gabe Evans","R","R",true,""],["CO-3","Jeff Hurd","R","R",true,""],["IA-1","Mariannette Miller-Meeks","R","R",true,""],["IA-3","Zach Nunn","R","R",true,""],["NJ-7","Tom Kean","R","R",true,""],["MI-7","Tom Barrett","R","R",true,""],["WI-1","Bryan Steil","R","R",true,""],["NY-1","Nick LaLota","R","R",true,""],["NY-2","Andrew Garbarino","R","R",true,""]]},{"id":"freedom","name":"Freedom Caucus","party":"R","short":"House Freedom Caucus members in competitive seats","blurb":"The hard-right caucus has few members in competitive districts this year (several left to run statewide). These are the ones in seats a forecaster rates competitive.","source":"House Freedom Caucus membership as publicly reported, compiled by the lab Nov 3","races":[["PA-10","Scott Perry","R","R",true,"former Freedom Caucus chair"],["CO-4","Lauren Boebert","R","R",true,""],["FL-13","Anna Paulina Luna","R","R",true,""]]}]}
+{
+ "note": "Caucus scoreboards for election night 2026. Each race: district, the group's candidate, their party, which party holds the seat now, whether the candidate is the incumbent, note. Opponents, forecasts and live numbers come from Decision Desk HQ. statewide: Decision Desk HQ race ids for each state's Senate and governor races (for the 'ahead of the ticket' comparison).",
+ "groups": [
+  {
+   "id": "bluedogs",
+   "name": "Blue Dogs",
+   "party": "D",
+   "short": "The House's centrist Democrats",
+   "blurb": "The 31 races the Blue Dog Coalition is tracking tonight: its members defending seats and its candidates trying to take seats from Republicans.",
+   "source": "Blue Dog Coalition tracker (2026bluedogselectionresults.netlify.app), Nov 3; OH-7 left off at the lab's request",
+   "races": [
+    [
+     "AK-AL",
+     "Bill Hill",
+     "I",
+     "R",
+     false,
+     "Hill is on the ballot without a party label; Democrat Eric Hafner is also running"
+    ],
+    [
+     "AZ-6",
+     "JoAnna Mendoza",
+     "D",
+     "R",
+     false,
+     ""
+    ],
+    [
+     "CA-4",
+     "Mike Thompson",
+     "D",
+     "D",
+     true,
+     "Two Democrats (top-two primary)"
+    ],
+    [
+     "CA-13",
+     "Adam Gray",
+     "D",
+     "D",
+     true,
+     ""
+    ],
+    [
+     "CA-21",
+     "Jim Costa",
+     "D",
+     "D",
+     true,
+     ""
+    ],
+    [
+     "CA-46",
+     "Lou Correa",
+     "D",
+     "D",
+     true,
+     ""
+    ],
+    [
+     "CO-3",
+     "Dwayne Romero",
+     "D",
+     "R",
+     false,
+     ""
+    ],
+    [
+     "CO-4",
+     "Eileen Laubacher",
+     "D",
+     "R",
+     false,
+     ""
+    ],
+    [
+     "FL-2",
+     "Amanda Green",
+     "D",
+     "R",
+     false,
+     "Open seat (Neal Dunn, R)"
+    ],
+    [
+     "FL-7",
+     "Bale Dalton",
+     "D",
+     "R",
+     false,
+     "Open seat (Cory Mills, R)"
+    ],
+    [
+     "FL-13",
+     "Leela Gray",
+     "D",
+     "R",
+     false,
+     ""
+    ],
+    [
+     "GA-2",
+     "Sanford Bishop",
+     "D",
+     "D",
+     true,
+     ""
+    ],
+    [
+     "KS-2",
+     "Don Coover",
+     "D",
+     "R",
+     false,
+     ""
+    ],
+    [
+     "KY-6",
+     "Zach Dembo",
+     "D",
+     "R",
+     false,
+     "Open seat (Andy Barr, R)"
+    ],
+    [
+     "MN-1",
+     "Jake Johnson",
+     "D",
+     "R",
+     false,
+     ""
+    ],
+    [
+     "MT-1",
+     "Sam Forstag",
+     "D",
+     "R",
+     false,
+     "Open seat (Ryan Zinke, R)"
+    ],
+    [
+     "NJ-2",
+     "Zack Mullock",
+     "D",
+     "R",
+     false,
+     ""
+    ],
+    [
+     "NJ-5",
+     "Josh Gottheimer",
+     "D",
+     "D",
+     true,
+     ""
+    ],
+    [
+     "NY-21",
+     "Blake Gendebien",
+     "D",
+     "R",
+     false,
+     "Open seat (Elise Stefanik, R)"
+    ],
+    [
+     "NC-11",
+     "Jamie Ager",
+     "D",
+     "R",
+     false,
+     "Open seat (Chuck Edwards, R)"
+    ],
+    [
+     "NC-13",
+     "Paul Barringer",
+     "D",
+     "R",
+     false,
+     ""
+    ],
+    [
+     "PA-7",
+     "Bob Brooks",
+     "D",
+     "R",
+     false,
+     ""
+    ],
+    [
+     "SC-1",
+     "Nancy Lacore",
+     "D",
+     "R",
+     false,
+     "Open seat (Nancy Mace, R)"
+    ],
+    [
+     "TN-5",
+     "Chaz Molder",
+     "D",
+     "R",
+     false,
+     "Open seat (Andy Ogles, R); new lines"
+    ],
+    [
+     "TX-15",
+     "Bobby Pulido",
+     "D",
+     "R",
+     false,
+     ""
+    ],
+    [
+     "TX-28",
+     "Henry Cuellar",
+     "D",
+     "D",
+     true,
+     ""
+    ],
+    [
+     "TX-34",
+     "Vicente Gonzalez",
+     "D",
+     "D",
+     true,
+     ""
+    ],
+    [
+     "TX-35",
+     "Johnny Garcia",
+     "D",
+     "D",
+     false,
+     "Open seat (Greg Casar, D, now in TX-37); new lines"
+    ],
+    [
+     "WA-3",
+     "Marie Gluesenkamp Perez",
+     "D",
+     "D",
+     true,
+     ""
+    ],
+    [
+     "WI-1",
+     "Mitchell Berman",
+     "D",
+     "R",
+     false,
+     ""
+    ],
+    [
+     "WI-3",
+     "Rebecca Cooke",
+     "D",
+     "R",
+     false,
+     ""
+    ]
+   ]
+  },
+  {
+   "id": "progressives",
+   "name": "Progressives",
+   "party": "D",
+   "short": "Congressional Progressive Caucus PAC's Red-to-Blue slate",
+   "blurb": "The nine candidates the CPC PAC endorsed in Republican-held or swing seats, from its Nov 3 memo. Three of them (Brooks, Poindexter, Forstag) are also on the Blue Dog list.",
+   "source": "CPC PAC memo, Nov 3, 2026 (mailchi.mp/weareprogressives)",
+   "races": [
+    [
+     "CA-22",
+     "Randy Villegas",
+     "D",
+     "R",
+     false,
+     "vs. David Valadao; among the most expensive House races"
+    ],
+    [
+     "PA-7",
+     "Bob Brooks",
+     "D",
+     "R",
+     false,
+     "also on the Blue Dog list"
+    ],
+    [
+     "MT-1",
+     "Sam Forstag",
+     "D",
+     "R",
+     false,
+     "open seat (Zinke); also on the Blue Dog list"
+    ],
+    [
+     "OH-7",
+     "Brian Poindexter",
+     "D",
+     "R",
+     false,
+     "also on the Blue Dog list"
+    ],
+    [
+     "MI-7",
+     "Will Lawrence",
+     "D",
+     "R",
+     false,
+     "vs. Tom Barrett; memo calls it the most expensive House race"
+    ],
+    [
+     "VA-5",
+     "Tom Perriello",
+     "D",
+     "R",
+     false,
+     "former congressman"
+    ],
+    [
+     "ME-2",
+     "Matt Dunlap",
+     "D",
+     "D",
+     false,
+     "open seat (Jared Golden)"
+    ],
+    [
+     "TN-9",
+     "Justin Pearson",
+     "D",
+     "D",
+     false,
+     "Memphis; open seat (Steve Cohen)"
+    ],
+    [
+     "TX-23",
+     "Katy Padilla Stout",
+     "D",
+     "R",
+     false,
+     "vs. Tony Gonzales"
+    ]
+   ]
+  },
+  {
+   "id": "mainstreet",
+   "name": "Main Street Republicans",
+   "party": "R",
+   "short": "Republican Governance Group / Main Street members in competitive seats",
+   "blurb": "Republican incumbents in competitive seats who belong to the Republican Governance Group or the Republican Main Street Partnership, the House GOP's pragmatic wing. Membership as the groups list it; tell the lab if one is wrong.",
+   "source": "Republican Governance Group and Main Street Partnership membership lists, compiled by the lab Nov 3",
+   "races": [
+    [
+     "NY-17",
+     "Mike Lawler",
+     "R",
+     "R",
+     true,
+     ""
+    ],
+    [
+     "AZ-6",
+     "Juan Ciscomani",
+     "R",
+     "R",
+     true,
+     ""
+    ],
+    [
+     "VA-2",
+     "Jen Kiggans",
+     "R",
+     "R",
+     true,
+     ""
+    ],
+    [
+     "CA-22",
+     "David Valadao",
+     "R",
+     "R",
+     true,
+     ""
+    ],
+    [
+     "PA-1",
+     "Brian Fitzpatrick",
+     "R",
+     "R",
+     true,
+     "Governance Group chair"
+    ],
+    [
+     "PA-7",
+     "Ryan Mackenzie",
+     "R",
+     "R",
+     true,
+     ""
+    ],
+    [
+     "PA-8",
+     "Rob Bresnahan",
+     "R",
+     "R",
+     true,
+     ""
+    ],
+    [
+     "CO-8",
+     "Gabe Evans",
+     "R",
+     "R",
+     true,
+     ""
+    ],
+    [
+     "CO-3",
+     "Jeff Hurd",
+     "R",
+     "R",
+     true,
+     ""
+    ],
+    [
+     "IA-1",
+     "Mariannette Miller-Meeks",
+     "R",
+     "R",
+     true,
+     ""
+    ],
+    [
+     "IA-3",
+     "Zach Nunn",
+     "R",
+     "R",
+     true,
+     ""
+    ],
+    [
+     "NJ-7",
+     "Tom Kean",
+     "R",
+     "R",
+     true,
+     ""
+    ],
+    [
+     "MI-7",
+     "Tom Barrett",
+     "R",
+     "R",
+     true,
+     ""
+    ],
+    [
+     "WI-1",
+     "Bryan Steil",
+     "R",
+     "R",
+     true,
+     ""
+    ],
+    [
+     "NY-1",
+     "Nick LaLota",
+     "R",
+     "R",
+     true,
+     ""
+    ],
+    [
+     "NY-2",
+     "Andrew Garbarino",
+     "R",
+     "R",
+     true,
+     ""
+    ]
+   ]
+  },
+  {
+   "id": "freedom",
+   "name": "Freedom Caucus",
+   "party": "R",
+   "short": "House Freedom Caucus members in competitive seats",
+   "blurb": "The hard-right caucus has few members in competitive districts this year (several left to run statewide). These are the ones in seats a forecaster rates competitive.",
+   "source": "House Freedom Caucus membership as publicly reported, compiled by the lab Nov 3",
+   "races": [
+    [
+     "PA-10",
+     "Scott Perry",
+     "R",
+     "R",
+     true,
+     "former Freedom Caucus chair"
+    ],
+    [
+     "CO-4",
+     "Lauren Boebert",
+     "R",
+     "R",
+     true,
+     ""
+    ],
+    [
+     "FL-13",
+     "Anna Paulina Luna",
+     "R",
+     "R",
+     true,
+     ""
+    ]
+   ]
+  },
+  {
+   "id": "nrcc",
+   "name": "NRCC MAGA Majority",
+   "party": "R",
+   "short": "The NRCC's 2026 challenger and open-seat program",
+   "blurb": "The 27 Republican challengers and open-seat candidates on the NRCC's 'MAGA Majority' roster (September 2026), as shared with the lab. One name on the shared list (MI-8) isn't the Republican nominee in the results feed and is left off.",
+   "source": "NRCC MAGA Majority program roster, September 2026, as shared with the lab Nov 3; checked against the Decision Desk HQ candidate list",
+   "races": [
+    [
+     "AZ-1",
+     "Jay Feely",
+     "R",
+     "R",
+     false,
+     "open seat (Schweikert ran for governor)"
+    ],
+    [
+     "CA-13",
+     "Kevin Lincoln",
+     "R",
+     "D",
+     false,
+     "vs. Adam Gray; the lab's home district"
+    ],
+    [
+     "CA-48",
+     "Jim Desmond",
+     "R",
+     "R",
+     false,
+     "open seat, redrawn under Prop 50"
+    ],
+    [
+     "FL-9",
+     "Dan Green",
+     "R",
+     "D",
+     false,
+     "vs. Darren Soto"
+    ],
+    [
+     "FL-14",
+     "Mike Beltran",
+     "R",
+     "D",
+     false,
+     "vs. Kathy Castor"
+    ],
+    [
+     "FL-22",
+     "Casey Askar",
+     "R",
+     "D",
+     false,
+     "open seat"
+    ],
+    [
+     "FL-25",
+     "Scott Singer",
+     "R",
+     "D",
+     false,
+     "vs. Jared Moskowitz"
+    ],
+    [
+     "IA-2",
+     "Joe Mitchell",
+     "R",
+     "R",
+     false,
+     "open seat (Hinson ran for Senate)"
+    ],
+    [
+     "IN-1",
+     "Barb Regnitz",
+     "R",
+     "D",
+     false,
+     "vs. Frank Mrvan"
+    ],
+    [
+     "ME-2",
+     "Paul LePage",
+     "R",
+     "D",
+     false,
+     "open seat (Golden retired); former governor"
+    ],
+    [
+     "MI-10",
+     "Mike Bouchard",
+     "R",
+     "R",
+     false,
+     "open seat (James ran for governor)"
+    ],
+    [
+     "MT-1",
+     "Aaron Flint",
+     "R",
+     "R",
+     false,
+     "open seat"
+    ],
+    [
+     "NC-1",
+     "Laurie Buckhout",
+     "R",
+     "D",
+     false,
+     "vs. Don Davis; rematch of 2024"
+    ],
+    [
+     "NC-11",
+     "Jennifer Balkcom",
+     "R",
+     "R",
+     false,
+     "open seat"
+    ],
+    [
+     "NE-2",
+     "Brinker Harding",
+     "R",
+     "R",
+     false,
+     "open seat (Bacon retired)"
+    ],
+    [
+     "NH-1",
+     "Anthony DiLorenzo",
+     "R",
+     "D",
+     false,
+     "open seat (Pappas ran for Senate)"
+    ],
+    [
+     "NM-2",
+     "Greg Cunningham",
+     "R",
+     "D",
+     false,
+     "vs. Gabe Vasquez"
+    ],
+    [
+     "NV-1",
+     "Carrie Buck",
+     "R",
+     "D",
+     false,
+     "vs. Dina Titus"
+    ],
+    [
+     "NV-3",
+     "Marty O'Donnell",
+     "R",
+     "D",
+     false,
+     "vs. Susie Lee"
+    ],
+    [
+     "NY-3",
+     "Mike LiPetri",
+     "R",
+     "D",
+     false,
+     "vs. Tom Suozzi"
+    ],
+    [
+     "NY-4",
+     "Jeanine Driscoll",
+     "R",
+     "D",
+     false,
+     "vs. Laura Gillen"
+    ],
+    [
+     "OH-1",
+     "Eric Conroy",
+     "R",
+     "D",
+     false,
+     "vs. Greg Landsman"
+    ],
+    [
+     "OH-9",
+     "Derek Merrin",
+     "R",
+     "D",
+     false,
+     "vs. Marcy Kaptur; rematch of 2024"
+    ],
+    [
+     "TX-28",
+     "Tano Tijerina",
+     "R",
+     "D",
+     false,
+     "vs. Henry Cuellar"
+    ],
+    [
+     "TX-34",
+     "Eric Flores",
+     "R",
+     "D",
+     false,
+     "vs. Vicente Gonzalez"
+    ],
+    [
+     "TX-35",
+     "Carlos De La Cruz",
+     "R",
+     "D",
+     false,
+     "open seat under Texas's new map"
+    ],
+    [
+     "WA-3",
+     "John Braun",
+     "R",
+     "D",
+     false,
+     "vs. Marie Gluesenkamp Perez (also on the Blue Dog list)"
+    ]
+   ]
+  }
+ ],
+ "statewide": {
+  "senate": {
+   "AK": [
+    294672
+   ],
+   "AL": [
+    294671
+   ],
+   "AR": [
+    294673
+   ],
+   "CO": [
+    294674
+   ],
+   "DE": [
+    294675
+   ],
+   "FL": [
+    294676
+   ],
+   "GA": [
+    294677
+   ],
+   "IA": [
+    294680
+   ],
+   "ID": [
+    294678
+   ],
+   "IL": [
+    294679
+   ],
+   "KS": [
+    294681
+   ],
+   "KY": [
+    294682
+   ],
+   "LA": [
+    294683
+   ],
+   "MA": [
+    294685
+   ],
+   "ME": [
+    294684
+   ],
+   "MI": [
+    294686
+   ],
+   "MN": [
+    294687
+   ],
+   "MS": [
+    294688
+   ],
+   "MT": [
+    294689
+   ],
+   "NC": [
+    294694
+   ],
+   "NE": [
+    294690
+   ],
+   "NH": [
+    294691
+   ],
+   "NJ": [
+    294692
+   ],
+   "NM": [
+    294693
+   ],
+   "OH": [
+    294695
+   ],
+   "OK": [
+    294696
+   ],
+   "OR": [
+    294697
+   ],
+   "RI": [
+    294698
+   ],
+   "SC": [
+    294699
+   ],
+   "SD": [
+    294700
+   ],
+   "TN": [
+    294701
+   ],
+   "TX": [
+    294702
+   ],
+   "VA": [
+    294703
+   ],
+   "WV": [
+    294704
+   ],
+   "WY": [
+    294705
+   ]
+  },
+  "gov": {
+   "AK": 716858,
+   "AL": 700160,
+   "AR": 716859,
+   "AZ": 716860,
+   "CA": 702340,
+   "CO": 716861,
+   "CT": 716862,
+   "FL": 716891,
+   "GA": 697741,
+   "HI": 716892,
+   "IA": 701582,
+   "ID": 698690,
+   "IL": 608024,
+   "KS": 716893,
+   "MA": 716924,
+   "MD": 716925,
+   "ME": 704318,
+   "MI": 716926,
+   "MN": 716957,
+   "NE": 694979,
+   "NH": 716990,
+   "NM": 701680,
+   "NV": 702307,
+   "NY": 716991,
+   "OH": 681152,
+   "OK": 704021,
+   "OR": 700028,
+   "PA": 700061,
+   "RI": 716992,
+   "SC": 702284,
+   "SD": 701777,
+   "TN": 716993,
+   "TX": 701534,
+   "VT": 716994,
+   "WI": 770252,
+   "WY": 716996
+  }
+ }
+}

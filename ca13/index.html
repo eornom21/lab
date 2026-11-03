@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
-<title>CA 13</title>
+<title>CA-13 · CAPE Election Lab</title>
 <meta property="og:title" content="CA-13 election night: Gray vs. Lincoln">
 <meta property="og:description" content="Live results by county, and a simulator: slide turnout and vote share in each county and see who wins.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -711,5 +711,6 @@ syncGlobals(); render(); startLive();
 loadPrecincts(); pullMercedPrecincts(); setInterval(pullMercedPrecincts, 60000);
 setInterval(() => { if (year === "2026" && !counted()) renderTop(); }, 60000);
 </script>
+<script defer src="/electionlab/track.js"></script>
 </body>
 </html>

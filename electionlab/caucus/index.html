@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
-<title>Caucus scoreboards · Election Night Lab</title>
+<title>Caucus scoreboards · CAPE Election Lab</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
@@ -51,30 +51,40 @@ td.n,th.n{text-align:right}
 .brow .trk i{position:absolute;top:0;height:100%;border-radius:4px}
 .brow .trk .zero{position:absolute;top:-2px;bottom:-2px;width:1px;background:var(--ink);left:50%}
 .lead{font-family:var(--serif);font-size:21px;color:var(--ink);margin:6px 0}
+.cape{font-family:var(--mono);font-weight:500}
+#otbl td:first-child{white-space:nowrap} #otbl .tiny{display:block}
 footer{color:var(--muted);font-size:13px;margin-top:30px;border-top:1px solid var(--line);padding-top:12px}
 @media (max-width:640px){.brow{grid-template-columns:110px 1fr 60px}}
 </style>
 </head>
 <body>
 <header class="top">
-  <div class="brand"><span>Election Night Lab · Caucus scoreboards</span><a href="../">← Back to the big screen</a></div>
+  <div class="brand"><span>UC Merced CAPE Election Lab · Caucus scoreboards</span><a href="../">← Back to the big screen</a></div>
   <h1 id="h1">Caucus scoreboards</h1>
   <p class="kicker" id="kicker">Each caucus's candidates, ranked by how far they're running ahead of (or behind) their own party's statewide candidates on the same ballots, their party's 2024 presidential share, and the district's registration. Live, every minute.</p>
   <div id="gtabs" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:12px"></div>
 </header>
 <main>
-  <section>
+  <section id="overview" style="display:none">
+    <h2>All the caucuses, side by side</h2>
+    <p class="sub">Apples to apples: every candidate is scored against the same yardsticks for their own party, so a Democratic and a Republican list can be read on the same scale. Numbers update every five minutes.</p>
+    <div class="meta"><span id="ostamp">Loading…</span><details class="how"><summary>The CAPE scores</summary><div class="hbx" id="ohow"></div></details></div>
+    <div class="card" id="olead"></div>
+    <div class="wrap card" style="margin-top:10px"><table id="otbl"></table></div>
+    <div class="stats" id="ostats"></div>
+  </section>
+  <section id="groupsec">
     <h2 id="h2a">The night for the caucus</h2>
     <div class="meta"><span id="stamp">Loading…</span><details class="how"><summary>How this works</summary><div class="hbx" id="how"></div></details></div>
     <div class="stats" id="stats"></div>
     <div class="card" id="lead" style="margin-top:10px"></div>
   </section>
-  <section>
+  <section class="gonly">
     <h2>Ahead of the ticket, race by race</h2>
     <p class="sub" id="barsSub">Each candidate's two-way share minus their party's candidate for Senate or governor in the same counties (weighted by this race's votes), in points. Bars to the right run ahead of the ticket; the line is even. Races in states with no Senate or governor race this year fall back to the 2024 presidential comparison, marked with *.</p>
     <div class="card"><div class="bars" id="bars"></div></div>
   </section>
-  <section>
+  <section class="gonly">
     <h2>The full table</h2>
     <p class="sub">Tap a column to sort. Tap a district for its full page.</p>
     <div class="wrap card"><table id="tbl"></table></div>
@@ -88,79 +98,130 @@ const pct = (x, d = 1) => x == null || !isFinite(x) ? "–" : (x * 100).toFixed(
 const pts = x => x == null || !isFinite(x) ? "–" : (x > 0 ? "+" : "") + x.toFixed(1);
 const $ = s => document.querySelector(s);
 const ptT = s => { const d = new Date(s); return isNaN(d) ? "" : d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", timeZone: "America/Los_Angeles" }) + " PT"; };
-let DATA = null, GROUPS = null, G = null, ROWS = [], sortKey = "ticket", sortDir = -1, IDX = null;
+const LIVE_URL = "https://raw.githubusercontent.com/eornom21/lab/main/electionlab/caucus/live.json";
+const STALE_MS = 20 * 60e3;
+let DATA = null, GROUPS = null, G = null, ROWS = [], LIVE = null, sortKey = "ticket", sortDir = -1, IDX = null, MODE = "live";
 const P = () => G.party, PARTY = () => P() === "D" ? "DEM" : "GOP", pres24 = () => P() === "D" ? "Harris" : "Trump";
+const pname = p => p === "D" ? "Democrat" : "Republican";
 async function getJSON(u) { const r = await fetch(u, { cache: "no-store" }); if (!r.ok) throw new Error(r.status); return r.json(); }
-$("#how").innerHTML = `<p><b>What it shows.</b> For each Blue Dog race: the Blue Dog's share and margin, how much of the expected vote is counted, and three comparisons: against the Democrat for Senate or governor in the same counties tonight, against Harris's 2024 share in those counties, and against Democrats' share of two-party registration there.</p><p><b>Why it's useful.</b> Blue Dogs make their case on winning voters the rest of the party can't. This measures that claim live, race by race, and across the whole group.</p><p><b>For example, you could</b> see whether the Blue Dogs as a group are running ahead of the ticket, and which ones are doing it in the hardest seats.</p><p><b>Where the data comes from, and how often.</b> Decision Desk HQ's public feed for this House race and the state's Senate and governor races, matched county by county, read every minute. Partial counties are compared whole-county. 2024 lean from the county presidential results archive; registration from the states as compiled by Decision Desk HQ.</p>`;
-const dShare = (race, who) => { // county -> two-way share for a named side (a party code "DEM"/"GOP", or a last name)
-  const tl = race.raceData.toplineResults || []; const dem = (who === "DEM" || who === "GOP") ? tl.find(c => c.party && c.party.abbrev === who) : tl.find(c => String(c.lastName).toLowerCase().includes(who));
-  if (!dem) return null; const opp = tl.filter(c => c !== dem).sort((x, y) => y.votes - x.votes)[0]; if (!opp) return null;
-  const by = {}, cnt = {}; for (const v of race.vcuData || []) { const f = v.vcu.countyFips || v.vcu.fips, cr = {}; for (const c of v.candidateResults || []) cr[c.id] = c; const a = (cr[dem.candId] || {}).votes || 0, b = (cr[opp.candId] || {}).votes || 0; if (a + b) { by[f] = a / (a + b); cnt[f] = a + b; } }
-  return { name: dem.firstName + " " + dem.lastName, oppName: opp.firstName + " " + opp.lastName, dem, opp, by, cnt, votes: dem.votes, oppVotes: opp.votes, winner: dem.winner ? "W" : opp.winner ? "L" : null };
+const HOW = () => `<p><b>What it shows.</b> For each race on the ${esc(G.name)} list: the candidate's two-way share and margin, how much of the expected vote is counted, and comparisons against the same yardsticks every list gets: their party's candidate for Senate or governor in the same counties tonight, their party's 2024 presidential share in those counties, their party's share of two-party registration there, and Decision Desk HQ's pre-election forecast (the CAPE score).</p><p><b>Why it's useful.</b> Every caucus claims its candidates win voters the rest of the party can't. This measures that claim live, race by race, and across the whole group, on the same scale for every group.</p><p><b>Where the data comes from, and how often.</b> Decision Desk HQ's public feed for each House race and the state's Senate and governor races, matched county by county; the lab's server reads it every five minutes and this page re-reads the result every minute (if that file is stale, the page reads the feed directly). Partial counties are compared whole-county. 2024 lean from the county presidential results archive; registration from the states as compiled by Decision Desk HQ. Forecast margins and ratings are Decision Desk HQ's, as published before the count.</p>`;
+$("#ohow").innerHTML = `<p><b>CAPE score</b> — <i>Candidate Advantage over Pre-election Expectation</i>: a candidate's two-way margin tonight minus Decision Desk HQ's pre-election forecast margin for that seat, in points, from the candidate's party's side. +3 means running three points better than the forecast; a caucus's CAPE score is the average across its races with votes. It is the fairest single number for comparing lists built in very different kinds of seats.</p><p><b>Wins vs. forecast</b> — how many of the list's candidates the forecast had ahead, against how many are winning or leading now.</p><p><b>Ticket</b> — two-way share minus the same-party Senate (else governor) candidate in the same counties, vote-weighted. Ahead of the ticket means out-running your own party's statewide candidate on the same ballots.</p><p><b>Crossover</b> — candidates winning or leading in districts whose counted counties went for the other party's presidential nominee in 2024.</p><p><b>Tide</b> — the national swing so far: the Democratic two-way share minus the 2024 presidential Democratic share in the same counties, vote-weighted across every race on these lists (negative is a Republican tide). The <a href="../weather/">weather page</a> carries the <b>rain tax</b>, the turnout shortfall per inch of rain, when it can be estimated.</p><p>Early in the night every number moves a lot as counties come in; read them together with "counted".</p>`;
+// ---------- live.json (computed on the lab's server) ----------
+async function loadLive() {
+  const j = await getJSON(LIVE_URL + "?t=" + Math.floor(Date.now() / 60e3));
+  if (!j || !j.groups) throw new Error("no live");
+  if (Date.now() - new Date(j.at).getTime() > STALE_MS) throw new Error("stale");
+  LIVE = j; return j;
+}
+// ---------- direct fallback: compute the selected group in the browser (the old path) ----------
+const dShare = (race, who) => {
+  const tl = race.raceData.toplineResults || []; const me = (who === "DEM" || who === "GOP") ? tl.find(c => c.party && c.party.abbrev === who) : tl.find(c => String(c.lastName).toLowerCase().includes(who));
+  if (!me) return null; const others = tl.filter(c => c !== me), major = others.filter(c => ["DEM", "GOP"].includes((c.party || {}).abbrev)); const opp = (major.length ? major : others).sort((x, y) => (y.votes || 0) - (x.votes || 0))[0]; if (!opp) return null;
+  const by = {}, cnt = {}; for (const v of race.vcuData || []) { const f = v.vcu.countyFips || v.vcu.fips, cr = {}; for (const c of v.candidateResults || []) cr[c.id] = c; const a = (cr[me.candId] || {}).votes || 0, b = (cr[opp.candId] || {}).votes || 0; if (f && a + b) { by[f] = a / (a + b); cnt[f] = a + b; } }
+  return { name: me.firstName + " " + me.lastName, oppName: opp.firstName + " " + opp.lastName, oppParty: (opp.party || {}).abbrev === "DEM" ? "D" : (opp.party || {}).abbrev === "GOP" ? "R" : "I", me, opp, by, cnt, votes: me.votes || 0, oppVotes: opp.votes || 0, winner: me.winner ? "W" : opp.winner ? "L" : null };
 };
 const wavg = pairs => { let w = 0, s = 0; for (const [a, b, wt] of pairs) if (a != null && b != null && wt) { w += wt; s += (a - b) * wt; } return w ? s / w * 100 : null; };
-const SEN = {"AK":[294672],"AL":[294671],"AR":[294673],"CO":[294674],"DE":[294675],"FL":[294676],"GA":[294677],"IA":[294680],"ID":[294678],"IL":[294679],"KS":[294681],"KY":[294682],"LA":[294683],"MA":[294685],"ME":[294684],"MI":[294686],"MN":[294687],"MS":[294688],"MT":[294689],"NC":[294694],"NE":[294690],"NH":[294691],"NJ":[294692],"NM":[294693],"OH":[294695],"OK":[294696],"OR":[294697],"RI":[294698],"SC":[294699],"SD":[294700],"TN":[294701],"TX":[294702],"VA":[294703],"WV":[294704],"WY":[294705]};
-const GOV = {"AK":716858,"AL":700160,"AR":716859,"AZ":716860,"CA":702340,"CO":716861,"CT":716862,"FL":716891,"GA":697741,"HI":716892,"IA":701582,"ID":698690,"IL":608024,"KS":716893,"MA":716924,"MD":716925,"ME":704318,"MI":716926,"MN":716957,"NE":694979,"NH":716990,"NM":701680,"NV":702307,"NY":716991,"OH":681152,"OK":704021,"OR":700028,"PA":700061,"RI":716992,"SC":702284,"SD":701777,"TN":716993,"TX":701534,"VT":716994,"WI":770252,"WY":716996};
+const presShare = (f, p) => { const l = DATA.county_lean[f]; return l ? (p === "D" ? 0.5 - l[2] / 200 : 0.5 + l[2] / 200) : null; };
 async function raceIndex() {
   if (IDX) return IDX; const j = await getJSON(DATA.ddhq_base + "/house"); IDX = {};
-  for (const r of j.races || []) { const m = /^([A-Z]{2})-(\d+|AL)$/.exec(r.displayName || ""); if (m) IDX[m[1] + "-" + (m[2] === "AL" ? "AL" : String(+m[2]))] = r.raceId; }
+  for (const r of j.races || []) { const m = /^([A-Z]{2})-(\d+|AL)$/.exec(r.displayName || ""); if (m) IDX[m[1] + "-" + (m[2] === "AL" ? "AL" : String(+m[2]))] = r; }
   return IDX;
 }
-async function tick() {
-  const idx = await raceIndex();
-  const races = G.races.map(([k, cand, party, held, inc, note]) => ({ id: k, st: k.slice(0, 2), ddhq: idx[k], bluedog: { cand, party, held, inc, note }, statewide: { senate: SEN[k.slice(0, 2)] || [], governor: GOV[k.slice(0, 2)] || null } })).filter(r => r.ddhq);
-  const swIds = [...new Set(races.flatMap(r => [...r.statewide.senate.map(id => ["senate", id]), r.statewide.governor ? ["gov", r.statewide.governor] : null].filter(Boolean).map(x => x.join(":"))))];
-  const [H, SW] = await Promise.all([Promise.all(races.map(r => getJSON(DATA.ddhq_base + "/house/" + r.ddhq).catch(() => null))), Promise.all(swIds.map(k => getJSON(DATA.ddhq_base + "/" + k.replace(":", "/")).catch(() => null)))]);
+async function tickDirect() {
+  const idx = await raceIndex(), SEN = GROUPS.statewide.senate, GOV = GROUPS.statewide.gov;
+  const races = G.races.map(([k, cand, party, held, inc, note]) => ({ id: k, st: k.slice(0, 2), ir: idx[k], cand, party, held, inc, note })).filter(r => r.ir);
+  const swIds = [...new Set(races.flatMap(r => [...(SEN[r.st] || []).map(id => "senate:" + id), GOV[r.st] ? "gov:" + GOV[r.st] : null].filter(Boolean)))];
+  const [H, SW] = await Promise.all([Promise.all(races.map(r => getJSON(DATA.ddhq_base + "/house/" + r.ir.raceId).catch(() => null))), Promise.all(swIds.map(k => getJSON(DATA.ddhq_base + "/" + k.replace(":", "/")).catch(() => null)))]);
   const swBy = {}; swIds.forEach((k, i) => { if (SW[i]) swBy[k] = SW[i]; });
-  ROWS = races.map((r, i) => { const h = H[i]; if (!h) return { r, none: true };
-    const who = r.bluedog.party === P() ? PARTY() : r.bluedog.cand.split(" ").slice(-1)[0].toLowerCase();
-    const me = dShare(h, who); if (!me) return { r, none: true };
+  return races.map((r, i) => { const h = H[i], base = { id: r.id, cand: r.cand, party: r.party, held: r.held, inc: r.inc, note: r.note }; if (!h) return { ...base, none: true };
+    const who = r.party === P() ? PARTY() : r.cand.split(" ").slice(-1)[0].toLowerCase();
+    const me = dShare(h, who); if (!me) return { ...base, none: true };
     const tu = h.raceData.turnout || {}, tot = (h.raceData.toplineResults || []).reduce((s, c) => s + (c.votes || 0), 0), exp = tu.estimated_votes_mid || null;
-    const two = me.votes + me.oppVotes, share = two ? me.votes / two : null;
-    // ticket comparison: Senate first, then governor
+    const two = me.votes + me.oppVotes, share = two ? me.votes / two : null, margin = share == null ? null : (share - 0.5) * 200;
     let ticket = null, ticketWho = null;
-    for (const k of [...r.statewide.senate.map(id => "senate:" + id), r.statewide.governor ? "gov:" + r.statewide.governor : null].filter(Boolean)) { const s = swBy[k] && dShare(swBy[k], PARTY()); if (!s) continue; const d = wavg(Object.keys(me.by).map(f => [me.by[f], s.by[f], me.cnt[f]])); if (d != null) { ticket = d; ticketWho = s.name + (k.startsWith("senate") ? " (Senate)" : " (governor)"); break; } }
-    const harris = wavg(Object.keys(me.by).map(f => { const l = DATA.county_lean[f]; return [me.by[f], l ? (P() === "D" ? 0.5 - l[2] / 200 : 0.5 + l[2] / 200) : null, me.cnt[f]]; }));
+    for (const k of [...(SEN[r.st] || []).map(id => "senate:" + id), GOV[r.st] ? "gov:" + GOV[r.st] : null].filter(Boolean)) { const s = swBy[k] && dShare(swBy[k], PARTY()); if (!s) continue; const d = wavg(Object.keys(me.by).map(f => [me.by[f], s.by[f], me.cnt[f]])); if (d != null) { ticket = d; ticketWho = s.name + (k.startsWith("senate") ? " (Senate)" : " (governor)"); break; } }
+    const harris = wavg(Object.keys(me.by).map(f => [me.by[f], presShare(f, P()), me.cnt[f]]));
+    let wb = 0, ws = 0; for (const f of Object.keys(me.by)) { const b = presShare(f, P()); if (b != null) { wb += me.cnt[f]; ws += b * me.cnt[f]; } }
     let regD = 0, regR = 0; for (const v of h.vcuData || []) { const g = v.voteGoal || {}; regD += g.democraticRegistration || 0; regR += g.republicanRegistration || 0; }
-    const own = P() === "D" ? regD : regR;
-    const reg = share != null && regD + regR ? (share - own / (regD + regR)) * 100 : null;
-    const opp = { name: me.oppName, party: (me.opp.party || {}).abbrev === "DEM" ? "D" : (me.opp.party || {}).abbrev === "GOP" ? "R" : "I" };
-    r.bluedog.opp = opp.name; r.bluedog.opp_party = opp.party;
-    return { r, me, tot, exp, inPct: exp ? Math.min(1, tot / exp) : null, share, margin: share == null ? null : (share - 0.5) * 200, ticket, ticketWho, harris, reg, called: me.winner, lastUpdated: h.raceData.lastUpdated };
+    const own = P() === "D" ? regD : regR, reg = share != null && regD + regR ? (share - own / (regD + regR)) * 100 : null;
+    const fc = r.ir.forecast || {}, la = (fc.leadingParty || {}).abbrev, fm = fc.margin;
+    let expMargin = null; if (fm != null && (la === "DEM" || la === "GOP") && r.party === P()) expMargin = la === PARTY() ? fm : -fm;
+    return { ...base, opp: me.oppName, opp_party: me.oppParty, tot, exp, inPct: exp ? Math.min(1, tot / exp) : null, share, margin, ticket, ticketWho, harris, presBase: wb ? ws / wb : null, reg, cape: margin != null && expMargin != null ? margin - expMargin : null, expMargin, expWin: r.party === P() && la ? la === PARTY() : null, rating: fc.ratingWithParty, called: me.winner, lastUpdated: h.raceData.lastUpdated };
   });
+}
+async function tick() {
+  let fromLive = false;
+  try { await loadLive(); fromLive = true; } catch (e) { /* fall through */ }
+  if (G.id === "all") { renderOverview(); return; }
+  if (fromLive && LIVE.groups[G.id]) { ROWS = LIVE.groups[G.id]; MODE = "live"; }
+  else { ROWS = await tickDirect(); MODE = "direct"; }
   render();
 }
-function render() {
-  const live = ROWS.filter(x => !x.none && x.tot > 0);
-  const won = ROWS.filter(x => x.called === "W").length, lost = ROWS.filter(x => x.called === "L").length, lead = live.filter(x => !x.called && x.share > 0.5).length, trail = live.filter(x => !x.called && x.share < 0.5).length;
-  const withT = live.filter(x => x.ticket != null), avgT = withT.length ? withT.reduce((s, x) => s + x.ticket, 0) / withT.length : null, aheadT = withT.filter(x => x.ticket > 0).length;
-  const withH = live.filter(x => x.harris != null), avgH = withH.length ? withH.reduce((s, x) => s + x.harris, 0) / withH.length : null, aheadH = withH.filter(x => x.harris > 0).length;
-  const other = P() === "D" ? "R" : "D";
-  const gains = live.filter(x => x.r.bluedog.held === other && (x.called === "W" || (!x.called && x.share > 0.5))).length, losses = live.filter(x => x.r.bluedog.held === P() && x.r.bluedog.opp_party !== P() && (x.called === "L" || (!x.called && x.share < 0.5))).length;
-  const newest = ROWS.map(x => x.lastUpdated).filter(Boolean).sort().slice(-1)[0];
-  $("#stamp").textContent = live.length ? `Results as of ${ptT(newest)} · Decision Desk HQ` : "Waiting for the first count"; $("#stamp").className = live.length ? "live" : "";
+// ---------- group summary ----------
+function summarize(rows) {
+  const live = rows.filter(x => !x.none && x.tot > 0);
+  const won = rows.filter(x => x.called === "W").length, lost = rows.filter(x => x.called === "L").length;
+  const lead = live.filter(x => !x.called && x.share > 0.5).length, trail = live.filter(x => !x.called && x.share < 0.5).length;
+  const avg = k => { const w = live.filter(x => x[k] != null); return { n: w.length, avg: w.length ? w.reduce((s, x) => s + x[k], 0) / w.length : null, ahead: w.filter(x => x[k] > 0).length }; };
+  const party = rows.find(x => x.party === "D" || x.party === "R");
+  const cross = live.filter(x => x.presBase != null && x.presBase < 0.5 && (x.called === "W" || (!x.called && x.share > 0.5))).length;
+  const expWins = rows.filter(x => x.expWin === true).length, expScored = rows.filter(x => x.expWin != null).length;
+  const nowWins = live.filter(x => x.expWin != null && (x.called === "W" || (!x.called && x.share > 0.5))).length;
+  const counted = live.map(x => x.inPct).filter(x => x != null).sort((a, b) => a - b), medC = counted.length ? counted[Math.floor(counted.length / 2)] : null;
+  return { live: live.length, n: rows.length, won, lost, lead, trail, ticket: avg("ticket"), harris: avg("harris"), reg: avg("reg"), cape: avg("cape"), cross, expWins, expScored, nowWins, medC };
+}
+function renderOverview() {
+  $("#overview").style.display = ""; $("#groupsec").style.display = "none"; document.querySelectorAll(".gonly").forEach(e => e.style.display = "none");
+  if (!LIVE) { $("#ostamp").textContent = "The lab's five-minute summary isn't available yet; pick a caucus above for its live page."; $("#otbl").innerHTML = ""; $("#olead").innerHTML = ""; $("#ostats").innerHTML = ""; return; }
+  const gs = GROUPS.groups.filter(g => g.id !== "all").map(g => ({ g, s: summarize(LIVE.groups[g.id] || []) }));
+  $("#ostamp").textContent = `As of ${ptT(LIVE.at)} · Decision Desk HQ via the lab's server`; $("#ostamp").className = "live";
+  const any = gs.some(x => x.s.live);
+  const cell = (v, n, suffix = "") => v == null ? `<td class="n">–</td>` : `<td class="n ${v > 0 ? "plus" : v < 0 ? "minus" : ""}">${pts(v)}${suffix}<span class="tiny">${n} race${n === 1 ? "" : "s"}</span></td>`;
+  $("#otbl").innerHTML = `<thead><tr><th>Caucus / list</th><th class="n">Races</th><th class="n">Counted</th><th class="n">Won–Lost</th><th class="n">Leading–Trailing</th><th class="n">Wins vs. forecast</th><th class="n">CAPE score</th><th class="n">Ticket</th><th class="n">Crossover</th></tr></thead><tbody>` +
+    gs.map(({ g, s }) => `<tr><td><a href="?g=${g.id}" data-go="${g.id}"><b>${esc(g.name)}</b></a><span class="tiny">${esc(g.short)} · ${g.party === "D" ? "Democrats" : "Republicans"}</span></td><td class="n">${s.n}</td><td class="n">${s.medC == null ? "–" : Math.round(s.medC * 100) + "%"}<span class="tiny">median</span></td><td class="n"><span class="D">${s.won}</span>–<span class="R">${s.lost}</span></td><td class="n">${s.lead}–${s.trail}</td><td class="n">${s.expScored ? `${s.nowWins} <span class="tiny" style="display:inline">of ${s.expWins} expected</span>` : "–"}</td>${cell(s.cape.avg, s.cape.n, " pts")}${cell(s.ticket.avg, s.ticket.n, " pts")}<td class="n">${s.live ? s.cross : "–"}</td></tr>`).join("") + `</tbody>`;
+  $("#otbl").querySelectorAll("[data-go]").forEach(a => a.onclick = e => { e.preventDefault(); go(a.dataset.go); });
+  const scored = gs.filter(x => x.s.cape.avg != null).sort((a, b) => b.s.cape.avg - a.s.cape.avg);
+  $("#olead").innerHTML = `<div class="lead">${!any ? `Nothing counted yet. ${gs.reduce((s, x) => s + x.s.n, 0)} races across ${gs.length} lists.` : scored.length ? `Best CAPE score so far: the ${esc(scored[0].g.name)}, ${pts(scored[0].s.cape.avg)} points against the pre-election forecast across ${scored[0].s.cape.n} races${scored.length > 1 ? `; the ${esc(scored[scored.length - 1].g.name)} are at ${pts(scored[scored.length - 1].s.cape.avg)}` : ""}.` : "Votes are in; forecast comparisons fill in as counties report."}</div>`;
+  const t = LIVE.tide || {};
   const st = (k, v, s, c) => `<div class="stat"><div class="k">${k}</div><div class="v ${c || ""}">${v}</div><div class="s">${s || ""}</div></div>`;
-  $("#stats").innerHTML = st("Won", won, "", "D") + st("Lost", lost, "", "R") + st("Leading", lead, "not called") + st("Trailing", trail, "not called") + st("Ahead of the ticket", withT.length ? `${aheadT} of ${withT.length}` : "–", avgT == null ? "" : `average ${pts(avgT)} pts`, avgT > 0 ? "plus" : avgT < 0 ? "minus" : "") + st("Ahead of " + pres24() + " 2024", withH.length ? `${aheadH} of ${withH.length}` : "–", avgH == null ? "" : `average ${pts(avgH)} pts`, avgH > 0 ? "plus" : avgH < 0 ? "minus" : "") + st("Pick-ups / losses", `${gains} / ${losses}`, "if every leader holds");
-  $("#lead").innerHTML = `<div class="lead">${!live.length ? `Nothing counted yet. ${ROWS.length} races on this list.` : avgT == null ? `${live.length} races have votes; waiting for the statewide races to report before comparing.` : `Across the ${withT.length} ${G.name} races with a statewide ${P() === "D" ? "Democrat" : "Republican"} to compare with, they are running ${Math.abs(avgT).toFixed(1)} points ${avgT >= 0 ? "ahead of" : "behind"} the ticket on average; ${aheadT} of ${withT.length} are ahead.`}</div>`;
+  $("#ostats").innerHTML = st("Tide so far", t.value == null ? "–" : (t.value > 0 ? "D" : "R") + Math.abs(t.value).toFixed(1), t.value == null ? "fills in as counties report" : `vs. 2024 presidential, ${fmt(t.counties)} counties on these lists`, t.value > 0 ? "D" : t.value < 0 ? "R" : "") + st("Races on the lists", gs.reduce((s, x) => s + x.s.n, 0), "some appear on more than one") + st("Called so far", gs.reduce((s, x) => s + x.s.won + x.s.lost, 0), "list candidates won or lost") + st("Rain tax", "see weather", `<a href="../weather/">turnout vs. rain, live</a>`);
+}
+// ---------- one group ----------
+function render() {
+  $("#overview").style.display = "none"; $("#groupsec").style.display = ""; document.querySelectorAll(".gonly").forEach(e => e.style.display = "");
+  const s = summarize(ROWS), live = ROWS.filter(x => !x.none && x.tot > 0);
+  const other = P() === "D" ? "R" : "D";
+  const gains = live.filter(x => x.held === other && (x.called === "W" || (!x.called && x.share > 0.5))).length, losses = live.filter(x => x.held === P() && x.opp_party !== P() && (x.called === "L" || (!x.called && x.share < 0.5))).length;
+  const newest = ROWS.map(x => x.lastUpdated).filter(Boolean).sort().slice(-1)[0];
+  $("#stamp").textContent = live.length ? `Results as of ${ptT(newest)} · Decision Desk HQ${MODE === "live" ? " via the lab's server (every 5 min)" : " (direct)"}` : "Waiting for the first count"; $("#stamp").className = live.length ? "live" : "";
+  const st = (k, v, sub, c) => `<div class="stat"><div class="k">${k}</div><div class="v ${c || ""}">${v}</div><div class="s">${sub || ""}</div></div>`;
+  $("#stats").innerHTML = st("Won", s.won, "", "D") + st("Lost", s.lost, "", "R") + st("Leading", s.lead, "not called") + st("Trailing", s.trail, "not called") + st("CAPE score", s.cape.avg == null ? "–" : pts(s.cape.avg), s.cape.n ? `avg. vs. forecast, ${s.cape.n} races` : "vs. pre-election forecast", s.cape.avg > 0 ? "plus" : s.cape.avg < 0 ? "minus" : "") + st("Ahead of the ticket", s.ticket.n ? `${s.ticket.ahead} of ${s.ticket.n}` : "–", s.ticket.avg == null ? "" : `average ${pts(s.ticket.avg)} pts`, s.ticket.avg > 0 ? "plus" : s.ticket.avg < 0 ? "minus" : "") + st("Ahead of " + pres24() + " 2024", s.harris.n ? `${s.harris.ahead} of ${s.harris.n}` : "–", s.harris.avg == null ? "" : `average ${pts(s.harris.avg)} pts`, s.harris.avg > 0 ? "plus" : s.harris.avg < 0 ? "minus" : "") + st("Pick-ups / losses", `${gains} / ${losses}`, "if every leader holds");
+  $("#lead").innerHTML = `<div class="lead">${!live.length ? `Nothing counted yet. ${ROWS.length} races on this list.` : s.ticket.avg == null ? `${live.length} races have votes; waiting for the statewide races to report before comparing.` : `Across the ${s.ticket.n} ${esc(G.name)} races with a statewide ${pname(P())} to compare with, they are running ${Math.abs(s.ticket.avg).toFixed(1)} points ${s.ticket.avg >= 0 ? "ahead of" : "behind"} the ticket on average; ${s.ticket.ahead} of ${s.ticket.n} are ahead.`}</div>`;
   const ranked = ROWS.filter(x => !x.none).map(x => ({ x, v: x.ticket != null ? x.ticket : x.harris, star: x.ticket == null && x.harris != null })).filter(y => y.v != null).sort((a, b) => b.v - a.v);
   const mx = Math.max(5, ...ranked.map(y => Math.abs(y.v)));
-  $("#bars").innerHTML = ranked.length ? ranked.map(({ x, v, star }) => `<div class="brow"><a class="lbl" href="../race/#${x.r.id}" title="${esc(x.r.bluedog.cand)}">${x.r.id} · ${esc(x.r.bluedog.cand.split(" ").slice(-1)[0])}${star ? "*" : ""}</a><div class="trk"><span class="zero"></span><i style="${v >= 0 ? `left:50%;width:${v / mx * 50}%;background:var(--${P() === "D" ? "dem" : "rep"})` : `right:50%;width:${-v / mx * 50}%;background:var(--muted)`}"></i></div><span class="n ${v >= 0 ? "plus" : "minus"}">${pts(v)}</span></div>`).join("") : `<div class="tiny">Fills in as the Blue Dog and statewide races report.</div>`;
-  const cols = [["id", "District", r => r.r.id], ["cand", G ? G.name.replace(/s$/, "") : "Candidate", r => r.r.bluedog.cand], ["opp", "Opponent", r => r.r.bluedog.opp], ["held", "Seat", r => r.r.bluedog.held], ["share", "Share", r => r.share], ["margin", "Margin", r => r.margin], ["inPct", "Counted", r => r.inPct], ["ticket", "vs. ticket", r => r.ticket], ["harris", "vs. " + pres24() + " '24", r => r.harris], ["reg", "vs. registration", r => r.reg]];
+  $("#bars").innerHTML = ranked.length ? ranked.map(({ x, v, star }) => `<div class="brow"><a class="lbl" href="../race/#${x.id}" title="${esc(x.cand)}">${x.id} · ${esc(x.cand.split(" ").slice(-1)[0])}${star ? "*" : ""}</a><div class="trk"><span class="zero"></span><i style="${v >= 0 ? `left:50%;width:${v / mx * 50}%;background:var(--${P() === "D" ? "dem" : "rep"})` : `right:50%;width:${-v / mx * 50}%;background:var(--muted)`}"></i></div><span class="n ${v >= 0 ? "plus" : "minus"}">${pts(v)}</span></div>`).join("") : `<div class="tiny">Fills in as these races and the statewide races report.</div>`;
+  const cols = [["id", "District", r => r.id], ["cand", G.name.replace(/s$/, "").replace(/^NRCC MAGA Majority$/, "Candidate"), r => r.cand], ["opp", "Opponent", r => r.opp], ["held", "Seat", r => r.held], ["share", "Share", r => r.share], ["margin", "Margin", r => r.margin], ["inPct", "Counted", r => r.inPct], ["cape", "CAPE score", r => r.cape], ["ticket", "vs. ticket", r => r.ticket], ["harris", "vs. " + pres24() + " '24", r => r.harris], ["reg", "vs. registration", r => r.reg]];
   const rows = ROWS.filter(x => !x.none).slice().sort((a, b) => { const c = cols.find(c => c[0] === sortKey)[2]; const va = c(a), vb = c(b); if (va == null && vb == null) return 0; if (va == null) return 1; if (vb == null) return -1; return (typeof va === "string" ? va.localeCompare(vb, "en", { numeric: true }) : va - vb) * sortDir; });
-  $("#tbl").innerHTML = `<thead><tr>${cols.map(c => `<th class="${["share", "margin", "inPct", "ticket", "harris", "reg"].includes(c[0]) ? "n" : ""} ${sortKey === c[0] ? "on" : ""}" data-k="${c[0]}">${c[1]}${sortKey === c[0] ? (sortDir > 0 ? " ▴" : " ▾") : ""}</th>`).join("")}</tr></thead><tbody>${rows.map(x => `<tr><td><a href="../race/#${x.r.id}"><b>${x.r.id}</b></a>${x.called === "W" ? ` <span class="won">Won</span>` : x.called === "L" ? ` <span class="lost">Lost</span>` : ""}</td><td>${esc(x.r.bluedog.cand)}${x.r.bluedog.inc ? " <span class='tiny'>inc.</span>" : ""}</td><td>${esc(x.r.bluedog.opp || "–")}${x.r.bluedog.opp_party ? ` (${esc(x.r.bluedog.opp_party)})` : ""}</td><td class="${x.r.bluedog.held}">${x.r.bluedog.held}</td><td class="n">${pct(x.share)}</td><td class="n ${x.margin > 0 ? "plus" : x.margin < 0 ? "minus" : ""}">${x.margin == null ? "–" : pts(x.margin)}</td><td class="n">${x.inPct == null ? "–" : Math.round(x.inPct * 100) + "%"}</td><td class="n ${x.ticket > 0 ? "plus" : x.ticket < 0 ? "minus" : ""}" title="${esc(x.ticketWho || "")}">${pts(x.ticket)}${x.ticketWho ? `<div class="tiny">${esc(x.ticketWho.split(" (")[0].split(" ").slice(-1)[0])}</div>` : ""}</td><td class="n ${x.harris > 0 ? "plus" : x.harris < 0 ? "minus" : ""}">${pts(x.harris)}</td><td class="n ${x.reg > 0 ? "plus" : x.reg < 0 ? "minus" : ""}">${pts(x.reg)}</td></tr>`).join("")}</tbody>`;
+  const num = new Set(["share", "margin", "inPct", "cape", "ticket", "harris", "reg"]);
+  $("#tbl").innerHTML = `<thead><tr>${cols.map(c => `<th class="${num.has(c[0]) ? "n" : ""} ${sortKey === c[0] ? "on" : ""}" data-k="${c[0]}">${c[1]}${sortKey === c[0] ? (sortDir > 0 ? " ▴" : " ▾") : ""}</th>`).join("")}</tr></thead><tbody>${rows.map(x => `<tr><td><a href="../race/#${x.id}"><b>${x.id}</b></a>${x.called === "W" ? ` <span class="won">Won</span>` : x.called === "L" ? ` <span class="lost">Lost</span>` : ""}</td><td>${esc(x.cand)}${x.inc ? " <span class='tiny'>inc.</span>" : ""}</td><td>${esc(x.opp || "–")}${x.opp_party ? ` (${esc(x.opp_party)})` : ""}</td><td class="${x.held}">${x.held}</td><td class="n">${pct(x.share)}</td><td class="n ${x.margin > 0 ? "plus" : x.margin < 0 ? "minus" : ""}">${x.margin == null ? "–" : pts(x.margin)}</td><td class="n">${x.inPct == null ? "–" : Math.round(x.inPct * 100) + "%"}</td><td class="n ${x.cape > 0 ? "plus" : x.cape < 0 ? "minus" : ""}" title="${esc(x.rating || "")}${x.expMargin != null ? ` · forecast margin ${pts(x.expMargin)}` : ""}">${pts(x.cape)}${x.rating ? `<div class="tiny">${esc(x.rating)}</div>` : ""}</td><td class="n ${x.ticket > 0 ? "plus" : x.ticket < 0 ? "minus" : ""}" title="${esc(x.ticketWho || "")}">${pts(x.ticket)}${x.ticketWho ? `<div class="tiny">${esc(x.ticketWho.split(" (")[0].split(" ").slice(-1)[0])}</div>` : ""}</td><td class="n ${x.harris > 0 ? "plus" : x.harris < 0 ? "minus" : ""}">${pts(x.harris)}</td><td class="n ${x.reg > 0 ? "plus" : x.reg < 0 ? "minus" : ""}">${pts(x.reg)}</td></tr>`).join("")}</tbody>`;
   $("#tbl").querySelectorAll("th").forEach(th => th.onclick = () => { const k = th.dataset.k; if (sortKey === k) sortDir = -sortDir; else { sortKey = k; sortDir = ["id", "cand", "opp", "held"].includes(k) ? 1 : -1; } render(); });
-  $("#foot").textContent = "Live results: Decision Desk HQ's public feed (each race and the state's Senate and governor races, matched by county). 2024 lean: county presidential results archive. Registration: state figures as compiled by Decision Desk HQ. Race lists: " + (G ? G.source : "") + ". Built by the Election Night Lab, UC Merced CAPE.";
+  $("#foot").textContent = "Live results: Decision Desk HQ's public feed (each race and the state's Senate and governor races, matched by county), read by the lab's server every five minutes. Forecast margins and ratings: Decision Desk HQ, pre-election. 2024 lean: county presidential results archive. Registration: state figures as compiled by Decision Desk HQ. Race lists: " + (G.source || "the groups' own published lists") + ". Built by the UC Merced CAPE Election Lab.";
 }
+function go(id) { pickGroup(id); $("#stamp").textContent = "Loading…"; $("#bars").innerHTML = ""; $("#tbl").innerHTML = ""; tick().catch(() => {}); window.scrollTo({ top: 0 }); }
 function pickGroup(id) {
-  G = GROUPS.groups.find(g => g.id === id) || GROUPS.groups[0]; ROWS = []; sortKey = "ticket"; sortDir = -1;
-  history.replaceState(null, "", "?g=" + G.id); document.title = G.name + " scoreboard · Election Night Lab";
-  $("#h1").textContent = "How the " + G.name + " are running"; $("#kicker").textContent = G.blurb; $("#h2a").textContent = "The night for the " + G.name;
-  $("#gtabs").innerHTML = GROUPS.groups.map(g => `<button type="button" data-g="${g.id}" style="font:600 14px var(--sans);border:1px solid rgba(255,255,255,.4);background:${g.id === G.id ? "var(--head-ink)" : "transparent"};color:${g.id === G.id ? "var(--head)" : "var(--head-ink)"};border-radius:999px;padding:6px 12px;cursor:pointer">${esc(g.name)} · ${g.races.length}</button>`).join("");
-  $("#gtabs").querySelectorAll("[data-g]").forEach(b => b.onclick = () => { pickGroup(b.dataset.g); $("#stamp").textContent = "Loading…"; $("#bars").innerHTML = ""; $("#tbl").innerHTML = ""; tick().catch(() => {}); });
+  G = id === "all" ? { id: "all", name: "caucuses", party: "D", races: [], blurb: "Five lists, one scale. How the Blue Dogs, the Progressive Caucus's slate, Main Street Republicans, the Freedom Caucus and the NRCC's MAGA Majority candidates are running against the same yardsticks: the pre-election forecast, their own party's statewide candidates, the 2024 presidential vote and registration." } : (GROUPS.groups.find(g => g.id === id) || GROUPS.groups[0]);
+  ROWS = []; sortKey = "ticket"; sortDir = -1;
+  history.replaceState(null, "", "?g=" + G.id); document.title = (G.id === "all" ? "Caucus scoreboards" : G.name + " scoreboard") + " · CAPE Election Lab";
+  $("#h1").textContent = G.id === "all" ? "Caucus scoreboards" : "How the " + G.name + " are running"; $("#kicker").textContent = G.blurb; $("#h2a").textContent = "The night for the " + G.name;
+  if (G.id !== "all") $("#how").innerHTML = HOW();
+  const tabs = [{ id: "all", name: "All caucuses", n: null }, ...GROUPS.groups.map(g => ({ id: g.id, name: g.name, n: g.races.length }))];
+  $("#gtabs").innerHTML = tabs.map(g => `<button type="button" data-g="${g.id}" style="font:600 14px var(--sans);border:1px solid rgba(255,255,255,.4);background:${g.id === G.id ? "var(--head-ink)" : "transparent"};color:${g.id === G.id ? "var(--head)" : "var(--head-ink)"};border-radius:999px;padding:6px 12px;cursor:pointer">${esc(g.name)}${g.n ? " · " + g.n : ""}</button>`).join("");
+  $("#gtabs").querySelectorAll("[data-g]").forEach(b => b.onclick = () => go(b.dataset.g));
 }
 (async () => { try { DATA = await getJSON("../race/data.json"); GROUPS = await getJSON("groups.json"); } catch (e) { $("#stamp").textContent = "Couldn't load race data."; return; }
-  pickGroup(new URLSearchParams(location.search).get("g") || "bluedogs");
+  pickGroup(new URLSearchParams(location.search).get("g") || "all");
   try { await tick(); } catch (e) { $("#stamp").textContent = "Couldn't reach the results feed; retrying."; } setInterval(() => { if (!document.hidden) tick().catch(() => {}); }, 60e3); })();
 </script>
+<script defer src="/electionlab/track.js"></script>
 </body>
 </html>

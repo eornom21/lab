@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
-<title>Election Night Lab</title>
+<title>CAPE Election Lab</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
@@ -44,6 +44,8 @@ header{grid-column:1/3;display:flex;align-items:center;gap:20px;flex-wrap:wrap;p
 .hbtn[aria-pressed="true"]{background:var(--live-soft);color:var(--live);border-color:var(--live)}
 nav{display:flex;flex-direction:column;gap:4px;padding:14px 10px;border-right:1px solid var(--rule);background:var(--panel);overflow-y:auto;min-height:0}
 nav .navgroup{font:600 11px var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:10px 14px 2px;border-top:1px solid var(--rule);margin-top:6px}
+nav .navgroup.first{border-top:0;margin-top:0;padding-top:2px}
+nav button.room{font-size:17px;padding:7px 14px}
 nav button.ca{font-size:17px;padding:7px 14px}
 nav button{font-family:var(--display);font-weight:600;font-size:22px;text-transform:uppercase;letter-spacing:.03em;text-align:left;
   background:none;border:0;color:var(--muted);padding:10px 14px;border-radius:8px;cursor:pointer}
@@ -111,7 +113,9 @@ td .chip{font-size:11px;padding:2px 6px;border-radius:4px;font-weight:600}
 .chip.done{background:var(--live-soft);color:var(--live)}
 .tablewrap{overflow-x:auto;background:var(--panel);border:1px solid var(--rule);border-radius:10px}
 /* summary, explainers, stamps */
-.navlink{font-family:var(--display);font-weight:600;font-size:22px;text-transform:uppercase;letter-spacing:.03em;text-decoration:none;color:var(--live);padding:10px 14px;border-radius:8px;border:1px dashed var(--live);margin-top:6px}
+.navlink{font-family:var(--display);font-weight:600;font-size:17px;text-transform:uppercase;letter-spacing:.03em;text-decoration:none;color:var(--live);padding:7px 14px;border-radius:8px;border:1px solid transparent}
+.navlink:hover{background:var(--panel2)}
+.navlink .ext{font-family:var(--body);font-size:12px;margin-left:6px;opacity:.8}
 .navlink kbd{font-family:var(--mono);font-size:11px;color:var(--muted);margin-left:8px;opacity:.7}
 .meta2{display:grid;grid-template-columns:1fr auto;align-items:baseline;gap:2px 12px;margin:0 0 14px;font-size:14px;color:var(--muted);max-width:1100px}
 .asof{display:inline-flex;align-items:baseline;gap:7px}
@@ -235,7 +239,7 @@ a.hbtn.detail{border-color:var(--ink);color:var(--ink)}
 
 <div id="app">
   <header>
-    <div class="brand">Election Night Lab<small>U.S. House · California · Tuesday, Nov 3, 2026</small></div>
+    <div class="brand">UC Merced CAPE Election Lab<small>U.S. House · California · Tuesday, Nov 3, 2026</small></div>
     <span class="clock" id="clock">--:--</span>
     <span class="pill" id="status">Waiting for results</span>
     <span class="pill" id="updated" hidden></span>
@@ -244,23 +248,22 @@ a.hbtn.detail{border-color:var(--ink);color:var(--ink)}
     <button class="hbtn" id="rehearse" aria-pressed="false" title="Fill the page with made-up partial results so you can practice">Rehearsal data</button>
   </header>
   <nav aria-label="Views">
+    <div class="navgroup first">U.S. House</div>
     <button data-view="summary" aria-current="true">Summary<kbd>1</kbd></button>
-    <button data-view="board">Board<kbd>2</kbd></button>
-    <button data-view="race">Race<kbd>3</kbd></button>
+    <button data-view="board">The board<kbd>2</kbd></button>
+    <button data-view="race">One race<kbd>3</kbd></button>
     <button data-view="turnout">Turnout<kbd>4</kbd></button>
-    <button data-view="bluedogs">Blue Dogs</button>
-    <button data-view="ask">Ask<kbd>5</kbd></button>
-    <button data-view="answered">Asked &amp; answered</button>
+    <a class="navlink" href="https://lab.nathanwmonroe.com/electionlab/caucus/" target="_blank" rel="noopener" title="Blue Dogs, the Progressive Caucus slate, Main Street Republicans, Freedom Caucus and the NRCC MAGA Majority list, side by side: CAPE scores, ahead of the ticket, race by race">Caucus scoreboards<span class="ext">↗</span></a>
+    <a class="navlink" href="https://lab.nathanwmonroe.com/electionlab/weather/" target="_blank" rel="noopener" title="Live weather alerts over the tracked counties, turnout against expectations, and three hypothesis tests that rerun as the count comes in">Weather &amp; turnout<span class="ext">↗</span></a>
     <div class="navgroup">California</div>
-    <button class="ca" data-view="cape">CAPE Alum Races<kbd>7</kbd></button>
+    <button class="ca" data-view="cape">CAPE alumni races<kbd>7</kbd></button>
     <button class="ca" data-view="leg">Valley Legislature<kbd>8</kbd></button>
     <button class="ca" data-view="gov">Governor<kbd>9</kbd></button>
-    <button class="ca" data-view="boe">Esparza · BOE-1</button>
     <button class="ca" data-view="props">Propositions<kbd>0</kbd></button>
-    <button class="ca" data-view="local">Merced County</button>
-    <a class="navlink" href="https://lab.nathanwmonroe.com/ca13/" target="_blank" rel="noopener" title="Opens the full CA-13 page in its own browser tab; it updates itself every minute">CA-13 ↗<kbd>6</kbd></a>
-    <a class="navlink" href="https://lab.nathanwmonroe.com/electionlab/weather/" target="_blank" rel="noopener" title="Live weather alerts over the tracked counties, with turnout against expectations" style="margin-top:6px;font-size:14px">Weather &amp; turnout ↗</a>
-    <a class="navlink" href="https://lab.nathanwmonroe.com/electionlab/caucus/" target="_blank" rel="noopener" title="Blue Dogs, Progressives, Main Street Republicans and Freedom Caucus: ahead of the ticket, race by race" style="font-size:14px">Caucus scoreboards ↗</a>
+    <button class="ca" data-view="local">Merced County &amp; BOE 1</button>
+    <div class="navgroup">The room</div>
+    <button data-view="ask" class="room">Ask the lab<kbd>5</kbd></button>
+    <button data-view="answered" class="room">Asked &amp; answered<kbd>6</kbd></button>
     <div class="qrcorner" aria-label="Scan to ask the lab and see its answers: lab.nathanwmonroe.com/electionnight"><img alt="QR code for lab.nathanwmonroe.com/electionnight" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASgAAAEoCAIAAABkZftOAAAFM0lEQVR42u3dMW4bMRCG0V9BrpAqde5/INepcojNCVwI4OzMrN7r48hrfSCBAZev67oC3OuHRwDCA+EBwgPhAcID4QHCA+EBwgPhgfAA4YHwAOHBNj/f/Qe/fv9Z8Yv9+/u14vd693N2ff5Tz3PL36X6+VjxwFYThAcID4QHCA+EB+TwHC/F86gsnyt+9xy++5xb5m85NK87Nd/b/n2z4oGtJggPEB4IDxAeCA/ITXO8FM89pp1be3dOVf1zpp3TOzWv2/59s+KBrSYIDxAeCA8QHggPyNA53hbV59ZOzbu63ldZPVfsOl9nxQPhAcID4QHCA+EBwoOY4+WT54HV87pTc8W4786KB8IDhAfCA4QHwgOEB/mEOd72c1bV58eqz8VNm7NVfx+2fN+seCA8EB4gPBAeIDwQHpCb5njOWfWeu6t+D+f294Ja8QDhgfBAeIDwQHiA8CAPn+N92j1mXb9v1z1yp97bWT0/tOIBwgPhAcID4YHwAOHBw72u60rHebMMm79tOSdWfc4tTecwt39/rHhgqwkID4QHwgOEB8ID8pD3ajrn1vv5nzofq54Hnnr+Vjyw1QThAcID4QHCA+EBOXweL0vuzds+Jzw1F60+P9k1P9zy+1rxwFYThAcID4QHCA+EB6T5PF6WvCez+v+tfp/ntHOPW+Z+XfNkKx4ID4QHCA+EBwgPhAek+X68LLkPrfocV9c5wO3n+rq+J11/Xyse2GqC8ADhgfAA4YHwgAx9r+a0edf2813V9+91ff7q70/XuU0rHthqgvAA4YHwAOGB8IDcdB7vqfetbZlPTjv/1nXe0nk8QHggPBAeIDwQHiA8iPvx8snzomlzy1Ofp/rzT/u7d81jrXhgqwnCA4QHwgOEB8IDctN7NbefB+s6j9f1c6b9v9Pux6v+e1nxwFYThAcID4QHCA+EB2To/XhpmrdU3y9X/Xmm3V837ffdMge24oGtJggPEB4IDxAeCA/ITe/V3P5exGnn07bMP6vP4536Hp56/u7HA1tNQHggPEB4IDwQHpCh5/Ge+v7GFJ/T67o3L0vO4225/9CKB7aagPBAeIDwQHggPCAPP483bU5Y/Tmnzf3e/X+3zyG73sNpxQNbTRAeIDwQHiA8EB6Q5vN4abpnrEvXHK9r7tT1fKp/jvvxwFYTEB4IDxAeCA8QHuTh5/G234fWNT88dR9d17m4736++/GseGCrCQgPhAfCA4QHwgMyYo6XprnWqXndtPdkdp2je+p9dNPOK1rxwFYThAcID4QHCA+EB+Sm92pueV/idtVzyOr3eU57bl1zPyse2GqC8ADhgfAA4YHwgBye42037b61affmpWk+Nu35uB8PbDUB4YHwAOGB8ADhQZa9V3P7+avqeVfXPGra+bRTz7PrPkP344GtJiA8EB4gPBAeIDzIQ+7Hq56rpHi+1PU+z+rzYNVzyy335k2bP1vxQHggPEB4IDxAeCA8IDfN8VI8P+maE04739X1/s/q+WfXnK3rfaRWPLDVBOEBwgPhAcID4QFpnuNl+Zwtw+Zdp94jOu39mdPu33M/HthqAsID4QHCA+EBwoOY42XyfXrTzoml6Xxg9Xzy1POv/jnuxwNbTUB4IDxAeCA8EB6Qh8zxpr0P89Scatpcq+seuer7+rruLbTiga0mIDwQHiA8EB4gPGj2uq4rT5yTbDnfleX3EE77PlTPM53HA1tNQHggPEB4IDwQHpChczzAigfCA4QHwgOEB8ID4QHCA+EBwgPhAcID4QHCA+HBB/oP42rvX/bLUTMAAAAASUVORK5CYII="><span>Ask the lab · see answers<br>lab.nathanwmonroe.com<br>/electionnight</span></div>
   </nav>
   <main>
@@ -359,7 +362,7 @@ a.hbtn.detail{border-color:var(--ink);color:var(--ink)}
     </section>
 
     <section id="v-boe" hidden>
-      <h2>Esparza for Board of Equalization</h2>
+      <h2>State Board of Equalization, District 1</h2>
       <p class="sub">Nelson Esparza (D), Fresno City Council president, vs. Shannon Grove (R), former Senate Republican leader, for the State Board of Equalization's District 1, which runs through the Central Valley.</p>
       <div class="meta2" data-sec="boe"></div>
       <div id="boeBody"></div>
@@ -374,9 +377,12 @@ a.hbtn.detail{border-color:var(--ink);color:var(--ink)}
 
     <section id="v-local" hidden>
       <h2>Merced County</h2>
-      <p class="sub">City councils, school boards, special districts and local measures on Merced County's ballot.</p>
+      <p class="sub">City councils, school boards, special districts and local measures on Merced County's ballot, and the Valley's seat on the State Board of Equalization.</p>
       <div class="meta2" data-sec="local"></div>
       <div id="localBody"></div>
+      <h3 style="margin-top:22px">State Board of Equalization, District 1</h3>
+      <p class="sub">Nelson Esparza (D) vs. Shannon Grove (R) for the elected tax board's Valley seat; an open seat. Statewide and Valley county numbers from the Secretary of State.</p>
+      <div id="boeBody2"></div>
     </section>
 
     <section id="v-ask" hidden>
@@ -494,8 +500,8 @@ function show(v) {
 document.querySelectorAll("nav button[data-view]").forEach(b => b.onclick = () => show(b.dataset.view));
 document.addEventListener("keydown", e => {
   if (e.target.matches("input,select,textarea")) return;
-  const m = { "1": "summary", "2": "board", "3": "race", "4": "turnout", "5": "ask", "7": "cape", "8": "leg", "9": "gov", "0": "props" }[e.key];
-  if (m) show(m); if (e.key === "6") window.open("https://lab.nathanwmonroe.com/ca13/", "_blank", "noopener"); if (e.key === "/") { e.preventDefault(); $("#askInput").focus(); }
+  const m = { "1": "summary", "2": "board", "3": "race", "4": "turnout", "5": "ask", "6": "answered", "7": "cape", "8": "leg", "9": "gov", "0": "props" }[e.key];
+  if (m) show(m); if (e.key === "/") { e.preventDefault(); $("#askInput").focus(); }
 });
 
 function renderBoard() {
@@ -736,7 +742,7 @@ function fullCard(r, x) {
 function renderCA(v) {
   const L = caLive();
   if (v === "cape") $("#capeBody").innerHTML = CA.cape.length ? CA.cape.map(r => fullCard(r, L.races[r.id])).join("") : `<p class="note">Being researched.</p>`;
-  if (v === "boe") { const g = CA.boe; $("#boeBody").innerHTML = g ? fullCard(g, L.races.BOE1) : `<p class="note">Being researched.</p>`; }
+  if (v === "boe" || v === "local") { const g = CA.boe, html = g ? fullCard(g, L.races.BOE1) : `<p class="note">Being researched.</p>`; if (v === "boe") $("#boeBody").innerHTML = html; else $("#boeBody2").innerHTML = html; }
   if (v === "gov") { const g = CA.gov; $("#govBody").innerHTML = g ? `<h2>Governor</h2><p class="sub" style="margin:0 0 12px">${esc(g.polls_line || "")}</p>` + fullCard(Object.assign({ office: "Governor of California" }, g), L.races.GOV) : `<p class="note">Being researched.</p>`; }
   if (v === "leg") {
     const row = r => { if (!r.b) return `<div class="lrow" style="cursor:default"><span class="dn">${esc(r.id.replace(/^AD/, "AD-").replace(/^SD/, "SD-"))}</span><span class="nm" style="color:var(--${pcol(r.a.party) === "N" ? "ink2" : pcol(r.a.party)})">${esc(r.a.name)} (${esc(ab(r.a.party))})${r.a.inc ? " *" : ""}</span><span></span><span class="nm rt" style="color:var(--muted)">Unopposed</span><span></span><span></span></div>`;
@@ -805,7 +811,7 @@ const HOW = {
     "The Valley's delegation in one place: which seats are close and which party is gaining.",
     "scan for the closest bars, then tap one to show its full scoreboard.",
     "Votes: the Secretary of State's feed (district totals across all counties in the district), every few minutes on election night. Candidates and June primary results: the Secretary of State and Ballotpedia, checked Nov 2."],
-  boe: ["Nelson Esparza's race for the State Board of Equalization, District 1: the count, the margin, and each side's case.", "The Board of Equalization is the elected tax board; District 1 is the Valley's seat, and this is a Valley-wide read on a Democrat vs. a Republican with the same voters as the legislative races.", "compare Esparza's share in Fresno and Merced with the legislative Democrats on the same ballots.", "The Secretary of State's feed, every few minutes after 8pm PT; the full page has county numbers."],
+  boe: ["The State Board of Equalization, District 1 race (Esparza vs. Grove): the count, the margin, and each side's case.", "The Board of Equalization is the elected tax board; District 1 is the Valley's seat, and this is a Valley-wide read on a Democrat vs. a Republican with the same voters as the legislative races.", "compare Esparza's share in Fresno and Merced with the legislative Democrats on the same ballots.", "The Secretary of State's feed, every few minutes after 8pm PT; the full page has county numbers."],
   gov: ["The governor's race statewide: the count, the margin, and each side's case with sources.",
     "The top of the ticket; it can shape turnout down the ballot.",
     "compare the governor's margin with the House races on the Summary to see who's running ahead of the top of the ticket.",
@@ -960,6 +966,7 @@ async function pollHouse() {
 }
 function startMirror() {
   document.body.classList.add("mirror");
+  { const gs = document.querySelectorAll("nav .navgroup"); if (gs.length) gs[gs.length - 1].textContent = "From the room"; }
   pollHouse(); setInterval(() => { if (!document.hidden) pollHouse(); }, 60e3);
   const b = document.querySelector(".brand small"); if (b) b.textContent = "Watch-party big screen, live view · U.S. House · California · Tuesday, Nov 3, 2026";
   $("#status").insertAdjacentHTML("afterend", `<span class="pill mirrorpill" id="mirrorStamp">Live view</span>`);
@@ -1114,5 +1121,6 @@ render();
 })();
 </script>
 
+<script defer src="/electionlab/track.js"></script>
 </body>
 </html>

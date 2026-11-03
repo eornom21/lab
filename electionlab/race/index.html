@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
-<title>Race detail · Election Night Lab</title>
+<title>Race detail · CAPE Election Lab</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
@@ -121,7 +121,7 @@ footer{color:var(--muted);font-size:13px;margin-top:30px;border-top:1px solid va
 </head>
 <body>
 <header class="top">
-  <div class="brand"><span>Election Night Lab · Race detail</span><a href="../">← Back to the big screen</a><a href="#" id="pickOther">Another race</a></div>
+  <div class="brand"><span>UC Merced CAPE Election Lab · Race detail</span><a href="../">← Back to the big screen</a><a href="#" id="pickOther">Another race</a></div>
   <h1 id="title">Loading…</h1>
   <p class="kicker" id="kicker"></p>
   <div class="chips" id="chips"></div>
@@ -222,7 +222,8 @@ async function init() {
   R = DATA.races[k] || DATA.races[k.replace(/^([A-Z]{2})(\d+|AL)$/, "$1-$2")];
   if (!R) { $("#title").textContent = "Pick a race"; $("#err").hidden = false; $("#err").innerHTML = "No race called <b>" + esc(k || "(none)") + "</b>. Try one of these: " + Object.keys(DATA.races).sort().map(x => `<a href="#${x}" onclick="location.reload()">${x}</a>`).join(" · "); return; }
   $("#pickOther").onclick = e => { e.preventDefault(); const x = prompt("Which race? e.g. PA-10, CA-13, WI-3", R.id); if (x) { location.hash = x.trim().toUpperCase(); location.reload(); } };
-  document.title = R.id + " · Election Night Lab";
+  document.title = R.id + " · CAPE Election Lab";
+  if (R.id === "CA-13") $("#chips").insertAdjacentHTML("afterend", `<p class="kicker" style="margin-top:8px"><a href="https://lab.nathanwmonroe.com/ca13/">The full CA-13 watcher, with precinct-level history and the news ↗</a></p>`);
   renderHeader(); fillHow(); renderStatic();
   loadGeo();
   await refresh();
@@ -273,7 +274,7 @@ function renderStatic() {
     $("#pastSub").textContent = "House results for " + R.id + " in past general elections. District lines changed after the 2020 census" + (R.redrawn_state ? ", and again for 2026" : "") + ", so earlier years are the same district number, not always the same voters.";
     $("#past").innerHTML = yrs.map(y => { const p = R.past[y], t = p.d + p.r, ds = t ? p.d / t : null;
       return `<div class="yr"><div class="y">${y}${+y % 4 ? " · midterm" : " · presidential"}</div><div class="w ${p.win || ""}">${p.win === "D" ? "D" : p.win === "R" ? "R" : "–"} ${ds != null ? pts((ds - 0.5) * 200 * (p.win === "R" ? -1 : 1)).replace("+", "+") : ""}</div><div class="s">${ds != null ? `<span class="D">${pct(ds)}</span> · <span class="R">${pct(1 - ds)}</span>` : "no D vs R race"}</div><div class="tiny">${esc(p.win === "D" ? p.dn : p.win === "R" ? p.rn : "")}</div></div>`; }).join(""); }
-  $("#foot").innerHTML = `Live results: Decision Desk HQ's public feed, read by this page every minute. County baselines: ${esc(DATA.sources.counties)}. Past results: ${esc(DATA.sources.past)}. Money: ${esc(DATA.sources.money)}. Built by the Election Night Lab, UC Merced CAPE.`;
+  $("#foot").innerHTML = `Live results: Decision Desk HQ's public feed, read by this page every minute. County baselines: ${esc(DATA.sources.counties)}. Past results: ${esc(DATA.sources.past)}. Money: ${esc(DATA.sources.money)}. Built by the UC Merced CAPE Election Lab.`;
 }
 async function loadGeo() {
   const st = R.st, fipsSt = { AK: "02", AL: "01", AZ: "04", CA: "06", CO: "08", FL: "12", GA: "13", IA: "19", KS: "20", KY: "21", MI: "26", MN: "27", MO: "29", MT: "30", NC: "37", NJ: "34", NY: "36", OH: "39", PA: "42", SC: "45", TN: "47", TX: "48", VA: "51", WA: "53", WI: "55" }[st];
@@ -501,7 +502,7 @@ async function initCA(k) {
   else { kind = "leg"; item = [...(CA.cape || []), ...(CA.leg || [])].find(r => r.id === k); }
   if (!item) { $("#title").textContent = "Pick a race"; $("#err").hidden = false; $("#err").textContent = "No California item called " + k; return; }
   CAR = { kind, item };
-  document.title = (kind === "prop" ? "Prop " + item.num : item.office || "Governor") + " · Election Night Lab";
+  document.title = (kind === "prop" ? "Prop " + item.num : item.office || "Governor") + " · CAPE Election Lab";
   $("#pickOther").onclick = e => { e.preventDefault(); const x = prompt("Which? e.g. SD4, AD22, GOV, P50", k); if (x) { location.hash = x.trim().toUpperCase(); location.reload(); } };
   // header
   if (kind === "prop") { $("#title").textContent = "Proposition " + item.num; $("#kicker").textContent = item.title; $("#chips").innerHTML = `<span class="chip">California statewide</span>${item.poll ? `<span class="chip">${esc(item.poll)}</span>` : ""}`; }
@@ -521,7 +522,7 @@ async function initCA(k) {
     const c = (p, name, list) => `<div class="case ${p}"><b>Why ${esc(name)} wins</b><ul>${(list || []).map(x => `<li>${esc(x.text || x)}${x.url ? ` <a href="${esc(x.url)}" target="_blank" rel="noopener">source</a>` : ""}</li>`).join("")}</ul></div>`;
     $("#cases").innerHTML = c(item.a.party === "Republican" ? "R" : "D", item.a.name, item.a_case) + (item.b ? c(item.b.party === "Republican" ? "R" : item.b.party === "Democratic" ? "D" : "O", item.b.name, item.b_case) : ""); }
   if (kind !== "prop" && item.money) { $("#s-money").hidden = false; $("#s-money .sub").textContent = "From state filings and news reports."; $("#money").innerHTML = `<div class="card" style="grid-column:1/-1">${esc(item.money)}${item.note ? `<div class="tiny" style="margin-top:6px">${esc(item.note)}</div>` : ""}</div>`; $("#moneyStamp").textContent = ""; }
-  $("#foot").textContent = "Live results: California Secretary of State (api.sos.ca.gov), read by this page every minute; votes before 7:55pm PT Nov 3 are ignored because the state posts test data. Candidates, cases and polls researched Nov 2, 2026. Built by the Election Night Lab, UC Merced CAPE.";
+  $("#foot").textContent = "Live results: California Secretary of State (api.sos.ca.gov), read by this page every minute; votes before 7:55pm PT Nov 3 are ignored because the state posts test data. Candidates, cases and polls researched Nov 2, 2026. Built by the UC Merced CAPE Election Lab.";
   try { GEO = await getJSON("../geo/06.json"); } catch (e) {}
   await refreshCA();
   setInterval(() => { if (!document.hidden) refreshCA(); }, 60e3);
@@ -585,5 +586,6 @@ function caWhere(rows, an, bn, pa, pb, stateShare) {
 window.addEventListener("hashchange", () => location.reload());
 init();
 </script>
+<script defer src="/electionlab/track.js"></script>
 </body>
 </html>

@@ -1,9 +1,10 @@
-name: Election-night RDD (weather, rules, turnout)
-# Runs electionlab/rdd/rdd.py every ~10 minutes on election night and commits its results.json and figures,
-# which lab.nathanwmonroe.com/electionlab/weather/ reads. Set up Nov 3, 2026 by the Election Night Lab thread.
+name: Election-night loop (RDD + caucus scoreboards)
+# Every ~5 minutes on election night: runs electionlab/rdd/rdd.py (weather/rules/turnout tests; results.json + figures for
+# /electionlab/weather/) and electionlab/caucus/build_live.py (live.json for /electionlab/caucus/, so the Decision Desk HQ feed
+# is read here once per cycle instead of once per viewer). Set up Nov 3, 2026 by the Election Night Lab thread.
 on:
   schedule:
-    - cron: "*/10 * * * *"
+    - cron: "*/5 * * * *"
   workflow_dispatch:
 permissions:
   contents: write
@@ -20,13 +21,15 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install --quiet numpy matplotlib
+      - name: Caucus scoreboards (live.json)
+        run: python3 electionlab/caucus/build_live.py || echo "caucus build failed; keeping the old live.json"
       - name: Run the analysis
         run: python3 electionlab/rdd/rdd.py
       - name: Commit results
         run: |
           git config user.name "election-night-lab"
           git config user.email "noreply@nathanwmonroe.com"
-          git add electionlab/rdd/results.json electionlab/rdd/history.json electionlab/rdd/rain_cache.json electionlab/rdd/fig_h1.svg electionlab/rdd/fig_h2.svg electionlab/rdd/fig_h3.svg || true
+          git add electionlab/caucus/live.json electionlab/rdd/results.json electionlab/rdd/history.json electionlab/rdd/rain_cache.json electionlab/rdd/fig_h1.svg electionlab/rdd/fig_h2.svg electionlab/rdd/fig_h3.svg || true
           if git diff --cached --quiet; then echo "no change"; exit 0; fi
-          git commit -q -m "rdd: results $(date -u +%H:%MZ)"
+          git commit -q -m "loop: results $(date -u +%H:%MZ)"
           for i in 1 2 3; do git pull --rebase -q origin main && git push -q origin main && break || sleep 5; done

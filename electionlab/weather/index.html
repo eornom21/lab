@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
-<title>Weather & turnout · Election Night Lab</title>
+<title>Weather & turnout · CAPE Election Lab</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
@@ -62,7 +62,7 @@ footer{color:var(--muted);font-size:13px;margin-top:30px;border-top:1px solid va
 </head>
 <body>
 <header class="top">
-  <div class="brand"><span>Election Night Lab · Weather & turnout</span><a href="../">← Back to the big screen</a></div>
+  <div class="brand"><span>UC Merced CAPE Election Lab · Weather & turnout</span><a href="../">← Back to the big screen</a></div>
   <h1>Is the weather keeping people home?</h1>
   <p class="kicker">Live National Weather Service alerts laid over the counties in the 53 House races the lab is tracking, with each county's turnout against what was expected, and the state rules that decide whether bad weather on Election Day matters at all.</p>
 </header>
@@ -178,7 +178,7 @@ function render() {
     : `<div class="card tiny">No two tracked races facing each other across a state line are both under weather alerts right now. The pairs this page watches: ${NEIGHBORS.map(p => p.join("–")).join(", ")}.</div>`;
   const sts = [...new Set(rows.map(r => r.st))].sort();
   $("#rules").innerHTML = `<thead><tr><th>State</th><th>Mail ballots</th><th>Early voting in person</th><th class="n">Our counties under alerts</th><th class="n">Turnout vs. expected</th></tr></thead><tbody>${sts.map(s => { const g = grp(r => r.st === s), na = rows.filter(r => r.st === s && r.alerts.length).length; return `<tr><td><b>${s}</b></td><td>${esc((RULES[s] || ["?"])[0])}</td><td>${esc((RULES[s] || ["", "?"])[1])}</td><td class="n">${na} of ${rows.filter(r => r.st === s).length}</td><td class="n ${g.gap == null ? "" : g.gap < -0.005 ? "minus" : g.gap > 0.005 ? "plus" : ""}">${g.gap == null ? "–" : (g.gap > 0 ? "+" : "") + (g.gap * 100).toFixed(1) + "%"}</td></tr>`; }).join("")}</tbody>`;
-  $("#foot").textContent = "Weather: National Weather Service active alerts (api.weather.gov). Turnout expectations and counts: Decision Desk HQ's public results feed. County 2024 lean: county presidential results archive. State rules summarized from NCSL and state election offices; early-voting windows are approximate. Built by the Election Night Lab, UC Merced CAPE.";
+  $("#foot").textContent = "Weather: National Weather Service active alerts (api.weather.gov). Turnout expectations and counts: Decision Desk HQ's public results feed. County 2024 lean: county presidential results archive. State rules summarized from NCSL and state election offices; early-voting windows are approximate. Built by the UC Merced CAPE Election Lab.";
 }
 // ---- hypothesis tests: results written by the GitHub Actions loop (electionlab/rdd/rdd.py) ----
 const RAW = "https://raw.githubusercontent.com/eornom21/lab/main/electionlab/rdd/";
@@ -202,5 +202,6 @@ async function tick() {
   loadHyp().catch(() => {}); try { await Promise.all([loadAlerts(), loadLive()]); render(); } catch (e) { $("#wxStamp").textContent = "Couldn't load the alerts or results feed; retrying in two minutes."; } }
 (async () => { how(); try { DATA = await getJSON("../race/data.json"); } catch (e) { $("#wxStamp").textContent = "Couldn't load race data."; return; } await tick(); setInterval(() => { if (!document.hidden) tick(); }, 120e3); })();
 </script>
+<script defer src="/electionlab/track.js"></script>
 </body>
 </html>
