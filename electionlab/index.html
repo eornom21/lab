@@ -290,6 +290,7 @@ a.hbtn.detail{border-color:var(--ink);color:var(--ink)}
       <h2>Blue Dog races</h2>
       <p class="sub">The 32 races the Blue Dog Coalition, the House's centrist Democrats, is tracking tonight: its members defending seats and its candidates trying to take seats from Republicans.</p>
       <div class="meta2" data-sec="bluedogs"></div>
+      <p class="sub"><a class="btnlink" href="https://lab.nathanwmonroe.com/electionlab/bluedogs/" target="_blank" rel="noopener">Blue Dog scoreboard: ahead of the ticket, race by race ↗</a></p>
       <div class="tiles" id="bdStats"></div>
       <div id="bdList"></div>
     </section>
@@ -918,8 +919,7 @@ async function loadSnap() {
   try {
     const r = await fetch("snap.json?t=" + Date.now(), { cache: "no-store" }); if (!r.ok) return;
     const S = await r.json();
-    LIVE.races = S.races || {}; LIVE.meta = S.meta || null;
-    HOUSE = S.house || {}; LBD = S.bluedogs || {};
+    if (!DIRECT_OK) { LIVE.races = S.races || {}; LIVE.meta = S.meta || null; HOUSE = S.house || {}; LBD = S.bluedogs || {}; }
     LCA = { races: S.ca?.races || {}, props: S.ca?.props || {}, meta: S.ca?.meta || null };
     LMC = { list: S.merced?.list || [], contests: {}, measures: S.merced?.measures || {}, meta: S.merced?.meta || null };
     ANS = (S.answers || []).filter(a => a && a.q);
@@ -927,8 +927,28 @@ async function loadSnap() {
     render(); renderAnswered();
   } catch (e) {}
 }
+// The mirror reads Decision Desk HQ's House feed directly (every minute), so House and Blue Dog numbers don't wait for the lab's relay.
+let DIRECT_OK = false;
+async function pollHouse() {
+  try {
+    const j = await fetch("https://race-api-proxy-production.decisiondeskhq.workers.dev/house", { cache: "no-store" }).then(r => r.json());
+    const ids = new Set(B.races.map(r => r.id)), bd = {}; for (const r of (B.bluedogs?.races || [])) bd[r[0]] = r[1].split(" ").slice(-1)[0].toLowerCase();
+    const races = {}, house = {}, lbd = {}; let newest = "";
+    for (const r of j.races || []) { const m = /^([A-Z]{2})-(\d+|AL)$/.exec(r.displayName || ""); if (!m) continue;
+      const key = m[1] + "-" + (m[2] === "AL" ? "AL" : String(+m[2])), id = key.replace("-", ""), cs = (r.results && r.results.candidates) || [];
+      let d = 0, rr = 0, called = null; for (const c of cs) { const p = c.party && c.party.abbrev; if (p === "DEM") d += c.votes || 0; if (p === "GOP") rr += c.votes || 0; if (c.winner) called = p === "DEM" ? "D" : p === "GOP" ? "R" : "O"; }
+      const pct = Math.round((r.results && r.results.percentIn) || 0); if (r.results && r.results.lastUpdated > newest && d + rr > 0) newest = r.results.lastUpdated;
+      if (d + rr > 0) house[key] = [d, rr, pct];
+      if (ids.has(id)) races[id] = { d, r: rr, pct, called };
+      if (bd[key]) { let mine = 0, opp = 0, st = null; for (const c of cs) { if (String(c.lastName || "").toLowerCase().includes(bd[key])) { mine = c.votes || 0; if (c.winner) st = "W"; } else { opp = Math.max(opp, c.votes || 0); if (c.winner) st = st || "L"; } } if (mine + opp > 0) lbd[key] = [mine, opp, pct, st]; }
+    }
+    LIVE.races = races; HOUSE = house; LBD = lbd; LIVE.meta = Object.keys(house).length ? { updated: newest ? new Date(newest.replace(" ", "T") + (newest.endsWith("Z") || /\+/.test(newest) ? "" : "Z")).toISOString() : new Date().toISOString(), source: "Decision Desk HQ (read directly, every minute)" } : null;
+    DIRECT_OK = true; render();
+  } catch (e) { DIRECT_OK = false; }
+}
 function startMirror() {
   document.body.classList.add("mirror");
+  pollHouse(); setInterval(() => { if (!document.hidden) pollHouse(); }, 60e3);
   const b = document.querySelector(".brand small"); if (b) b.textContent = "Watch-party big screen, live view · U.S. House · California · Tuesday, Nov 3, 2026";
   $("#status").insertAdjacentHTML("afterend", `<span class="pill mirrorpill" id="mirrorStamp">Live view</span>`);
   loadSnap(); setInterval(() => { if (!document.hidden) loadSnap(); }, 60e3);
