@@ -1,6 +1,6 @@
 {
- "run_at": "2026-11-03T23:43:20.431314+00:00",
- "run_at_pt": "3:43 PM PT",
+ "run_at": "2026-11-03T23:48:20.272938+00:00",
+ "run_at_pt": "3:48 PM PT",
  "sample": false,
  "feed": {
   "races": 436,
@@ -52,7 +52,7 @@
  "data": {
   "counties_in_feed": 3045,
   "counties_with_votes": 2,
-  "counties_any_votes": 26,
+  "counties_any_votes": 30,
   "counties_wet_1mm": 0,
   "rain_asof": "2026-11-03T22:25:20.939234+00:00",
   "states_with_votes": 1,
@@ -70,5 +70,5 @@
   "H4": "fig_h4.svg",
   "H5": "fig_h5.svg"
  },
- "seconds": 5.6
+ "seconds": 6.1
 }
