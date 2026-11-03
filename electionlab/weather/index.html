@@ -45,6 +45,18 @@ td.n,th.n{text-align:right}
 .lead{font-family:var(--serif);font-size:21px;color:var(--ink);margin:6px 0}
 .tiny{font-size:12px;color:var(--muted)}
 .pair{border-left:5px solid var(--warn);padding-left:12px;margin:10px 0}
+.hcard{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:12px 0}
+.hcard .hid{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.hcard h3{font-family:var(--serif);font-size:24px;color:var(--ink);margin:2px 0 6px;line-height:1.15}
+.hcard .claim{font-size:15px;color:var(--body);margin:0 0 6px}
+.hcard .design{font-size:14px;color:var(--muted);margin:0 0 10px}
+.verdict{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 9px;border-radius:999px;background:var(--neutral);color:var(--ink);margin-left:8px;vertical-align:middle}
+.verdict.yes{background:#DDEFE4;color:#1F7A4D} .verdict.no{background:#F8DEDB;color:var(--rep)} .verdict.weak{background:var(--warn-soft);color:var(--warn)}
+.hgrid{display:grid;grid-template-columns:1.2fr 1fr;gap:14px;align-items:start}
+@media (max-width:860px){.hgrid{grid-template-columns:1fr}}
+.hgrid img{width:100%;height:auto;display:block;background:#fff;border:1px solid var(--line);border-radius:10px}
+.reading{font-family:var(--serif);font-size:19px;color:var(--ink);margin:8px 0}
+.spark{display:flex;gap:4px;align-items:flex-end;height:28px;margin-top:6px}
 footer{color:var(--muted);font-size:13px;margin-top:30px;border-top:1px solid var(--line);padding-top:12px}
 </style>
 </head>
@@ -79,6 +91,13 @@ footer{color:var(--muted);font-size:13px;margin-top:30px;border-top:1px solid va
     <p class="sub">Where a storm sits across a state line, the two sides are a natural experiment: same rain, different rules on mail ballots and early voting. States where most votes were already in before Tuesday should barely notice; states that vote mostly on Election Day should feel it.</p>
     <div id="pairs"></div>
     <div class="wrap card" style="margin-top:10px"><table id="rules"></table></div>
+  </section>
+  <section id="s-hyp">
+    <h2>Hypothesis testing in real time</h2>
+    <p class="sub">Three claims from the turnout literature, re-estimated every ten minutes as the count comes in: every county in all 435 House races, today's precipitation at each county's center, and each state's mail and early-voting rules. The second test is a regression discontinuity at state lines: counties on either side of a line where the rules change, hit by the same storm.</p>
+    <div class="meta"><span id="hypStamp">Loading the latest run…</span><details class="how"><summary>How this works</summary><div class="hbx" id="how-hyp"></div></details></div>
+    <div class="stats" id="hypData"></div>
+    <div id="hyp"></div>
   </section>
   <footer id="foot"></footer>
 </main>
@@ -161,7 +180,26 @@ function render() {
   $("#rules").innerHTML = `<thead><tr><th>State</th><th>Mail ballots</th><th>Early voting in person</th><th class="n">Our counties under alerts</th><th class="n">Turnout vs. expected</th></tr></thead><tbody>${sts.map(s => { const g = grp(r => r.st === s), na = rows.filter(r => r.st === s && r.alerts.length).length; return `<tr><td><b>${s}</b></td><td>${esc((RULES[s] || ["?"])[0])}</td><td>${esc((RULES[s] || ["", "?"])[1])}</td><td class="n">${na} of ${rows.filter(r => r.st === s).length}</td><td class="n ${g.gap == null ? "" : g.gap < -0.005 ? "minus" : g.gap > 0.005 ? "plus" : ""}">${g.gap == null ? "–" : (g.gap > 0 ? "+" : "") + (g.gap * 100).toFixed(1) + "%"}</td></tr>`; }).join("")}</tbody>`;
   $("#foot").textContent = "Weather: National Weather Service active alerts (api.weather.gov). Turnout expectations and counts: Decision Desk HQ's public results feed. County 2024 lean: county presidential results archive. State rules summarized from NCSL and state election offices; early-voting windows are approximate. Built by the Election Night Lab, UC Merced CAPE.";
 }
-async function tick() { try { await Promise.all([loadAlerts(), loadLive()]); render(); } catch (e) { $("#wxStamp").textContent = "Couldn't load the alerts or results feed; retrying in two minutes."; } }
+// ---- hypothesis tests: results written by the GitHub Actions loop (electionlab/rdd/rdd.py) ----
+const RAW = "https://raw.githubusercontent.com/eornom21/lab/main/electionlab/rdd/";
+let lastRun = null;
+function vclass(v) { return /^Supported/.test(v) ? "yes" : /Contradicted|against/.test(v) ? "no" : /Weak/.test(v) ? "weak" : ""; }
+async function loadHyp() {
+  let R; try { R = await getJSON(RAW + "results.json?t=" + Math.floor(Date.now() / 60000)); } catch (e) { $("#hypStamp").textContent = "No results published yet. The first run lands within about 15 minutes of the loop starting."; return; }
+  if (R.run_at === lastRun) return; lastRun = R.run_at;
+  $("#hypStamp").textContent = `Last run ${ptT(R.run_at)}${R.sample ? " · SAMPLE DATA (made up)" : ""} · ${R.feed && R.feed.fetched ? R.feed.fetched + " races read" : ""}`; $("#hypStamp").className = "live";
+  const d = R.data || {};
+  $("#hypData").innerHTML = `<div class="stat"><div class="k">Counties with votes</div><div class="v">${fmt(d.counties_with_votes)}</div><div class="s">of ${fmt(d.counties_in_feed)} in the feed · ${d.states_with_votes || 0} states</div></div><div class="stat"><div class="k">Wet counties (≥ 1 mm today)</div><div class="v">${fmt(d.counties_wet_1mm)}</div><div class="s">precipitation as of ${d.rain_asof ? ptT(d.rain_asof) : "–"}</div></div><div class="stat"><div class="k">Border sample</div><div class="v">${fmt(d.border_sample)}</div><div class="s">counties within 100 km of a rules line · ${d.border_pairs || 0} state pairs</div></div>`;
+  const tbl = rows => rows && rows.length ? `<div class="wrap"><table><thead><tr><th>Term</th><th class="n">Estimate</th><th class="n">Std. error</th><th class="n">p</th></tr></thead><tbody>${rows.map(r => `<tr><td>${esc(r.term)}</td><td class="n ${r.p != null && r.p < 0.05 ? (r.est < 0 ? "minus" : "plus") : ""}">${r.est == null ? "–" : r.est.toFixed(3)}</td><td class="n">${r.se == null ? "–" : r.se.toFixed(3)}</td><td class="n">${r.p == null ? "–" : r.p < 0.001 ? "<0.001" : r.p.toFixed(3)}</td></tr>`).join("")}</tbody></table></div>` : "";
+  $("#hyp").innerHTML = (R.hypotheses || []).map(h => `<div class="hcard"><div class="hid">${esc(h.id)}</div><h3>${esc(h.title)}<span class="verdict ${vclass(h.verdict || "")}">${esc(h.verdict || "")}</span></h3>
+    <p class="claim"><b>The claim.</b> ${esc(h.claim)}</p><p class="design"><b>The test.</b> ${esc(h.design)}</p>
+    <div class="hgrid"><div>${R.figures && R.figures[h.id] ? `<img src="${RAW}${R.figures[h.id]}?t=${encodeURIComponent(R.run_at)}" alt="${esc(h.title)} figure">` : ""}</div>
+    <div><div class="reading">${esc(h.reading || "")}</div>${tbl(h.table)}${h.n ? `<div class="tiny">n = ${fmt(h.n)}${h.pairs ? ` · ${h.pairs} state pairs` : ""}${h.r2 != null ? ` · R² ${h.r2.toFixed(3)}` : ""}</div>` : ""}
+    ${h.early_days_table ? `<details style="margin-top:8px"><summary style="cursor:pointer;color:var(--accent);font-weight:600">Same test with the length of the early-voting window instead of the mail rule (n = ${fmt(h.early_days_n)})</summary>${tbl(h.early_days_table)}</details>` : ""}</div></div></div>`).join("");
+}
+$("#how-hyp").innerHTML = `<p><b>What it shows.</b> Three hypotheses from the turnout literature, each with its claim, the test, the current estimate with a standard error and p-value, a figure, and a verdict that updates as more counties report.</p><p><b>Why it's useful.</b> It is the difference between saying "rain probably hurt turnout somewhere" and measuring it, tonight, with a design that holds the weather constant across a state line.</p><p><b>For example, you could</b> watch H2: if the "restrictive × rain" estimate stays negative as the sample grows, voters in excuse-required states are losing more turnout to the same storm than their neighbors across the line.</p><p><b>Where the data comes from, and how often.</b> Decision Desk HQ's county turnout estimates for every House race (3,100+ counties), Open-Meteo precipitation at each county's center, NCSL's rule summaries, and Census county boundaries. A script re-runs every ten minutes on GitHub and this page re-reads the results every minute. Early in the night the estimates are noisy and the verdict reads "too early"; read them after 9pm PT. Caveats: county, not precinct; model-based expected vote; approximate rules.</p>`;
+async function tick() {
+  loadHyp().catch(() => {}); try { await Promise.all([loadAlerts(), loadLive()]); render(); } catch (e) { $("#wxStamp").textContent = "Couldn't load the alerts or results feed; retrying in two minutes."; } }
 (async () => { how(); try { DATA = await getJSON("../race/data.json"); } catch (e) { $("#wxStamp").textContent = "Couldn't load race data."; return; } await tick(); setInterval(() => { if (!document.hidden) tick(); }, 120e3); })();
 </script>
 </body>
