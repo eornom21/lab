@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Weather & turnout · Election Night Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+:root{--bg:#F3F1EB;--paper:#FFFDF8;--ink:#1B2A41;--body:#3D4A5C;--muted:#6B7280;--line:#DCD5C8;--head:#1B2A41;--head-ink:#F3F1EB;--accent:#2E6F8E;--live:#A85F00;--live-soft:#F7E7CF;--dem:#2E5E9E;--rep:#B5451B;--neutral:#E6E1D6;--warn:#B8860B;--warn-soft:#FBF1D6;--serif:'Source Serif 4',Georgia,serif;--sans:'IBM Plex Sans',system-ui,sans-serif;--mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#11161F;--paper:#18202C;--ink:#EEF1F5;--body:#C9D3DC;--muted:#93A0B0;--line:#2C3747;--head:#0E1520;--head-ink:#EEF1F5;--accent:#6FB3CF;--live:#F2A93B;--live-soft:#3A2A12;--dem:#6D9FE0;--rep:#E07E58;--neutral:#26303E;--warn:#E6B422;--warn-soft:#3A3012;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#11161F;--paper:#18202C;--ink:#EEF1F5;--body:#C9D3DC;--muted:#93A0B0;--line:#2C3747;--head:#0E1520;--head-ink:#EEF1F5;--accent:#6FB3CF;--live:#F2A93B;--live-soft:#3A2A12;--dem:#6D9FE0;--rep:#E07E58;--neutral:#26303E;--warn:#E6B422;--warn-soft:#3A3012;color-scheme:dark}
+*{box-sizing:border-box} html{overflow-x:hidden}
+body{margin:0;background:var(--bg);color:var(--body);font:16px/1.5 var(--sans);overflow-x:hidden}
+a{color:var(--accent)}
+header.top{background:var(--head);color:var(--head-ink);padding:14px max(16px,env(safe-area-inset-left)) 18px}
+header.top .brand{font:600 12px var(--sans);letter-spacing:.08em;text-transform:uppercase;opacity:.8;display:flex;gap:14px;flex-wrap:wrap}
+header.top .brand a{color:inherit;text-decoration:none;border-bottom:1px solid rgba(255,255,255,.35)}
+h1{font-family:var(--serif);font-weight:700;font-size:clamp(28px,6vw,44px);line-height:1.05;margin:6px 0 2px;color:var(--head-ink)}
+.kicker{font-size:15px;opacity:.9;margin:0;max-width:80ch}
+main{max-width:1100px;margin:0 auto;padding:16px max(16px,env(safe-area-inset-left)) 60px}
+section{margin:22px 0}
+h2{font-family:var(--serif);font-weight:700;font-size:26px;color:var(--ink);line-height:1.15;margin:0 0 4px}
+.sub{color:var(--muted);margin:0 0 10px;font-size:15px;max-width:80ch}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:16px;min-width:0}
+.meta{display:flex;gap:8px 14px;flex-wrap:wrap;align-items:center;font-size:13px;color:var(--muted);margin:0 0 10px}
+.meta .live::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--live);margin-right:6px;vertical-align:1px}
+details.how{font-size:14px;margin-left:auto} details.how summary{cursor:pointer;color:var(--accent);font-weight:600;list-style:none} details.how summary::after{content:" ▾"} details.how[open] summary::after{content:" ▴"}
+details.how .hbx{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin-top:8px;max-width:70ch} details.how p{margin:6px 0}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-top:10px}
+.stat{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.stat .k{font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.stat .v{font-family:var(--serif);font-weight:700;font-size:30px;line-height:1.1;color:var(--ink);font-variant-numeric:tabular-nums}
+.stat .s{font-size:13px}
+.D{color:var(--dem)} .R{color:var(--rep)} .plus{color:#1F7A4D;font-weight:600} .minus{color:var(--rep);font-weight:600}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{text-align:left;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:6px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top;font-variant-numeric:tabular-nums}
+td.n,th.n{text-align:right}
+.wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:2px 7px;border-radius:999px;background:var(--warn-soft);color:var(--warn);margin:1px 2px 1px 0}
+.tag.sev{background:#F8DEDB;color:var(--rep)}
+.lead{font-family:var(--serif);font-size:21px;color:var(--ink);margin:6px 0}
+.tiny{font-size:12px;color:var(--muted)}
+.pair{border-left:5px solid var(--warn);padding-left:12px;margin:10px 0}
+footer{color:var(--muted);font-size:13px;margin-top:30px;border-top:1px solid var(--line);padding-top:12px}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand"><span>Election Night Lab · Weather & turnout</span><a href="../">← Back to the big screen</a></div>
+  <h1>Is the weather keeping people home?</h1>
+  <p class="kicker">Live National Weather Service alerts laid over the counties in the 53 House races the lab is tracking, with each county's turnout against what was expected, and the state rules that decide whether bad weather on Election Day matters at all.</p>
+</header>
+<main>
+  <section>
+    <h2>Weather right now, where our races are</h2>
+    <div class="meta"><span id="wxStamp">Loading alerts…</span><details class="how"><summary>How this works</summary><div class="hbx" id="how-wx"></div></details></div>
+    <div class="stats" id="wxStats"></div>
+    <div class="wrap card" style="margin-top:10px"><table id="wxTable"></table></div>
+  </section>
+  <section>
+    <h2>Turnout vs. expectations: alert counties against the rest</h2>
+    <p class="sub">Decision Desk HQ projects how many votes each county will cast. Before polls close that projection is the pre-election estimate; once votes are counted it moves with the count. The gap between the two is the turnout surprise. Weather would show up as a bigger shortfall in alert counties than elsewhere.</p>
+    <div class="meta"><span id="tuStamp"></span><details class="how"><summary>How this works</summary><div class="hbx" id="how-tu"></div></details></div>
+    <div class="stats" id="tuStats"></div>
+    <div id="tuLead" class="card" style="margin-top:10px"></div>
+  </section>
+  <section>
+    <h2>Who loses more?</h2>
+    <p class="sub">The same shortfall split by how the county voted in 2024. If Trump counties under alerts are falling further below expectations than Harris counties under alerts, the weather is costing Republicans votes tonight, and vice versa.</p>
+    <div class="stats" id="whoStats"></div>
+    <div id="whoLead" class="card" style="margin-top:10px"></div>
+  </section>
+  <section>
+    <h2>Same weather, different rules</h2>
+    <p class="sub">Where a storm sits across a state line, the two sides are a natural experiment: same rain, different rules on mail ballots and early voting. States where most votes were already in before Tuesday should barely notice; states that vote mostly on Election Day should feel it.</p>
+    <div id="pairs"></div>
+    <div class="wrap card" style="margin-top:10px"><table id="rules"></table></div>
+  </section>
+  <footer id="foot"></footer>
+</main>
+<script>
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const fmt = n => n == null || !isFinite(n) ? "–" : Math.round(n).toLocaleString("en-US");
+const pct = (x, d = 1) => x == null || !isFinite(x) ? "–" : (x * 100).toFixed(d) + "%";
+const $ = s => document.querySelector(s);
+const ptT = s => { const d = new Date(s); return isNaN(d) ? "" : d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", timeZone: "America/Los_Angeles" }) + " PT"; };
+const ST = { "01": "AL", "02": "AK", "04": "AZ", "06": "CA", "08": "CO", "12": "FL", "13": "GA", "19": "IA", "20": "KS", "21": "KY", "26": "MI", "27": "MN", "29": "MO", "30": "MT", "37": "NC", "34": "NJ", "36": "NY", "39": "OH", "42": "PA", "45": "SC", "47": "TN", "48": "TX", "51": "VA", "53": "WA", "55": "WI" };
+// State rules, summarized from NCSL (no-excuse absentee list) and state election offices; early-voting windows are approximate.
+const RULES = { AK: ["no-excuse mail", "about 15 days"], AL: ["excuse required", "none"], AZ: ["no-excuse mail; most voters on the permanent mail list", "about 27 days"], CA: ["ballot mailed to every voter", "varies by county"], CO: ["ballot mailed to every voter", "about 15 days"], FL: ["no-excuse mail", "8 to 14 days"], GA: ["no-excuse mail", "about 17 days"], IA: ["no-excuse mail (request window shortened in 2021)", "20 days"], KS: ["no-excuse mail", "up to 20 days"], KY: ["excuse required", "3 days"], MI: ["no-excuse mail", "9 days"], MN: ["no-excuse mail", "46 days"], MO: ["excuse required for mail; no-excuse in person", "2 weeks in person"], MT: ["no-excuse mail", "about 30 days"], NC: ["no-excuse mail", "about 17 days"], NJ: ["no-excuse mail", "9 days"], NY: ["no-excuse mail", "9 days"], OH: ["no-excuse mail", "about 4 weeks"], PA: ["no-excuse mail", "mail ballots in person at county offices"], SC: ["excuse required for mail; no-excuse early in person", "about 2 weeks"], TN: ["excuse required", "about 2 weeks"], TX: ["excuse required (65+, disability, away)", "about 12 days"], VA: ["no-excuse mail", "45 days"], WA: ["ballot mailed to every voter", "about 18 days"], WI: ["no-excuse mail", "about 13 days in person"] };
+// Tracked districts that face each other across a state line (one on each side)
+const NEIGHBORS = [["WI-3", "MN-1"], ["WI-3", "IA-2"], ["MN-1", "IA-2"], ["AL-2", "GA-2"], ["AL-2", "FL-2"], ["OH-9", "MI-7"], ["OH-9", "MI-10"], ["KS-2", "MO-2"], ["KY-6", "OH-7"], ["VA-5", "NC-13"], ["VA-5", "NC-1"], ["TN-5", "KY-6"], ["NJ-5", "NY-17"], ["PA-7", "NJ-5"], ["PA-8", "NJ-5"], ["PA-1", "NJ-2"], ["NC-11", "TN-5"], ["SC-1", "GA-2"], ["WA-3", "MT-1"]];
+let DATA = null, ALERTS = [], LIVE = {}, countyAlerts = {};
+const marine = /Craft|Gale|Marine|Surf|Rip|Freezing Spray|Beach|Coastal|Brisk|Lake Wind|Storm Warning|Hydrologic Outlook/;
+const bad = /Warning|Watch|Advisory|Special Weather/;
+
+async function getJSON(u, h) { const r = await fetch(u, { cache: "no-store", headers: h || {} }); if (!r.ok) throw new Error(r.status); return r.json(); }
+function how() {
+  const H = { wx: ["Every active National Weather Service alert that names a county in one of the 53 tracked House races (the lab's 32 plus the Blue Dog list), with how many of our counties it covers and when it ends. Marine and coastal alerts are left out.", "It tells you where, right now, voting is physically harder than usual.", "find the races whose counties are under a flood or wind warning, then check those races' detail pages for whether turnout is lagging.", "api.weather.gov, read every two minutes while this page is open."],
+    tu: ["For every tracked county: Decision Desk HQ's pre-election estimate of votes, its live estimate (which moves as the count comes in), and the shortfall between them, for counties under an alert and for the rest.", "Comparing alert counties with similar counties that are dry is the simplest honest test of whether weather is suppressing turnout.", "if alert counties are 3 points under expectations and dry counties are 1 point under, the weather is worth about 2 points of turnout there.", "Decision Desk HQ's public results feed (county turnout estimates), read every two minutes. Before counting starts both estimates match, so the shortfall is 0 until results arrive."] };
+  for (const k in H) $("#how-" + k).innerHTML = `<p><b>What it shows.</b> ${esc(H[k][0])}</p><p><b>Why it's useful.</b> ${esc(H[k][1])}</p><p><b>For example, you could</b> ${esc(H[k][2])}</p><p><b>Where the data comes from, and how often.</b> ${esc(H[k][3])}</p>`;
+}
+async function loadAlerts() {
+  const j = await getJSON("https://api.weather.gov/alerts/active?status=actual&message_type=alert,update", { "Accept": "application/geo+json" });
+  ALERTS = (j.features || []).map(f => f.properties).filter(p => !marine.test(p.event) && bad.test(p.event));
+  countyAlerts = {};
+  for (const p of ALERTS) for (const c of (p.geocode && p.geocode.SAME) || []) { const f = c.length === 6 ? c.slice(1) : c; (countyAlerts[f] = countyAlerts[f] || []).push(p); }
+}
+async function loadLive() {
+  const ids = Object.values(DATA.races).map(r => r.ddhq).filter(Boolean);
+  const got = await Promise.all(ids.map(id => getJSON(DATA.ddhq_base + "/house/" + id).catch(() => null)));
+  LIVE = {}; ids.forEach((id, i) => { if (got[i]) LIVE[id] = got[i]; });
+}
+function counties() { // one row per tracked county (a county in two districts counts once per district)
+  const base = {}; for (const r of Object.values(DATA.races)) for (const c of r.counties || []) base[c.fips] = c;
+  const rows = [];
+  for (const r of Object.values(DATA.races)) { const L = LIVE[r.ddhq]; if (!L) continue;
+    for (const v of L.vcuData || []) { const fips = v.vcu.countyFips || v.vcu.fips, g = v.voteGoal || {}, t = v.liveTurnoutEstimate || {};
+      rows.push({ fips, name: v.vcu.county || v.vcu.name, st: r.st, race: r.id, pre: g.preElectionMid || null, live: t.estimatedVotesMid || null, counted: t.totalVotes || 0, done: !!t.completedCounty, m24: (base[fips] || {}).m24, alerts: countyAlerts[fips] || [] }); } }
+  return rows;
+}
+function render() {
+  const rows = counties(), ours = new Set(rows.map(r => r.fips));
+  // alerts touching our counties
+  const hits = ALERTS.map(p => ({ p, mine: [...new Set(((p.geocode && p.geocode.SAME) || []).map(c => c.length === 6 ? c.slice(1) : c).filter(f => ours.has(f)))] })).filter(x => x.mine.length);
+  const byRace = {}; for (const x of hits) for (const f of x.mine) for (const r of rows.filter(r => r.fips === f)) (byRace[r.race] = byRace[r.race] || new Set()).add(x.p.event);
+  const nationalCounties = new Set(Object.keys(countyAlerts)).size;
+  $("#wxStamp").textContent = `NWS alerts as of ${ptT(new Date())}`; $("#wxStamp").className = "live";
+  $("#wxStats").innerHTML = `<div class="stat"><div class="k">Land alerts nationwide</div><div class="v">${ALERTS.length}</div><div class="s">${nationalCounties} counties</div></div><div class="stat"><div class="k">Touching our races</div><div class="v">${hits.length}</div><div class="s">${Object.keys(byRace).length} of 53 races</div></div><div class="stat"><div class="k">Our counties under an alert</div><div class="v">${rows.filter(r => r.alerts.length).length}</div><div class="s">of ${rows.length}</div></div>`;
+  const sevTag = p => `<span class="tag ${/Severe|Extreme/.test(p.severity) ? "sev" : ""}">${esc(p.event)}</span>`;
+  $("#wxTable").innerHTML = hits.length ? `<thead><tr><th>Alert</th><th>Where (our counties)</th><th>Races</th><th>Until</th></tr></thead><tbody>${hits.sort((a, b) => b.mine.length - a.mine.length).map(x => { const rs = [...new Set(rows.filter(r => x.mine.includes(r.fips)).map(r => r.race))];
+      return `<tr><td>${sevTag(x.p)}<div class="tiny">${esc(x.p.headline || "").slice(0, 90)}</div></td><td>${x.mine.map(f => { const r = rows.find(r => r.fips === f); return esc(r.name) + ", " + r.st; }).join("; ")}</td><td>${rs.map(k => `<a href="../race/#${k}">${k}</a>`).join(", ")}</td><td>${ptT(x.p.ends || x.p.expires)}</td></tr>`; }).join("")}</tbody>`
+    : `<tbody><tr><td class="tiny">No weather alerts touch any county in the 53 tracked races right now. Dry election, at least where we're watching.</td></tr></tbody>`;
+  // turnout vs expectation
+  const grp = sel => { const g = rows.filter(sel).filter(r => r.pre && r.live); const pre = g.reduce((s, r) => s + r.pre, 0), live = g.reduce((s, r) => s + r.live, 0), counted = g.reduce((s, r) => s + r.counted, 0); return { n: g.length, pre, live, counted, gap: pre ? (live - pre) / pre : null }; };
+  const A = grp(r => r.alerts.length), B = grp(r => !r.alerts.length);
+  const anyCount = rows.some(r => r.counted > 0);
+  $("#tuStamp").textContent = anyCount ? `Decision Desk HQ estimates as of ${ptT(new Date())}` : "Before results: the live estimate equals the pre-election estimate, so every gap reads 0";
+  $("#tuStamp").className = anyCount ? "live" : "";
+  const st = (t, g) => `<div class="stat"><div class="k">${t}</div><div class="v ${g.gap == null ? "" : g.gap < -0.005 ? "minus" : g.gap > 0.005 ? "plus" : ""}">${g.gap == null ? "–" : (g.gap > 0 ? "+" : "") + (g.gap * 100).toFixed(1) + "%"}</div><div class="s">${g.n} counties · expected ${fmt(g.pre)} → now ${fmt(g.live)} · ${fmt(g.counted)} counted</div></div>`;
+  $("#tuStats").innerHTML = st("Counties under a weather alert", A) + st("Counties with no alert", B);
+  const diff = A.gap != null && B.gap != null ? (A.gap - B.gap) * 100 : null;
+  $("#tuLead").innerHTML = `<div class="lead">${!anyCount ? "Waiting for the first counts." : A.n === 0 ? "No tracked county is under a weather alert, so there's nothing to compare." : diff == null ? "Not enough counted yet." : Math.abs(diff) < 1 ? `No weather effect to speak of: alert counties and dry counties are running about the same against expectations (${diff.toFixed(1)} points apart).` : diff < 0 ? `Alert counties are running ${Math.abs(diff).toFixed(1)} points further below expectations than dry counties. That's the size of the weather effect so far.` : `Alert counties are actually running ${diff.toFixed(1)} points better against expectations than dry counties. If anything the weather isn't the story.`}</div><div class="tiny">Expectations and live estimates are Decision Desk HQ's; they are revised as the count develops, so read this after a good share of the vote is in.</div>`;
+  // who loses
+  const lean = r => r.m24 == null ? null : r.m24 > 0 ? "R" : "D";
+  const AD = grp(r => r.alerts.length && lean(r) === "D"), AR = grp(r => r.alerts.length && lean(r) === "R"), ND = grp(r => !r.alerts.length && lean(r) === "D"), NR = grp(r => !r.alerts.length && lean(r) === "R");
+  $("#whoStats").innerHTML = st("Harris counties, under alert", AD) + st("Trump counties, under alert", AR) + st("Harris counties, dry", ND) + st("Trump counties, dry", NR);
+  const lostD = AD.pre && AD.live != null ? AD.live - AD.pre : null, lostR = AR.pre && AR.live != null ? AR.live - AR.pre : null;
+  $("#whoLead").innerHTML = `<div class="lead">${!anyCount ? "Waiting for the first counts." : lostD == null && lostR == null ? "No 2024-lean data for the counties under alerts (that's available for the 32 board races' counties)." : `Against expectations, Harris counties under alerts are ${lostD == null ? "n/a" : (lostD >= 0 ? "+" : "") + fmt(lostD)} votes and Trump counties under alerts are ${lostR == null ? "n/a" : (lostR >= 0 ? "+" : "") + fmt(lostR)} votes.${lostD != null && lostR != null ? (lostD < lostR - 500 ? " The weather is costing Democrats more raw votes so far." : lostR < lostD - 500 ? " The weather is costing Republicans more raw votes so far." : " About even.") : ""}`}</div><div class="tiny">Lean is the county's 2024 presidential margin (whole county). Only counties in the 32 board races carry it.</div>`;
+  // pairs
+  const alertRaces = new Set(Object.keys(byRace));
+  const pairs = NEIGHBORS.filter(([a, b]) => alertRaces.has(a) && alertRaces.has(b) && a.slice(0, 2) !== b.slice(0, 2));
+  const raceGap = k => { const g = grp(r => r.race === k); return g; };
+  $("#pairs").innerHTML = pairs.length ? pairs.map(([a, b]) => { const ga = raceGap(a), gb = raceGap(b);
+      return `<div class="card pair"><div class="lead">${a} and ${b}: same storm, two rulebooks</div><div><b>${a.slice(0, 2)}</b>: ${esc(RULES[a.slice(0, 2)][0])}; early in person ${esc(RULES[a.slice(0, 2)][1])} · turnout vs. expected ${ga.gap == null ? "–" : (ga.gap * 100).toFixed(1) + "%"}</div><div><b>${b.slice(0, 2)}</b>: ${esc(RULES[b.slice(0, 2)][0])}; early in person ${esc(RULES[b.slice(0, 2)][1])} · turnout vs. expected ${gb.gap == null ? "–" : (gb.gap * 100).toFixed(1) + "%"}</div><div class="tiny">Alerts: ${[...byRace[a]].join(", ")} / ${[...byRace[b]].join(", ")}. <a href="../race/#${a}">${a} detail</a> · <a href="../race/#${b}">${b} detail</a></div></div>`; }).join("")
+    : `<div class="card tiny">No two tracked races facing each other across a state line are both under weather alerts right now. The pairs this page watches: ${NEIGHBORS.map(p => p.join("–")).join(", ")}.</div>`;
+  const sts = [...new Set(rows.map(r => r.st))].sort();
+  $("#rules").innerHTML = `<thead><tr><th>State</th><th>Mail ballots</th><th>Early voting in person</th><th class="n">Our counties under alerts</th><th class="n">Turnout vs. expected</th></tr></thead><tbody>${sts.map(s => { const g = grp(r => r.st === s), na = rows.filter(r => r.st === s && r.alerts.length).length; return `<tr><td><b>${s}</b></td><td>${esc((RULES[s] || ["?"])[0])}</td><td>${esc((RULES[s] || ["", "?"])[1])}</td><td class="n">${na} of ${rows.filter(r => r.st === s).length}</td><td class="n ${g.gap == null ? "" : g.gap < -0.005 ? "minus" : g.gap > 0.005 ? "plus" : ""}">${g.gap == null ? "–" : (g.gap > 0 ? "+" : "") + (g.gap * 100).toFixed(1) + "%"}</td></tr>`; }).join("")}</tbody>`;
+  $("#foot").textContent = "Weather: National Weather Service active alerts (api.weather.gov). Turnout expectations and counts: Decision Desk HQ's public results feed. County 2024 lean: county presidential results archive. State rules summarized from NCSL and state election offices; early-voting windows are approximate. Built by the Election Night Lab, UC Merced CAPE.";
+}
+async function tick() { try { await Promise.all([loadAlerts(), loadLive()]); render(); } catch (e) { $("#wxStamp").textContent = "Couldn't load the alerts or results feed; retrying in two minutes."; } }
+(async () => { how(); try { DATA = await getJSON("../race/data.json"); } catch (e) { $("#wxStamp").textContent = "Couldn't load race data."; return; } await tick(); setInterval(() => { if (!document.hidden) tick(); }, 120e3); })();
+</script>
+</body>
+</html>
