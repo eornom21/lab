@@ -264,7 +264,7 @@
    "name": "Progressives",
    "party": "D",
    "short": "Congressional Progressive Caucus PAC's Red-to-Blue slate",
-   "blurb": "The nine candidates the CPC PAC endorsed in Republican-held or swing seats, from its Nov 3 memo. Three of them (Brooks, Poindexter, Forstag) are also on the Blue Dog list.",
+   "blurb": "The nine candidates the CPC PAC endorsed in Republican-held or swing seats, from its Nov 3 memo. Two of them (Brooks, Forstag) are also on the Blue Dog list.",
    "source": "CPC PAC memo, Nov 3, 2026 (mailchi.mp/weareprogressives)",
    "races": [
     [
@@ -297,7 +297,7 @@
      "D",
      "R",
      false,
-     "also on the Blue Dog list"
+     ""
     ],
     [
      "MI-7",
@@ -337,7 +337,7 @@
      "D",
      "R",
      false,
-     "vs. Tony Gonzales"
+     ""
     ]
    ]
   },
@@ -346,7 +346,7 @@
    "name": "Main Street Republicans",
    "party": "R",
    "short": "Republican Governance Group / Main Street members in competitive seats",
-   "blurb": "Republican incumbents in competitive seats who belong to the Republican Governance Group or the Republican Main Street Partnership, the House GOP's pragmatic wing. Membership as the groups list it; tell the lab if one is wrong.",
+   "blurb": "Republican incumbents in competitive seats (Toss Up or Lean in Decision Desk HQ's pre-election ratings) who belong to the Republican Governance Group or the Republican Main Street Partnership, the House GOP's centrist wing. Membership as the groups list it; tell the lab if one is wrong.",
    "source": "Republican Governance Group and Main Street Partnership membership lists, compiled by the lab Nov 3",
    "races": [
     [
@@ -387,7 +387,7 @@
      "R",
      "R",
      true,
-     "Governance Group chair"
+     ""
     ],
     [
      "PA-7",
@@ -468,14 +468,6 @@
      "R",
      true,
      ""
-    ],
-    [
-     "NY-2",
-     "Andrew Garbarino",
-     "R",
-     "R",
-     true,
-     ""
     ]
    ]
   },
@@ -484,7 +476,7 @@
    "name": "Freedom Caucus",
    "party": "R",
    "short": "House Freedom Caucus members in competitive seats",
-   "blurb": "The hard-right caucus has few members in competitive districts this year (several left to run statewide). These are the ones in seats a forecaster rates competitive.",
+   "blurb": "The House's most conservative caucus has few members in competitive districts this year (several left to run statewide, and Anna Paulina Luna left the caucus in 2025). These are its members in seats a forecaster rates Lean or Likely.",
    "source": "House Freedom Caucus membership as publicly reported, compiled by the lab Nov 3",
    "races": [
     [
@@ -498,14 +490,6 @@
     [
      "CO-4",
      "Lauren Boebert",
-     "R",
-     "R",
-     true,
-     ""
-    ],
-    [
-     "FL-13",
-     "Anna Paulina Luna",
      "R",
      "R",
      true,

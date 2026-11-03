@@ -207,7 +207,8 @@ const fmt = n => n == null || !isFinite(n) ? "–" : Math.round(n).toLocaleStrin
 const pct = (x, d = 1) => x == null || !isFinite(x) ? "–" : (x * 100).toFixed(d) + "%";
 const pts = x => x == null || !isFinite(x) ? "–" : (x > 0 ? "+" : "") + x.toFixed(1);
 const money = x => x == null ? "–" : x >= 1e6 ? "$" + (x / 1e6).toFixed(1) + "M" : "$" + Math.round(x / 1e3) + "K";
-const ptT = (s, opts = {}) => { if (!s) return ""; const d = new Date(String(s).includes("T") || /\+00|Z$/.test(s) ? s : s.replace(" ", "T") + "Z"); return isNaN(d) ? "" : d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", timeZone: "America/Los_Angeles", ...opts }) + " PT"; };
+const normTs = s => { if (!s) return s; let x = String(s).trim().replace(" ", "T").replace(/(\.\d{3})\d+/, "$1"); if (/[+-]\d{2}$/.test(x)) x += ":00"; if (!/(Z|[+-]\d{2}:\d{2})$/.test(x)) x += "Z"; return x; };
+const ptT = (s, opts = {}) => { if (!s) return ""; const d = new Date(normTs(s)); return isNaN(d) ? "" : d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", timeZone: "America/Los_Angeles", ...opts }) + " PT"; };
 const $ = s => document.querySelector(s);
 const TEST = new URLSearchParams(location.search).has("test");
 let DATA = null, R = null, LIVE = null, GEO = null, HIST = null, SW = { senate: [], governor: null }, selFips = null;

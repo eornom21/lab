@@ -433,6 +433,7 @@ let LIVE = { counties: {}, races: {}, meta: null };  // counties: fips -> {n, do
 let REH = null;  // rehearsal copy
 // Read-only public mirror (lab.nathanwmonroe.com/electionlab): numbers come from snap.json next to the page, which Nate's working chat
 // rewrites with every feed update. No Ask box, no rehearsal, no card buttons.
+const normTs = s => { if (!s) return s; let x = String(s).trim().replace(" ", "T").replace(/(\.\d{3})\d+/, "$1"); if (/[+-]\d{2}$/.test(x)) x += ":00"; if (!/(Z|[+-]\d{2}:\d{2})$/.test(x)) x += "Z"; return x; };
 const MIRROR = true;
 const live = () => REH || LIVE;
 
@@ -960,7 +961,7 @@ async function pollHouse() {
       if (ids.has(id)) races[id] = { d, r: rr, pct, called };
       if (bd[key]) { let mine = 0, opp = 0, st = null; for (const c of cs) { if (String(c.lastName || "").toLowerCase().includes(bd[key])) { mine = c.votes || 0; if (c.winner) st = "W"; } else { opp = Math.max(opp, c.votes || 0); if (c.winner) st = st || "L"; } } if (mine + opp > 0) lbd[key] = [mine, opp, pct, st]; }
     }
-    LIVE.races = races; HOUSE = house; LBD = lbd; LIVE.meta = Object.keys(house).length ? { updated: newest ? new Date(newest.replace(" ", "T") + (newest.endsWith("Z") || /\+/.test(newest) ? "" : "Z")).toISOString() : new Date().toISOString(), source: "Decision Desk HQ (read directly, every minute)" } : null;
+    LIVE.races = races; HOUSE = house; LBD = lbd; LIVE.meta = Object.keys(house).length ? { updated: newest ? (isNaN(new Date(normTs(newest))) ? new Date().toISOString() : new Date(normTs(newest)).toISOString()) : new Date().toISOString(), source: "Decision Desk HQ (read directly, every minute)" } : null;
     DIRECT_OK = true; render();
   } catch (e) { DIRECT_OK = false; }
 }

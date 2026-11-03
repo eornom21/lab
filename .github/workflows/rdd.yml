@@ -1,11 +1,18 @@
 name: Election-night loop (RDD + caucus scoreboards)
-# Every ~5 minutes on election night: runs electionlab/rdd/rdd.py (weather/rules/turnout tests; results.json + figures for
-# /electionlab/weather/) and electionlab/caucus/build_live.py (live.json for /electionlab/caucus/, so the Decision Desk HQ feed
-# is read here once per cycle instead of once per viewer). Set up Nov 3, 2026 by the Election Night Lab thread.
+# One long job that loops every 5 minutes for up to ~5.5 hours: runs electionlab/caucus/build_live.py (live.json for
+# /electionlab/caucus/, so the Decision Desk HQ feed is read here once per cycle instead of once per viewer) and
+# electionlab/rdd/rdd.py (weather/rules/turnout tests; results.json + figures for /electionlab/weather/), committing
+# whatever changed. The cron is the restarter: GitHub's scheduled runs are unreliable minute to minute, but a run every
+# 30 minutes queued behind the running loop (concurrency group) means a fresh loop starts whenever the old one ends.
+# Set up Nov 3, 2026 by the Election Night Lab thread.
 on:
   schedule:
-    - cron: "*/5 * * * *"
+    - cron: "*/30 * * * *"
   workflow_dispatch:
+    inputs:
+      minutes:
+        description: "How long to loop (minutes)"
+        default: "330"
 permissions:
   contents: write
 concurrency:
@@ -14,22 +21,29 @@ concurrency:
 jobs:
   run:
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 350
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
       - run: pip install --quiet numpy matplotlib
-      - name: Caucus scoreboards (live.json)
-        run: python3 electionlab/caucus/build_live.py || echo "caucus build failed; keeping the old live.json"
-      - name: Run the analysis
-        run: python3 electionlab/rdd/rdd.py
-      - name: Commit results
+      - name: Loop
+        env:
+          MINUTES: ${{ github.event.inputs.minutes || '330' }}
         run: |
           git config user.name "election-night-lab"
           git config user.email "noreply@nathanwmonroe.com"
-          git add electionlab/caucus/live.json electionlab/rdd/results.json electionlab/rdd/history.json electionlab/rdd/rain_cache.json electionlab/rdd/fig_h1.svg electionlab/rdd/fig_h2.svg electionlab/rdd/fig_h3.svg || true
-          if git diff --cached --quiet; then echo "no change"; exit 0; fi
-          git commit -q -m "loop: results $(date -u +%H:%MZ)"
-          for i in 1 2 3; do git pull --rebase -q origin main && git push -q origin main && break || sleep 5; done
+          end=$(( $(date +%s) + MINUTES * 60 ))
+          while [ "$(date +%s)" -lt "$end" ]; do
+            t0=$(date +%s)
+            git pull --rebase -q origin main || true
+            python3 electionlab/caucus/build_live.py || echo "caucus build failed; keeping the old live.json"
+            python3 electionlab/rdd/rdd.py || echo "rdd failed; keeping the old results"
+            git add electionlab/caucus/live.json electionlab/weather/counties.json electionlab/rdd/results.json electionlab/rdd/history.json electionlab/rdd/rain_cache.json electionlab/rdd/fig_h1.svg electionlab/rdd/fig_h2.svg electionlab/rdd/fig_h3.svg 2>/dev/null || true
+            if git diff --cached --quiet; then echo "no change $(date -u +%H:%MZ)"; else
+              git commit -q -m "loop: results $(date -u +%H:%MZ)"
+              for i in 1 2 3; do git pull --rebase -q origin main && git push -q origin main && break || sleep 5; done
+            fi
+            el=$(( $(date +%s) - t0 )); s=$(( 300 - el )); [ "$s" -gt 0 ] && sleep "$s" || true
+          done

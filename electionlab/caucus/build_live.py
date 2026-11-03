@@ -120,12 +120,15 @@ def main():
         print("no house index; keeping the old live.json", file=sys.stderr)
         sys.exit(1)
 
-    # every race any group needs, and every statewide race, fetched once
+    # every race any group needs, every race with a detail page (for the weather page's county rows), and every statewide race, fetched once
     need = {}
     for g in GROUPS["groups"]:
         for k, *_ in g["races"]:
             if k in idx:
                 need[k] = idx[k]["raceId"]
+    for k, r in DATA["races"].items():
+        if k in idx:
+            need[k] = idx[k]["raceId"]
     sw_keys = set()
     for k in need:
         st = k[:2]
@@ -152,7 +155,9 @@ def main():
             if not h or not ir:
                 rows.append(dict(base, none=True))
                 continue
-            who = pcode if cparty == party else cand.split(" ")[-1].lower()
+            tl = (h.get("raceData") or {}).get("toplineResults") or []
+            same_party = [c for c in tl if (c.get("party") or {}).get("abbrev") == pcode]
+            who = pcode if (cparty == party and len(same_party) == 1) else cand.split(" ")[-1].lower()
             me = two_way(h, who)
             if not me:
                 rows.append(dict(base, none=True))
@@ -198,13 +203,17 @@ def main():
             if cparty != party:  # an independent on a party's list: no party forecast to score against
                 cape = exp_margin = None
                 lead_abbrev = None
+            same = me["oppParty"] == ("D" if cparty == "D" else "R" if cparty == "R" else "I")
+            if same:  # Democrat vs. Democrat (CA-4): ticket, presidential, registration and forecast comparisons are meaningless
+                ticket = ticket_who = pres = pres_base = reg = cape = exp_margin = None
+                lead_abbrev = None
             rows.append(dict(base,
                 opp=me["oppName"], opp_party=me["oppParty"], tot=tot, exp=exp,
                 inPct=(min(1.0, tot / exp) if exp else None), share=share, margin=margin,
                 ticket=ticket, ticketWho=ticket_who, harris=pres, presBase=pres_base, reg=reg,
                 cape=cape, expMargin=exp_margin, expWin=(lead_abbrev == pcode) if lead_abbrev else None,
                 rating=fc.get("ratingWithParty"), winProb=fc.get("winProbability"),
-                called=me["winner"], lastUpdated=rd.get("lastUpdated")))
+                sameParty=same, called=me["winner"], lastUpdated=rd.get("lastUpdated")))
         out_groups[g["id"]] = rows
 
     # national tide so far: Democratic two-way share vs. 2024 presidential, vote-weighted over all House races with county votes
@@ -215,12 +224,38 @@ def main():
         for key, h in got.items():
             if key[0] != "house" or not h:
                 continue
+            tl = (h.get("raceData") or {}).get("toplineResults") or []
+            parties = {(c.get("party") or {}).get("abbrev") for c in tl}
+            if not ({"DEM", "GOP"} <= parties):
+                continue  # uncontested or same-party race: no two-party swing to measure
             s = two_way(h, "DEM")
-            if s:
+            if s and s["oppParty"] == "R":
                 pairs += [(s["by"][f], pres_share(f, "D"), s["cnt"][f]) for f in s["by"]]
         tide = {"value": wavg(pairs), "counties": sum(1 for p in pairs if p[1] is not None), "basis": "caucus-list races only"}
     except Exception as e:  # noqa: BLE001
         print("tide failed", e, file=sys.stderr)
+
+    # county rows for the weather page (the 53 tracked races): expected vote, live estimate, counted, done, 2024 lean
+    try:
+        wrows = []
+        for k, r in DATA["races"].items():
+            h = got.get(("house", k))
+            if not h:
+                continue
+            base = {c["fips"]: c for c in r.get("counties") or []}
+            for v in h.get("vcuData") or []:
+                vcu = v.get("vcu") or {}
+                f = vcu.get("countyFips") or vcu.get("fips")
+                g = v.get("voteGoal") or {}
+                t = v.get("liveTurnoutEstimate") or {}
+                m24 = (base.get(f) or {}).get("m24")
+                if m24 is None and LEAN.get(f):
+                    m24 = LEAN[f][2]
+                wrows.append({"fips": f, "name": vcu.get("county") or vcu.get("name"), "st": r["st"], "race": k, "pre": g.get("preElectionMid"), "live": t.get("estimatedVotesMid"),
+                              "counted": t.get("totalVotes") or 0, "done": bool(t.get("completedCounty")), "m24": m24})
+        json.dump({"at": datetime.now(timezone.utc).isoformat(timespec="seconds"), "rows": wrows}, open(os.path.join(HERE, "..", "weather", "counties.json"), "w"), separators=(",", ":"))
+    except Exception as e:  # noqa: BLE001
+        print("weather counties failed", e, file=sys.stderr)
 
     out = {"at": datetime.now(timezone.utc).isoformat(timespec="seconds"), "seconds": round(time.time() - t0, 1),
            "fetched": sum(1 for v in got.values() if v), "requested": len(got), "groups": out_groups, "tide": tide}
