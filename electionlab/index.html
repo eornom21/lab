@@ -504,7 +504,8 @@ function raceTurnout(r, base = "v22") {
 }
 
 // ---------- views ----------
-let view = "summary", sortMode = "lean", base = "v22", raceId = B.races[0].id;
+const RACE_ORDER = B.races.slice().sort((a, b) => String(a.label).localeCompare(String(b.label), "en", { numeric: true }));
+let view = "summary", sortMode = "lean", base = "v22", raceId = RACE_ORDER[0].id;
 // phone dropdown: the same views and links as the rail, grouped the same way
 (function buildMnav() {
   const sel = $("#mnavSel"); if (!sel) return; let grp = null, html = "";
@@ -618,7 +619,7 @@ function renderRace() {
       <p class="note" style="font-size:16px">${x.pct != null ? x.pct + "% of the expected vote counted. " : ""}Held now by ${held}${r.open_seat ? " (open seat)" : ""}.</p>`;
   $("#raceBody").innerHTML = `
     <div class="race-head"><div><h2>${esc(r.label)}</h2><p class="sub" style="margin:0">${esc(r.d)} (D) vs. ${esc(r.r)} (R) · ${esc(r.blurb || "")} · ${esc(leanLabel(r))}</p></div>
-      ${r.id === "CA13" ? `<a class="btnlink" href="https://lab.nathanwmonroe.com/ca13/" target="_blank" rel="noopener">Open the full CA-13 page ↗</a>` : ""}</div>
+</div>
     <div class="card2">${score}</div>
     <div class="vs"><div class="side"><h3>The case for ${esc(r.d)}</h3><ul>${caseList(r.d_case)}</ul></div><div class="side r"><h3>The case for ${esc(r.r)}</h3><ul>${caseList(r.r_case)}</ul></div></div>
     <div class="money">${mcard(md, r.d + " (D)", "dem")}${mcard(mr, r.r + " (R)", "rep")}</div>${covNote}
@@ -628,7 +629,7 @@ function renderRace() {
     </tbody></table></div></details>` : ""}`;
   fillMeta(); renderStamps();
 }
-B.races.forEach(r => $("#raceSel").insertAdjacentHTML("beforeend", `<option value="${r.id}">${esc(r.label)} — ${esc(r.d)} vs ${esc(r.r)}</option>`));
+RACE_ORDER.forEach(r => $("#raceSel").insertAdjacentHTML("beforeend", `<option value="${r.id}">${esc(r.label)} — ${esc(r.d)} vs ${esc(r.r)}</option>`));
 $("#raceSel").onchange = e => { raceId = e.target.value; renderRace(); };
 
 // ---------- summary: the 32 races added up ----------
