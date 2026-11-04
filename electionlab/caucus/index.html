@@ -279,7 +279,8 @@ function renderGroupHeadlines() {
 }
 function renderOverviewHeadlines() {
   const el = $("#ohead"); if (!el || !LIVE) { if (el) el.innerHTML = ""; return; }
-  const all = GROUPS.groups.filter(g => g.id !== "all").map(g => ({ g, c: claims(g, LIVE.groups[g.id] || []) })).filter(x => x.c && (x.c.best.length || x.c.worst.length));
+  // overview slots need a real sample: at least 8 of the list's races half counted (small lists keep their own page's headline)
+  const all = GROUPS.groups.filter(g => g.id !== "all").map(g => ({ g, c: claims(g, LIVE.groups[g.id] || []) })).filter(x => x.c && x.c.n >= 8 && (x.c.best.length || x.c.worst.length));
   if (!all.length) { el.innerHTML = ""; return; }
   const bestL = all.filter(x => x.c.best.length).sort((a, b) => b.c.score - a.c.score)[0], worstL = all.filter(x => x.c.worst.length).sort((a, b) => a.c.score - b.c.score)[0];
   el.innerHTML = (bestL ? hlBox("good", `Doing best: ${bestL.g.name}`, bestL.c.best[0], `as of ${ptT(LIVE.at)}`) : "") + (worstL && (!bestL || worstL.g.id !== bestL.g.id) ? hlBox("bad", `Doing worst: ${worstL.g.name}`, worstL.c.worst[0]) : "");
