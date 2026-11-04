@@ -1,6 +1,6 @@
 {
- "run_at": "2026-11-04T17:38:04.737731+00:00",
- "run_at_pt": "9:38 AM PT",
+ "run_at": "2026-11-04T17:43:05.027278+00:00",
+ "run_at_pt": "9:43 AM PT",
  "sample": false,
  "feed": {
   "races": 436,
@@ -20,24 +20,24 @@
     {
      "term": "rain (per cm)",
      "est": 0.048520946775311144,
-     "se": 0.17025087658184562,
-     "t": 0.28499675155555165,
+     "se": 0.17025087658184565,
+     "t": 0.2849967515555516,
      "p": 0.7769838357411543,
      "ci": [
-      -0.29459714940826304,
-      0.39163904295888535
+      -0.2945971494082631,
+      0.3916390429588854
      ],
      "df": 44
     },
     {
      "term": "rain (per inch)",
      "est": 0.12324320480929031,
-     "se": 0.4324372265178879,
-     "t": 0.28499675155555165,
+     "se": 0.43243722651788796,
+     "t": 0.2849967515555516,
      "p": 0.7769838357411543,
      "ci": [
-      -0.7482767594969881,
-      0.9947631691155688
+      -0.7482767594969882,
+      0.994763169115569
      ]
     }
    ],
@@ -56,36 +56,36 @@
     {
      "term": "restrictive side (at the line, dry)",
      "est": 1.7469426159175847,
-     "se": 5.28584607040699,
-     "t": 0.3304944170996407,
+     "se": 5.28584607040698,
+     "t": 0.33049441709964134,
      "p": 0.7462922535273115,
      "ci": [
-      -9.672433557474776,
-      13.166318789309944
+      -9.672433557474756,
+      13.166318789309924
      ],
      "df": 13
     },
     {
      "term": "distance (per 10 km)",
      "est": -0.19230006727972665,
-     "se": 0.23010515407468746,
-     "t": -0.8357051716334435,
-     "p": 0.418416312955018,
+     "se": 0.2301051540746864,
+     "t": -0.8357051716334474,
+     "p": 0.41841631295501625,
      "ci": [
-      -0.6894120298331394,
-      0.3048118952736862
+      -0.6894120298331372,
+      0.3048118952736839
      ],
      "df": 13
     },
     {
      "term": "restrictive x distance",
      "est": 0.3283762334159271,
-     "se": 0.2979082910313686,
-     "t": 1.1022728916979028,
-     "p": 0.2903319150458299,
+     "se": 0.29790829103136734,
+     "t": 1.1022728916979074,
+     "p": 0.2903319150458281,
      "ci": [
-      -0.3152155010285292,
-      0.9719679678603834
+      -0.3152155010285264,
+      0.9719679678603805
      ],
      "df": 13
     },
@@ -104,12 +104,12 @@
     {
      "term": "restrictive x rain (per cm)",
      "est": -1.9325961716710183,
-     "se": 1.1266811527864065,
-     "t": -1.7152999913875326,
+     "se": 1.1266811527864062,
+     "t": -1.7152999913875329,
      "p": 0.11001144917406647,
      "ci": [
       -4.366642819977728,
-      0.5014504766356918
+      0.5014504766356913
      ],
      "df": 13
     }
@@ -151,36 +151,36 @@
    "claim": "Gomez, Hansford & Krause (2007) found rain shifted the vote toward Republicans, on the premise that the voters it keeps home lean Democratic. That premise is contested after 2024, when lower-propensity voters leaned Republican, and the effect should shrink or reverse where Democrats vote by mail.",
    "design": "Counties at least half counted, in House races with both a Democrat and a Republican. The county's Democratic two-way share tonight minus Harris's 2024 two-way share (the swing), regressed on rain and rain x convenience-voting state, with state fixed effects; errors clustered by state. A negative rain coefficient means rain is moving the count toward Republicans where voting is Election-Day heavy. Which ballots a county counts first changes its partisan mix during the night, so this test means little until most counties are mostly counted.",
    "n": 2988,
-   "r2": 0.4248118390826182,
+   "r2": 0.42463081694204285,
    "table": [
     {
      "term": "rain (per cm)",
-     "est": -0.13475051267862512,
-     "se": 0.15374599176255183,
-     "t": -0.8764489476040216,
+     "est": -0.13475051267862515,
+     "se": 0.1537459917625519,
+     "t": -0.8764489476040213,
      "p": 0.38554611804670147,
      "ci": [
-      -0.44460519917747565,
-      0.1751041738202254
+      -0.4446051991774758,
+      0.17510417382022553
      ],
      "df": 44
     },
     {
      "term": "rain x convenience-voting state",
-     "est": 0.18053414640229373,
-     "se": 0.17498836708332605,
-     "t": 1.031692274243161,
-     "p": 0.30785406771186086,
+     "est": 0.17844694323533108,
+     "se": 0.17501711547410118,
+     "t": 1.0195970991290704,
+     "p": 0.3134932368862273,
      "ci": [
-      -0.17213173452219652,
-      0.533200027326784
+      -0.1742768762637448,
+      0.531170762734407
      ],
      "df": 44
     }
    ],
    "verdict": "No clear signal yet",
    "clusters": 45,
-   "reading": "In states without convenience voting, each centimeter of rain goes with a -0.13-point move in the Democratic share against its 2024 baseline (p = 0.39, not significant; 95% CI -0.44 to +0.18); in convenience-voting states the rain term is +0.05 points per cm."
+   "reading": "In states without convenience voting, each centimeter of rain goes with a -0.13-point move in the Democratic share against its 2024 baseline (p = 0.39, not significant; 95% CI -0.44 to +0.18); in convenience-voting states the rain term is +0.04 points per cm."
   },
   {
    "id": "H4",
@@ -207,11 +207,11 @@
     {
      "term": "early in-person x rain (per cm)",
      "est": 0.008346318204050799,
-     "se": 0.014880024639206114,
-     "t": 0.5609075526702956,
+     "se": 0.014880024639206115,
+     "t": 0.5609075526702955,
      "p": 0.5800602267261517,
      "ci": [
-      -0.02236454324579003,
+      -0.022364543245790035,
       0.03905717965389163
      ],
      "df": 24
@@ -232,12 +232,12 @@
     {
      "term": "rain (per cm, average-sized county)",
      "est": 0.005781511369337931,
-     "se": 0.19625029691890905,
-     "t": 0.029459885972691606,
+     "se": 0.19625029691890908,
+     "t": 0.029459885972691603,
      "p": 0.9766310332908401,
      "ci": [
-      -0.3897349735158717,
-      0.40129799625454754
+      -0.3897349735158718,
+      0.4012979962545476
      ],
      "df": 44
     },
@@ -291,5 +291,5 @@
   "H4": "fig_h4.svg",
   "H5": "fig_h5.svg"
  },
- "seconds": 13.0
+ "seconds": 11.8
 }
