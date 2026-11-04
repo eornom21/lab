@@ -163,9 +163,9 @@ function cdKey(p) { const st = FIPS2ST[p.st] || p.st; return st + "-" + (p.cd ==
 function initRadar() {
   if (MAP) return; if (!window.L) { $("#radarStamp").textContent = "The map library didn't load; reload the page."; return; }
   MAP = L.map("radar", { zoomSnap: 0.25, worldCopyJump: false, preferCanvas: true, attributionControl: true });
-  L.tileLayer("https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png", { subdomains: "abcd", maxZoom: 12, attribution: "&copy; OpenStreetMap &copy; CARTO" }).addTo(MAP);
+  L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}", { maxNativeZoom: 16, maxZoom: 12, attribution: "Basemap: Esri, HERE, Garmin, &copy; OpenStreetMap contributors" }).addTo(MAP);
   RADAR = L.tileLayer("https://mesonet.agron.iastate.edu/cache/tile.py/1.0.0/nexrad-n0q-900913/{z}/{x}/{y}.png?t=" + Math.floor(Date.now() / 300000), { opacity: 0.72, maxNativeZoom: 10, maxZoom: 12, attribution: "Radar: NWS NEXRAD composite via Iowa Environmental Mesonet, about every 5 min" }).addTo(MAP);
-  L.tileLayer("https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png", { subdomains: "abcd", maxZoom: 12, opacity: 0.9, pane: "shadowPane" }).addTo(MAP);
+  L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Reference/MapServer/tile/{z}/{y}/{x}", { maxNativeZoom: 16, maxZoom: 12, opacity: 0.85, pane: "shadowPane" }).addTo(MAP);
   MAP.fitBounds(VIEWS.us);
   LABELS = L.layerGroup().addTo(MAP);
   MAP.on("zoomend moveend", placeLabels);
