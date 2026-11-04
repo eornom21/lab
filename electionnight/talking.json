@@ -55,6 +55,14 @@
 "title": "7:30 · Turnout: fully counted counties are at 110% of 2022 and 78% of 2024, red and blue alike",
 "body": "In the 55 tracked counties that report all votes counted (Virginia, Kentucky, Florida, Ohio, Georgia), votes cast are 110% of 2022's total and 78% of 2024's. Harris counties: 108% of 2022; Trump counties: 112% of 2022 — the Trump counties are turning out slightly MORE relative to 2022, which is why the blue tide is a persuasion story, not a turnout story. Against DDHQ's pre-election expectation, counties at least half counted are running +0.4% (Harris) and +1.5% (Trump). Highest vs. 2022: Paulding OH 135%, Williamsburg VA 134%, Goochland VA 127%; lowest: Fayette KY 95%, Fleming KY 92%. Caveat: 'fully counted' is DDHQ's flag and late mail can still add a few percent; Virginia's small counties dominate this sample.\nTraffic: 686 views and 262 visitors on the lab pages as of 7:01pm; a quarter arrived from Instagram.",
 "show": "Turnout tab (fully counted only, vs 2022); then Weather & turnout ↗ for the expectation comparison"
+},
+{
+"id": "tp-0339-0-7-45-rain-tax-update-0-01-per-inch-acros",
+"t": "2026-11-04T03:39:09Z",
+"section": "Weather",
+"title": "7:45 · Rain tax update: −0.01% per inch across 1,832 counties — nothing",
+"body": "The CAPE Rain Tax is now measured on 1,832 counties at least half counted, 569 of them with at least a millimeter of rain today: each inch of rain goes with −0.01% of expected vote (p = 0.98; 95% CI −1.1 to +1.0). The classic Gomez–Hansford–Krause estimate (about −2% per inch, in presidential years) sits outside that interval. The one test with a signal is H2, and it points the wrong way: within 100 km of a rules line, rain goes with 3% LESS shortfall on the side that requires an excuse to vote by mail (p < 0.05, 370 counties, 14 state pairs) — the simplest reading is that heavy-rain counties tonight happen to be high-turnout counties, not that rules matter in reverse. H3 (does rain shift the partisan split?): +0.04 points per cm, nothing. H4 (Election Day ballots vs. the county's early ballots): +0.2%, nothing; placebo also nothing. H5 (county size): no interaction (p = 0.11). Caveat: 'expected vote' is DDHQ's live estimate, which moves with the count; the final read comes when counts close.",
+"show": "Weather & turnout ↗ → Jump to the hypothesis tests; H1 figure, then H2"
 }
 ]
 }
