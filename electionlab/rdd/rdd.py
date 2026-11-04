@@ -266,14 +266,15 @@ def analyze(rows, meta):
           "design": "Counties at least half counted, in House races with both a Democrat and a Republican. The county's Democratic two-way share tonight minus Harris's 2024 two-way share (the swing), regressed on rain and rain x convenience-voting state, with state fixed effects; errors clustered by state. A negative rain coefficient means rain is moving the count toward Republicans where voting is Election-Day heavy. Which ballots a county counts first changes its partisan mix during the night, so this test means little until most counties are mostly counted."}
     h3s = [r for r in have if r["m24"] is not None and not r.get("uncontested") and r["dem"] > 0 and r["rep"] > 0 and r["dem"] + r["rep"] > 50]
     for r in h3s: r["dshift"] = r["dem"] / (r["dem"] + r["rep"]) * 100 - (50 - r["m24"] / 2)
-    if not early and len(h3s) >= 150:
+    wet3 = {0: sum(1 for r in h3s if r["rain"] >= 1 and r["conv"] == 0), 1: sum(1 for r in h3s if r["rain"] >= 1 and r["conv"] == 1)}
+    if not early and len(h3s) >= 150 and min(wet3.values()) >= 10:
         X = [[1.0] * len(h3s), [r["rain_cm"] for r in h3s], [r["rain_cm"] * r["conv"] for r in h3s]] + fe(None, [r["st"] for r in h3s])
         res = ols([r["dshift"] for r in h3s], np.array(X).T, ["const", "rain (per cm)", "rain x convenience-voting state"] + [None] * (len(X) - 3), cluster=[r["st"] for r in h3s])
         if res:
             b = next(x for x in res["rows"] if x["term"] == "rain (per cm)"); i = next(x for x in res["rows"] if x["term"].startswith("rain x"))
             h3.update({"n": res["n"], "r2": res["r2"], "table": [x for x in res["rows"] if x["term"] != "const"], "verdict": verdict(b, expect="neg"),
                        "clusters": res["clusters"], "reading": f"In states without convenience voting, each centimeter of rain goes with a {b['est']:+.2f}-point move in the Democratic share against its 2024 baseline ({sig(b)}" + (f"; 95% CI {b['ci'][0]:+.2f} to {b['ci'][1]:+.2f})" if b.get('ci') else ")") + f"; in convenience-voting states the rain term is {b['est'] + i['est']:+.2f} points per cm."})
-    else: h3.update({"verdict": "Too early", "reading": f"Needs about 150 counties at least half counted in two-party races ({len(h3s)} so far)."})
+    else: h3.update({"verdict": "Too early", "reading": f"Needs about 150 counties at least half counted in two-party races ({len(h3s)} so far) with at least 10 wet counties on each side of the rules split ({wet3[0]} in states without convenience voting, {wet3[1]} with)."})
     R["hypotheses"].append(h3)
     # ----- H4: rain by ballot type, within the same county -----
     h4 = {"id": "H4", "title": "Rain hits Election-Day ballots, not ballots already cast", "claim": "If rain really keeps people home, it should show up in Election-Day votes and not in the mail and early in-person votes that were cast before it rained. The within-county contrast is the cleanest test of the mechanism behind H1; early in-person votes are the placebo (cast before today, so rain today should not touch them).",
@@ -330,8 +331,8 @@ def sig(b):
     if p is None: return "no standard error"
     return "p < 0.01" if p < 0.01 else "p < 0.05" if p < 0.05 else "p < 0.10" if p < 0.10 else f"p = {p:.2f}, not significant"
 def verdict(b, expect):
-    p = b.get("p"); e = b["est"]
-    if p is None: return "Inconclusive"
+    p = b.get("p"); e = b["est"]; se = b.get("se")
+    if p is None or not se or se <= 1e-9 or abs(e) > 100: return "Not estimable yet"
     right = (e < 0) if expect == "neg" else (e > 0)
     if p < 0.05: return "Consistent so far" if right else "Opposite direction so far"
     if p < 0.10: return "Leaning consistent" if right else "Leaning opposite"
