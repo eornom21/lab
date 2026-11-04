@@ -8,6 +8,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="/electionlab/vendor/leaflet/leaflet.css">
+<script src="/electionlab/vendor/leaflet/leaflet.js"></script>
 <style>
 :root{--bg:#F3F1EB;--paper:#FFFDF8;--ink:#1B2A41;--body:#3D4A5C;--muted:#6B7280;--line:#DCD5C8;--head:#1B2A41;--head-ink:#F3F1EB;--accent:#2E6F8E;--live:#A85F00;--live-soft:#F7E7CF;--dem:#2E5E9E;--rep:#B5451B;--neutral:#E6E1D6;--warn:#B8860B;--warn-soft:#FBF1D6;--serif:'Source Serif 4',Georgia,serif;--sans:'IBM Plex Sans',system-ui,sans-serif;--mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;color-scheme:light}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#11161F;--paper:#18202C;--ink:#EEF1F5;--body:#C9D3DC;--muted:#93A0B0;--line:#2C3747;--head:#0E1520;--head-ink:#EEF1F5;--accent:#6FB3CF;--live:#F2A93B;--live-soft:#3A2A12;--dem:#6D9FE0;--rep:#E07E58;--neutral:#26303E;--warn:#E6B422;--warn-soft:#3A3012;color-scheme:dark}}
@@ -63,6 +65,16 @@ details.rd{margin:0 0 12px} details.rd summary{cursor:pointer;color:var(--accent
 .reading{font-family:var(--serif);font-size:19px;color:var(--ink);margin:8px 0}
 .spark{display:flex;gap:4px;align-items:flex-end;height:28px;margin-top:6px}
 footer{color:var(--muted);font-size:13px;margin-top:30px;border-top:1px solid var(--line);padding-top:12px}
+#radar{height:min(72vh,640px);min-height:380px;border:1px solid var(--line);border-radius:12px;background:#dfe6ee;overflow:hidden}
+#radar .leaflet-container{font:inherit}
+.cdlab{background:rgba(255,253,248,.82);border:1px solid rgba(27,42,65,.35);border-radius:4px;padding:0 4px;font:600 11px/16px var(--sans,'IBM Plex Sans',sans-serif);color:#1B2A41;white-space:nowrap;pointer-events:none;letter-spacing:.2px}
+.cdlab.t{background:#1B2A41;color:#F3F1EB;border-color:#1B2A41;font-size:11.5px}
+.rtools{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:8px 0 6px}
+.rtools button,.rtools select{font:500 13px var(--sans,'IBM Plex Sans',sans-serif);padding:5px 10px;border:1px solid var(--line);background:var(--paper);border-radius:8px;color:var(--ink);cursor:pointer}
+.rtools button[aria-pressed="true"]{background:var(--ink);color:var(--head-ink);border-color:var(--ink)}
+.rkey{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);margin-top:6px;align-items:center}
+.rkey i{display:inline-block;width:14px;height:10px;vertical-align:-1px;margin-right:4px;border-radius:2px}
+.leaflet-control-attribution{font-size:10px}
 </style>
 </head>
 <body>
@@ -72,6 +84,17 @@ footer{color:var(--muted);font-size:13px;margin-top:30px;border-top:1px solid va
   <p class="kicker">Live National Weather Service alerts laid over the counties in the 53 House races the lab is tracking, with each county's turnout against what was expected, and the state rules that decide whether bad weather on Election Day matters at all.</p>
 </header>
 <main>
+  <section id="s-radar">
+    <h2>Live radar over the district map</h2>
+    <div class="meta"><span id="radarStamp">Loading the map…</span><details class="how"><summary>How this works</summary><div class="hbx" id="how-radar"></div></details></div>
+    <div class="rtools" role="group" aria-label="Map views">
+      <button type="button" data-go="us" aria-pressed="true">Lower 48</button><button type="button" data-go="east">East</button><button type="button" data-go="mid">Midwest</button><button type="button" data-go="ca">California</button><button type="button" data-go="valley">Valley</button><button type="button" data-go="ak">Alaska</button>
+      <select id="goDist" aria-label="Zoom to a tracked race"><option value="">Zoom to a race…</option></select>
+      <button type="button" id="radarToggle" aria-pressed="true">Radar on</button>
+    </div>
+    <div id="radar" role="img" aria-label="Map of the United States with live weather radar and the 2026 congressional district lines"></div>
+    <div class="rkey"><span><i style="background:#1B2A41"></i>tracked race (bold line, dark label; click for its page)</span><span><i style="background:#2E5E9E;opacity:.35"></i>Democrat ahead</span><span><i style="background:#B5451B;opacity:.35"></i>Republican ahead (every district, once it has votes)</span><span><i style="background:#f0c000"></i>&nbsp;<i style="background:#e03000;margin-left:-6px"></i>radar: rain/snow intensity</span><span>Labels appear when a district is big enough on screen; zoom in for the rest.</span></div>
+  </section>
   <section>
     <h2>Weather right now, where our races are</h2>
     <div class="meta"><span id="wxStamp">Loading alerts…</span><details class="how"><summary>How this works</summary><div class="hbx" id="how-wx"></div></details></div>
@@ -127,10 +150,79 @@ const inHours = p => { const a = Date.parse(p.onset || p.effective || p.sent || 
 
 async function getJSON(u, h) { const r = await fetch(u, { cache: "no-store", headers: h || {} }); if (!r.ok) throw new Error(r.status); return r.json(); }
 function how() {
-  const H = { wx: ["Every active National Weather Service alert that names a county in one of the 53 tracked House races (the lab's 32 plus the Blue Dog list), with how many of our counties it covers and when it ends. Only warnings and advisories for weather that can keep people from the polls (flood, rain, thunderstorm, tornado, winter, wind, dust), in effect during voting hours; watches, marine, frost, fire and heat alerts are left out.", "It tells you where, right now, voting is physically harder than usual.", "find the races whose counties are under a flood or wind warning, then check those races' detail pages for whether turnout is lagging.", "api.weather.gov, read every two minutes while this page is open."],
+  const H = { radar: ["The live National Weather Service radar composite (reflectivity, the same picture a TV weather map shows) laid over every congressional district in force for tonight's election, with the 53 tracked races outlined in bold and labeled; once a tracked district has votes it is tinted by the party ahead.", "Rain and snow on Election Day are the oldest turnout story in the literature; seeing where the weather actually is, against the lines, tells you which of tonight's close races it could touch.", "zoom to a tracked race from the menu and compare the radar there with its county turnout on the race page, or watch the Midwest view during the evening as the central-U.S. system moves east.", "Radar: NEXRAD composite tiles from the Iowa Environmental Mesonet, refreshed about every 5 minutes. Lines: Census TIGERweb's 120th Congress layer (January 1, 2026 vintage, so the maps redrawn for 2026 are included), simplified for a national view and cached on this site. Leaders: the lab's loop (Decision Desk HQ), every 5 minutes."],
+    wx: ["Every active National Weather Service alert that names a county in one of the 53 tracked House races (the lab's 32 plus the Blue Dog list), with how many of our counties it covers and when it ends. Only warnings and advisories for weather that can keep people from the polls (flood, rain, thunderstorm, tornado, winter, wind, dust), in effect during voting hours; watches, marine, frost, fire and heat alerts are left out.", "It tells you where, right now, voting is physically harder than usual.", "find the races whose counties are under a flood or wind warning, then check those races' detail pages for whether turnout is lagging.", "api.weather.gov, read every two minutes while this page is open."],
     tu: ["For every tracked county: Decision Desk HQ's pre-election estimate of votes, its live estimate (which moves as the count comes in), and the shortfall between them, for counties under an alert and for the rest.", "Comparing alert counties with counties under no alert is the simplest first look at whether weather is suppressing turnout; it is a raw difference between two groups that also differ in state rules, count speed and urbanicity, so the hypothesis tests below are the real test.", "if alert counties are 3% under their expected vote and no-alert counties are 1% under, alert counties are running about 2% further behind, relative to expectations.", "Decision Desk HQ's public results feed (county turnout estimates), read every two minutes. Before counting starts both estimates match, so the shortfall is 0 until results arrive."] };
   for (const k in H) $("#how-" + k).innerHTML = `<p><b>What it shows.</b> ${esc(H[k][0])}</p><p><b>Why it's useful.</b> ${esc(H[k][1])}</p><p><b>For example, you could</b> ${esc(H[k][2])}</p><p><b>Where the data comes from, and how often.</b> ${esc(H[k][3])}</p>`;
 }
+// ---------- live radar over the district map ----------
+const FIPS2ST = { "01": "AL", "02": "AK", "04": "AZ", "05": "AR", "06": "CA", "08": "CO", "09": "CT", "10": "DE", "11": "DC", "12": "FL", "13": "GA", "15": "HI", "16": "ID", "17": "IL", "18": "IN", "19": "IA", "20": "KS", "21": "KY", "22": "LA", "23": "ME", "24": "MD", "25": "MA", "26": "MI", "27": "MN", "28": "MS", "29": "MO", "30": "MT", "31": "NE", "32": "NV", "33": "NH", "34": "NJ", "35": "NM", "36": "NY", "37": "NC", "38": "ND", "39": "OH", "40": "OK", "41": "OR", "42": "PA", "44": "RI", "45": "SC", "46": "SD", "47": "TN", "48": "TX", "49": "UT", "50": "VT", "51": "VA", "53": "WA", "54": "WV", "55": "WI", "56": "WY", "60": "AS", "66": "GU", "69": "MP", "72": "PR", "78": "VI" };
+const VIEWS = { us: [[24.5, -125], [49.5, -66.5]], east: [[33, -92], [47.5, -67]], mid: [[36, -104], [49, -82]], ca: [[32.3, -124.6], [42.1, -114]], valley: [[36.3, -122.3], [38.6, -119.3]], ak: [[54, -170], [71.5, -130]] };
+let MAP = null, RADAR = null, CDLAYER = null, LABELS = null, CDFEATS = [], HL = {};
+function cdKey(p) { const st = FIPS2ST[p.st] || p.st; return st + "-" + (p.cd === "00" ? "AL" : String(+p.cd)); }
+function initRadar() {
+  if (MAP) return; if (!window.L) { $("#radarStamp").textContent = "The map library didn't load; reload the page."; return; }
+  MAP = L.map("radar", { zoomSnap: 0.25, worldCopyJump: false, preferCanvas: true, attributionControl: true });
+  L.tileLayer("https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png", { subdomains: "abcd", maxZoom: 12, attribution: "&copy; OpenStreetMap &copy; CARTO" }).addTo(MAP);
+  RADAR = L.tileLayer("https://mesonet.agron.iastate.edu/cache/tile.py/1.0.0/nexrad-n0q-900913/{z}/{x}/{y}.png?t=" + Math.floor(Date.now() / 300000), { opacity: 0.72, maxNativeZoom: 10, maxZoom: 12, attribution: "Radar: NWS NEXRAD composite via Iowa Environmental Mesonet, about every 5 min" }).addTo(MAP);
+  L.tileLayer("https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png", { subdomains: "abcd", maxZoom: 12, opacity: 0.9, pane: "shadowPane" }).addTo(MAP);
+  MAP.fitBounds(VIEWS.us);
+  LABELS = L.layerGroup().addTo(MAP);
+  MAP.on("zoomend moveend", placeLabels);
+  document.querySelectorAll(".rtools [data-go]").forEach(b => b.onclick = () => { document.querySelectorAll(".rtools [data-go]").forEach(x => x.setAttribute("aria-pressed", x === b)); MAP.fitBounds(VIEWS[b.dataset.go]); });
+  $("#radarToggle").onclick = () => { const on = $("#radarToggle").getAttribute("aria-pressed") !== "true"; $("#radarToggle").setAttribute("aria-pressed", on); $("#radarToggle").textContent = on ? "Radar on" : "Radar off"; if (on) RADAR.addTo(MAP); else MAP.removeLayer(RADAR); };
+  setInterval(() => { if (!document.hidden && RADAR && MAP.hasLayer(RADAR)) { RADAR.setUrl("https://mesonet.agron.iastate.edu/cache/tile.py/1.0.0/nexrad-n0q-900913/{z}/{x}/{y}.png?t=" + Math.floor(Date.now() / 300000)); $("#radarStamp").textContent = radarStamp(); } }, 300000);
+  loadDistricts();
+}
+const radarStamp = () => `Radar refreshed ${ptT(new Date().toISOString())} (composite updates about every 5 minutes) · district lines: 120th Congress (the Nov 3, 2026 map), Census TIGERweb${CDFEATS.length ? " · " + CDFEATS.length + " districts" : ""}`;
+async function loadDistricts() {
+  let gj = null;
+  try { gj = await getJSON("../geo/cd120.json?t=" + Math.floor(Date.now() / 3600000)); } catch (e) {}
+  if (!gj) { // fallback: ask the Census service directly (slower)
+    try { const feats = []; for (let off = 0; off < 600; off += 100) { const j = await getJSON("https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Legislative/MapServer/0/query?" + new URLSearchParams({ where: "1=1", outFields: "STATE,CD120,GEOID,INTPTLAT,INTPTLON", f: "geojson", outSR: "4326", maxAllowableOffset: "0.012", geometryPrecision: "3", resultOffset: String(off), resultRecordCount: "100", orderByFields: "GEOID" })); const fs = j.features || []; for (const f of fs) { const p = f.properties || {}; if (p.CD120 && p.CD120 !== "ZZ") feats.push({ type: "Feature", properties: { st: p.STATE, cd: p.CD120, lat: +p.INTPTLAT, lon: +p.INTPTLON }, geometry: f.geometry }); } if (fs.length < 100) break; } gj = { type: "FeatureCollection", features: feats }; } catch (e) { $("#radarStamp").textContent = "District lines couldn't be loaded (" + e.message + "); radar still live."; return; }
+  }
+  CDFEATS = (gj.features || []).filter(f => f.geometry && f.properties && f.properties.cd !== "98");
+  const tracked = new Set(DATA ? Object.keys(DATA.races) : []);
+  CDLAYER = L.geoJSON({ type: "FeatureCollection", features: CDFEATS }, {
+    style: f => { const k = cdKey(f.properties), t = tracked.has(k), h = HL[k]; return { color: t ? "#1B2A41" : "#5b6b82", weight: t ? 2.2 : 0.7, opacity: t ? 0.95 : 0.55, fillColor: h ? (h === "D" ? "#2E5E9E" : "#B5451B") : "#000", fillOpacity: h ? (t ? 0.3 : 0.14) : 0 }; },
+    onEachFeature: (f, l) => { const k = cdKey(f.properties); const lv = LIVE[k]; l.bindTooltip(k + (tracked.has(k) ? " · tracked race" : ""), { sticky: true, direction: "top", opacity: 0.95 }); if (tracked.has(k)) l.on("click", () => window.open("https://lab.nathanwmonroe.com/electionlab/race/#" + k, "_blank", "noopener")); }
+  }).addTo(MAP);
+  const sel = $("#goDist"); [...tracked].sort().forEach(k => sel.insertAdjacentHTML("beforeend", `<option value="${k}">${k}</option>`));
+  sel.onchange = () => { const f = CDFEATS.find(x => cdKey(x.properties) === sel.value); if (f) { const b = L.geoJSON(f).getBounds(); MAP.fitBounds(b.pad(0.6)); document.querySelectorAll(".rtools [data-go]").forEach(x => x.setAttribute("aria-pressed", "false")); } };
+  $("#radarStamp").textContent = radarStamp();
+  placeLabels(); tintLeaders();
+}
+function placeLabels() {
+  if (!MAP || !LABELS || !CDFEATS.length) return;
+  LABELS.clearLayers();
+  const z = MAP.getZoom(), vb = MAP.getBounds(), tracked = new Set(DATA ? Object.keys(DATA.races) : []);
+  const minW = 46, minH = 18, taken = [];
+  for (const f of CDFEATS) {
+    const p = f.properties; if (!p.lat || !vb.contains([p.lat, p.lon])) continue;
+    const k = cdKey(p), t = tracked.has(k);
+    // size on screen from the feature's bounding box
+    const g = f.geometry; let minx = 999, maxx = -999, miny = 999, maxy = -999;
+    const walk = c => { if (typeof c[0] === "number") { if (c[0] < minx) minx = c[0]; if (c[0] > maxx) maxx = c[0]; if (c[1] < miny) miny = c[1]; if (c[1] > maxy) maxy = c[1]; } else c.forEach(walk); };
+    walk(g.coordinates);
+    const a = MAP.latLngToContainerPoint([maxy, minx]), b = MAP.latLngToContainerPoint([miny, maxx]);
+    const w = Math.abs(b.x - a.x), h = Math.abs(b.y - a.y);
+    if (!t && (w < minW || h < minH)) continue;
+    if (t && (w < 22 || h < 10) && z < 6) continue;
+    const c = MAP.latLngToContainerPoint([p.lat, p.lon]);
+    if (taken.some(q => Math.abs(q.x - c.x) < 40 && Math.abs(q.y - c.y) < 16)) continue;
+    taken.push(c);
+    L.marker([p.lat, p.lon], { icon: L.divIcon({ className: "", html: `<span class="cdlab${t ? " t" : ""}">${k}</span>`, iconSize: null, iconAnchor: [k.length * 3.6 + 4, 9] }), interactive: false, keyboard: false }).addTo(LABELS);
+  }
+}
+async function tintLeaders() {
+  try {
+    const h = await getJSON("../house_live.json?t=" + Math.floor(Date.now() / 60000));
+    const hl = {}; for (const k in (h.house || {})) { const [d, r] = h.house[k]; if (d + r > 0) hl[k] = d > r ? "D" : r > d ? "R" : null; }
+    HL = hl; if (CDLAYER) CDLAYER.setStyle(CDLAYER.options.style);
+  } catch (e) {}
+}
+setInterval(() => { if (!document.hidden) tintLeaders(); }, 300000);
+
 async function loadAlerts() {
   const j = await getJSON("https://api.weather.gov/alerts/active?status=actual&message_type=alert,update", { "Accept": "application/geo+json" });
   ALERTS = (j.features || []).map(f => f.properties).filter(p => !marine.test(p.event) && bad.test(p.event) && !/Watch$/.test(p.event) && inHours(p));
@@ -251,7 +343,7 @@ async function loadHyp() {
 $("#how-hyp").innerHTML = `<p><b>What it shows.</b> Three hypotheses from the turnout literature, each with its claim, the test, the current estimate with a standard error and p-value, a figure, and a verdict that updates as more counties report.</p><p><b>Why it's useful.</b> It is the difference between saying "rain probably hurt turnout somewhere" and measuring it, tonight, with a design that holds the weather constant across a state line.</p><p><b>For example, you could</b> watch H2: if the "restrictive × rain" estimate stays negative as the sample grows, voters in excuse-required states are losing more turnout to the same storm than their neighbors across the line.</p><p><b>Where the data comes from, and how often.</b> Decision Desk HQ's county turnout estimates for every House race (3,100+ counties), Open-Meteo precipitation at each county's center, NCSL's rule summaries, and Census county boundaries. A script re-runs every ten minutes on GitHub and this page re-reads the results every minute. Early in the night the estimates are noisy and the verdict reads "too early"; read them after 9pm PT. Caveats: county, not precinct; model-based expected vote; approximate rules.</p>`;
 async function tick() {
   loadHyp().catch(() => {}); try { await Promise.all([loadAlerts(), loadLive()]); render(); } catch (e) { $("#wxStamp").textContent = "Couldn't load the alerts or results feed; retrying in two minutes."; } }
-(async () => { how(); try { DATA = await getJSON("../race/data.json"); } catch (e) { $("#wxStamp").textContent = "Couldn't load race data."; return; } await tick(); setInterval(() => { if (!document.hidden) tick(); }, 120e3); })();
+(async () => { how(); try { DATA = await getJSON("../race/data.json"); } catch (e) { $("#wxStamp").textContent = "Couldn't load race data."; } try { initRadar(); } catch (e) { $("#radarStamp").textContent = "Map couldn't start: " + e.message; } if (!DATA) return; await tick(); setInterval(() => { if (!document.hidden) tick(); }, 120e3); })();
 </script>
 <script defer src="/electionlab/track.js"></script>
 </body>
