@@ -1,6 +1,6 @@
 {
- "run_at": "2026-11-04T17:23:03.979084+00:00",
- "run_at_pt": "9:23 AM PT",
+ "run_at": "2026-11-04T17:28:04.525087+00:00",
+ "run_at_pt": "9:28 AM PT",
  "sample": false,
  "feed": {
   "races": 436,
@@ -13,167 +13,167 @@
    "title": "Rain lowers Election-Day turnout",
    "claim": "Gomez, Hansford & Krause (2007, Journal of Politics) found that each inch of Election-Day rain cut turnout by just under one percentage point in presidential years; at midterm turnout that is roughly two percent fewer votes than expected.",
    "design": "Counties at least half counted. The county's votes vs. expectation (Decision Desk HQ's live estimate of its final vote against its pre-election expectation, in percent) regressed on today's precipitation, with state fixed effects; standard errors clustered by state, p-values on t with states minus one degrees of freedom.",
-   "n": 2989,
-   "r2": 0.31968268643062436,
+   "n": 2990,
+   "r2": 0.31975647158008935,
    "clusters": 45,
    "table": [
     {
      "term": "rain (per cm)",
-     "est": 0.04851014557018315,
-     "se": 0.1702681334459581,
-     "t": 0.2849044303735198,
-     "p": 0.7770541038517553,
+     "est": 0.04966655749645944,
+     "se": 0.17031020167511984,
+     "t": 0.29162408950229723,
+     "p": 0.7719445573535333,
      "ci": [
-      -0.29464272953775994,
-      0.3916630206781262
+      -0.29357110055645047,
+      0.39290421554936933
      ],
      "df": 44
     },
     {
      "term": "rain (per inch)",
-     "est": 0.1232157697482652,
-     "se": 0.43248105895273353,
-     "t": 0.2849044303735198,
-     "p": 0.7770541038517553,
+     "est": 0.126153056041007,
+     "se": 0.4325879122548044,
+     "t": 0.29162408950229723,
+     "p": 0.7719445573535333,
      "ci": [
-      -0.7483925330259102,
-      0.9948240725224405
+      -0.7456705954133842,
+      0.9979767074953981
      ]
     }
    ],
    "verdict": "No clear signal yet",
-   "reading": "Across 2989 counties at least half counted, each inch of rain today goes with +0.12% votes vs. expectation (p = 0.78, not significant; 95% CI -0.75 to +0.99). The literature's roughly \u22122% per inch is outside that interval."
+   "reading": "Across 2990 counties at least half counted, each inch of rain today goes with +0.13% votes vs. expectation (p = 0.77, not significant; 95% CI -0.75 to +1.00). The literature's roughly \u22122% per inch is outside that interval."
   },
   {
    "id": "H2",
    "title": "Easy mail and early voting blunt the rain effect",
    "claim": "Where most votes are cast before Election Day, a rainy Tuesday should matter less. Gomez, Hansford & Krause (2007) found the rain effect weaker in states with easy absentee voting; Johnson & Stein (2023, American Politics Research) test this directly with early-voting rules. The convenience-voting literature (Gronke et al. 2008; Thompson, Wu, Yoder & Hall 2020) is about turnout levels, not weather.",
    "design": "A border-pair comparison, not a regression discontinuity: counties within 100 km of a state line where the convenience-voting rules change (no-excuse or all-mail voting, or at least 10 days of in-person early voting, on one side; neither on the other). Votes vs. expectation regressed on which side of the line the county is on, distance to the line (separately on each side), rain, and side x rain, with a fixed effect for each state pair; errors clustered by pair, p-values on t with pairs minus one degrees of freedom. The side x rain term is the test: a negative value means rain costs more turnout on the restrictive side. The assumption is that only state rules change at the line; a state line changes every state policy at once, so read it as the effect of the rule bundle.",
-   "n": 529,
-   "r2": 0.29035911758128174,
+   "n": 530,
+   "r2": 0.29112157772149916,
    "pairs": 14,
    "table": [
     {
      "term": "restrictive side (at the line, dry)",
-     "est": 1.7489234003293883,
-     "se": 5.289531708551145,
-     "t": 0.3306386078567314,
-     "p": 0.7461858179611229,
+     "est": 1.7469426159175847,
+     "se": 5.285846070406985,
+     "t": 0.330494417099641,
+     "p": 0.7462922535273115,
      "ci": [
-      -9.678415110188666,
-      13.176261910847444
+      -9.672433557474767,
+      13.166318789309935
      ],
      "df": 13
     },
     {
      "term": "distance (per 10 km)",
-     "est": -0.1922954809078222,
-     "se": 0.23009395645655042,
-     "t": -0.835725908968557,
-     "p": 0.41840506018641577,
+     "est": -0.19230006727972665,
+     "se": 0.23010515407468585,
+     "t": -0.8357051716334494,
+     "p": 0.4184163129550156,
      "ci": [
-      -0.6893832524779847,
-      0.30479229066234037
+      -0.6894120298331361,
+      0.30481189527368274
      ],
      "df": 13
     },
     {
      "term": "restrictive x distance",
-     "est": 0.31858586622346335,
-     "se": 0.30173361409255495,
-     "t": 1.0558514243817034,
-     "p": 0.3102638268827067,
+     "est": 0.3283762334159271,
+     "se": 0.29790829103136696,
+     "t": 1.102272891697909,
+     "p": 0.29033191504582745,
      "ci": [
-      -0.3332699762632227,
-      0.9704417087101493
+      -0.3152155010285255,
+      0.9719679678603796
      ],
      "df": 13
     },
     {
      "term": "rain (per cm)",
-     "est": 0.6584527672994912,
-     "se": 0.4324237473884092,
-     "t": 1.5227026065894098,
-     "p": 0.15178170980998873,
+     "est": 0.6609175241011792,
+     "se": 0.43293054858279484,
+     "t": 1.5266132784223785,
+     "p": 0.15081403108300906,
      "ci": [
-      -0.2757419428684553,
-      1.5926474774674377
+      -0.2743720634821758,
+      1.5962071116845342
      ],
      "df": 13
     },
     {
      "term": "restrictive x rain (per cm)",
-     "est": -1.9250242023008086,
-     "se": 1.1237311268956984,
-     "t": -1.713064768098645,
-     "p": 0.11043159867794827,
+     "est": -1.9325961716710183,
+     "se": 1.126681152786407,
+     "t": -1.715299991387532,
+     "p": 0.11001144917406647,
      "ci": [
-      -4.35269770713748,
-      0.5026493025358629
+      -4.366642819977729,
+      0.5014504766356926
      ],
      "df": 13
     }
    ],
    "verdict": "No clear signal yet",
    "clusters": 14,
-   "reading": "In 529 counties at least half counted within 100 km of a rules line (14 state pairs), each centimeter of rain goes with 1.93% more shortfall against expectation on the restrictive side than on the convenience-voting side of the same line (p = 0.11, not significant; 95% CI -4.35 to +0.50).",
+   "reading": "In 530 counties at least half counted within 100 km of a rules line (14 state pairs), each centimeter of rain goes with 1.93% more shortfall against expectation on the restrictive side than on the convenience-voting side of the same line (p = 0.11, not significant; 95% CI -4.37 to +0.50).",
    "early_days_table": [
     {
      "term": "rain (per cm)",
-     "est": 0.3647760361304,
-     "se": 0.20131929136329804,
-     "t": 1.8119278766590239,
-     "p": 0.07682555263973923,
+     "est": 0.36765331808928015,
+     "se": 0.20147237494197934,
+     "t": 1.8248324029294742,
+     "p": 0.07482021815475304,
      "ci": [
-      -0.04095633579306368,
-      0.7705084080538637
+      -0.038387573514837514,
+      0.7736942096933979
      ],
      "df": 44
     },
     {
      "term": "rain x early-voting days (per 10 days)",
-     "est": -0.21290260204639563,
-     "se": 0.15517530263545942,
-     "t": -1.372013448213149,
-     "p": 0.17701433828313395,
+     "est": -0.21408326444539888,
+     "se": 0.1551272098382853,
+     "t": -1.3800497325296652,
+     "p": 0.17454363479713808,
      "ci": [
-      -0.5256378753323031,
-      0.09983267123951187
+      -0.5267216130673174,
+      0.09855508417651959
      ],
      "df": 44
     }
    ],
-   "early_days_n": 2989
+   "early_days_n": 2990
   },
   {
    "id": "H3",
    "title": "Rain helps Republicans",
    "claim": "Gomez, Hansford & Krause (2007) found rain shifted the vote toward Republicans, on the premise that the voters it keeps home lean Democratic. That premise is contested after 2024, when lower-propensity voters leaned Republican, and the effect should shrink or reverse where Democrats vote by mail.",
    "design": "Counties at least half counted, in House races with both a Democrat and a Republican. The county's Democratic two-way share tonight minus Harris's 2024 two-way share (the swing), regressed on rain and rain x convenience-voting state, with state fixed effects; errors clustered by state. A negative rain coefficient means rain is moving the count toward Republicans where voting is Election-Day heavy. Which ballots a county counts first changes its partisan mix during the night, so this test means little until most counties are mostly counted.",
-   "n": 2987,
-   "r2": 0.42467812806289185,
+   "n": 2988,
+   "r2": 0.42469067313262376,
    "table": [
     {
      "term": "rain (per cm)",
-     "est": -0.13471254451073408,
-     "se": 0.15380141253411111,
-     "t": -0.8758862632737955,
-     "p": 0.3858486155159846,
+     "est": -0.1342160533906759,
+     "se": 0.15374672315938254,
+     "t": -0.8729685461428662,
+     "p": 0.3874195752395606,
      "ci": [
-      -0.4446789242355358,
-      0.17525383521406765
+      -0.44407221392298313,
+      0.17564010714163128
      ],
      "df": 44
     },
     {
      "term": "rain x convenience-voting state",
-     "est": 0.18049667923297047,
-     "se": 0.17503715438560655,
-     "t": 1.0311906627283063,
-     "p": 0.3080865469445282,
+     "est": 0.1800001881128477,
+     "se": 0.17498899743097815,
+     "t": 1.0286371757964163,
+     "p": 0.3092718601704114,
      "ci": [
-      -0.17226752603858048,
-      0.5332608845045215
+      -0.17266696319386124,
+      0.5326673394195567
      ],
      "df": 44
     }
@@ -190,16 +190,16 @@
    "n": 2982,
    "counties": 1172,
    "clusters": 25,
-   "r2": 0.9458579203467307,
+   "r2": 0.9458520419082871,
    "table": [
     {
      "term": "eday x rain (per cm)",
      "est": 0.01926409674079599,
-     "se": 0.02104157975520804,
-     "t": 0.9155252107925925,
-     "p": 0.36902376587607777,
+     "se": 0.021041579755208043,
+     "t": 0.9155252107925924,
+     "p": 0.36902376587607866,
      "ci": [
-      -0.024163589450350437,
+      -0.024163589450350444,
       0.06269178293194241
      ],
      "df": 24
@@ -207,12 +207,12 @@
     {
      "term": "early in-person x rain (per cm)",
      "est": 0.008161768373403613,
-     "se": 0.014947876254115429,
-     "t": 0.5460152488990887,
+     "se": 0.01494787625411544,
+     "t": 0.5460152488990883,
      "p": 0.5900954518088803,
      "ci": [
-      -0.022689131926852665,
-      0.03901266867365989
+      -0.022689131926852686,
+      0.03901266867365991
      ],
      "df": 24
     }
@@ -225,62 +225,62 @@
    "title": "The rain effect is larger in small, rural counties",
    "claim": "Gomez, Hansford & Krause (2007) found the turnout cost of rain concentrated outside big metropolitan counties, where polling places are farther apart and more voters drive. Here county size (log 2024 presidential votes) stands in for rural vs. urban.",
    "design": "H1 with one more term: rain x county size, where size is the log of the county's 2024 presidential vote, centered at the average county. The rain term is then the effect at an average-sized county; a positive interaction means the rain penalty shrinks as counties get bigger (that is, it is larger in small counties). State fixed effects; standard errors clustered by state.",
-   "n": 2987,
+   "n": 2988,
    "clusters": 45,
-   "r2": 0.36589426479513065,
+   "r2": 0.3659096762071081,
    "table": [
     {
      "term": "rain (per cm, average-sized county)",
-     "est": 0.005557724505171688,
-     "se": 0.19626642200806013,
-     "t": 0.028317245753547427,
-     "p": 0.9775371764932885,
+     "est": 0.006961241043957712,
+     "se": 0.19626933629709153,
+     "t": 0.03546779734059186,
+     "p": 0.97186714585348,
      "ci": [
-      -0.38999125836184806,
-      0.4011067073721914
+      -0.3885936151866784,
+      0.40251609727459386
      ],
      "df": 44
     },
     {
      "term": "rain x county size (per log unit)",
-     "est": -0.042761112682947904,
-     "se": 0.12274320521234601,
-     "t": -0.34837865451672934,
-     "p": 0.7292172525389611,
+     "est": -0.04273417157246623,
+     "se": 0.12283351290098904,
+     "t": -0.347903194846446,
+     "p": 0.7295718262416653,
      "ci": [
-      -0.2901337884511314,
-      0.2046115630852356
+      -0.2902888505280638,
+      0.20482050738313134
      ],
      "df": 44
     },
     {
      "term": "county size (log 2024 votes)",
-     "est": 2.254450172390234,
-     "se": 0.4279744406219683,
-     "t": 5.267721523542102,
-     "p": 3.964183317162195e-06,
+     "est": 2.2532201705469843,
+     "se": 0.4280857327469004,
+     "t": 5.263478780497383,
+     "p": 4.020678333827021e-06,
      "ci": [
-      1.391924362070274,
-      3.116975982710194
+      1.3904700656871452,
+      3.1159702754068235
      ],
      "df": 44
     }
    ],
    "verdict": "No clear signal yet",
-   "reading": "Across 2987 counties, each centimeter of rain goes with +0.01% votes vs. expectation at an average-sized county; the rain term moves -0.04 per log unit of size (p = 0.73, not significant; 95% CI -0.29 to +0.20), so about +0.07% per cm in a county a quarter the average size and -0.06% in one four times it."
+   "reading": "Across 2988 counties, each centimeter of rain goes with +0.01% votes vs. expectation at an average-sized county; the rain term moves -0.04 per log unit of size (p = 0.73, not significant; 95% CI -0.29 to +0.20), so about +0.07% per cm in a county a quarter the average size and -0.06% in one four times it."
   }
  ],
  "data": {
   "counties_in_feed": 3045,
-  "counties_with_votes": 2989,
-  "counties_any_votes": 3029,
+  "counties_with_votes": 2990,
+  "counties_any_votes": 3030,
   "counties_wet_1mm": 1122,
   "rain_asof": "2026-11-04T14:43:01.290898+00:00",
   "states_with_votes": 45,
   "rain_coverage": 3045,
   "rain_missing_states": [],
   "gate": "counties at least half counted (counted / live expected vote >= 0.5)",
-  "border_sample": 529,
+  "border_sample": 530,
   "border_pairs": 14,
   "counties_with_vote_types": 1172
  },
@@ -291,5 +291,5 @@
   "H4": "fig_h4.svg",
   "H5": "fig_h5.svg"
  },
- "seconds": 11.2
+ "seconds": 11.8
 }
