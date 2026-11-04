@@ -63,6 +63,22 @@
 "title": "7:45 · Rain tax update: −0.01% per inch across 1,832 counties — nothing",
 "body": "The CAPE Rain Tax is now measured on 1,832 counties at least half counted, 569 of them with at least a millimeter of rain today: each inch of rain goes with −0.01% of expected vote (p = 0.98; 95% CI −1.1 to +1.0). The classic Gomez–Hansford–Krause estimate (about −2% per inch, in presidential years) sits outside that interval. The one test with a signal is H2, and it points the wrong way: within 100 km of a rules line, rain goes with 3% LESS shortfall on the side that requires an excuse to vote by mail (p < 0.05, 370 counties, 14 state pairs) — the simplest reading is that heavy-rain counties tonight happen to be high-turnout counties, not that rules matter in reverse. H3 (does rain shift the partisan split?): +0.04 points per cm, nothing. H4 (Election Day ballots vs. the county's early ballots): +0.2%, nothing; placebo also nothing. H5 (county size): no interaction (p = 0.11). Caveat: 'expected vote' is DDHQ's live estimate, which moves with the count; the final read comes when counts close.",
 "show": "Weather & turnout ↗ → Jump to the hypothesis tests; H1 figure, then H2"
+},
+{
+"id": "tp-0411-0-8-10-california-s-first-batch-becerra-55",
+"t": "2026-11-04T04:11:30Z",
+"section": "California",
+"title": "8:10 · California's first batch: Becerra 55–45, Prop 39 (voter ID) failing 49.6–50.4, Prop 44 crushed",
+"body": "The 8:03pm batch (pre-election mail, 6% of precincts, about 610,000 governor votes): Becerra 55.1%, Hilton 44.9% — short of the PPIC 61–37 and Emerson 60–33 polls, but the first batch is the oldest electorate California counts; later mail skews younger. Propositions, same batch: Prop 3 (extend the high-income tax for schools and health care) yes 52.8%; Prop 1 (housing bonds) yes 53.3%; Prop 39 (government-issued ID to vote) NO 50.4–49.6, the one to watch; Prop 40 (one-time wealth tax) no 63.5%; Prop 44 (clinics' 90% rule) no 81.5%; Prop 42 (no new personal-property taxes) yes 63.0%; Prop 2 (rainy-day fund) dead even, 50.4 yes. BOE District 1: Esparza 53.7%, Grove 46.3% at 16% (open seat). Caveat: California's first drop is pre-election mail only; in 2022 and 2024 the Election Day batches moved Valley races several points toward Republicans before late mail moved them back.",
+"show": "Governor tab, then Propositions (Prop 39 row); Merced County & BOE 1 for Esparza"
+},
+{
+"id": "tp-0411-1-8-12-ca-13-first-batch-gray-58-8-41-2-on",
+"t": "2026-11-04T04:11:31Z",
+"section": "CA-13",
+"title": "8:12 · CA-13 first batch: Gray 58.8–41.2 on 39,000 votes",
+"body": "Secretary of State, 8:05pm: Gray 23,072 (58.8%), Lincoln 16,134 (41.2%) — 39,206 votes, roughly a fifth of the ~200,000 expected. The SoS's '83% of precincts reporting' means mail has been counted from most precincts, not that 83% of the vote is in. Same-count check against his past races (the tracker on /ca13): at this stage in 2024 Gray led by about 1.3 points and finished +0.1; in 2022 the morning-after count matched the final within 0.1. Tonight's first batch is about 17 points better than 2024's first batch. Lincoln would need roughly 55% of the remaining vote to catch up; in 2024 Duarte's best batch, the Election Day in-person count, ran about 56% for him. The lab's pre-8pm projection from the national tide was Gray 54–56%; this batch is above it. Caveat: one batch, oldest voters; Merced's Election Day count lands around 11:30.",
+"show": "/ca13 in Chrome (same-count tracker and county rows), or the CA-13 race page"
 }
 ]
 }
