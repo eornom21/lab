@@ -182,7 +182,7 @@ td.d{color:var(--dem)} td.r{color:var(--rep)}
 .yn{font-size:15px;margin:8px 0 0;color:var(--ink2)} .yn b{color:var(--ink)}
 @media (max-width:900px){.lrow{grid-template-columns:70px 1fr 1fr;}.lrow .bar,.lrow .rt.p{display:none}}
 /* ask */
-.qrcorner{margin-top:auto;display:flex;flex-direction:column;align-items:center;gap:4px;background:#fff;padding:8px 8px 6px;border-radius:10px}
+.qrcorner{position:fixed;right:16px;bottom:16px;z-index:30;display:flex;flex-direction:column;align-items:center;gap:4px;background:#fff;padding:8px 8px 6px;border-radius:10px;box-shadow:0 6px 24px rgba(0,0,0,.35);border:1px solid rgba(0,0,0,.15)}
 .qrcorner img{width:104px;height:104px;display:block;image-rendering:pixelated}
 .qrcorner span{font:600 11px var(--body);color:#141A24;text-align:center;line-height:1.25;max-width:132px;overflow-wrap:anywhere}
 @media (max-width:760px){.qrcorner{display:none}}
@@ -241,7 +241,7 @@ a.hbtn.detail{border-color:var(--ink);color:var(--ink)}
   h2{font-size:30px}
   .meta2{grid-template-columns:1fr}
 }
-.mirror nav button[data-view="ask"],.mirror .askbar,.mirror #rehearse,.mirror .qrcorner,.mirror .acard .am button,.mirror #v-ask{display:none!important}
+.mirror nav button[data-view="ask"],.mirror .askbar,.mirror #rehearse,.mirror .acard .am button,.mirror #v-ask{display:none!important}
 .mirrorpill{background:var(--live-soft);color:var(--live)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
