@@ -178,6 +178,18 @@ function summarize(rows) {
   const counted = live.map(x => x.inPct).filter(x => x != null).sort((a, b) => a - b), medC = counted.length ? counted[Math.floor(counted.length / 2)] : null;
   return { live: live.length, n: rows.length, won, lost, lead, trail, ticket: avg("ticket"), harris: avg("harris"), reg: avg("reg"), cape: avg("cape"), cross, expWins, expScored, nowWins, medC };
 }
+// Overperformance against the caucus's own party: the caucus's average CAPE score minus the average CAPE score of every
+// candidate of that party in a two-party House race with votes (the loop computes the party baselines), plus the share
+// beating their forecast on each side.
+function premium(g, s) {
+  const b = LIVE && LIVE.baseline && LIVE.baseline[g.party] && LIVE.baseline[g.party].any;
+  if (!b || b.avg == null || s.cape.avg == null) return null;
+  return { prem: s.cape.avg - b.avg, base: b.avg, baseN: b.n, beat: s.cape.n ? s.cape.ahead / s.cape.n : null, baseBeat: b.beat };
+}
+function premCell(g, s) {
+  const p = premium(g, s); if (!p) return `<td class="n">–</td>`;
+  return `<td class="n ${p.prem > 0 ? "plus" : p.prem < 0 ? "minus" : ""}">${pts(p.prem)} pts<span class="tiny">${g.party === "D" ? "Democrats" : "Republicans"} overall ${pts(p.base)}</span></td>`;
+}
 function renderOverview() {
   $("#overview").style.display = ""; $("#groupsec").style.display = "none"; document.querySelectorAll(".gonly").forEach(e => e.style.display = "none");
   if (!LIVE) { $("#ostamp").textContent = "The lab's five-minute summary isn't available yet; pick a caucus above for its live page."; $("#otbl").innerHTML = ""; $("#olead").innerHTML = ""; $("#ostats").innerHTML = ""; return; }
@@ -185,14 +197,16 @@ function renderOverview() {
   $("#ostamp").textContent = `As of ${ptT(LIVE.at)} · Decision Desk HQ via the lab's server`; $("#ostamp").className = "live";
   const any = gs.some(x => x.s.live);
   const cell = (v, n, suffix = "") => v == null ? `<td class="n">–</td>` : `<td class="n ${v > 0 ? "plus" : v < 0 ? "minus" : ""}">${pts(v)}${suffix}<span class="tiny">${n} race${n === 1 ? "" : "s"}</span></td>`;
-  $("#otbl").innerHTML = `<thead><tr><th>Caucus / list</th><th class="n">Races</th><th class="n">Counted</th><th class="n">Won–Lost</th><th class="n">Leading–Trailing</th><th class="n">Wins vs. forecast</th><th class="n">CAPE score</th><th class="n">Ticket</th><th class="n">Crossover</th></tr></thead><tbody>` +
-    gs.map(({ g, s }) => `<tr><td><a href="?g=${g.id}" data-go="${g.id}"><b>${esc(g.name)}</b></a><span class="tiny">${esc(g.short)} · ${g.party === "D" ? "Democrats" : "Republicans"}</span></td><td class="n">${s.n}</td><td class="n">${s.medC == null ? "–" : Math.round(s.medC * 100) + "%"}<span class="tiny">median</span></td><td class="n"><span class="D">${s.won}</span>–<span class="R">${s.lost}</span></td><td class="n">${s.lead}–${s.trail}</td><td class="n">${s.expScored ? `${s.nowWins} <span class="tiny" style="display:inline">of ${s.expWins} expected</span>` : "–"}</td>${cell(s.cape.avg, s.cape.n, " pts")}${cell(s.ticket.avg, s.ticket.n, " pts")}<td class="n">${s.live ? s.cross : "–"}</td></tr>`).join("") + `</tbody>`;
+  $("#otbl").innerHTML = `<thead><tr><th>Caucus / list</th><th class="n">Races</th><th class="n">Counted</th><th class="n">Won–Lost</th><th class="n">Leading–Trailing</th><th class="n">Wins vs. forecast</th><th class="n">CAPE score</th><th class="n">vs. own party</th><th class="n">Ticket</th><th class="n">Crossover</th></tr></thead><tbody>` +
+    gs.map(({ g, s }) => `<tr><td><a href="?g=${g.id}" data-go="${g.id}"><b>${esc(g.name)}</b></a><span class="tiny">${esc(g.short)} · ${g.party === "D" ? "Democrats" : "Republicans"}</span></td><td class="n">${s.n}</td><td class="n">${s.medC == null ? "–" : Math.round(s.medC * 100) + "%"}<span class="tiny">median</span></td><td class="n"><span class="D">${s.won}</span>–<span class="R">${s.lost}</span></td><td class="n">${s.lead}–${s.trail}</td><td class="n">${s.expScored ? `${s.nowWins} <span class="tiny" style="display:inline">of ${s.expWins} expected</span>` : "–"}</td>${cell(s.cape.avg, s.cape.n, " pts")}${premCell(g, s)}${cell(s.ticket.avg, s.ticket.n, " pts")}<td class="n">${s.live ? s.cross : "–"}</td></tr>`).join("") + `</tbody>`;
   $("#otbl").querySelectorAll("[data-go]").forEach(a => a.onclick = e => { e.preventDefault(); go(a.dataset.go); });
   const scored = gs.filter(x => x.s.cape.avg != null).sort((a, b) => b.s.cape.avg - a.s.cape.avg);
   $("#olead").innerHTML = `<div class="lead">${!any ? `Nothing counted yet. ${gs.reduce((s, x) => s + x.s.n, 0)} races across ${gs.length} lists.` : scored.length ? `Best CAPE score so far: the ${esc(scored[0].g.name)}, ${pts(scored[0].s.cape.avg)} points against the pre-election forecast across ${scored[0].s.cape.n} races${scored.length > 1 ? `; the ${esc(scored[scored.length - 1].g.name)} are at ${pts(scored[scored.length - 1].s.cape.avg)}` : ""}.` : "Votes are in; forecast comparisons fill in as counties report."}</div>`;
   const t = LIVE.tide || {};
   const st = (k, v, s, c) => `<div class="stat"><div class="k">${k}</div><div class="v ${c || ""}">${v}</div><div class="s">${s || ""}</div></div>`;
-  $("#ostats").innerHTML = st("Tide so far", t.value == null ? "–" : (t.value > 0 ? "D" : "R") + Math.abs(t.value).toFixed(1), t.value == null ? "fills in as counties report" : `vs. 2024 presidential, ${fmt(t.counties)} counties on these lists`, t.value > 0 ? "D" : t.value < 0 ? "R" : "") + st("Races on the lists", gs.reduce((s, x) => s + x.s.n, 0), "some appear on more than one") + st("Called so far", gs.reduce((s, x) => s + x.s.won + x.s.lost, 0), "list candidates won or lost") + st("CAPE Rain Tax", RAINTAX == null ? "–" : (RAINTAX > 0 ? "+" : "") + RAINTAX.toFixed(1) + "%", `<a href="../weather/">of the expected vote per inch of rain; live on the weather page</a>`);
+  const bd = gs.find(x => x.g.id === "bluedogs"), bp = bd ? premium(bd.g, bd.s) : null;
+  const premTile = bp ? st("Blue Dog premium", pts(bp.prem) + " pts", `running ${Math.abs(bp.prem).toFixed(1)} points ${bp.prem >= 0 ? "better" : "worse"} against forecast than Democrats overall (${pts(bd.s.cape.avg)} vs ${pts(bp.base)}); ${Math.round(bp.beat * 100)}% beating their forecast vs ${Math.round(bp.baseBeat * 100)}% of all Democrats (${bp.baseN} races)`, bp.prem > 0 ? "D" : bp.prem < 0 ? "R" : "") : "";
+  $("#ostats").innerHTML = premTile + st("Tide so far", t.value == null ? "–" : (t.value > 0 ? "D" : "R") + Math.abs(t.value).toFixed(1), t.value == null ? "fills in as counties report" : `vs. 2024 presidential, ${fmt(t.counties)} counties on these lists`, t.value > 0 ? "D" : t.value < 0 ? "R" : "") + st("Races on the lists", gs.reduce((s, x) => s + x.s.n, 0), "some appear on more than one") + st("Called so far", gs.reduce((s, x) => s + x.s.won + x.s.lost, 0), "list candidates won or lost") + st("CAPE Rain Tax", RAINTAX == null ? "–" : (RAINTAX > 0 ? "+" : "") + RAINTAX.toFixed(1) + "%", `<a href="../weather/">of the expected vote per inch of rain; live on the weather page</a>`);
 }
 // ---------- one group ----------
 function render() {

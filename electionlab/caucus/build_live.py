@@ -264,6 +264,7 @@ def main():
         board_ids = [r["id"] for r in board_ids]
     except Exception:
         board_ids = []
+    BASELINE = None
     try:
         bd_names = {g_r[0]: g_r[1].split(" ")[-1].lower() for g in GROUPS["groups"] if g["id"] == "bluedogs" for g_r in g["races"]}
         rl = {"races": {}, "house": {}, "bluedogs": {}, "n": 0, "withVotes": 0, "called": 0, "at": datetime.now(timezone.utc).isoformat(timespec="seconds")}
@@ -296,6 +297,23 @@ def main():
             if fc.get("margin") is not None and la in ("DEM", "GOP"): fm = fc["margin"] if la == "DEM" else -fc["margin"]
             if did in board_ids: rl["races"][did] = {"d": d, "r": rr, "pct": pct, "called": called, "fm": fm}
         json.dump(rl, open(os.path.join(HERE, "..", "house_live.json"), "w"), separators=(",", ":"))
+        # party baselines for the caucus overview: every two-party House race with votes, CAPE score from each party's side
+        base = {"D": [], "R": []}
+        for k, r in idx.items():
+            cs = (r.get("results") or {}).get("candidates") or []
+            d = sum(c.get("votes") or 0 for c in cs if (c.get("party") or {}).get("abbrev") == "DEM")
+            rr = sum(c.get("votes") or 0 for c in cs if (c.get("party") or {}).get("abbrev") == "GOP")
+            if d == 0 or rr == 0: continue
+            fc = r.get("forecast") or {}; la = (fc.get("leadingParty") or {}).get("abbrev")
+            if fc.get("margin") is None or la not in ("DEM", "GOP"): continue
+            fm = fc["margin"] if la == "DEM" else -fc["margin"]
+            m = (d - rr) / (d + rr) * 100; pct = float((r.get("results") or {}).get("percentIn") or 0)
+            base["D"].append((m - fm, pct)); base["R"].append((-(m - fm), pct))
+        def bsum(xs):
+            allv = [c for c, p in xs]; half = [c for c, p in xs if p >= 50]
+            f = lambda v: {"n": len(v), "avg": (sum(v) / len(v)) if v else None, "beat": (sum(1 for c in v if c > 0) / len(v)) if v else None}
+            return {"any": f(allv), "half": f(half)}
+        BASELINE = {"D": bsum(base["D"]), "R": bsum(base["R"]), "note": "all two-party House races with votes: CAPE score from the party's side; 'half' = at least half counted"}
     except Exception as e:  # noqa: BLE001
         print("house_live failed", e, file=sys.stderr)
 
@@ -334,7 +352,7 @@ def main():
         print("gov failed", e, file=sys.stderr)
 
     out = {"at": datetime.now(timezone.utc).isoformat(timespec="seconds"), "seconds": round(time.time() - t0, 1),
-           "fetched": sum(1 for v in got.values() if v), "requested": len(got), "groups": out_groups, "tide": tide}
+           "fetched": sum(1 for v in got.values() if v), "requested": len(got), "groups": out_groups, "tide": tide, "baseline": BASELINE}
     json.dump(out, open(OUT, "w"), separators=(",", ":"))
     print(json.dumps({"at": out["at"], "fetched": out["fetched"], "requested": out["requested"], "seconds": out["seconds"],
                       "withVotes": {g: sum(1 for r in rows if not r.get("none") and (r.get("tot") or 0) > 0) for g, rows in out_groups.items()}}))
