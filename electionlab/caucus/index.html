@@ -52,6 +52,13 @@ td.n,th.n{text-align:right}
 .brow .trk i{position:absolute;top:0;height:100%;border-radius:4px}
 .brow .trk .zero{position:absolute;top:-2px;bottom:-2px;width:1px;background:var(--ink);left:50%}
 .lead{font-family:var(--serif);font-size:21px;color:var(--ink);margin:6px 0}
+.headlines{display:grid;gap:10px;margin:10px 0}
+.hl{border-radius:12px;padding:14px 16px;border:1px solid var(--line);background:var(--paper);border-left-width:6px}
+.hl.good{border-left-color:#2E8B57;background:#F1F8F3}.hl.bad{border-left-color:#B5451B;background:#FBF1EC}.hl.flat{border-left-color:#9AA3AF}
+.hl .k{font:600 11px var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.hl .t{font-family:var(--serif);font-size:20px;line-height:1.3;color:var(--ink)}
+.hl .s{font-size:13px;color:var(--muted);margin-top:6px}
+@media (max-width:700px){.hl .t{font-size:17px}}
 .cape{font-family:var(--mono);font-weight:500}
 #otbl td:first-child{white-space:nowrap} #otbl .tiny{display:block}
 footer{color:var(--muted);font-size:13px;margin-top:30px;border-top:1px solid var(--line);padding-top:12px}
@@ -71,12 +78,14 @@ footer{color:var(--muted);font-size:13px;margin-top:30px;border-top:1px solid va
     <p class="sub">Apples to apples: every candidate is scored against the same yardsticks for their own party, so a Democratic and a Republican list can be read on the same scale. Numbers update every five minutes.</p>
     <div class="meta"><span id="ostamp">Loading…</span><details class="how"><summary>The CAPE scores</summary><div class="hbx" id="ohow"></div></details></div>
     <div class="card" id="olead"></div>
+    <div class="headlines" id="ohead"></div>
     <div class="wrap card" style="margin-top:10px"><table id="otbl"></table></div>
     <div class="stats" id="ostats"></div>
   </section>
   <section id="groupsec">
     <h2 id="h2a">The night for the caucus</h2>
     <div class="meta"><span id="stamp">Loading…</span><details class="how"><summary>How this works</summary><div class="hbx" id="how"></div></details></div>
+    <div class="headlines" id="ghead"></div>
     <div class="stats" id="stats"></div>
     <div class="card" id="lead" style="margin-top:10px"></div>
   </section>
@@ -195,6 +204,86 @@ function premCell(g, s, rows) {
   const p = premium(g, s, rows); if (!p) return `<td class="n">–</td>`;
   return `<td class="n ${p.prem > 0 ? "plus" : p.prem < 0 ? "minus" : ""}">${pts(p.prem)} pts<span class="tiny">${p.n} at half counted+ · ${g.party === "D" ? "Democrats" : "Republicans"} overall ${pts(p.base)}</span></td>`;
 }
+// ---------- headlines: the strongest defensible claim each way ----------
+// Every claim is computed on the half-counted gate against the list's own party, names its n, and says "leading" for
+// uncalled races. A list "doing well" (premium >= 0 in competitive seats, else overall) gets its best case; one doing
+// poorly gets its worst case. The overview shows the best list's best case and the worst list's worst case.
+function claims(g, rows) {
+  const B = LIVE && LIVE.baseline && LIVE.baseline[g.party]; if (!B) return null;
+  const party = g.party === "D" ? "Democrats" : "Republicans", other = g.party === "D" ? "Republicans" : "Democrats";
+  const live = rows.filter(x => !x.none && x.cape != null && (x.inPct || 0) >= 0.5);
+  if (live.length < 3) return { score: 0, best: [], worst: [], n: live.length };
+  const name = { bluedogs: "Blue Dog", progressives: "CPC slate", mainstreet: "Main Street", freedom: "Freedom Caucus", dccc: "Red to Blue", nrcc: "MAGA Majority" }[g.id] || g.name;
+  const avg = live.reduce((a, x) => a + x.cape, 0) / live.length, beat = live.filter(x => x.cape > 0).length;
+  const out = { best: [], worst: [], n: live.length };
+  const push = (side, strength, text, sub) => out[side].push({ strength, text, sub });
+  // 1. competitive-seat premium
+  const comp = live.filter(x => x.expMargin != null && Math.abs(x.expMargin) <= 10), c = B.comp;
+  let prem = null;
+  if (comp.length >= 4 && c && c.avg != null && c.n >= 10) {
+    const ca = comp.reduce((a, x) => a + x.cape, 0) / comp.length; prem = ca - c.avg;
+    const txt = `In competitive seats, ${name} candidates are ${ca >= 0 ? "beating" : "missing"} their forecasts by ${Math.abs(ca).toFixed(1)} points; other ${party} in the same kind of seat are at ${pts(c.avg)}.`;
+    const sub = `${comp.length} ${name} races and ${c.n} other ${party} races with forecasts within 10 points, at least half counted; CAPE score = margin minus Decision Desk HQ's forecast margin.`;
+    if (prem > 0) push("best", prem, txt, sub); else push("worst", -prem, txt, sub);
+  }
+  // 2. overall premium
+  const h = B.half; let premAll = null;
+  if (h && h.avg != null && h.n >= 20) {
+    premAll = avg - h.avg;
+    const txt = `${name} candidates are running ${Math.abs(avg).toFixed(1)} points ${avg >= 0 ? "ahead of" : "behind"} their forecasts, ${Math.abs(premAll).toFixed(1)} points ${premAll >= 0 ? "better" : "worse"} than ${party} overall (${pts(h.avg)}).`;
+    const sub = `${live.length} ${name} races vs. ${h.n} two-party House races with a ${g.party === "D" ? "Democrat" : "Republican"}, all at least half counted.`;
+    if (premAll > 0) push("best", premAll * 0.8, txt, sub); else push("worst", -premAll * 0.8, txt, sub);
+  }
+  // 3. beat rate
+  if (h && h.beat != null && h.n >= 20) {
+    const r = beat / live.length, d = r - h.beat;
+    const txt = `${beat} of ${live.length} ${name} candidates are beating their forecast (${Math.round(r * 100)}%); ${party} overall: ${Math.round(h.beat * 100)}%.`;
+    if (d > 0) push("best", d * 30, txt, "Half counted or more."); else push("worst", -d * 30, txt, "Half counted or more.");
+  }
+  // 4. pickups: seats the forecast gave to the other party
+  const pk = live.filter(x => x.expWin === false), pkLead = pk.filter(x => x.called === "W" || (!x.called && x.share > 0.5)), bp = B.pickups;
+  if (pk.length >= 3 && bp && bp.n >= 20) {
+    const r = pkLead.length / pk.length, d = r - bp.rate;
+    const txt = `${name} candidates are leading or have won in ${pkLead.length} of ${pk.length} seats the forecast gave to ${other} (${Math.round(r * 100)}%); the rest of the party: ${bp.lead} of ${bp.n} (${Math.round(bp.rate * 100)}%).`;
+    const sub = pkLead.length ? pkLead.map(x => x.id + (x.called === "W" ? " (won)" : "")).join(", ") : "";
+    if (d > 0) push("best", d * 40, txt, sub); else push("worst", -d * 40 + 0.5, txt, sub);
+  }
+  // 5. holds: seats forecast for the list that it is losing
+  const hd = live.filter(x => x.expWin === true), hdLose = hd.filter(x => x.called === "L" || (!x.called && x.share < 0.5)), bh = B.holds;
+  if (hd.length >= 3 && bh && bh.n >= 20) {
+    const r = 1 - hdLose.length / hd.length, d = r - bh.rate;
+    const txt = hdLose.length ? `${name} candidates are trailing or have lost in ${hdLose.length} of ${hd.length} seats the forecast had them winning; the rest of the party is holding ${Math.round(bh.rate * 100)}% of theirs.` : `${name} candidates are holding all ${hd.length} seats the forecast had them winning; the rest of the party is holding ${Math.round(bh.rate * 100)}% of theirs.`;
+    const sub = hdLose.map(x => x.id + (x.called === "L" ? " (lost)" : "")).join(", ");
+    if (d >= 0) push("best", d * 40 + (hdLose.length ? 0 : 1), txt, sub); else push("worst", -d * 40, txt, sub);
+  }
+  // 6. ticket
+  const tk = live.filter(x => x.ticket != null);
+  if (tk.length >= 4) { const t = tk.reduce((a, x) => a + x.ticket, 0) / tk.length, ahead = tk.filter(x => x.ticket > 0).length;
+    const txt = `${name} candidates are running ${Math.abs(t).toFixed(1)} points ${t >= 0 ? "ahead of" : "behind"} their party's top of the ticket in their districts (${ahead} of ${tk.length} ahead).`;
+    const sub = "Against the state's Senate or governor candidate of the same party, county by county within the district.";
+    if (t > 0) push("best", t * 0.6, txt, sub); else push("worst", -t * 0.6, txt, sub); }
+  out.best.sort((a, b) => b.strength - a.strength); out.worst.sort((a, b) => b.strength - a.strength);
+  out.score = avg;  // doing well or poorly in absolute terms: the list's average CAPE score at the half-counted gate
+  out.prem = prem != null ? prem : premAll;
+  return out;
+}
+function hlBox(kind, label, c, extra) { return `<div class="hl ${kind}"><div class="k">${esc(label)}</div><div class="t">${esc(c.text)}</div>${c.sub || extra ? `<div class="s">${esc(c.sub || "")}${extra ? (c.sub ? " · " : "") + esc(extra) : ""}</div>` : ""}</div>`; }
+function renderGroupHeadlines() {
+  const el = $("#ghead"); if (!el || !G || !LIVE) { if (el) el.innerHTML = ""; return; }
+  const c = claims(G, LIVE.groups[G.id] || []);
+  if (!c || (!c.best.length && !c.worst.length)) { el.innerHTML = c && c.n < 3 ? `<div class="hl flat"><div class="k">Headline</div><div class="t">Too early for a defensible claim: ${c.n} ${esc(G.name)} race${c.n === 1 ? "" : "s"} at least half counted.</div></div>` : ""; return; }
+  const good = c.score >= 0, pick = good ? (c.best[0] || c.worst[0]) : (c.worst[0] || c.best[0]), isGood = good ? !!c.best[0] : !c.worst[0];
+  if (!pick) { el.innerHTML = ""; return; }
+  const alt = good ? c.worst[0] : c.best[0];
+  el.innerHTML = hlBox(isGood ? "good" : "bad", isGood ? "Headline: the best defensible case" : "Headline: the worst defensible case", pick, `as of ${ptT(LIVE.at)}`) + (alt ? hlBox("flat", isGood ? "And the other side of it" : "In their favor", alt) : "");
+}
+function renderOverviewHeadlines() {
+  const el = $("#ohead"); if (!el || !LIVE) { if (el) el.innerHTML = ""; return; }
+  const all = GROUPS.groups.filter(g => g.id !== "all").map(g => ({ g, c: claims(g, LIVE.groups[g.id] || []) })).filter(x => x.c && (x.c.best.length || x.c.worst.length));
+  if (!all.length) { el.innerHTML = ""; return; }
+  const bestL = all.filter(x => x.c.best.length).sort((a, b) => b.c.score - a.c.score)[0], worstL = all.filter(x => x.c.worst.length).sort((a, b) => a.c.score - b.c.score)[0];
+  el.innerHTML = (bestL ? hlBox("good", `Doing best: ${bestL.g.name}`, bestL.c.best[0], `as of ${ptT(LIVE.at)}`) : "") + (worstL && (!bestL || worstL.g.id !== bestL.g.id) ? hlBox("bad", `Doing worst: ${worstL.g.name}`, worstL.c.worst[0]) : "");
+}
 function renderOverview() {
   $("#overview").style.display = ""; $("#groupsec").style.display = "none"; document.querySelectorAll(".gonly").forEach(e => e.style.display = "none");
   if (!LIVE) { $("#ostamp").textContent = "The lab's five-minute summary isn't available yet; pick a caucus above for its live page."; $("#otbl").innerHTML = ""; $("#olead").innerHTML = ""; $("#ostats").innerHTML = ""; return; }
@@ -205,6 +294,7 @@ function renderOverview() {
   $("#otbl").innerHTML = `<thead><tr><th>Caucus / list</th><th class="n">Races</th><th class="n">Counted</th><th class="n">Won–Lost</th><th class="n">Leading–Trailing</th><th class="n">Wins vs. forecast</th><th class="n">CAPE score</th><th class="n">vs. own party</th><th class="n">Ticket</th><th class="n">Crossover</th></tr></thead><tbody>` +
     gs.map(({ g, s }) => `<tr><td><a href="?g=${g.id}" data-go="${g.id}"><b>${esc(g.name)}</b></a><span class="tiny">${esc(g.short)} · ${g.party === "D" ? "Democrats" : "Republicans"}</span></td><td class="n">${s.n}</td><td class="n">${s.medC == null ? "–" : Math.round(s.medC * 100) + "%"}<span class="tiny">median</span></td><td class="n"><span class="D">${s.won}</span>–<span class="R">${s.lost}</span></td><td class="n">${s.lead}–${s.trail}</td><td class="n">${s.expScored ? `${s.nowWins} <span class="tiny" style="display:inline">of ${s.expWins} expected</span>` : "–"}</td>${cell(s.cape.avg, s.cape.n, " pts")}${premCell(g, s, LIVE.groups[g.id] || [])}${cell(s.ticket.avg, s.ticket.n, " pts")}<td class="n">${s.live ? s.cross : "–"}</td></tr>`).join("") + `</tbody>`;
   $("#otbl").querySelectorAll("[data-go]").forEach(a => a.onclick = e => { e.preventDefault(); go(a.dataset.go); });
+  try { renderOverviewHeadlines(); } catch (e) { console.warn("headlines", e); }
   const scored = gs.filter(x => x.s.cape.avg != null).sort((a, b) => b.s.cape.avg - a.s.cape.avg);
   $("#olead").innerHTML = `<div class="lead">${!any ? `Nothing counted yet. ${gs.reduce((s, x) => s + x.s.n, 0)} races across ${gs.length} lists.` : scored.length ? `Best CAPE score so far: the ${esc(scored[0].g.name)}, ${pts(scored[0].s.cape.avg)} points against the pre-election forecast across ${scored[0].s.cape.n} races${scored.length > 1 ? `; the ${esc(scored[scored.length - 1].g.name)} are at ${pts(scored[scored.length - 1].s.cape.avg)}` : ""}.` : "Votes are in; forecast comparisons fill in as counties report."}</div>`;
   const t = LIVE.tide || {};
@@ -220,6 +310,7 @@ function render() {
   const other = P() === "D" ? "R" : "D";
   const gains = live.filter(x => x.held === other && (x.called === "W" || (!x.called && x.share > 0.5))).length, losses = live.filter(x => x.held === P() && x.opp_party !== P() && (x.called === "L" || (!x.called && x.share < 0.5))).length;
   const newest = ROWS.map(x => x.lastUpdated).filter(Boolean).sort().slice(-1)[0];
+  try { renderGroupHeadlines(); } catch (e) { console.warn("headlines", e); }
   $("#stamp").textContent = live.length ? `Results as of ${ptT(newest)} · Decision Desk HQ${MODE === "live" ? " via the lab's server (every 5 min)" : " (direct)"}` : "Waiting for the first count"; $("#stamp").className = live.length ? "live" : "";
   const st = (k, v, sub, c) => `<div class="stat"><div class="k">${k}</div><div class="v ${c || ""}">${v}</div><div class="s">${sub || ""}</div></div>`;
   $("#stats").innerHTML = st("Won", s.won, "", "D") + st("Lost", s.lost, "", "R") + st("Leading", s.lead, "not called") + st("Trailing", s.trail, "not called") + st("CAPE score", s.cape.avg == null ? "–" : pts(s.cape.avg), s.cape.n ? `avg. vs. forecast, ${s.cape.n} races` : "vs. pre-election forecast", s.cape.avg > 0 ? "plus" : s.cape.avg < 0 ? "minus" : "") + st("Ahead of the ticket", s.ticket.n ? `${s.ticket.ahead} of ${s.ticket.n}` : "–", s.ticket.avg == null ? "" : `average ${pts(s.ticket.avg)} pts`, s.ticket.avg > 0 ? "plus" : s.ticket.avg < 0 ? "minus" : "") + st("Ahead of " + pres24() + " 2024", s.harris.n ? `${s.harris.ahead} of ${s.harris.n}` : "–", s.harris.avg == null ? "" : `average ${pts(s.harris.avg)} pts`, s.harris.avg > 0 ? "plus" : s.harris.avg < 0 ? "minus" : "") + st("Pick-ups / losses", `${gains} / ${losses}`, "if every leader holds");
