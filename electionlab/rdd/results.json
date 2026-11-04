@@ -1,6 +1,6 @@
 {
- "run_at": "2026-11-04T11:12:42.766831+00:00",
- "run_at_pt": "3:12 AM PT",
+ "run_at": "2026-11-04T11:17:42.240332+00:00",
+ "run_at_pt": "3:17 AM PT",
  "sample": false,
  "feed": {
   "races": 436,
@@ -20,24 +20,24 @@
     {
      "term": "rain (per cm)",
      "est": 0.016924634390840215,
-     "se": 0.1988600779990938,
-     "t": 0.08510825582054403,
+     "se": 0.19886007799909383,
+     "t": 0.08510825582054402,
      "p": 0.9325614131352293,
      "ci": [
       -0.38385151865976896,
-      0.41770078744144934
+      0.41770078744144945
      ],
      "df": 44
     },
     {
      "term": "rain (per inch)",
      "est": 0.04298857135273415,
-     "se": 0.5051045981176983,
-     "t": 0.08510825582054403,
+     "se": 0.5051045981176984,
+     "t": 0.08510825582054402,
      "p": 0.9325614131352293,
      "ci": [
       -0.9749828573958131,
-      1.0609600001012813
+      1.0609600001012816
      ]
     }
    ],
@@ -56,60 +56,60 @@
     {
      "term": "restrictive side (at the line, dry)",
      "est": 3.2721091956944055,
-     "se": 5.184677700815043,
-     "t": 0.631111398723979,
+     "se": 5.184677700815039,
+     "t": 0.6311113987239796,
      "p": 0.5389060771213439,
      "ci": [
-      -7.928706003006107,
-      14.472924394394918
+      -7.928706003006097,
+      14.472924394394907
      ],
      "df": 13
     },
     {
      "term": "distance (per 10 km)",
      "est": -0.20458796237473947,
-     "se": 0.2489033388576006,
-     "t": -0.821957484836255,
-     "p": 0.4259200833958643,
+     "se": 0.2489033388576014,
+     "t": -0.8219574848362523,
+     "p": 0.4259200833958654,
      "ci": [
-      -0.7423109341315468,
-      0.3331350093820679
+      -0.7423109341315486,
+      0.3331350093820697
      ],
      "df": 13
     },
     {
      "term": "restrictive x distance",
      "est": 0.43002518313145804,
-     "se": 0.2936974666862225,
-     "t": 1.4641773658568324,
-     "p": 0.16690505341141293,
+     "se": 0.2936974666862251,
+     "t": 1.4641773658568193,
+     "p": 0.16690505341141648,
      "ci": [
-      -0.20446961837987548,
-      1.0645199846427915
+      -0.20446961837988115,
+      1.0645199846427973
      ],
      "df": 13
     },
     {
      "term": "rain (per cm)",
      "est": 1.3054710996256929,
-     "se": 0.513966510573573,
-     "t": 2.5399925340832454,
+     "se": 0.5139665105735727,
+     "t": 2.539992534083247,
      "p": 0.024654851052989812,
      "ci": [
-      0.19511395971117995,
-      2.4158282395402058
+      0.19511395971118062,
+      2.415828239540205
      ],
      "df": 13
     },
     {
      "term": "restrictive x rain (per cm)",
      "est": -3.0585099322931417,
-     "se": 1.0637199931845356,
-     "t": -2.875296085332249,
+     "se": 1.063719993184535,
+     "t": -2.8752960853322507,
      "p": 0.013010275601606835,
      "ci": [
-      -5.3565372648214415,
-      -0.7604825997648419
+      -5.35653726482144,
+      -0.7604825997648437
      ],
      "df": 13
     }
@@ -121,24 +121,24 @@
     {
      "term": "rain (per cm)",
      "est": 0.17082259907694744,
-     "se": 0.287038867902017,
-     "t": 0.5951200975864325,
+     "se": 0.28703886790201705,
+     "t": 0.5951200975864324,
      "p": 0.5548117507745751,
      "ci": [
-      -0.40766622789764817,
-      0.749311426051543
+      -0.4076662278976483,
+      0.7493114260515431
      ],
      "df": 44
     },
     {
      "term": "rain x early-voting days (per 10 days)",
      "est": -0.10435922707355316,
-     "se": 0.17153530452327384,
-     "t": -0.6083833725283867,
+     "se": 0.1715353045232739,
+     "t": -0.6083833725283865,
      "p": 0.5460612402885245,
      "ci": [
-      -0.45006591768199056,
-      0.24134746353488423
+      -0.45006591768199067,
+      0.24134746353488434
      ],
      "df": 44
     }
@@ -151,29 +151,29 @@
    "claim": "Gomez, Hansford & Krause (2007) found rain shifted the vote toward Republicans, on the premise that the voters it keeps home lean Democratic. That premise is contested after 2024, when lower-propensity voters leaned Republican, and the effect should shrink or reverse where Democrats vote by mail.",
    "design": "Counties at least half counted, in House races with both a Democrat and a Republican. The county's Democratic two-way share tonight minus Harris's 2024 two-way share (the swing), regressed on rain and rain x convenience-voting state, with state fixed effects; errors clustered by state. A negative rain coefficient means rain is moving the count toward Republicans where voting is Election-Day heavy. Which ballots a county counts first changes its partisan mix during the night, so this test means little until most counties are mostly counted.",
    "n": 2977,
-   "r2": 0.4236931673155502,
+   "r2": 0.4235929471621722,
    "table": [
     {
      "term": "rain (per cm)",
      "est": -0.2029075199442479,
-     "se": 0.10078290434909064,
-     "t": -2.0133128853026423,
-     "p": 0.05022400839140739,
+     "se": 0.10078290434909054,
+     "t": -2.0133128853026445,
+     "p": 0.05022400839140717,
      "ci": [
-      -0.40602211742761063,
-      0.0002070775391148083
+      -0.4060221174276104,
+      0.00020707753911461402
      ],
      "df": 44
     },
     {
      "term": "rain x convenience-voting state",
-     "est": 0.17792255544127053,
-     "se": 0.13894101708741002,
-     "t": 1.2805617748525375,
-     "p": 0.20705707162457299,
+     "est": 0.17792262463890846,
+     "se": 0.13894101579939155,
+     "t": 1.2805622847597433,
+     "p": 0.2070568940393993,
      "ci": [
-      -0.1020946651568472,
-      0.4579397760393883
+      -0.10209459336337862,
+      0.4579398426411955
      ],
      "df": 44
     }
@@ -187,38 +187,38 @@
    "title": "Rain hits Election-Day ballots, not ballots already cast",
    "claim": "If rain really keeps people home, it should show up in Election-Day votes and not in the mail and early in-person votes that were cast before it rained. The within-county contrast is the cleanest test of the mechanism behind H1; early in-person votes are the placebo (cast before today, so rain today should not touch them).",
    "design": "Counties at least half counted whose feed splits votes by type. One row per county and ballot type (mail, early in-person, Election Day); the outcome is log votes of that type. County fixed effects absorb each county's size and overall turnout; state x type fixed effects absorb how each state's count brings in each type; the terms of interest are Election Day x rain and early in-person x rain. A negative Election Day x rain term with an early-vote term near zero is the pattern the claim predicts. Standard errors clustered by state.",
-   "n": 2974,
-   "counties": 1168,
+   "n": 2972,
+   "counties": 1167,
    "clusters": 25,
-   "r2": 0.9449916662902004,
+   "r2": 0.9456225980532482,
    "table": [
     {
      "term": "eday x rain (per cm)",
-     "est": 0.0015414181244687473,
-     "se": 0.018884825181178202,
-     "t": 0.08162204890331846,
-     "p": 0.9356241587078542,
+     "est": 0.001541418124469108,
+     "se": 0.018884978454513833,
+     "t": 0.08162138644646866,
+     "p": 0.9356246799845829,
      "ci": [
-      -0.03743494540355373,
-      0.04051778165249123
+      -0.03743526174417032,
+      0.04051809799310853
      ],
      "df": 24
     },
     {
      "term": "early in-person x rain (per cm)",
-     "est": -0.01569707476552429,
-     "se": 0.007705672402124946,
-     "t": -2.037080470900321,
-     "p": 0.05281539462588536,
+     "est": -0.0156970747655241,
+     "se": 0.00770573494303286,
+     "t": -2.037063937647714,
+     "p": 0.05281717291044696,
      "ci": [
-      -0.031600800952643504,
-      0.0002066514215949243
+      -0.0316009300307332,
+      0.0002067804996849984
      ],
      "df": 24
     }
    ],
    "verdict": "No clear signal yet",
-   "reading": "Within the same county (1168 counties, 2974 county-type rows), each centimeter of rain goes with +0.2% Election-Day votes relative to the county's other ballots (p = 0.94, not significant; 95% CI -3.7% to +4.1%). The placebo, early in-person votes cast before today: -1.6% per cm (p < 0.10)."
+   "reading": "Within the same county (1167 counties, 2972 county-type rows), each centimeter of rain goes with +0.2% Election-Day votes relative to the county's other ballots (p = 0.94, not significant; 95% CI -3.7% to +4.1%). The placebo, early in-person votes cast before today: -1.6% per cm (p < 0.10)."
   },
   {
    "id": "H5",
@@ -232,12 +232,12 @@
     {
      "term": "rain (per cm, average-sized county)",
      "est": 0.010234573067488536,
-     "se": 0.2499632102848566,
-     "t": 0.04094431758907752,
+     "se": 0.24996321028485655,
+     "t": 0.040944317589077524,
      "p": 0.9675255172868222,
      "ci": [
-      -0.49353317574432576,
-      0.5140023218793028
+      -0.49353317574432565,
+      0.5140023218793027
      ],
      "df": 44
     },
@@ -256,11 +256,11 @@
     {
      "term": "county size (log 2024 votes)",
      "est": 2.289870572244449,
-     "se": 0.42291290287848254,
-     "t": 5.414520476104763,
+     "se": 0.4229129028784825,
+     "t": 5.414520476104764,
      "p": 2.4268006852956603e-06,
      "ci": [
-      1.43754562096953,
+      1.4375456209695303,
       3.1421955235193675
      ],
      "df": 44
@@ -282,7 +282,7 @@
   "gate": "counties at least half counted (counted / live expected vote >= 0.5)",
   "border_sample": 529,
   "border_pairs": 14,
-  "counties_with_vote_types": 1168
+  "counties_with_vote_types": 1167
  },
  "figures": {
   "H1": "fig_h1.svg",
@@ -291,5 +291,5 @@
   "H4": "fig_h4.svg",
   "H5": "fig_h5.svg"
  },
- "seconds": 3.9
+ "seconds": 4.3
 }
