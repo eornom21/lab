@@ -278,12 +278,14 @@ function renderGroupHeadlines() {
   el.innerHTML = hlBox(isGood ? "good" : "bad", isGood ? "Headline: the best defensible case" : "Headline: the worst defensible case", pick, `as of ${ptT(LIVE.at)}`) + (alt ? hlBox("flat", isGood ? "And the other side of it" : "In their favor", alt) : "");
 }
 function renderOverviewHeadlines() {
+  // The overview carries one headline: the Blue Dogs', the same one their page shows.
   const el = $("#ohead"); if (!el || !LIVE) { if (el) el.innerHTML = ""; return; }
-  // overview slots need a real sample: at least 8 of the list's races half counted (small lists keep their own page's headline)
-  const all = GROUPS.groups.filter(g => g.id !== "all").map(g => ({ g, c: claims(g, LIVE.groups[g.id] || []) })).filter(x => x.c && x.c.n >= 8 && (x.c.best.length || x.c.worst.length));
-  if (!all.length) { el.innerHTML = ""; return; }
-  const bestL = all.filter(x => x.c.best.length).sort((a, b) => b.c.score - a.c.score)[0], worstL = all.filter(x => x.c.worst.length).sort((a, b) => a.c.score - b.c.score)[0];
-  el.innerHTML = (bestL ? hlBox("good", `Doing best: ${bestL.g.name}`, bestL.c.best[0], `as of ${ptT(LIVE.at)}`) : "") + (worstL && (!bestL || worstL.g.id !== bestL.g.id) ? hlBox("bad", `Doing worst: ${worstL.g.name}`, worstL.c.worst[0]) : "");
+  const g = GROUPS.groups.find(x => x.id === "bluedogs"); const c = g ? claims(g, LIVE.groups.bluedogs || []) : null;
+  if (!c || (!c.best.length && !c.worst.length)) { el.innerHTML = ""; return; }
+  const good = c.score >= 0, pick = good ? (c.best[0] || c.worst[0]) : (c.worst[0] || c.best[0]), isGood = good ? !!c.best[0] : !c.worst[0];
+  if (!pick) { el.innerHTML = ""; return; }
+  const alt = good ? c.worst[0] : c.best[0];
+  el.innerHTML = hlBox(isGood ? "good" : "bad", isGood ? "Blue Dogs: the best defensible case so far" : "Blue Dogs: the worst defensible case so far", pick, `as of ${ptT(LIVE.at)} · full scoreboard: Blue Dogs tab`) + (alt ? hlBox("flat", isGood ? "And the other side of it" : "In their favor", alt) : "");
 }
 function renderOverview() {
   $("#overview").style.display = ""; $("#groupsec").style.display = "none"; document.querySelectorAll(".gonly").forEach(e => e.style.display = "none");
