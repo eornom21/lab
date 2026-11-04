@@ -1,1 +1,44 @@
-{"items":[]}
+{
+"items": [
+{
+"id": "tp-0258-0-seven-of-our-32-called-all-democrats-fou",
+"t": "2026-11-04T02:58:37Z",
+"section": "The board",
+"title": "Seven of our 32 called, all Democrats, four of them flips",
+"body": "Called so far: FL-14, FL-22, FL-25 (holds) and VA-2 Luria, KY-6 Dembo, NC-11 Ager, PA-8 Cognetti (flips from Republican). Of the 19 board races with votes and no call, Democrats lead 12; eleven of those leads would be flips if they hold (VA-1, NY-17, CO-5, OH-7, WI-3, PA-10, MO-2, PA-1, IA-2, plus Republicans leading in OH-9 Kaptur and AL-2 Figures, the two Democratic-held seats at risk). Board CAPE score: Democrats running +4.5 points ahead of DDHQ's forecasts on average across 26 races.\nCaveat to say out loud: the early-counted ballots (mail, early in-person) lean Democratic in most of these states; expect Republican-leaning Election Day batches to narrow margins over the next hour. OH-9 and AL-2 are at 44% counted.",
+"show": "Summary tile row, then The board sorted by margin"
+},
+{
+"id": "tp-0258-1-the-tide-democrats-7-5-points-vs-2024-in",
+"t": "2026-11-04T02:58:38Z",
+"section": "Tide",
+"title": "The tide: Democrats +7.5 points vs. 2024 in 395 counties",
+"body": "Across the 395 counties on the caucus lists that are at least half counted, the two-party vote is running 7.5 points more Democratic than the 2024 presidential vote in the same counties. For scale: 2018's national House swing against the president's party was about 10 points off the 2016 presidential margin. Turnout is coming in about as expected on both sides (live expected vote vs. pre-election: Harris counties −0.2%, Trump counties +1%), so this is a persuasion-and-midterm-dropoff swing, not a differential-turnout story.",
+"show": "Summary: Tide in every House race (vs 2024, half counted+)"
+},
+{
+"id": "tp-0258-2-senate-17-called-democrats-leading-in-ev",
+"t": "2026-11-04T02:58:39Z",
+"section": "Senate",
+"title": "Senate: 17 called; Democrats leading in every Toss Up with votes",
+"body": "Called: South Carolina Andrews (D, flip) and North Carolina Cooper (D, flip) among 12 Democratic calls; Republicans hold FL (Moody), KY (Barr), OK, WV, WY. Not called, Democrat ahead: Ohio Brown 48.3–47.0 (66% in), Texas Talarico 56–42 (66%), Kansas Hamilton 58–40 (63%), Iowa Turek 59–39 (24%), Michigan El-Sayed 54–44 (20%), Louisiana Davis (5%, ignore). Nebraska: independent Osborn 54–41.5 over Ricketts at 42%. Republicans ahead: Maine Collins 51.5–47.7 at 21%, Mississippi Hyde-Smith 50.1–47.9 at 49%, Tennessee Hagerty 51.5–47.7 at 50%, Arkansas Cotton only 49.2–47.9 at 36%.\nIf every current leader held, Democrats plus Osborn would have the majority. Say it as 'if every leader held' — Ohio, Texas, Kansas and Iowa are early-vote-heavy counts.",
+"show": "The Senate view, pivotal first"
+},
+{
+"id": "tp-0258-3-caucus-scoreboards-every-democratic-list",
+"t": "2026-11-04T02:58:40Z",
+"section": "Caucuses",
+"title": "Caucus scoreboards: every Democratic list is beating its forecasts; Blue Dogs +10 in competitive seats",
+"body": "Blue Dogs: 6 won, 2 lost, 10 leading, 3 trailing; CAPE score +9.8 across 21 races with votes. In competitive seats (forecast within 10 points) at least half counted, Blue Dog candidates are beating their forecasts by 10.2 points vs. +7.9 for other Democrats in the same kind of seat (11 vs. 60 races) — the defensible 'Blue Dog premium' is about 2 points, not the raw 10. DCCC Red to Blue: 8 won, 1 lost, 14 leading. Progressive Caucus slate: 1 won, 3 leading, 3 trailing, +4.8. Republican lists: NRCC MAGA Majority 0 won, 9 lost, 3 leading, 8 trailing, −7.7 vs. forecast; Main Street Republicans 0–4, −4.9. Texas governor: Hinojosa (D) 55–45 over Abbott at 63% counted, rated Lean R; Georgia governor called for the Democrat, a flip.",
+"show": "Caucus scoreboards ↗ (overview headlines), then Misc races for Texas"
+},
+{
+"id": "tp-0258-4-no-rain-tax-tonight-the-cape-rain-tax-is",
+"t": "2026-11-04T02:58:41Z",
+"section": "Weather",
+"title": "No rain tax tonight: the CAPE Rain Tax is about zero",
+"body": "H1 across 1,369 counties at least half counted: each inch of rain goes with +0.5% votes vs. expectation (p = 0.33; 95% CI −0.5 to +1.5). The literature's roughly −2% per inch (Gomez, Hansford & Krause) is outside that interval, so tonight's data don't show the classic rain penalty. H2 (the rules line): rain is going with 3.6% LESS shortfall on the restrictive-voting side than the convenience-voting side — opposite the hypothesis; small sample (297 counties, 14 state pairs). H4 (ballot type within county) and H5 (county size): no signal. Say it as: 336 wet counties, mostly in the central U.S. system over KS–MO–IA–WI and south Texas, and people voted anyway — or they'd already voted by mail.",
+"show": "Weather & turnout ↗: radar map, then 'Hypothesis testing in real time'"
+}
+]
+}
