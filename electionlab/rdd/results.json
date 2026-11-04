@@ -1,6 +1,6 @@
 {
- "run_at": "2026-11-04T16:23:04.470267+00:00",
- "run_at_pt": "8:23 AM PT",
+ "run_at": "2026-11-04T16:28:03.660852+00:00",
+ "run_at_pt": "8:28 AM PT",
  "sample": false,
  "feed": {
   "races": 436,
@@ -20,24 +20,24 @@
     {
      "term": "rain (per cm)",
      "est": 0.0486152875955578,
-     "se": 0.17027301955630295,
-     "t": 0.2855137456435518,
+     "se": 0.17027301955630297,
+     "t": 0.28551374564355175,
      "p": 0.7765903726642489,
      "ci": [
-      -0.2945474348207394,
-      0.39177801001185497
+      -0.2945474348207395,
+      0.391778010011855
      ],
      "df": 44
     },
     {
      "term": "rain (per inch)",
      "est": 0.12348283049271681,
-     "se": 0.4324934696730095,
-     "t": 0.2855137456435518,
+     "se": 0.43249346967300956,
+     "t": 0.28551374564355175,
      "p": 0.7765903726642489,
      "ci": [
-      -0.7481504844446781,
-      0.9951161454301116
+      -0.7481504844446782,
+      0.9951161454301117
      ]
     }
    ],
@@ -56,60 +56,60 @@
     {
      "term": "restrictive side (at the line, dry)",
      "est": 1.7489234003293883,
-     "se": 5.289531708551151,
-     "t": 0.330638607856731,
+     "se": 5.289531708551138,
+     "t": 0.3306386078567318,
      "p": 0.7461858179611229,
      "ci": [
-      -9.67841511018868,
-      13.176261910847458
+      -9.678415110188652,
+      13.17626191084743
      ],
      "df": 13
     },
     {
      "term": "distance (per 10 km)",
      "est": -0.1922954809078222,
-     "se": 0.23009395645655067,
-     "t": -0.8357259089685561,
+     "se": 0.2300939564565505,
+     "t": -0.8357259089685568,
      "p": 0.41840506018641577,
      "ci": [
-      -0.6893832524779853,
-      0.3047922906623409
+      -0.6893832524779849,
+      0.3047922906623406
      ],
      "df": 13
     },
     {
      "term": "restrictive x distance",
      "est": 0.31858586622346335,
-     "se": 0.30173361409255495,
-     "t": 1.0558514243817034,
-     "p": 0.3102638268827067,
+     "se": 0.30173361409255756,
+     "t": 1.0558514243816943,
+     "p": 0.3102638268827109,
      "ci": [
-      -0.3332699762632227,
-      0.9704417087101493
+      -0.33326997626322835,
+      0.9704417087101551
      ],
      "df": 13
     },
     {
      "term": "rain (per cm)",
      "est": 0.6584527672994912,
-     "se": 0.4324237473884094,
-     "t": 1.5227026065894091,
-     "p": 0.15178170980998962,
+     "se": 0.4324237473884093,
+     "t": 1.5227026065894096,
+     "p": 0.15178170980998873,
      "ci": [
-      -0.27574194286845577,
-      1.5926474774674382
+      -0.27574194286845544,
+      1.592647477467438
      ],
      "df": 13
     },
     {
      "term": "restrictive x rain (per cm)",
      "est": -1.9250242023008086,
-     "se": 1.1237311268956989,
-     "t": -1.7130647680986444,
-     "p": 0.11043159867794894,
+     "se": 1.1237311268956984,
+     "t": -1.713064768098645,
+     "p": 0.11043159867794827,
      "ci": [
-      -4.352697707137482,
-      0.5026493025358643
+      -4.35269770713748,
+      0.5026493025358629
      ],
      "df": 13
     }
@@ -121,24 +121,24 @@
     {
      "term": "rain (per cm)",
      "est": 0.365035296509964,
-     "se": 0.20133672331461133,
-     "t": 1.8130586934185633,
-     "p": 0.07664803292614164,
+     "se": 0.20133672331461108,
+     "t": 1.8130586934185655,
+     "p": 0.07664803292614142,
      "ci": [
-      -0.04073220720293569,
-      0.7708028002228637
+      -0.04073220720293519,
+      0.7708028002228633
      ],
      "df": 44
     },
     {
      "term": "rain x early-voting days (per 10 days)",
      "est": -0.21300635082111147,
-     "se": 0.15517220004472795,
-     "t": -1.372709485073441,
-     "p": 0.17679928580498894,
+     "se": 0.15517220004472787,
+     "t": -1.3727094850734416,
+     "p": 0.1767992858049876,
      "ci": [
-      -0.525735371246262,
-      0.09972266960403908
+      -0.5257353712462618,
+      0.09972266960403892
      ],
      "df": 44
     }
@@ -156,24 +156,24 @@
     {
      "term": "rain (per cm)",
      "est": -0.1336522246003037,
-     "se": 0.15465698934401004,
-     "t": -0.8641848335933622,
+     "se": 0.15465698934401012,
+     "t": -0.8641848335933617,
      "p": 0.3921732125696309,
      "ci": [
-      -0.4453429060852212,
-      0.1780384568846138
+      -0.4453429060852214,
+      0.17803845688461398
      ],
      "df": 44
     },
     {
      "term": "rain x convenience-voting state",
      "est": 0.17903315741320022,
-     "se": 0.1758311735241989,
-     "t": 1.0182105585990453,
+     "se": 0.17583117352419897,
+     "t": 1.0182105585990449,
      "p": 0.3141441529800564,
      "ci": [
-      -0.17533128828375708,
-      0.5333976031101575
+      -0.1753312882837572,
+      0.5333976031101576
      ],
      "df": 44
     }
@@ -187,38 +187,38 @@
    "title": "Rain hits Election-Day ballots, not ballots already cast",
    "claim": "If rain really keeps people home, it should show up in Election-Day votes and not in the mail and early in-person votes that were cast before it rained. The within-county contrast is the cleanest test of the mechanism behind H1; early in-person votes are the placebo (cast before today, so rain today should not touch them).",
    "design": "Counties at least half counted whose feed splits votes by type. One row per county and ballot type (mail, early in-person, Election Day); the outcome is log votes of that type. County fixed effects absorb each county's size and overall turnout; state x type fixed effects absorb how each state's count brings in each type; the terms of interest are Election Day x rain and early in-person x rain. A negative Election Day x rain term with an early-vote term near zero is the pattern the claim predicts. Standard errors clustered by state.",
-   "n": 2980,
-   "counties": 1171,
+   "n": 2982,
+   "counties": 1172,
    "clusters": 25,
-   "r2": 0.9461586576963562,
+   "r2": 0.9459752685973608,
    "table": [
     {
      "term": "eday x rain (per cm)",
-     "est": 0.01923536382524838,
-     "se": 0.021046456809785737,
-     "t": 0.9139478440050168,
-     "p": 0.36983530161833733,
+     "est": 0.01926412121359658,
+     "se": 0.021041579207941388,
+     "t": 0.915526397672948,
+     "p": 0.36902315568456134,
      "ci": [
-      -0.024202388111825932,
-      0.06267311576232269
+      -0.024163563848046986,
+      0.06269180627524015
      ],
      "df": 24
     },
     {
      "term": "early in-person x rain (per cm)",
-     "est": 0.008147091036558574,
-     "se": 0.014952125519307526,
-     "t": 0.5448784539722008,
-     "p": 0.5908649674879853,
+     "est": 0.00816178087459018,
+     "se": 0.014947874010050037,
+     "t": 0.5460161671889058,
+     "p": 0.5900948304014932,
      "ci": [
-      -0.022712579316015648,
-      0.039006761389132796
+      -0.022689114794142762,
+      0.039012676543323126
      ],
      "df": 24
     }
    ],
    "verdict": "No clear signal yet",
-   "reading": "Within the same county (1171 counties, 2980 county-type rows), each centimeter of rain goes with +1.9% Election-Day votes relative to the county's other ballots (p = 0.37, not significant; 95% CI -2.4% to +6.3%). The placebo, early in-person votes cast before today: +0.8% per cm (p = 0.59, not significant)."
+   "reading": "Within the same county (1172 counties, 2982 county-type rows), each centimeter of rain goes with +1.9% Election-Day votes relative to the county's other ballots (p = 0.37, not significant; 95% CI -2.4% to +6.3%). The placebo, early in-person votes cast before today: +0.8% per cm (p = 0.59, not significant)."
   },
   {
    "id": "H5",
@@ -232,24 +232,24 @@
     {
      "term": "rain (per cm, average-sized county)",
      "est": 0.005630416865513319,
-     "se": 0.19626062949894468,
-     "t": 0.028688468389650175,
+     "se": 0.19626062949894466,
+     "t": 0.02868846838965018,
      "p": 0.9772427840090758,
      "ci": [
-      -0.38990689196646044,
-      0.40116772569748704
+      -0.3899068919664604,
+      0.401167725697487
      ],
      "df": 44
     },
     {
      "term": "rain x county size (per log unit)",
      "est": -0.04259277360580809,
-     "se": 0.1227610853278198,
-     "t": -0.34695663932970966,
+     "se": 0.12276108532781979,
+     "t": -0.3469566393297097,
      "p": 0.7302778973631256,
      "ci": [
-      -0.2900014843789448,
-      0.2048159371673286
+      -0.29000148437894474,
+      0.20481593716732857
      ],
      "df": 44
     },
@@ -282,7 +282,7 @@
   "gate": "counties at least half counted (counted / live expected vote >= 0.5)",
   "border_sample": 529,
   "border_pairs": 14,
-  "counties_with_vote_types": 1171
+  "counties_with_vote_types": 1172
  },
  "figures": {
   "H1": "fig_h1.svg",
@@ -291,5 +291,5 @@
   "H4": "fig_h4.svg",
   "H5": "fig_h5.svg"
  },
- "seconds": 11.8
+ "seconds": 9.1
 }
