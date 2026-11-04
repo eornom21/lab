@@ -1,6 +1,6 @@
 {
- "run_at": "2026-11-04T00:13:20.305311+00:00",
- "run_at_pt": "4:13 PM PT",
+ "run_at": "2026-11-04T00:18:21.469101+00:00",
+ "run_at_pt": "4:18 PM PT",
  "sample": false,
  "feed": {
   "races": 436,
@@ -14,7 +14,7 @@
    "claim": "Gomez, Hansford & Krause (2007, Journal of Politics) found that each inch of Election-Day rain cut turnout by just under one percentage point in presidential years; at midterm turnout that is roughly two percent fewer votes than expected.",
    "design": "Counties at least half counted. The county's votes vs. expectation (Decision Desk HQ's live estimate of its final vote against its pre-election expectation, in percent) regressed on today's precipitation, with state fixed effects; standard errors clustered by state, p-values on t with states minus one degrees of freedom.",
    "verdict": "Too early",
-   "reading": "Needs more counties at least half counted (49 so far, 12 of them with at least 1 mm of rain; the test waits for 150 and 25)."
+   "reading": "Needs more counties at least half counted (61 so far, 15 of them with at least 1 mm of rain; the test waits for 150 and 25)."
   },
   {
    "id": "H2",
@@ -22,7 +22,7 @@
    "claim": "Where most votes are cast before Election Day, a rainy Tuesday should matter less. Gomez, Hansford & Krause (2007) found the rain effect weaker in states with easy absentee voting; Johnson & Stein (2023, American Politics Research) test this directly with early-voting rules. The convenience-voting literature (Gronke et al. 2008; Thompson, Wu, Yoder & Hall 2020) is about turnout levels, not weather.",
    "design": "A border-pair comparison, not a regression discontinuity: counties within 100 km of a state line where the convenience-voting rules change (no-excuse or all-mail voting, or at least 10 days of in-person early voting, on one side; neither on the other). Votes vs. expectation regressed on which side of the line the county is on, distance to the line (separately on each side), rain, and side x rain, with a fixed effect for each state pair; errors clustered by pair, p-values on t with pairs minus one degrees of freedom. The side x rain term is the test: a negative value means rain costs more turnout on the restrictive side. The assumption is that only state rules change at the line; a state line changes every state policy at once, so read it as the effect of the rule bundle.",
    "verdict": "Too early",
-   "reading": "Border sample so far: 13 counties at least half counted within 100 km of a rules line, 2 of them wet. The test waits for about 60 and 15, on both sides of a line."
+   "reading": "Border sample so far: 14 counties at least half counted within 100 km of a rules line, 2 of them wet. The test waits for about 60 and 15, on both sides of a line."
   },
   {
    "id": "H3",
@@ -30,7 +30,7 @@
    "claim": "Gomez, Hansford & Krause (2007) found rain shifted the vote toward Republicans, on the premise that the voters it keeps home lean Democratic. That premise is contested after 2024, when lower-propensity voters leaned Republican, and the effect should shrink or reverse where Democrats vote by mail.",
    "design": "Counties at least half counted, in House races with both a Democrat and a Republican. The county's Democratic two-way share tonight minus Harris's 2024 two-way share (the swing), regressed on rain and rain x convenience-voting state, with state fixed effects; errors clustered by state. A negative rain coefficient means rain is moving the count toward Republicans where voting is Election-Day heavy. Which ballots a county counts first changes its partisan mix during the night, so this test means little until most counties are mostly counted.",
    "verdict": "Too early",
-   "reading": "Needs about 150 counties at least half counted in two-party races (49 so far)."
+   "reading": "Needs about 150 counties at least half counted in two-party races (61 so far)."
   },
   {
    "id": "H4",
@@ -38,7 +38,7 @@
    "claim": "If rain really keeps people home, it should show up in Election-Day votes and not in the mail and early in-person votes that were cast before it rained. The within-county contrast is the cleanest test of the mechanism behind H1; early in-person votes are the placebo (cast before today, so rain today should not touch them).",
    "design": "Counties at least half counted whose feed splits votes by type. One row per county and ballot type (mail, early in-person, Election Day); the outcome is log votes of that type. County fixed effects absorb each county's size and overall turnout; state x type fixed effects absorb how each state's count brings in each type; the terms of interest are Election Day x rain and early in-person x rain. A negative Election Day x rain term with an early-vote term near zero is the pattern the claim predicts. Standard errors clustered by state.",
    "verdict": "Too early",
-   "reading": "Needs about 150 counties at least half counted whose feed splits votes by type (2 so far, 0 wet). Some states' feeds never split by type; those counties stay out."
+   "reading": "Needs about 150 counties at least half counted whose feed splits votes by type (5 so far, 0 wet). Some states' feeds never split by type; those counties stay out."
   },
   {
    "id": "H5",
@@ -46,22 +46,22 @@
    "claim": "Gomez, Hansford & Krause (2007) found the turnout cost of rain concentrated outside big metropolitan counties, where polling places are farther apart and more voters drive. Here county size (log 2024 presidential votes) stands in for rural vs. urban.",
    "design": "H1 with one more term: rain x county size, where size is the log of the county's 2024 presidential vote, centered at the average county. The rain term is then the effect at an average-sized county; a positive interaction means the rain penalty shrinks as counties get bigger (that is, it is larger in small counties). State fixed effects; standard errors clustered by state.",
    "verdict": "Too early",
-   "reading": "Needs about 150 counties at least half counted (49 so far)."
+   "reading": "Needs about 150 counties at least half counted (61 so far)."
   }
  ],
  "data": {
   "counties_in_feed": 3045,
-  "counties_with_votes": 49,
-  "counties_any_votes": 88,
-  "counties_wet_1mm": 12,
+  "counties_with_votes": 61,
+  "counties_any_votes": 114,
+  "counties_wet_1mm": 15,
   "rain_asof": "2026-11-03T22:25:20.939234+00:00",
   "states_with_votes": 4,
   "rain_coverage": 3045,
   "rain_missing_states": [],
   "gate": "counties at least half counted (counted / live expected vote >= 0.5)",
-  "border_sample": 13,
+  "border_sample": 14,
   "border_pairs": 7,
-  "counties_with_vote_types": 2
+  "counties_with_vote_types": 5
  },
  "figures": {
   "H1": "fig_h1.svg",
@@ -70,5 +70,5 @@
   "H4": "fig_h4.svg",
   "H5": "fig_h5.svg"
  },
- "seconds": 5.8
+ "seconds": 7.9
 }
