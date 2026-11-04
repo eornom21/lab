@@ -1,0 +1,22 @@
+name: Fetch 120th Congress district outlines
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: |
+          git config user.name "election-night-lab"
+          git config user.email "noreply@nathanwmonroe.com"
+          python3 electionlab/geo/fetch_cd120.py
+          ls -la electionlab/geo/cd120.json
+          git add electionlab/geo/cd120.json
+          git commit -q -m "geo: 120th Congress district outlines (TIGERweb)" || exit 0
+          for i in 1 2 3 4 5; do git pull --rebase -q origin main && git push -q origin main && break || sleep 5; done
