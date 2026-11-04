@@ -498,6 +498,352 @@
    ]
   },
   {
+   "id": "dccc",
+   "name": "DCCC Red to Blue",
+   "party": "D",
+   "short": "The DCCC's 2026 challenger and open-seat program",
+   "blurb": "The Democratic campaign committee's Red to Blue list: its challengers and open-seat candidates, announced in rounds from February to October 2026 (46 by October 5). 42 of them are identified here from the DCCC's own releases and press coverage of each round, nominees only (two first picks lost primaries and were replaced); the other four names weren't found in time.",
+   "source": "DCCC Red to Blue announcements as reported by Roll Call (Feb 23, Aug 20, Sep 15), the DCCC (May 5, June 4), Punchbowl News (June 4, Oct 5), 314 Action and New Politics (July); checked against the Decision Desk HQ candidate list Nov 3",
+   "races": [
+    [
+     "AZ-2",
+     "Jonathan Nez",
+     "D",
+     "R",
+     false,
+     "added Feb 23"
+    ],
+    [
+     "AZ-6",
+     "JoAnna Mendoza",
+     "D",
+     "R",
+     false,
+     "added Feb 23"
+    ],
+    [
+     "IA-1",
+     "Christina Bohannan",
+     "D",
+     "R",
+     false,
+     "added Feb 23"
+    ],
+    [
+     "IA-3",
+     "Sarah Trone Garriott",
+     "D",
+     "R",
+     false,
+     "added Feb 23"
+    ],
+    [
+     "MI-4",
+     "Sean McCann",
+     "D",
+     "R",
+     false,
+     "added Feb 23"
+    ],
+    [
+     "NC-11",
+     "Jamie Ager",
+     "D",
+     "R",
+     false,
+     "added Feb 23"
+    ],
+    [
+     "PA-8",
+     "Paige Cognetti",
+     "D",
+     "R",
+     false,
+     "added Feb 23"
+    ],
+    [
+     "PA-10",
+     "Janelle Stelson",
+     "D",
+     "R",
+     false,
+     "added Feb 23"
+    ],
+    [
+     "TN-5",
+     "Chaz Molder",
+     "D",
+     "R",
+     false,
+     "added Feb 23"
+    ],
+    [
+     "VA-1",
+     "Shannon Taylor",
+     "D",
+     "R",
+     false,
+     "added Feb 23"
+    ],
+    [
+     "VA-2",
+     "Elaine Luria",
+     "D",
+     "R",
+     false,
+     "added Feb 23"
+    ],
+    [
+     "WI-3",
+     "Rebecca Cooke",
+     "D",
+     "R",
+     false,
+     "added Feb 23"
+    ],
+    [
+     "AZ-1",
+     "Amish Shah",
+     "D",
+     "R",
+     false,
+     "added May 5 (nominee replaced the first pick)"
+    ],
+    [
+     "CO-5",
+     "Jessica Killin",
+     "D",
+     "R",
+     false,
+     "added May 5"
+    ],
+    [
+     "ME-2",
+     "Matt Dunlap",
+     "D",
+     "D",
+     false,
+     "added May 5 (nominee replaced the first pick)"
+    ],
+    [
+     "PA-1",
+     "Bob Harvie",
+     "D",
+     "R",
+     false,
+     "added May 5"
+    ],
+    [
+     "PA-7",
+     "Bob Brooks",
+     "D",
+     "R",
+     false,
+     "added May 5"
+    ],
+    [
+     "TX-15",
+     "Bobby Pulido",
+     "D",
+     "R",
+     false,
+     "added May 5"
+    ],
+    [
+     "TX-35",
+     "Johnny Garcia",
+     "D",
+     "D",
+     false,
+     "added May 5"
+    ],
+    [
+     "CA-48",
+     "Marni von Wilpert",
+     "D",
+     "R",
+     false,
+     "added June 4"
+    ],
+    [
+     "FL-7",
+     "Bale Dalton",
+     "D",
+     "R",
+     false,
+     "added June 4"
+    ],
+    [
+     "NE-2",
+     "Denise Powell",
+     "D",
+     "R",
+     false,
+     "added June 4"
+    ],
+    [
+     "NJ-7",
+     "Rebecca Bennett",
+     "D",
+     "R",
+     false,
+     "added June 4"
+    ],
+    [
+     "CO-8",
+     "Manny Rutinel",
+     "D",
+     "R",
+     false,
+     "added July"
+    ],
+    [
+     "CA-6",
+     "Richard Pan",
+     "D",
+     "D",
+     false,
+     "added July"
+    ],
+    [
+     "MT-1",
+     "Sam Forstag",
+     "D",
+     "R",
+     false,
+     "added July"
+    ],
+    [
+     "FL-22",
+     "Pia Dandiya",
+     "D",
+     "D",
+     false,
+     "added July"
+    ],
+    [
+     "IA-2",
+     "Lindsay James",
+     "D",
+     "R",
+     false,
+     "added July"
+    ],
+    [
+     "MN-1",
+     "Jake Johnson",
+     "D",
+     "R",
+     false,
+     "added July"
+    ],
+    [
+     "FL-13",
+     "Leela Gray",
+     "D",
+     "R",
+     false,
+     "added Aug 20"
+    ],
+    [
+     "KY-6",
+     "Zach Dembo",
+     "D",
+     "R",
+     false,
+     "added Aug 20"
+    ],
+    [
+     "SC-1",
+     "Nancy Lacore",
+     "D",
+     "R",
+     false,
+     "added Aug 20"
+    ],
+    [
+     "VA-5",
+     "Tom Perriello",
+     "D",
+     "R",
+     false,
+     "added Aug 20"
+    ],
+    [
+     "AK-AL",
+     "Bill Hill",
+     "I",
+     "R",
+     false,
+     "added Sep 15; no party label on the ballot"
+    ],
+    [
+     "MI-7",
+     "Will Lawrence",
+     "D",
+     "R",
+     false,
+     "added Sep 15"
+    ],
+    [
+     "WI-1",
+     "Mitchell Berman",
+     "D",
+     "R",
+     false,
+     "added Sep 15"
+    ],
+    [
+     "NY-21",
+     "Blake Gendebien",
+     "D",
+     "R",
+     false,
+     "added Oct 5"
+    ],
+    [
+     "CO-3",
+     "Dwayne Romero",
+     "D",
+     "R",
+     false,
+     "added Oct 5"
+    ],
+    [
+     "FL-27",
+     "Eliott Rodriguez",
+     "D",
+     "R",
+     false,
+     "added Oct 5"
+    ],
+    [
+     "AR-2",
+     "Chris Jones",
+     "D",
+     "R",
+     false,
+     "added Oct 5"
+    ],
+    [
+     "TN-9",
+     "Justin Pearson",
+     "D",
+     "D",
+     false,
+     "added Oct 5"
+    ],
+    [
+     "NV-2",
+     "Teresa Benitez-Thompson",
+     "D",
+     "R",
+     false,
+     "added Oct 5"
+    ]
+   ]
+  },
+  {
    "id": "nrcc",
    "name": "NRCC MAGA Majority",
    "party": "R",
