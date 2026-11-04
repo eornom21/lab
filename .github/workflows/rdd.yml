@@ -4,15 +4,16 @@ name: Election-night loop (RDD + caucus scoreboards)
 # electionlab/rdd/rdd.py (weather/rules/turnout tests; results.json + figures for /electionlab/weather/), committing
 # whatever changed. The cron is the restarter: GitHub's scheduled runs are unreliable minute to minute, but a run every
 # 30 minutes queued behind the running loop (concurrency group) means a fresh loop starts whenever the old one ends.
-# Set up Nov 3, 2026 by the Election Night Lab thread.
+# Set up Nov 3, 2026 by the Election Night Lab thread. Nov 4, 2026 (Nate: update much less often now): one pass per
+# hour at :07 instead of the 5-minute loop. Dispatch with minutes > 0 to bring the long loop back.
 on:
   schedule:
-    - cron: "*/30 * * * *"
+    - cron: "7 * * * *"
   workflow_dispatch:
     inputs:
       minutes:
         description: "How long to loop (minutes)"
-        default: "330"
+        default: "0"
 permissions:
   contents: write
 concurrency:
@@ -30,12 +31,13 @@ jobs:
       - run: pip install --quiet numpy matplotlib
       - name: Loop
         env:
-          MINUTES: ${{ github.event.inputs.minutes || '330' }}
+          MINUTES: ${{ github.event.inputs.minutes || '0' }}
         run: |
           git config user.name "election-night-lab"
           git config user.email "noreply@nathanwmonroe.com"
-          end=$(( $(date +%s) + MINUTES * 60 ))
-          while [ "$(date +%s)" -lt "$end" ]; do
+          end=$(( $(date +%s) + MINUTES * 60 )); first=1
+          while [ "$first" = 1 ] || [ "$(date +%s)" -lt "$end" ]; do
+            first=0
             t0=$(date +%s)
             git pull --rebase -q origin main || true
             python3 electionlab/caucus/build_live.py || echo "caucus build failed; keeping the old live.json"
@@ -45,5 +47,6 @@ jobs:
               git commit -q -m "loop: results $(date -u +%H:%MZ)"
               for i in 1 2 3; do git pull --rebase -q origin main && git push -q origin main && break || sleep 5; done
             fi
+            [ "$(date +%s)" -lt "$end" ] || break
             el=$(( $(date +%s) - t0 )); s=$(( 300 - el )); [ "$s" -gt 0 ] && sleep "$s" || true
           done
