@@ -265,7 +265,6 @@ a.hbtn.detail{border-color:var(--ink);color:var(--ink)}
     <div class="navgroup first">Congress</div>
     <button data-view="summary" aria-current="true">Summary<kbd>1</kbd></button>
     <button data-view="board">The board<kbd>2</kbd></button>
-    <button data-view="race">One race<kbd>3</kbd></button>
     <button data-view="turnout">Turnout<kbd>4</kbd></button>
     <button data-view="senate">The Senate</button>
     <a class="navlink" href="https://lab.nathanwmonroe.com/electionlab/caucus/" target="_blank" rel="noopener" title="Blue Dogs, the Progressive Caucus slate, Main Street Republicans, Freedom Caucus and the NRCC MAGA Majority list, side by side: CAPE scores, ahead of the ticket, race by race">Caucus scoreboards<span class="ext">↗</span></a>
@@ -539,7 +538,7 @@ document.querySelectorAll("nav button[data-view]").forEach(b => b.onclick = () =
 
 document.addEventListener("keydown", e => {
   if (e.target.matches("input,select,textarea")) return;
-  const m = { "1": "summary", "2": "board", "3": "race", "4": "turnout", "5": "ask", "6": "answered", "7": "cape", "8": "leg", "9": "gov", "0": "props" }[e.key];
+  const m = { "1": "summary", "2": "board", "4": "turnout", "5": "ask", "6": "answered", "7": "cape", "8": "leg", "9": "gov", "0": "props" }[e.key];
   if (m) show(m); if (e.key === "/") { e.preventDefault(); $("#askInput").focus(); }
 });
 
@@ -925,11 +924,13 @@ $("#clock").textContent = new Date().toLocaleTimeString("en-US", { hour: "numeri
 // ---------- live data from the artifact database ----------
 (async () => {
   if (MIRROR) { setTimeout(startMirror, 0); return; }
+  setTimeout(startDirect, 0);
   const db = await window.claude?.use?.("db");
   if (!db) return;
   ADB = db;
   db.collection("answers").onSnapshot(snap => { ANS = snap.docs.map(d => Object.assign({ id: d.id }, d.data() || {})).filter(x => x.q && !x.hidden).sort((a, b) => String(b.at).localeCompare(String(a.at))); renderAnswered(); }, () => {});
   db.collection("live_counties").onSnapshot(snap => {
+    if (COUNTIES_DIRECT) return;
     const out = {};
     for (const d of snap.docs) { const c = d.data()?.c || {}; for (const f in c) { const [n, done, dd, rr, p] = c[f]; out[f] = { n, done: !!done, d: dd, r: rr, pct: p }; } }
     LIVE.counties = out; if (!REH) render();
@@ -939,14 +940,14 @@ $("#clock").textContent = new Date().toLocaleTimeString("en-US", { hour: "numeri
   let colRaces = {}, docRaces = {};
   const mergeRaces = () => { LIVE.races = Object.assign({}, colRaces, docRaces); if (!REH) render(); };
   db.collection("live_races").onSnapshot(snap => { const out = {}; for (const d of snap.docs) { const x = d.data(); if (x) out[d.id] = x; } colRaces = out; mergeRaces(); });
-  db.doc("live/races").onSnapshot(s => { const d = s.exists ? s.data() : {}; const out = {}; for (const k in d) if (d[k] && typeof d[k] === "object" && "d" in d[k]) out[k] = d[k]; docRaces = out; mergeRaces(); });
-  db.doc("live/bluedogs").onSnapshot(s => { const d = s.exists ? s.data() : {}; const out = {}; for (const k in d) if (Array.isArray(d[k])) out[k] = d[k]; LBD = out; if (!REH) render(); });
-  db.doc("live/meta").onSnapshot(s => { LIVE.meta = s.exists ? s.data() : null; if (!REH) render(); });
-  db.doc("live/senate").onSnapshot(s => { const d = s.exists ? s.data() : null; if (d && Array.isArray(d.races)) { SEN = d; if (!REH) render(); } });
+  db.doc("live/races").onSnapshot(s => { if (DIRECT_OK) return; const d = s.exists ? s.data() : {}; const out = {}; for (const k in d) if (d[k] && typeof d[k] === "object" && "d" in d[k]) out[k] = d[k]; docRaces = out; mergeRaces(); });
+  db.doc("live/bluedogs").onSnapshot(s => { if (DIRECT_OK) return; const d = s.exists ? s.data() : {}; const out = {}; for (const k in d) if (Array.isArray(d[k])) out[k] = d[k]; LBD = out; if (!REH) render(); });
+  db.doc("live/meta").onSnapshot(s => { if (DIRECT_OK) return; LIVE.meta = s.exists ? s.data() : null; if (!REH) render(); });
+  db.doc("live/senate").onSnapshot(s => { if (SEN_DIRECT) return; const d = s.exists ? s.data() : null; if (d && Array.isArray(d.races)) { SEN = d; if (!REH) render(); } });
   db.doc("live/ca").onSnapshot(s => { const d = s.exists ? s.data() : null; LCA = { races: d?.races || {}, props: d?.props || {}, meta: d?.meta || null }; if (!REH) render(); });
   db.doc("live/merced").onSnapshot(s => { const d = s.exists ? s.data() : null; LMC = { list: d?.list || [], contests: {}, measures: d?.measures || {}, meta: d?.meta || null }; if (!REH) render(); });
   // live/house: one field per district, "PA-10": [dem votes, rep votes, % counted]
-  db.doc("live/house").onSnapshot(s => { const d = s.exists ? s.data() : {}; const out = Object.assign({}, d.s || {}); for (const k in d) if (Array.isArray(d[k])) out[k] = d[k]; HOUSE = out; if (!REH) render(); });
+  db.doc("live/house").onSnapshot(s => { if (DIRECT_OK) return; const d = s.exists ? s.data() : {}; const out = Object.assign({}, d.s || {}); for (const k in d) if (Array.isArray(d[k])) out[k] = d[k]; HOUSE = out; if (!REH) render(); });
 })();
 
 // ---------- Senate ----------
@@ -1018,21 +1019,31 @@ async function loadSnap() {
     LCA = { races: S.ca?.races || {}, props: S.ca?.props || {}, meta: S.ca?.meta || null };
     LMC = { list: S.merced?.list || [], contests: {}, measures: S.merced?.measures || {}, meta: S.merced?.meta || null };
     ANS = (S.answers || []).filter(a => a && a.q);
-    try { const cr = await fetch("https://raw.githubusercontent.com/eornom21/lab/main/electionlab/counties_live.json?t=" + Math.floor(Date.now() / 60000), { cache: "no-store" }); if (cr.ok) { const CJ = await cr.json(); if (CJ && CJ.c && Object.keys(CJ.c).length) { const out = {}; for (const f in CJ.c) { const [n, done, d, r, p] = CJ.c[f]; out[f] = { n, done: !!done, d: d ?? 0, r: r ?? 0, pct: p }; } LIVE.counties = out; } } } catch (e) {}
+    await pollCounties();
     const m = $("#mirrorStamp"); if (m) m.textContent = "Live view · copied " + ptT(S.copied || S.meta?.updated);
     render(); renderAnswered();
   } catch (e) {}
 }
 // The mirror reads Decision Desk HQ's House feed directly (every minute), so House and Blue Dog numbers don't wait for the lab's relay.
-let DIRECT_OK = false;
+let DIRECT_OK = false, SEN_DIRECT = false, COUNTIES_DIRECT = false;
+// County counts come from the lab's loop (GitHub Actions, every 5 minutes): electionlab/counties_live.json.
+async function pollCounties() {
+  try { const cr = await fetch("https://raw.githubusercontent.com/eornom21/lab/main/electionlab/counties_live.json?t=" + Math.floor(Date.now() / 60000), { cache: "no-store" }); if (cr.ok) { const CJ = await cr.json(); if (CJ && CJ.c && Object.keys(CJ.c).length) { const out = {}; for (const f in CJ.c) { const [n, done, d, r, p] = CJ.c[f]; out[f] = { n, done: !!done, d: d ?? 0, r: r ?? 0, pct: p }; } LIVE.counties = out; COUNTIES_DIRECT = true; if (!REH) render(); } } } catch (e) {}
+}
+function startDirect() {
+  pollHouse(); setInterval(() => { if (!document.hidden) pollHouse(); }, 60e3);
+  pollSenate(); setInterval(() => { if (!document.hidden) pollSenate(); }, 60e3);
+  pollCounties(); setInterval(() => { if (!document.hidden) pollCounties(); }, 60e3);
+  document.addEventListener("visibilitychange", () => { if (!document.hidden) { pollHouse(); pollSenate(); pollCounties(); } });
+}
 async function pollSenate() {
   try {
     const j = await fetch("https://race-api-proxy-production.decisiondeskhq.workers.dev/senate", { cache: "no-store" }).then(r => r.json());
     const races = (j.races || []).map(r => { const cs = ((r.results && r.results.candidates) || []).map(c => ({ n: (c.firstName + " " + c.lastName).trim(), p: c.party && c.party.abbrev === "DEM" ? "D" : c.party && c.party.abbrev === "GOP" ? "R" : "I", v: c.votes || 0, w: !!c.winner, inc: !!c.incumbent })).sort((a, b) => b.v - a.v);
       const fc = r.forecast || {}, la = (fc.leadingParty || {}).abbrev; let fm = fc.margin; if (fm != null && (la === "DEM" || la === "GOP")) fm = la === "DEM" ? fm : -fm; else if (fm != null && /\sR$/.test(fc.ratingWithParty || "")) fm = -Math.abs(fm);
       return { id: r.raceId, st: r.stateAbb || r.state, name: r.displayName || r.name, prev: r.previousParty && r.previousParty.abbrev === "DEM" ? "D" : r.previousParty && r.previousParty.abbrev === "GOP" ? "R" : "I", rating: fc.ratingWithParty || fc.rating, fm, pct: Math.round((r.results && r.results.percentIn) || 0), called: (cs.find(c => c.w) || {}).p || null, cands: cs.slice(0, 4) }; });
-    if (races.length) { SEN = { at: new Date().toISOString(), races }; if (view === "senate" || view === "summary") render(); }
-  } catch (e) { }
+    if (races.length) { SEN = { at: new Date().toISOString(), races }; SEN_DIRECT = true; if (!REH) render(); }
+  } catch (e) { SEN_DIRECT = false; }
 }
 async function pollHouse() {
   try {
@@ -1048,8 +1059,9 @@ async function pollHouse() {
       if (ids.has(id)) races[id] = { d, r: rr, pct, called, fm };
       if (bd[key]) { let mine = 0, opp = 0, st = null; for (const c of cs) { if (String(c.lastName || "").toLowerCase().includes(bd[key])) { mine = c.votes || 0; if (c.winner) st = "W"; } else { opp = Math.max(opp, c.votes || 0); if (c.winner) st = st || "L"; } } if (mine + opp > 0) lbd[key] = [mine, opp, pct, st]; }
     }
+    if (!Object.keys(house).length && !DIRECT_OK) return;  // nothing counted yet: keep whatever the database holds
     LIVE.races = races; HOUSE = house; LBD = lbd; LIVE.meta = Object.keys(house).length ? { updated: newest ? (isNaN(new Date(normTs(newest))) ? new Date().toISOString() : new Date(normTs(newest)).toISOString()) : new Date().toISOString(), source: "Decision Desk HQ (read directly, every minute)" } : null;
-    DIRECT_OK = true; render();
+    DIRECT_OK = true; if (!REH) render();
   } catch (e) { DIRECT_OK = false; }
 }
 function startMirror() {
