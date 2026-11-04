@@ -308,6 +308,10 @@ def main():
             if fc.get("margin") is None or la not in ("DEM", "GOP"): continue
             fm = fc["margin"] if la == "DEM" else -fc["margin"]
             m = (d - rr) / (d + rr) * 100; pct = float((r.get("results") or {}).get("percentIn") or 0)
+            called = None
+            for c in cs:
+                if c.get("winner"):
+                    pa = (c.get("party") or {}).get("abbrev"); called = "D" if pa == "DEM" else "R" if pa == "GOP" else "O"
             dlead = (m > 0) if not called else (called == "D")
             base["D"].append((m - fm, pct, abs(fm), fm, dlead)); base["R"].append((-(m - fm), pct, abs(fm), -fm, not dlead))
         def bsum(xs):
