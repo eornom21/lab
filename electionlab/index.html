@@ -953,9 +953,11 @@ $("#clock").textContent = new Date().toLocaleTimeString("en-US", { hour: "numeri
 const PIVOTAL_SEN = ["NC", "ME", "GA", "MI", "OH", "TX", "IA", "AK", "NH", "MN", "KS", "NE", "FL", "VA", "MT", "SC", "KY", "LA", "MS", "CO", "NM", "IL", "OR", "DE"];
 function senTally() {
   const R = SEN.races || [], up = { D: 0, R: 0, I: 0 }, called = { D: 0, R: 0, I: 0 }, lead = { D: 0, R: 0, I: 0 };
-  for (const r of R) { up[r.prev] = (up[r.prev] || 0) + 1; if (r.called) called[r.called] = (called[r.called] || 0) + 1; else { const c = (r.cands || [])[0]; if (c && c.v > 0) lead[c.p] = (lead[c.p] || 0) + 1; } }
+  const none = { D: 0, R: 0, I: 0 };
+  for (const r of R) { up[r.prev] = (up[r.prev] || 0) + 1; if (r.called) called[r.called] = (called[r.called] || 0) + 1; else { const c = (r.cands || [])[0]; if (c && c.v > 0) lead[c.p] = (lead[c.p] || 0) + 1; else none[r.prev] = (none[r.prev] || 0) + 1; } }
   const notUp = { R: 53 - (up.R || 0), D: 47 - (up.D || 0) - (up.I || 0) };  // 53-47 going in; independents counted with Democrats
-  const proj = { R: notUp.R + (called.R || 0) + (lead.R || 0), D: notUp.D + (called.D || 0) + (called.I || 0) + (lead.D || 0) + (lead.I || 0) };
+  // projection: seats not up + called + current leaders + (races with no votes yet stay with the party that holds them)
+  const proj = { R: notUp.R + (called.R || 0) + (lead.R || 0) + (none.R || 0), D: notUp.D + (called.D || 0) + (called.I || 0) + (lead.D || 0) + (lead.I || 0) + (none.D || 0) + (none.I || 0) };
   return { up, called, lead, notUp, proj, n: R.length, votes: R.filter(r => (r.cands || []).some(c => c.v > 0)).length };
 }
 function renderSenate() {
@@ -965,7 +967,7 @@ function renderSenate() {
   const stat = (k, v, s, cls = "") => `<div class="stat ${cls}"><div class="k">${k}</div><div class="v">${v}</div><div class="s">${s}</div></div>`;
   $("#senTiles").innerHTML = stat("Called tonight", `<span style="color:var(--dem)">${(T.called.D || 0) + (T.called.I || 0)}</span> – <span style="color:var(--rep)">${T.called.R || 0}</span>`, `Democrats (with independents) – Republicans, of ${T.n} seats up`) +
     stat("Leading, not called", `<span style="color:var(--dem)">${(T.lead.D || 0) + (T.lead.I || 0)}</span> – <span style="color:var(--rep)">${T.lead.R || 0}</span>`, `${T.n - T.votes} with no votes yet`) +
-    stat("If every leader holds", `<span style="color:var(--rep)">${T.proj.R}</span> R – <span style="color:var(--dem)">${T.proj.D}</span> D`, `53 R – 47 D going in; ${T.notUp.R} R and ${T.notUp.D} D seats aren't up`) +
+    stat("If every leader holds", `<span style="color:var(--rep)">${T.proj.R}</span> R – <span style="color:var(--dem)">${T.proj.D}</span> D`, `53 R – 47 D going in; seats with no votes yet stay with the party holding them`) +
     stat("Seats changing party", R.filter(r => r.called && r.called !== r.prev).length, R.filter(r => r.called && r.called !== r.prev).map(r => r.st + " → " + r.called).join(", ") || "called races where the winner's party differs from the seat's");
   const row = r => { const cs = r.cands || [], tot = cs.reduce((s, c) => s + c.v, 0), a = cs[0], b = cs[1], fl = r.called && r.called !== r.prev;
     return `<tr><td><b>${esc(r.name)}</b><div class="tiny">${esc(r.rating || "")}${r.fm != null ? ` · forecast ${r.fm > 0 ? "D" : "R"} +${Math.abs(r.fm)}` : ""}</div></td><td class="${r.prev.toLowerCase()}">${r.prev}</td>
