@@ -308,12 +308,12 @@ def main():
             if fc.get("margin") is None or la not in ("DEM", "GOP"): continue
             fm = fc["margin"] if la == "DEM" else -fc["margin"]
             m = (d - rr) / (d + rr) * 100; pct = float((r.get("results") or {}).get("percentIn") or 0)
-            base["D"].append((m - fm, pct)); base["R"].append((-(m - fm), pct))
+            base["D"].append((m - fm, pct, abs(fm))); base["R"].append((-(m - fm), pct, abs(fm)))
         def bsum(xs):
-            allv = [c for c, p in xs]; half = [c for c, p in xs if p >= 50]
+            allv = [c for c, p, a in xs]; half = [c for c, p, a in xs if p >= 50]; comp = [c for c, p, a in xs if p >= 50 and a <= 10]
             f = lambda v: {"n": len(v), "avg": (sum(v) / len(v)) if v else None, "beat": (sum(1 for c in v if c > 0) / len(v)) if v else None}
-            return {"any": f(allv), "half": f(half)}
-        BASELINE = {"D": bsum(base["D"]), "R": bsum(base["R"]), "note": "all two-party House races with votes: CAPE score from the party's side; 'half' = at least half counted"}
+            return {"any": f(allv), "half": f(half), "comp": f(comp)}
+        BASELINE = {"D": bsum(base["D"]), "R": bsum(base["R"]), "note": "all two-party House races with votes: CAPE score from the party's side; 'half' = at least half counted; 'comp' = at least half counted and forecast within 10 points"}
     except Exception as e:  # noqa: BLE001
         print("house_live failed", e, file=sys.stderr)
 
