@@ -257,6 +257,48 @@ def main():
     except Exception as e:  # noqa: BLE001
         print("weather counties failed", e, file=sys.stderr)
 
+    # the dashboard relay's output, computed here so the lab thread can copy it into the dashboard database without a browser:
+    # races (the 32 board races by dashboard id), house (every district), bluedogs (the Blue Dog list by last name)
+    try:
+        board_ids = json.load(open(os.path.join(HERE, "..", "..", "_electionnight_src", "races.json")))
+        board_ids = [r["id"] for r in board_ids]
+    except Exception:
+        board_ids = []
+    try:
+        bd_names = {g_r[0]: g_r[1].split(" ")[-1].lower() for g in GROUPS["groups"] if g["id"] == "bluedogs" for g_r in g["races"]}
+        rl = {"races": {}, "house": {}, "bluedogs": {}, "n": 0, "withVotes": 0, "called": 0, "at": datetime.now(timezone.utc).isoformat(timespec="seconds")}
+        for k, r in idx.items():
+            did = k.replace("-", "")
+            cs = (r.get("results") or {}).get("candidates") or []
+            d = rr = 0; called = None
+            for c in cs:
+                pa = (c.get("party") or {}).get("abbrev")
+                if pa == "DEM": d += c.get("votes") or 0
+                if pa == "GOP": rr += c.get("votes") or 0
+                if c.get("winner"): called = "D" if pa == "DEM" else "R" if pa == "GOP" else (pa or "O")
+            pct = int(round((r.get("results") or {}).get("percentIn") or 0))
+            rl["n"] += 1
+            if d + rr > 0: rl["withVotes"] += 1
+            if called: rl["called"] += 1
+            if d + rr > 0: rl["house"][k] = [d, rr, pct]
+            if k in bd_names:
+                ln = bd_names[k]; bdv = opp = 0; st = None
+                for c in cs:
+                    mine = str(c.get("lastName") or "").lower() == ln
+                    if mine:
+                        bdv = c.get("votes") or 0
+                        if c.get("winner"): st = "W"
+                    else:
+                        opp = max(opp, c.get("votes") or 0)
+                        if c.get("winner"): st = st or "L"
+                rl["bluedogs"][k] = [bdv, opp, pct, st]
+            fc = r.get("forecast") or {}; la = (fc.get("leadingParty") or {}).get("abbrev"); fm = None
+            if fc.get("margin") is not None and la in ("DEM", "GOP"): fm = fc["margin"] if la == "DEM" else -fc["margin"]
+            if did in board_ids: rl["races"][did] = {"d": d, "r": rr, "pct": pct, "called": called, "fm": fm}
+        json.dump(rl, open(os.path.join(HERE, "..", "house_live.json"), "w"), separators=(",", ":"))
+    except Exception as e:  # noqa: BLE001
+        print("house_live failed", e, file=sys.stderr)
+
     out = {"at": datetime.now(timezone.utc).isoformat(timespec="seconds"), "seconds": round(time.time() - t0, 1),
            "fetched": sum(1 for v in got.values() if v), "requested": len(got), "groups": out_groups, "tide": tide}
     json.dump(out, open(OUT, "w"), separators=(",", ":"))
