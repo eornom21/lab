@@ -299,6 +299,23 @@ def main():
     except Exception as e:  # noqa: BLE001
         print("house_live failed", e, file=sys.stderr)
 
+    # Senate: all 35 races from the /senate index, for the dashboard's Senate view and the mirror
+    try:
+        sj = fetch(BASE + "/senate") or {}
+        srows = []
+        for r in sj.get("races") or []:
+            cs = (r.get("results") or {}).get("candidates") or []
+            cands = sorted([{"n": f"{c.get('firstName', '')} {c.get('lastName', '')}".strip(), "p": {"DEM": "D", "GOP": "R"}.get((c.get("party") or {}).get("abbrev"), "I"), "v": c.get("votes") or 0, "w": bool(c.get("winner")), "inc": bool(c.get("incumbent"))} for c in cs], key=lambda c: -c["v"])
+            called = next((c["p"] for c in cands if c["w"]), None)
+            fc = r.get("forecast") or {}; la = (fc.get("leadingParty") or {}).get("abbrev"); fm = fc.get("margin")
+            if fm is not None and la in ("DEM", "GOP"): fm = fm if la == "DEM" else -fm
+            elif fm is not None and (fc.get("ratingWithParty") or "").endswith(" R"): fm = -abs(fm)
+            srows.append({"id": r.get("raceId"), "st": r.get("stateAbb") or r.get("state"), "name": r.get("displayName") or r.get("name"), "prev": {"DEM": "D", "GOP": "R"}.get((r.get("previousParty") or {}).get("abbrev"), "I"),
+                          "rating": fc.get("ratingWithParty") or fc.get("rating"), "fm": fm, "pct": int(round((r.get("results") or {}).get("percentIn") or 0)), "called": called, "cands": cands[:4], "updated": (r.get("results") or {}).get("lastUpdated")})
+        json.dump({"at": datetime.now(timezone.utc).isoformat(timespec="seconds"), "races": srows}, open(os.path.join(HERE, "..", "senate_live.json"), "w"), separators=(",", ":"))
+    except Exception as e:  # noqa: BLE001
+        print("senate failed", e, file=sys.stderr)
+
     out = {"at": datetime.now(timezone.utc).isoformat(timespec="seconds"), "seconds": round(time.time() - t0, 1),
            "fetched": sum(1 for v in got.values() if v), "requested": len(got), "groups": out_groups, "tide": tide}
     json.dump(out, open(OUT, "w"), separators=(",", ":"))

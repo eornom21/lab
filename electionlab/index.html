@@ -262,11 +262,12 @@ a.hbtn.detail{border-color:var(--ink);color:var(--ink)}
   </header>
   <div class="mnav" id="mnav"><label for="mnavSel">View</label><select id="mnavSel" aria-label="Choose a view"></select></div>
   <nav aria-label="Views">
-    <div class="navgroup first">U.S. House</div>
+    <div class="navgroup first">Congress</div>
     <button data-view="summary" aria-current="true">Summary<kbd>1</kbd></button>
     <button data-view="board">The board<kbd>2</kbd></button>
     <button data-view="race">One race<kbd>3</kbd></button>
     <button data-view="turnout">Turnout<kbd>4</kbd></button>
+    <button data-view="senate">The Senate</button>
     <a class="navlink" href="https://lab.nathanwmonroe.com/electionlab/caucus/" target="_blank" rel="noopener" title="Blue Dogs, the Progressive Caucus slate, Main Street Republicans, Freedom Caucus and the NRCC MAGA Majority list, side by side: CAPE scores, ahead of the ticket, race by race">Caucus scoreboards<span class="ext">↗</span></a>
     <a class="navlink" href="https://lab.nathanwmonroe.com/electionlab/weather/" target="_blank" rel="noopener" title="Live weather alerts over the tracked counties, turnout against expectations, and three hypothesis tests that rerun as the count comes in">Weather &amp; turnout<span class="ext">↗</span></a>
     <div class="navgroup">California</div>
@@ -314,6 +315,13 @@ a.hbtn.detail{border-color:var(--ink);color:var(--ink)}
       <div id="bdList"></div>
     </section>
 
+    <section id="v-senate" hidden>
+      <h2>The Senate</h2>
+      <p class="sub">All 35 Senate races tonight, the pivotal ones first: Decision Desk HQ's pre-election rating, the count, who leads, and what the chamber looks like if every leader holds. Republicans hold 53 seats going in.</p>
+      <div class="meta2" data-sec="senate"></div>
+      <div class="tiles" id="senTiles"></div>
+      <div class="card2" id="senBody"></div>
+    </section>
     <section id="v-board" hidden>
       <h2>The 32 races to watch</h2>
       <p class="sub">Every House race at least one forecaster calls a toss-up, plus CA-13. Tap a race for its scoreboard, both sides' case and the money.</p>
@@ -524,7 +532,7 @@ function show(v) {
   document.querySelectorAll("nav button[data-view]").forEach(b => b.setAttribute("aria-current", String(b.dataset.view === v)));
   { const sel = $("#mnavSel"); if (sel && sel.value !== "view:" + v) sel.value = "view:" + v; }
   if (window.innerWidth <= 760) { const mn = $("#mnav"); if (mn && typeof mn.scrollIntoView === "function") window.scrollTo({ top: Math.max(0, mn.offsetTop - 2) }); }
-  for (const s of ["summary", "board", "turnout", "race", "bluedogs", "ask", "answered", "cape", "leg", "gov", "boe", "props", "local"]) $("#v-" + s).hidden = s !== v;
+  for (const s of ["summary", "board", "turnout", "senate", "race", "bluedogs", "ask", "answered", "cape", "leg", "gov", "boe", "props", "local"]) $("#v-" + s).hidden = s !== v;
   render();
 }
 document.querySelectorAll("nav button[data-view]").forEach(b => b.onclick = () => show(b.dataset.view));
@@ -658,6 +666,7 @@ function renderSummary() {
     stat("Seats changing party", `${T.flips.D.length + T.flips.R.length}`, T.flips.D.length + T.flips.R.length ? [T.flips.D.length ? `D gains: ${T.flips.D.map(dash).join(", ")}` : "", T.flips.R.length ? `R gains: ${T.flips.R.map(dash).join(", ")}` : ""].filter(Boolean).join(" · ") : "Called races where the winner's party differs from who holds the seat now") +
     stat("Leading, not called", `<span style="color:var(--dem)">${T.lead.D}</span> – <span style="color:var(--rep)">${T.lead.R}</span>`, `${T.none} with no votes yet` + (T.would.D.length + T.would.R.length ? ` · would flip: ${[...T.would.D, ...T.would.R].map(dash).join(", ")}` : "")) +
     stat("If every leader holds", !any ? "–" : net === 0 ? "No change" : `${net > 0 ? "D" : "R"} +${Math.abs(net)}`, `Democrats would hold ${T.hold.D} of these 32 seats (they hold ${T.now.D} now)`) +
+    stat("The Senate", (SEN.races || []).length ? `<span style="color:var(--rep)">${senTally().proj.R}</span> R – <span style="color:var(--dem)">${senTally().proj.D}</span> D` : "–", (SEN.races || []).length ? `if every leader holds (53 R – 47 D going in); ${(senTally().called.D || 0) + (senTally().called.I || 0)}–${senTally().called.R || 0} called tonight` : "fills in with the first Senate counts") +
     stat("CAPE score, the board", T.capeN ? `${T.capeSum / T.capeN > 0 ? "D" : "R"} +${Math.abs(T.capeSum / T.capeN).toFixed(1)}` : "–", T.capeN ? `average two-way margin vs. Decision Desk HQ's pre-election forecast, ${T.capeN} races with votes; + means Democrats beating the forecast` : "fills in with the first counts: margin tonight vs. the pre-election forecast");
   const ds = any ? T.d / (T.d + T.r) : null;
   $("#sVote").innerHTML = !any ? `<div class="k" style="font-size:13px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)">The battleground vote</div><div class="wait2" style="font-size:30px;margin-top:6px">Waiting for the first count</div>` :
@@ -681,6 +690,7 @@ function renderSummary() {
 // Only districts with one Democrat vs one Republican both times, on unchanged lines. Redrawn states are compared statewide.
 const TD = B.tide || { house: {}, house_state: {}, redrawn: {} };
 let tideBase = "2024", tideCut = 50, HOUSE = {};  // HOUSE: "PA-10" -> [d, r, pct]
+let SEN = { at: null, races: [] };  // live/senate doc or electionlab/senate_live.json: {at, races: [{id, st, name, prev, rating, fm, pct, called, cands: [{n, p, v, w, inc}]}]}
 function tideRows() {
   const L = REH ? REH.house : HOUSE, past = TD.house[tideBase] || {};
   const redrawn = new Set([...(TD.redrawn.since2024 || []), ...(tideBase === "2022" ? TD.redrawn.since2022 || [] : [])]);
@@ -859,6 +869,7 @@ const HOW = {
     "Local races are where turnout and margins can be tiny and the room may know the people.",
     "open this after Merced's 9:30pm update and read off the closest council race.",
     "Votes: Merced County's results site, every few minutes on election night (Merced's schedule: mail ballots by 8:15pm, early in-person by 9:30pm, Election Day votes by 11:30pm, then the next update by 5pm Friday). Candidate list: Merced County Registrar of Voters."],
+  senate: ["All 35 Senate races, the pivotal ones first: Decision Desk HQ's pre-election rating and forecast margin, who holds the seat, the two leaders and their shares, the margin, how much is counted, and whether the race is called.", "The Senate majority is the other half of the night; this view says where it stands and what it would look like if every current leader held on.", "watch the Toss Up rows (Alaska, Iowa, Kansas, North Carolina, Maine, Georgia, Michigan, Ohio, Texas) and the \"If every leader holds\" tile.", "Decision Desk HQ's public Senate feed: on the public mirror, read directly every minute; on the big screen, copied in by the lab every few minutes. Seats not up this year are counted from the 53–47 split going in, independents with Democrats."],
   board: ["One tile per race: the two candidates, each one's share of the votes counted so far, and how much of the expected vote is in. Before results it shows the forecasters' ratings.",
     "A quick scan of all 32 at once; sort by Closest now to see which ones are knife-edge.",
     "switch to Closest now late in the evening and pull up the top three.",
@@ -879,7 +890,8 @@ function renderStamps() {
   const ca = stamp(LCA.meta, Object.keys(LCA.races).length, "No results yet · California's first numbers come shortly after 8pm PT");
   const mc = stamp(LMC.meta, (LMC.list || []).length, "No results yet · Merced's first numbers come by 8:15pm PT");
   document.querySelectorAll(".meta2[data-sec]").forEach(m => { const a = m.querySelector(".asof"); if (!a || m.dataset.sec === "answered") return; const sec = m.dataset.sec;
-    const [txt, on] = sec === "local" ? mc : ["cape", "leg", "gov", "boe", "props"].includes(sec) ? ca : nat; a.textContent = txt; a.className = "asof" + (on ? " live" : ""); });
+    const sen = stamp(SEN.at ? { updated: SEN.at, source: "Decision Desk HQ" } : null, (SEN.races || []).length, "No results yet · Senate numbers arrive with the first counts");
+    const [txt, on] = sec === "senate" ? sen : sec === "local" ? mc : ["cape", "leg", "gov", "boe", "props"].includes(sec) ? ca : nat; a.textContent = txt; a.className = "asof" + (on ? " live" : ""); });
 }
 fillMeta();
 
@@ -889,6 +901,7 @@ function render() {
   if (view === "board") renderBoard();
   if (view === "bluedogs") renderBlueDogs();
   if (view === "turnout") renderTurnout();
+  if (view === "senate") renderSenate();
   if (view === "race") renderRace();
   const m = live().meta, any = Object.keys(live().counties).length || Object.keys(live().races).length;
   { const tb = document.querySelector('nav button[data-view="turnout"]'); if (tb) tb.title = Object.keys(live().counties).length ? "" : "County counts arrive with the first results"; }
@@ -929,12 +942,38 @@ $("#clock").textContent = new Date().toLocaleTimeString("en-US", { hour: "numeri
   db.doc("live/races").onSnapshot(s => { const d = s.exists ? s.data() : {}; const out = {}; for (const k in d) if (d[k] && typeof d[k] === "object" && "d" in d[k]) out[k] = d[k]; docRaces = out; mergeRaces(); });
   db.doc("live/bluedogs").onSnapshot(s => { const d = s.exists ? s.data() : {}; const out = {}; for (const k in d) if (Array.isArray(d[k])) out[k] = d[k]; LBD = out; if (!REH) render(); });
   db.doc("live/meta").onSnapshot(s => { LIVE.meta = s.exists ? s.data() : null; if (!REH) render(); });
+  db.doc("live/senate").onSnapshot(s => { const d = s.exists ? s.data() : null; if (d && Array.isArray(d.races)) { SEN = d; if (!REH) render(); } });
   db.doc("live/ca").onSnapshot(s => { const d = s.exists ? s.data() : null; LCA = { races: d?.races || {}, props: d?.props || {}, meta: d?.meta || null }; if (!REH) render(); });
   db.doc("live/merced").onSnapshot(s => { const d = s.exists ? s.data() : null; LMC = { list: d?.list || [], contests: {}, measures: d?.measures || {}, meta: d?.meta || null }; if (!REH) render(); });
   // live/house: one field per district, "PA-10": [dem votes, rep votes, % counted]
   db.doc("live/house").onSnapshot(s => { const d = s.exists ? s.data() : {}; const out = Object.assign({}, d.s || {}); for (const k in d) if (Array.isArray(d[k])) out[k] = d[k]; HOUSE = out; if (!REH) render(); });
 })();
 
+// ---------- Senate ----------
+const PIVOTAL_SEN = ["NC", "ME", "GA", "MI", "OH", "TX", "IA", "AK", "NH", "MN", "KS", "NE", "FL", "VA", "MT", "SC", "KY", "LA", "MS", "CO", "NM", "IL", "OR", "DE"];
+function senTally() {
+  const R = SEN.races || [], up = { D: 0, R: 0, I: 0 }, called = { D: 0, R: 0, I: 0 }, lead = { D: 0, R: 0, I: 0 };
+  for (const r of R) { up[r.prev] = (up[r.prev] || 0) + 1; if (r.called) called[r.called] = (called[r.called] || 0) + 1; else { const c = (r.cands || [])[0]; if (c && c.v > 0) lead[c.p] = (lead[c.p] || 0) + 1; } }
+  const notUp = { R: 53 - (up.R || 0), D: 47 - (up.D || 0) - (up.I || 0) };  // 53-47 going in; independents counted with Democrats
+  const proj = { R: notUp.R + (called.R || 0) + (lead.R || 0), D: notUp.D + (called.D || 0) + (called.I || 0) + (lead.D || 0) + (lead.I || 0) };
+  return { up, called, lead, notUp, proj, n: R.length, votes: R.filter(r => (r.cands || []).some(c => c.v > 0)).length };
+}
+function renderSenate() {
+  const R = (SEN.races || []).slice(), T = senTally();
+  const rank = r => { const i = PIVOTAL_SEN.indexOf(r.st); return (i < 0 ? 99 : i) + (/Toss/.test(r.rating || "") ? -50 : /Lean/.test(r.rating || "") ? -30 : /Likely/.test(r.rating || "") ? -10 : 0); };
+  R.sort((a, b) => rank(a) - rank(b));
+  const stat = (k, v, s, cls = "") => `<div class="stat ${cls}"><div class="k">${k}</div><div class="v">${v}</div><div class="s">${s}</div></div>`;
+  $("#senTiles").innerHTML = stat("Called tonight", `<span style="color:var(--dem)">${(T.called.D || 0) + (T.called.I || 0)}</span> – <span style="color:var(--rep)">${T.called.R || 0}</span>`, `Democrats (with independents) – Republicans, of ${T.n} seats up`) +
+    stat("Leading, not called", `<span style="color:var(--dem)">${(T.lead.D || 0) + (T.lead.I || 0)}</span> – <span style="color:var(--rep)">${T.lead.R || 0}</span>`, `${T.n - T.votes} with no votes yet`) +
+    stat("If every leader holds", `<span style="color:var(--rep)">${T.proj.R}</span> R – <span style="color:var(--dem)">${T.proj.D}</span> D`, `53 R – 47 D going in; ${T.notUp.R} R and ${T.notUp.D} D seats aren't up`) +
+    stat("Seats changing party", R.filter(r => r.called && r.called !== r.prev).length, R.filter(r => r.called && r.called !== r.prev).map(r => r.st + " → " + r.called).join(", ") || "called races where the winner's party differs from the seat's");
+  const row = r => { const cs = r.cands || [], tot = cs.reduce((s, c) => s + c.v, 0), a = cs[0], b = cs[1], fl = r.called && r.called !== r.prev;
+    return `<tr><td><b>${esc(r.name)}</b><div class="tiny">${esc(r.rating || "")}${r.fm != null ? ` · forecast ${r.fm > 0 ? "D" : "R"} +${Math.abs(r.fm)}` : ""}</div></td><td class="${r.prev.toLowerCase()}">${r.prev}</td>
+      <td>${cs.slice(0, 2).map(c => `<span class="${c.p === "D" ? "d" : c.p === "R" ? "r" : ""}">${esc(c.n)}${c.inc ? " *" : ""} ${tot ? pct(c.v / tot, 1) : ""}</span>`).join(" · ")}</td>
+      <td class="${a && b && tot ? (a.p === "D" ? "d" : a.p === "R" ? "r" : "") : ""}">${a && b && tot ? `${a.p} +${fmt(a.v - b.v)}` : "–"}</td><td>${r.pct ? r.pct + "%" : "–"}</td>
+      <td>${r.called ? `<span class="called ${r.called}">${r.called} win</span>` : tot ? "Counting" : "No votes yet"}${fl ? ` <span class="flip">Flip</span>` : ""}</td></tr>`; };
+  $("#senBody").innerHTML = R.length ? `<div class="tablewrap"><table><thead><tr><th>State</th><th>Held by</th><th>Leaders</th><th>Margin</th><th>Counted</th><th>Status</th></tr></thead><tbody>${R.map(row).join("")}</tbody></table></div><p class="note">* incumbent. Ratings and forecast margins are Decision Desk HQ's, pre-election. Alaska uses ranked-choice voting; first-round shares shown. "If every leader holds" adds the seats not up this year (53 R – 47 D going in, independents with Democrats).</p>` : `<div class="wait2">Senate numbers arrive with the first counts.</div>`;
+}
 // ---------- Blue Dog races ----------
 // live/bluedogs: "PA-7": [blue dog votes, top opponent votes, % counted, "W"|"L"|null] (relay matches candidates by name, so it also
 // covers the independent in AK-AL and the Democrat-vs-Democrat race in CA-4); otherwise falls back to the district's D and R votes.
@@ -984,6 +1023,15 @@ async function loadSnap() {
 }
 // The mirror reads Decision Desk HQ's House feed directly (every minute), so House and Blue Dog numbers don't wait for the lab's relay.
 let DIRECT_OK = false;
+async function pollSenate() {
+  try {
+    const j = await fetch("https://race-api-proxy-production.decisiondeskhq.workers.dev/senate", { cache: "no-store" }).then(r => r.json());
+    const races = (j.races || []).map(r => { const cs = ((r.results && r.results.candidates) || []).map(c => ({ n: (c.firstName + " " + c.lastName).trim(), p: c.party && c.party.abbrev === "DEM" ? "D" : c.party && c.party.abbrev === "GOP" ? "R" : "I", v: c.votes || 0, w: !!c.winner, inc: !!c.incumbent })).sort((a, b) => b.v - a.v);
+      const fc = r.forecast || {}, la = (fc.leadingParty || {}).abbrev; let fm = fc.margin; if (fm != null && (la === "DEM" || la === "GOP")) fm = la === "DEM" ? fm : -fm; else if (fm != null && /\sR$/.test(fc.ratingWithParty || "")) fm = -Math.abs(fm);
+      return { id: r.raceId, st: r.stateAbb || r.state, name: r.displayName || r.name, prev: r.previousParty && r.previousParty.abbrev === "DEM" ? "D" : r.previousParty && r.previousParty.abbrev === "GOP" ? "R" : "I", rating: fc.ratingWithParty || fc.rating, fm, pct: Math.round((r.results && r.results.percentIn) || 0), called: (cs.find(c => c.w) || {}).p || null, cands: cs.slice(0, 4) }; });
+    if (races.length) { SEN = { at: new Date().toISOString(), races }; if (view === "senate" || view === "summary") render(); }
+  } catch (e) { }
+}
 async function pollHouse() {
   try {
     const j = await fetch("https://race-api-proxy-production.decisiondeskhq.workers.dev/house", { cache: "no-store" }).then(r => r.json());
@@ -1006,6 +1054,7 @@ function startMirror() {
   document.body.classList.add("mirror");
   { const gs = document.querySelectorAll("nav .navgroup"); if (gs.length) gs[gs.length - 1].textContent = "From the room"; }
   pollHouse(); setInterval(() => { if (!document.hidden) pollHouse(); }, 60e3);
+  pollSenate(); setInterval(() => { if (!document.hidden) pollSenate(); }, 60e3);
   const b = document.querySelector(".brand small"); if (b) b.textContent = "Watch-party big screen, live view · U.S. House · California · Tuesday, Nov 3, 2026";
   $("#status").insertAdjacentHTML("afterend", `<span class="pill mirrorpill" id="mirrorStamp">Live view</span>`);
   loadSnap(); setInterval(() => { if (!document.hidden) loadSnap(); }, 60e3);
