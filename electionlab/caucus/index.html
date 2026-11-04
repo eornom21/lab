@@ -275,7 +275,7 @@ function renderGroupHeadlines() {
   const good = c.score >= 0, pick = good ? (c.best[0] || c.worst[0]) : (c.worst[0] || c.best[0]), isGood = good ? !!c.best[0] : !c.worst[0];
   if (!pick) { el.innerHTML = ""; return; }
   const alt = good ? c.worst[0] : c.best[0];
-  el.innerHTML = hlBox(isGood ? "good" : "bad", isGood ? "Headline: the best defensible case" : "Headline: the worst defensible case", pick, `as of ${ptT(LIVE.at)}`) + (alt ? hlBox("flat", isGood ? "And the other side of it" : "In their favor", alt) : "");
+  el.innerHTML = hlBox(isGood ? "good" : "bad", G.name, pick, `as of ${ptT(LIVE.at)}`) + (alt ? hlBox("flat", isGood ? "And the other side of it" : "In their favor", alt) : "");
 }
 function renderOverviewHeadlines() {
   // The overview carries one headline: the Blue Dogs', the same one their page shows.
@@ -285,7 +285,7 @@ function renderOverviewHeadlines() {
   const good = c.score >= 0, pick = good ? (c.best[0] || c.worst[0]) : (c.worst[0] || c.best[0]), isGood = good ? !!c.best[0] : !c.worst[0];
   if (!pick) { el.innerHTML = ""; return; }
   const alt = good ? c.worst[0] : c.best[0];
-  el.innerHTML = hlBox(isGood ? "good" : "bad", isGood ? "Blue Dogs: the best defensible case so far" : "Blue Dogs: the worst defensible case so far", pick, `as of ${ptT(LIVE.at)} · full scoreboard: Blue Dogs tab`) + (alt ? hlBox("flat", isGood ? "And the other side of it" : "In their favor", alt) : "");
+  el.innerHTML = hlBox(isGood ? "good" : "bad", "Blue Dogs", pick, `as of ${ptT(LIVE.at)} · full scoreboard: Blue Dogs tab`) + (alt ? hlBox("flat", isGood ? "And the other side of it" : "In their favor", alt) : "");
 }
 function renderOverview() {
   $("#overview").style.display = ""; $("#groupsec").style.display = "none"; document.querySelectorAll(".gonly").forEach(e => e.style.display = "none");
