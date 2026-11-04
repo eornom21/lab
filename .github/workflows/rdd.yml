@@ -4,11 +4,13 @@ name: Election-night loop (RDD + caucus scoreboards)
 # electionlab/rdd/rdd.py (weather/rules/turnout tests; results.json + figures for /electionlab/weather/), committing
 # whatever changed. The cron is the restarter: GitHub's scheduled runs are unreliable minute to minute, but a run every
 # 30 minutes queued behind the running loop (concurrency group) means a fresh loop starts whenever the old one ends.
-# Set up Nov 3, 2026 by the Election Night Lab thread. Nov 4, 2026 (Nate: update much less often now): one pass per
-# hour at :07 instead of the 5-minute loop. Dispatch with minutes > 0 to bring the long loop back.
+# Set up Nov 3, 2026 by the Election Night Lab thread. Nov 4, 2026 (Nate: update much less often now): one pass at
+# noon and 5pm Pacific (20:00 and 01:00 UTC) instead of the 5-minute loop, plus the California update (SoS feed ->
+# snap.json, results.json) at 6pm Pacific (02:00 UTC). Dispatch with minutes > 0 to bring the long loop back.
 on:
   schedule:
-    - cron: "7 * * * *"
+    - cron: "0 20,1 * * *"
+    - cron: "0 2 * * *"
   workflow_dispatch:
     inputs:
       minutes:
@@ -42,7 +44,10 @@ jobs:
             git pull --rebase -q origin main || true
             python3 electionlab/caucus/build_live.py || echo "caucus build failed; keeping the old live.json"
             python3 electionlab/rdd/rdd.py || echo "rdd failed; keeping the old results"
-            git add -A electionlab/ 2>/dev/null || true
+            if [ "${{ github.event.schedule }}" = "0 2 * * *" ] || [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+              python3 _electionlab_relay/ca_update.py || echo "california update failed; keeping the old numbers"
+            fi
+            git add -A electionlab/ electionnight/results.json 2>/dev/null || true
             if git diff --cached --quiet; then echo "no change $(date -u +%H:%MZ)"; else
               git commit -q -m "loop: results $(date -u +%H:%MZ)"
               for i in 1 2 3; do git pull --rebase -q origin main && git push -q origin main && break || sleep 5; done

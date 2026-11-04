@@ -1,0 +1,837 @@
+{
+ "cape": [
+  {
+   "id": "SD4",
+   "office": "State Senate District 4",
+   "alum": "Jaron Brandon",
+   "a": {
+    "name": "Jaron Brandon",
+    "party": "Democratic",
+    "inc": false
+   },
+   "b": {
+    "name": "Alexandra Duarte",
+    "party": "Republican",
+    "inc": false
+   },
+   "open": true,
+   "counties": [
+    "Stanislaus",
+    "Merced",
+    "Madera",
+    "El Dorado",
+    "Mariposa",
+    "Amador",
+    "Calaveras",
+    "Tuolumne",
+    "Nevada",
+    "Placer",
+    "Alpine",
+    "Mono",
+    "Inyo"
+   ],
+   "primary": "Brandon 41.3%, Duarte 32.1%, Sen. Marie Alvarado-Gil (R, incumbent) 26.6%",
+   "money": "as of Apr 18: Duarte $254,900 on hand, Brandon $72,400 (fall totals not found)",
+   "note": "Open seat: the incumbent finished third in June. Duarte is the wife of former Rep. John Duarte.",
+   "a_case": [
+    {
+     "text": "Finished first in the June primary with 41.3% (109,094 votes).",
+     "url": "https://elections.cdn.sos.ca.gov/sov/2026-primary/sov/90-state-senator.pdf"
+    },
+    {
+     "text": "Endorsed by the California Democratic Party for the general election.",
+     "url": "https://cadem.org/wp-content/uploads/2026/08/FINAL-2026-General-Election-Endorsements.pdf"
+    },
+    {
+     "text": "Two-term Tuolumne County supervisor; won his 2020 general election with 59.4%.",
+     "url": "https://www.turlockjournal.com/news/government/democrat-jaron-brandon-launches-his-bid-for-senate-district-4-seat/"
+    }
+   ],
+   "b_case": [
+    {
+     "text": "Republican primary candidates combined for 58.7% of June votes (32.1% + 26.6%).",
+     "url": "https://elections.cdn.sos.ca.gov/sov/2026-primary/sov/90-state-senator.pdf"
+    },
+    {
+     "text": "Registered Republicans outnumber Democrats by about 6.6 points (2025 estimate, Target Book).",
+     "url": "https://sjvsun.com/news/politics/tuolumne-co-supervisor-brandon-launches-bid-for-state-senate/"
+    },
+    {
+     "text": "Had $254,900 on hand to Brandon's $72,400 as of April 18, 2026.",
+     "url": "https://sjvsun.com/?p=104444"
+    }
+   ]
+  },
+  {
+   "id": "SD26",
+   "office": "State Senate District 26",
+   "alum": "Sarah Rascón",
+   "a": {
+    "name": "Sarah Rascón",
+    "party": "Democratic",
+    "inc": false
+   },
+   "b": {
+    "name": "Sara Hernandez",
+    "party": "Democratic",
+    "inc": false
+   },
+   "open": true,
+   "counties": [
+    "Los Angeles"
+   ],
+   "primary": "Hernandez 31.2%, Rascón 19.4%, six others below",
+   "money": "$2.2M+ in outside spending backed Hernandez before the primary; candidate totals not found",
+   "note": "Open seat (Sen. María Elena Durazo ran for L.A. County supervisor). Two Democrats; the state party made no endorsement.",
+   "a_case": [
+    {
+     "text": "Endorsed by Sen. María Elena Durazo, who now holds the seat.",
+     "url": "https://www.rasconforsenate.com/meet-sarah"
+    },
+    {
+     "text": "Placed second of eight in June with 19.4% (34,158 votes).",
+     "url": "https://elections.cdn.sos.ca.gov/sov/2026-primary/sov/90-state-senator.pdf"
+    },
+    {
+     "text": "Endorsed by L.A. County Firefighters Local 1014 and the Planned Parenthood Advocacy Project L.A. County.",
+     "url": "https://www.rasconforsenate.com/meet-sarah"
+    }
+   ],
+   "b_case": [
+    {
+     "text": "Finished first in the eight-candidate June primary with 31.2% (54,799 votes).",
+     "url": "https://elections.cdn.sos.ca.gov/sov/2026-primary/sov/90-state-senator.pdf"
+    },
+    {
+     "text": "Independent groups spent over $2.2 million supporting her before the primary.",
+     "url": "https://www.theeastsiderla.com/news/government_and_politics/as-the-june-2-primary-arrives-cash-is-flying-into-eastside-races/article_148486d1-0519-46c2-968e-2d0d6c1414c7.html"
+    },
+    {
+     "text": "Elected L.A. Community College District trustee in 2022; housing and environmental attorney.",
+     "url": "https://www.theeastsiderla.com/news/government_and_politics/sara-hernandez-leads-crowded-state-senate-race/article_660ecc5e-a851-42c2-8cd6-4a08c6cc03ad.html"
+    }
+   ]
+  }
+ ],
+ "leg": [
+  {
+   "id": "SD4",
+   "office": "State Senate District 4",
+   "alum": "Jaron Brandon",
+   "a": {
+    "name": "Jaron Brandon",
+    "party": "Democratic",
+    "inc": false
+   },
+   "b": {
+    "name": "Alexandra Duarte",
+    "party": "Republican",
+    "inc": false
+   },
+   "open": true,
+   "counties": [
+    "Stanislaus",
+    "Merced",
+    "Madera",
+    "El Dorado",
+    "Mariposa",
+    "Amador",
+    "Calaveras",
+    "Tuolumne",
+    "Nevada",
+    "Placer",
+    "Alpine",
+    "Mono",
+    "Inyo"
+   ],
+   "primary": "Brandon 41.3%, Duarte 32.1%, Sen. Marie Alvarado-Gil (R, incumbent) 26.6%",
+   "money": "as of Apr 18: Duarte $254,900 on hand, Brandon $72,400 (fall totals not found)",
+   "note": "Open seat: the incumbent finished third in June. Duarte is the wife of former Rep. John Duarte.",
+   "a_case": [
+    {
+     "text": "Finished first in the June primary with 41.3% (109,094 votes).",
+     "url": "https://elections.cdn.sos.ca.gov/sov/2026-primary/sov/90-state-senator.pdf"
+    },
+    {
+     "text": "Endorsed by the California Democratic Party for the general election.",
+     "url": "https://cadem.org/wp-content/uploads/2026/08/FINAL-2026-General-Election-Endorsements.pdf"
+    },
+    {
+     "text": "Two-term Tuolumne County supervisor; won his 2020 general election with 59.4%.",
+     "url": "https://www.turlockjournal.com/news/government/democrat-jaron-brandon-launches-his-bid-for-senate-district-4-seat/"
+    }
+   ],
+   "b_case": [
+    {
+     "text": "Republican primary candidates combined for 58.7% of June votes (32.1% + 26.6%).",
+     "url": "https://elections.cdn.sos.ca.gov/sov/2026-primary/sov/90-state-senator.pdf"
+    },
+    {
+     "text": "Registered Republicans outnumber Democrats by about 6.6 points (2025 estimate, Target Book).",
+     "url": "https://sjvsun.com/news/politics/tuolumne-co-supervisor-brandon-launches-bid-for-state-senate/"
+    },
+    {
+     "text": "Had $254,900 on hand to Brandon's $72,400 as of April 18, 2026.",
+     "url": "https://sjvsun.com/?p=104444"
+    }
+   ]
+  },
+  {
+   "id": "SD12",
+   "office": "State Senate District 12",
+   "a": {
+    "name": "Nathan Magsig",
+    "party": "Republican",
+    "inc": false
+   },
+   "b": {
+    "name": "William Brown Jr.",
+    "party": "Libertarian",
+    "inc": false
+   },
+   "open": true,
+   "counties": [
+    "Fresno",
+    "Kern",
+    "Tulare"
+   ],
+   "primary": "Magsig (R) 59.5%, Brown (Lib) 26.5%, Louis Anthony Miramontes (R) 14.0%",
+   "note": "Open seat; Republican vs. Libertarian, no Democrat on the ballot. Registration R 45.1%, D 27.5%."
+  },
+  {
+   "id": "SD14",
+   "office": "State Senate District 14",
+   "a": {
+    "name": "Esmeralda Soria",
+    "party": "Democratic",
+    "inc": false
+   },
+   "b": {
+    "name": "Darin S. DuPont",
+    "party": "Republican",
+    "inc": false
+   },
+   "open": true,
+   "counties": [
+    "Fresno",
+    "Madera",
+    "Merced",
+    "Tulare"
+   ],
+   "primary": "Soria (D) 45.8%, DuPont (R) 40.4%, Esmeralda Hurtado (D) 13.8%",
+   "note": "Open seat; CalMatters rates it competitive. Registration D 41.5%, R 26.5%."
+  },
+  {
+   "id": "SD16",
+   "office": "State Senate District 16",
+   "a": {
+    "name": "Melissa Hurtado",
+    "party": "Democratic",
+    "inc": true
+   },
+   "b": {
+    "name": "Guillermo Asuncion Gonzalez",
+    "party": "Republican",
+    "inc": false
+   },
+   "open": false,
+   "counties": [
+    "Fresno",
+    "Kern",
+    "Kings",
+    "Tulare"
+   ],
+   "primary": "Gonzalez (R) 45.2%, Hurtado (D) 35.6%, Manpreet Kaur (D) 19.1%",
+   "note": "Democratic-held; Hurtado won in 2022 by 13 votes (CalMatters). Registration D 39.0%, R 29.8%."
+  },
+  {
+   "id": "AD8",
+   "office": "State Assembly District 8",
+   "a": {
+    "name": "David Tangipa",
+    "party": "Republican",
+    "inc": true
+   },
+   "b": null,
+   "open": false,
+   "counties": [
+    "Calaveras",
+    "Fresno",
+    "Inyo",
+    "Madera",
+    "Mariposa",
+    "Mono",
+    "Tuolumne"
+   ],
+   "primary": "Tangipa (R) 100.0% (103,817), unopposed",
+   "note": "Only one candidate on the Nov 3 ballot. Registration R 44.1%, D 29.0%, NPP 18.0%."
+  },
+  {
+   "id": "AD9",
+   "office": "State Assembly District 9",
+   "a": {
+    "name": "Heath Flora",
+    "party": "Republican",
+    "inc": true
+   },
+   "b": {
+    "name": "Matthew Adams",
+    "party": "Democratic",
+    "inc": false
+   },
+   "open": false,
+   "counties": [
+    "Amador",
+    "Calaveras",
+    "Sacramento",
+    "San Joaquin",
+    "Stanislaus"
+   ],
+   "primary": "Flora (R) 30.6%, Adams (D) 25.9%, Jim Shoemaker (R) 22.7%, Michael Perez (D) 9.3%, Brandon Owen (R) 8.6%, Tami Nobriga (R) 3.0%",
+   "note": "Republican-held; Flora is Assembly Republican Leader seeking a sixth and final term. Local GOP committees endorsed Shoemaker in the primary. Registration R 41.7%, D 31.1%."
+  },
+  {
+   "id": "AD13",
+   "office": "State Assembly District 13",
+   "a": {
+    "name": "Rhodesia Ransom",
+    "party": "Democratic",
+    "inc": true
+   },
+   "b": {
+    "name": "Tom Patti",
+    "party": "Republican",
+    "inc": false
+   },
+   "open": false,
+   "counties": [
+    "San Joaquin"
+   ],
+   "primary": "Ransom (D) 58.3%, Patti (R) 35.3%, Ali Jafri (R) 4.1%, Eliza Dy (NPP) 2.3%",
+   "note": "Democratic-held; Patti is a former San Joaquin County supervisor. Registration D 45.8%, R 23.6%."
+  },
+  {
+   "id": "AD22",
+   "office": "State Assembly District 22",
+   "a": {
+    "name": "Juan Alanis",
+    "party": "Republican",
+    "inc": true
+   },
+   "b": null,
+   "open": false,
+   "counties": [
+    "Merced",
+    "Stanislaus"
+   ],
+   "primary": "Alanis (R) 100.0% (51,246), unopposed",
+   "note": "Only one candidate on the Nov 3 ballot. Republican-held; registration D 37.4%, R 34.0%."
+  },
+  {
+   "id": "AD27",
+   "office": "State Assembly District 27",
+   "a": {
+    "name": "Brian Pacheco",
+    "party": "Democratic",
+    "inc": false
+   },
+   "b": {
+    "name": "Mike Murphy",
+    "party": "Republican",
+    "inc": false
+   },
+   "open": true,
+   "counties": [
+    "Fresno",
+    "Madera",
+    "Merced"
+   ],
+   "primary": "Murphy (R) 43.4%, Pacheco (D) 40.3%, Japjeet Singh Uppal (D) 16.3%",
+   "note": "Open seat (Esmeralda Soria running for SD14). Registration D 39.6%, R 28.9%; CalMatters says Trump carried it in 2024."
+  },
+  {
+   "id": "AD31",
+   "office": "State Assembly District 31",
+   "a": {
+    "name": "Annalisa Perea",
+    "party": "Democratic",
+    "inc": false
+   },
+   "b": {
+    "name": "Jim Polsgrove",
+    "party": "Republican",
+    "inc": false
+   },
+   "open": true,
+   "counties": [
+    "Fresno"
+   ],
+   "primary": "Perea (D) 44.6%, Polsgrove (R) 34.4%, Sandra Celedon (D) 21.0%",
+   "note": "Open seat (Joaquin Arambula not running). Registration D 43.5%, R 23.8%."
+  },
+  {
+   "id": "AD33",
+   "office": "State Assembly District 33",
+   "a": {
+    "name": "Alexandra (Ali) Macedo",
+    "party": "Republican",
+    "inc": true
+   },
+   "b": {
+    "name": "Hipolito Angel Cerros",
+    "party": "Democratic",
+    "inc": false
+   },
+   "open": false,
+   "counties": [
+    "Fresno",
+    "Kings",
+    "Tulare"
+   ],
+   "primary": "Macedo (R) 61.2%, Cerros (D) 38.8%",
+   "note": "Same two candidates as the primary. Republican-held; registration R 36.4%, D 32.9%."
+  }
+ ],
+ "gov": {
+  "id": "GOV",
+  "a": {
+   "name": "Xavier Becerra",
+   "party": "Democratic",
+   "inc": false
+  },
+  "b": {
+   "name": "Steve Hilton",
+   "party": "Republican",
+   "inc": false
+  },
+  "primary": "Becerra 28.0%, Hilton 24.6%, Steyer 22.8%, Bianco 10.2%; Hilton led in all five Valley counties",
+  "money": "raised: Becerra $40M, Hilton $33.6M (CalMatters, Oct 27)",
+  "polls_line": "Latest polls: PPIC Statewide Survey (Oct 16-22, 2026): Becerra 61%, Hilton 37%; Emerson College (Oct 17-19, 2026): Becerra 60%, Hilton 33%.",
+  "a_case": [
+   {
+    "text": "Leads Hilton 61% to 37% among likely voters in PPIC's Oct. 16-22 survey.",
+    "url": "https://www.ppic.org/pdf/ppic-statewide-survey-californians-and-their-government-october-2026.pdf"
+   },
+   {
+    "text": "Finished first statewide in the June primary, 28.0% to Hilton's 24.6%.",
+    "url": "https://elections.cdn.sos.ca.gov/sov/2026-primary/sov/19-gov.pdf"
+   },
+   {
+    "text": "Has out-raised Hilton, $40 million to $33.6 million.",
+    "url": "https://calmatters.org/politics/2026/10/california-governor-race-final-stretch/"
+   }
+  ],
+  "b_case": [
+   {
+    "text": "Out-polled Becerra in all five Valley counties in June, including Madera 40.6% to 19.3%.",
+    "url": "https://elections.cdn.sos.ca.gov/sov/2026-primary/sov/19-gov.pdf"
+   },
+   {
+    "text": "Raised $33.6 million, about double the leading Republican in the 2021 recall.",
+    "url": "https://calmatters.org/politics/2026/10/california-governor-race-final-stretch/"
+   },
+   {
+    "text": "Led the Republican field by more than 14 points, ahead of Chad Bianco, 24.6% to 10.2%.",
+    "url": "https://elections.cdn.sos.ca.gov/sov/2026-primary/sov/19-gov.pdf"
+   }
+  ]
+ },
+ "props": [
+  {
+   "num": "1",
+   "title": "Authorizes Bonds for Housing Affordability Programs. Legislative Statute.",
+   "yes": "The state could borrow $11.25 billion to support veterans and affordable housing.",
+   "no": "The state could not borrow $11.25 billion to support veterans and affordable housing.",
+   "yes_side": "Placed on ballot by Legislature (SB 417, Limon); named campaign not found",
+   "no_side": "No organized opposition found",
+   "poll": "PPIC Oct 16-22, 2026 (likely voters): Yes 60%, No 38%",
+   "source": "https://lao.ca.gov/BallotAnalysis/Proposition?number=1&year=2026"
+  },
+  {
+   "num": "2",
+   "title": "Increases State's Rainy Day Fund. Legislative Constitutional Amendment.",
+   "yes": "Rules for building state budget reserves and paying down extra state debts would change (reserve cap rises from 10% to 20% of General Fund revenue).",
+   "no": "Rules for building state budget reserves and paying down extra state debts would not change.",
+   "yes_side": "Democrats (CalMatters); placed on ballot by Legislature (ACA 20, Gabriel)",
+   "no_side": "Many Republicans (CalMatters); no named committee found",
+   "poll": "PPIC Oct 16-22, 2026: Yes 61%, No 38%",
+   "source": "https://lao.ca.gov/BallotAnalysis/Proposition?number=2&year=2026"
+  },
+  {
+   "num": "3",
+   "title": "Provides Permanent Funding for Schools and Health Care by Extending Existing Tax on High Incomes. Initiative Constitutional Amendment.",
+   "yes": "An income tax increase on high-income earners in place since 2012 would become permanent instead of expiring in 2031.",
+   "no": "An income tax increase on high-income earners in place since 2012 would expire in 2031.",
+   "yes_side": "The state's largest teachers union (CalMatters, not named in article)",
+   "no_side": "Opponents not named in sources found",
+   "poll": "PPIC Oct 16-22, 2026: Yes 58%, No 41%",
+   "source": "https://lao.ca.gov/BallotAnalysis/Proposition?number=3&year=2026"
+  },
+  {
+   "num": "4",
+   "title": "Repeals Prohibition Against Public Funding of Election Campaigns. Legislative Statute.",
+   "yes": "State and local governments could create public campaign financing programs for candidates for public office.",
+   "no": "State and most local governments would remain unable to create public campaign finance programs.",
+   "yes_side": "California Democratic Party (CalMatters); placed on ballot by Legislature (SB 42, Umberg)",
+   "no_side": "Opponents not named in sources found",
+   "poll": "PPIC Oct 16-22, 2026: Yes 45%, No 52%",
+   "source": "https://lao.ca.gov/BallotAnalysis/Proposition?number=4&year=2026"
+  },
+  {
+   "num": "5",
+   "title": "Changes Recall Election Process for Statewide Officers. Legislative Constitutional Amendment.",
+   "yes": "Recall elections would no longer include a question about who should fill the vacancy.",
+   "no": "Voters would continue to be asked who should fill the vacancy as part of recall elections.",
+   "yes_side": "Democratic Party (CalMatters); placed on ballot by Legislature (SCA 1, Newman)",
+   "no_side": "Republicans (CalMatters)",
+   "poll": "PPIC Oct 16-22, 2026: Yes 45%, No 52%",
+   "source": "https://lao.ca.gov/BallotAnalysis/Proposition?number=5&year=2026"
+  },
+  {
+   "num": "37",
+   "title": "Creates Loan Program for Middle-Income Buyers of Qualified New Homes. Initiative Statute.",
+   "yes": "The state would create a new homebuying assistance program.",
+   "no": "The state would not be required to create a new homebuying assistance program.",
+   "yes_side": "Unions, real estate developers, Democratic Party (CalMatters)",
+   "no_side": "Opponents not named in sources found",
+   "poll": "PPIC Oct 16-22, 2026: Yes 65%, No 32%",
+   "source": "https://lao.ca.gov/BallotAnalysis/Proposition?number=37&year=2026"
+  },
+  {
+   "num": "38",
+   "title": "Authorizes Bonds for Immunology Medical Research. Initiative Statute.",
+   "yes": "The state could borrow $8.4 billion to support medical research in immunology and immunotherapy.",
+   "no": "The state could not borrow $8.4 billion to support medical research in immunology and immunotherapy.",
+   "yes_side": "Placed on ballot by Gary K. Michelson (CalMatters)",
+   "no_side": "Opponents not named in sources found",
+   "poll": "PPIC Oct 16-22, 2026: Yes 57%, No 41%",
+   "source": "https://lao.ca.gov/BallotAnalysis/Proposition?number=38&year=2026"
+  },
+  {
+   "num": "39",
+   "title": "Prohibits Citizens from Voting Unless They Present Government-Issued Identification. Initiative Constitutional Amendment.",
+   "yes": "Voters would be required to present additional identifying information to elections officials each time they vote.",
+   "no": "A voter's identity would continue to be established with the voter's signature.",
+   "yes_side": "Reform California with Carl DeMaio, California Republican Party; top funders Richard Uihlein ($17.0M), Joseph Gebbia ($8.0M); $36.7M total (KQED, Nov 1)",
+   "no_side": "No on 39, California Democratic Party, California Nurses Association, League of Women Voters of CA, Common Cause; $35.2M total (KQED, Nov 1)",
+   "poll": "PPIC Oct 16-22, 2026: Yes 41%, No 58%",
+   "source": "https://lao.ca.gov/BallotAnalysis/Proposition?number=39&year=2026"
+  },
+  {
+   "num": "40",
+   "title": "Imposes One-Time Tax on Certain Taxpayers. Initiative Constitutional Amendment and Statute.",
+   "yes": "The state would collect a one-time tax from billionaires equal to 5 percent of their wealth.",
+   "no": "The state would not collect a one-time tax from billionaires equal to 5 percent of their wealth.",
+   "yes_side": "YES on 40 - Billionaire Tax Now (SEIU United Healthcare Workers West), about $32.0M",
+   "no_side": "No on Prop 40 committee, about $118.8M, nearly all from Building a Better California (largest donor Sergey Brin); Golden State Promise ($10.45M); business leaders and Planned Parenthood also oppose (CalMatters)",
+   "poll": "PPIC Oct 16-22, 2026: Yes 46%, No 52%",
+   "source": "https://lao.ca.gov/BallotAnalysis/Proposition?number=40&year=2026"
+  },
+  {
+   "num": "41",
+   "title": "Prohibits New State Taxes That Exclude Revenues from State Spending Limit. Requires Audits for New State Special Taxes. Initiative Constitutional Amendment.",
+   "yes": "New state taxes could not be excluded from the state spending limit, and the State Auditor would review programs funded by proposed new special taxes (LAO, paraphrased; a yes vote also invalidates Prop 40 per CalMatters).",
+   "no": "The State Auditor's responsibility to review government programs and the state spending limit requirements would not change.",
+   "yes_side": "Yes on 41 - Californians for Transparency and Accountability, about $58.4M, nearly all from Building a Better California",
+   "no_side": "Working Families Say NO to Propositions 41 and 42 (labor unions), about $951K",
+   "poll": "PPIC Oct 16-22, 2026: Yes 48%, No 49%",
+   "source": "https://lao.ca.gov/BallotAnalysis/Proposition?number=41&year=2026"
+  },
+  {
+   "num": "42",
+   "title": "Prohibits New State Personal Property Taxes and Certain Retroactive State Taxes. Initiative Constitutional Amendment.",
+   "yes": "The state could not establish new taxes on the ownership of financial assets or other personal property.",
+   "no": "The state would continue to have the option to establish new taxes on the ownership of financial assets.",
+   "yes_side": "Yes on 42 - Protect Retirement & Life Savings, about $128.0M, nearly all from Building a Better California",
+   "no_side": "Working Families Say NO to Propositions 41 and 42 (labor unions), about $951K",
+   "poll": "PPIC Oct 16-22, 2026: Yes 51%, No 47%",
+   "source": "https://lao.ca.gov/BallotAnalysis/Proposition?number=42&year=2026"
+  },
+  {
+   "num": "43",
+   "title": "Limits Voters' Ability to Raise Revenues for Local Government Services. Legislative Constitutional Amendment.",
+   "yes": "Certain local government taxes would require two-thirds approval by voters.",
+   "no": "Certain local government taxes could continue to be approved by voters with a majority vote.",
+   "yes_side": "Placed on ballot by Legislature (ACA 22, Wicks); proponents not named in sources found",
+   "no_side": "Opponents not named in sources found",
+   "poll": "PPIC Oct 16-22, 2026: Yes 42%, No 55%",
+   "source": "https://lao.ca.gov/BallotAnalysis/Proposition?number=43&year=2026"
+  },
+  {
+   "num": "44",
+   "title": "Requires Community Health Clinics Spend 90% of Revenue on Program Services. Initiative Statute.",
+   "yes": "Certain private nonprofit health care clinics would have to spend at least 90 percent of their revenue on program services.",
+   "no": "The new requirement on health care clinic spending would not go into effect.",
+   "yes_side": "SEIU United Healthcare Workers West (CalMatters)",
+   "no_side": "Democratic Party and health care associations (CalMatters)",
+   "poll": "PPIC Oct 16-22, 2026: Yes 25%, No 71%",
+   "source": "https://lao.ca.gov/BallotAnalysis/Proposition?number=44&year=2026"
+  },
+  {
+   "num": "45",
+   "title": "Modifies Environmental Review for Certain Projects. Initiative Statute.",
+   "yes": "Certain public and private projects would be eligible for new project review and court challenge procedures.",
+   "no": "Public and private projects would continue to use existing project review and court challenge procedures.",
+   "yes_side": "California Chamber of Commerce (CalMatters)",
+   "no_side": "Environmental groups (CalMatters, not named)",
+   "poll": "PPIC Oct 16-22, 2026: Yes 46%, No 50%",
+   "source": "https://lao.ca.gov/BallotAnalysis/Proposition?number=45&year=2026"
+  }
+ ],
+ "local": {
+  "contests": [
+   {
+    "office": "County Superintendent of Schools",
+    "jurisdiction": "Merced County",
+    "seats": 1,
+    "candidates": [
+     {
+      "name": "Richard Lopez",
+      "designation": "Superintendent / Veteran (June primary designation; Nov designation unconfirmed)",
+      "inc": false
+     },
+     {
+      "name": "Ana Boyenga",
+      "designation": "Assistant Superintendent (June primary designation; Nov designation unconfirmed)",
+      "inc": false
+     }
+    ]
+   },
+   {
+    "office": "City Council District 2",
+    "jurisdiction": "City of Merced",
+    "seats": 1,
+    "candidates": [
+     {
+      "name": "Yang Pao Thao",
+      "designation": "unconfirmed",
+      "inc": true
+     },
+     {
+      "name": "Felipe Rojas-Flores",
+      "designation": "Legal Aid Attorney",
+      "inc": false
+     }
+    ]
+   },
+   {
+    "office": "City Council District 4",
+    "jurisdiction": "City of Merced",
+    "seats": 1,
+    "candidates": [
+     {
+      "name": "Shane Smith",
+      "designation": "Councilmember / Legal Counselor",
+      "inc": true
+     }
+    ]
+   },
+   {
+    "office": "City Council District 6",
+    "jurisdiction": "City of Merced",
+    "seats": 1,
+    "candidates": [
+     {
+      "name": "Fue Xiong",
+      "designation": "unconfirmed",
+      "inc": true
+     },
+     {
+      "name": "Yader Jesus Zeledon Venegas",
+      "designation": "unconfirmed (filed as Yader Zeledon in news)",
+      "inc": false
+     },
+     {
+      "name": "John G. Bliss, Jr",
+      "designation": "Retired Educator",
+      "inc": false
+     }
+    ]
+   },
+   {
+    "office": "Mayor",
+    "jurisdiction": "City of Atwater",
+    "seats": 1,
+    "candidates": [
+     {
+      "name": "Mike Nelson",
+      "designation": "Mayor / Business Owner",
+      "inc": true
+     },
+     {
+      "name": "Roberto Montes-Yepez",
+      "designation": "Utility Worker / Artist",
+      "inc": false
+     }
+    ]
+   },
+   {
+    "office": "Mayor (2-year term)",
+    "jurisdiction": "City of Livingston",
+    "seats": 1,
+    "candidates": [
+     {
+      "name": "Jason Roth",
+      "designation": "unconfirmed",
+      "inc": false
+     },
+     {
+      "name": "Japjeet Singh Uppal",
+      "designation": "unconfirmed",
+      "inc": false
+     }
+    ]
+   },
+   {
+    "office": "City Council (full term)",
+    "jurisdiction": "City of Livingston",
+    "seats": 2,
+    "candidates": [
+     {
+      "name": "Gurpal S. Samra",
+      "designation": "Councilmember",
+      "inc": true
+     },
+     {
+      "name": "Parwinder Singh Uppal",
+      "designation": "unconfirmed",
+      "inc": false
+     },
+     {
+      "name": "Terika Michelle Degraw",
+      "designation": "unconfirmed",
+      "inc": false
+     },
+     {
+      "name": "Mohinder Singh Kanda",
+      "designation": "unconfirmed",
+      "inc": false
+     }
+    ]
+   },
+   {
+    "office": "City Council (short term)",
+    "jurisdiction": "City of Livingston",
+    "seats": 1,
+    "candidates": [
+     {
+      "name": "Robert S. Wallis",
+      "designation": "Appointed Councilmember",
+      "inc": true
+     }
+    ]
+   },
+   {
+    "office": "Mayor",
+    "jurisdiction": "City of Los Banos",
+    "seats": 1,
+    "candidates": [
+     {
+      "name": "Michael S. Amabile",
+      "designation": "Businessman",
+      "inc": true
+     }
+    ]
+   },
+   {
+    "office": "City Council District 3",
+    "jurisdiction": "City of Los Banos",
+    "seats": 1,
+    "candidates": [
+     {
+      "name": "Marcus Chavez",
+      "designation": "Transportation Coordinator",
+      "inc": true
+     },
+     {
+      "name": "Erasmo Viveros",
+      "designation": "unconfirmed",
+      "inc": false
+     }
+    ]
+   }
+  ],
+  "measures": [
+   {
+    "letter": "B",
+    "jurisdiction": "City of Merced",
+    "yes": "Adds a one-cent general sales tax (city rate to 9.25%), no sunset, majority vote; revenue for general city services."
+   },
+   {
+    "letter": "T",
+    "jurisdiction": "City of Livingston",
+    "yes": "Makes the City Clerk an appointed rather than elected office"
+   },
+   {
+    "letter": "U",
+    "jurisdiction": "City of Livingston",
+    "yes": "Makes the City Treasurer an appointed rather than elected office"
+   },
+   {
+    "letter": "V",
+    "jurisdiction": "City of Los Banos",
+    "yes": "Makes the City Treasurer an appointed rather than elected office"
+   },
+   {
+    "letter": "W",
+    "jurisdiction": "Merced Union High School District, School Facilities Improvement District No. 1",
+    "yes": "Authorizes school facility general obligation bonds for SFID No. 1 ."
+   },
+   {
+    "letter": "X",
+    "jurisdiction": "Merced Union High School District, School Facilities Improvement District No. 2",
+    "yes": "Authorizes school facility general obligation bonds for SFID No. 2 ."
+   },
+   {
+    "letter": "Z",
+    "jurisdiction": "Merced Union High School District, School Facilities Improvement District No. 3",
+    "yes": "Authorizes school facility general obligation bonds for SFID No. 3 ."
+   },
+   {
+    "letter": "A",
+    "jurisdiction": "Le Grand Union High School District",
+    "yes": "Authorizes school facility general obligation bonds ."
+   }
+  ]
+ },
+ "boe": {
+  "id": "BOE1",
+  "office": "State Board of Equalization, District 1",
+  "alum": null,
+  "a": {
+   "name": "Nelson Esparza",
+   "party": "Democratic",
+   "inc": false
+  },
+  "b": {
+   "name": "Shannon Grove",
+   "party": "Republican",
+   "inc": false
+  },
+  "open": true,
+  "counties": [
+   "Merced",
+   "Stanislaus",
+   "San Joaquin",
+   "Fresno",
+   "Madera",
+   "Mariposa",
+   "Tuolumne"
+  ],
+  "primary": "",
+  "money": "",
+  "note": "Open seat. District 1 runs through the Central Valley and inland California. Esparza is Fresno City Council president (termed out of his council seat); Grove is the former Senate Republican leader from Bakersfield. Statewide and Valley county numbers from the Secretary of State.",
+  "a_case": [
+   {
+    "text": "Endorsed by Rep. Jim Costa and backed by the Democratic Party in a district Democrats have held",
+    "url": "https://sjvsun.com/?p=93979"
+   }
+  ],
+  "b_case": [
+   {
+    "text": "Former Senate Republican leader with a Bakersfield base in the district's most Republican counties",
+    "url": "https://ballotpedia.org/Nelson_Esparza"
+   }
+  ]
+ }
+}
