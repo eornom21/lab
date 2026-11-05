@@ -143,6 +143,10 @@ details.how .hbx b{color:var(--ink)}
 .seatbar i{display:block;height:100%}
 .seatbar .mid{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--ink)}
 .seats .s{font-size:14px;color:var(--muted)}
+#ucTable{max-height:440px;overflow:auto}
+#ucTable th:nth-child(-n+3),#ucTable td:nth-child(-n+3){text-align:left}
+#ucTable td:nth-child(3){white-space:normal;min-width:220px}
+#ucTable thead th{position:sticky;top:0;background:var(--panel)}
 .big2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .big2 .c{border-left:5px solid var(--dem);padding-left:12px}.big2 .c.R{border-left-color:var(--rep)}
 .big2 .n{font-family:var(--display);font-weight:800;font-size:30px;text-transform:uppercase;line-height:1}
@@ -299,9 +303,8 @@ a.hbtn.detail{border-color:var(--ink);color:var(--ink)}
     <div class="banner" id="rehearsalBanner" hidden>Rehearsal data: these numbers are made up from 2022 turnout. Turn it off before results come in.</div>
 
     <section id="v-summary">
-      <h2>The night so far</h2>
+      <h2>Where it stands</h2>
       <div class="meta2" data-sec="summary"></div>
-      <div class="tiles" id="sTiles"></div>
       <div class="card2" id="seatCard">
         <div style="display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between">
           <h3 style="font-family:var(--display);font-weight:800;font-size:30px;text-transform:uppercase;margin:0">Seats in the new Congress</h3>
@@ -329,6 +332,9 @@ a.hbtn.detail{border-color:var(--ink);color:var(--ink)}
         <div class="tidegrid"><div class="tablewrap" id="tideTable"></div><div class="tablewrap" id="tideStates"></div></div>
         <p class="note" id="tideNote"></p>
       </div>
+      <h3 style="font-family:var(--display);font-weight:800;font-size:30px;text-transform:uppercase;margin:22px 0 4px">The lab's 32 battleground races</h3>
+      <p class="note" style="margin:0 0 10px">The races the lab followed on election night, chosen before the votes were counted. Tap a row to open the race.</p>
+      <div class="tiles" id="sTiles"></div>
       <div class="card2" id="sVote"></div>
       <div class="tablewrap" id="sTable"></div>
     </section>
@@ -711,11 +717,10 @@ function renderSummary() {
     stat("Seats changing party", `${T.flips.D.length + T.flips.R.length}`, T.flips.D.length + T.flips.R.length ? [T.flips.D.length ? `D gains: ${T.flips.D.map(dash).join(", ")}` : "", T.flips.R.length ? `R gains: ${T.flips.R.map(dash).join(", ")}` : ""].filter(Boolean).join(" · ") : "Called races where the winner's party differs from who holds the seat now") +
     stat("Leading, not called", `<span style="color:var(--dem)">${T.lead.D}</span> – <span style="color:var(--rep)">${T.lead.R}</span>`, `${T.none} with no votes yet` + (T.would.D.length + T.would.R.length ? ` · would flip: ${[...T.would.D, ...T.would.R].map(dash).join(", ")}` : "")) +
     stat("If every leader holds", !any ? "–" : net === 0 ? "No change" : `${net > 0 ? "D" : "R"} +${Math.abs(net)}`, `Democrats would hold ${T.hold.D} of these 32 seats (they hold ${T.now.D} now)`) +
-    stat("The Senate", (SEN.races || []).length ? `<span style="color:var(--rep)">${senTally().proj.R}</span> R – <span style="color:var(--dem)">${senTally().proj.D}</span> D` : "–", (SEN.races || []).length ? `if every leader holds (53 R – 47 D going in); ${(senTally().called.D || 0) + (senTally().called.I || 0)}–${senTally().called.R || 0} called tonight` : "fills in with the first Senate counts") +
     stat("CAPE score, the board", T.capeN ? `${T.capeSum / T.capeN > 0 ? "D" : "R"} +${Math.abs(T.capeSum / T.capeN).toFixed(1)}` : "–", T.capeN ? `average two-way margin vs. Decision Desk HQ's pre-election forecast, ${T.capeN} races with votes; + means Democrats beating the forecast` : "fills in with the first counts: margin tonight vs. the pre-election forecast");
   const ds = any ? T.d / (T.d + T.r) : null;
   $("#sVote").innerHTML = !any ? `<div class="k" style="font-size:13px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)">The battleground vote</div><div class="wait2" style="font-size:30px;margin-top:6px">Waiting for the first count</div>` :
-    `<div class="k" style="font-size:13px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)">The battleground vote: every vote counted so far in the 32 races, added up</div>
+    `<div class="k" style="font-size:13px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)">The battleground vote: every vote counted in the 32 races, added up</div>
      <div class="big2" style="margin-top:8px"><div class="c"><div class="n">Democrats</div><div class="p">${pct(ds, 1)}</div><div class="v">${fmt(T.d)} votes</div></div><div class="c R"><div class="n">Republicans</div><div class="p">${pct(1 - ds, 1)}</div><div class="v">${fmt(T.r)} votes</div></div></div>
      <div class="bigbar"><i style="width:${ds * 100}%;background:var(--dem)"></i><i style="flex:1;background:var(--rep)"></i></div>
      <p class="note" style="font-size:16px">${fmt(T.d + T.r)} votes counted across the 32 races${T.pctN ? `; on average ${Math.round(T.pctSum / T.pctN)}% of each race's expected vote is in` : ""}.</p>`;
@@ -768,7 +773,7 @@ function renderUncalled() {
   else { const L = (SEN.races || []).filter(r => !r.called).map(r => ({ ...r, cands: (r.cands || []).slice(0, 2) })); n = L.length; L.sort((a, b) => close(a) - close(b));
     rows = L.map(r => row(r.name, r.prev, r.cands, r.pct, r.rating || "")); }
   el.innerHTML = !n ? `<div class="wait2" style="font-size:20px">${ucMode === "house" && !HSEATS ? "Fills in when Decision Desk HQ's House feed loads" : "Every race is called"}</div>`
-    : `<table><thead><tr><th>Race</th><th>Held by</th><th>Top two</th><th>Margin</th><th>Counted</th><th>If the leader holds</th></tr></thead><tbody>${rows.join("")}</tbody></table>
+    : `<table><thead><tr><th>Race</th><th>Held by</th><th>Top two</th><th>Margin</th><th>Counted</th><th>Outcome</th></tr></thead><tbody>${rows.join("")}</tbody></table>
        <p class="note">${n} ${ucMode === "house" ? "House" : "Senate"} race${n === 1 ? "" : "s"} not called by Decision Desk HQ, closest first. * incumbent.</p>`;
 }
 document.querySelectorAll("[data-uc]").forEach(b => b.onclick = () => { ucMode = b.dataset.uc; document.querySelectorAll("[data-uc]").forEach(x => x.setAttribute("aria-pressed", String(x === b))); renderUncalled(); });
@@ -932,7 +937,7 @@ const HOW = {
     "The room can scroll back to anything already answered, and a question like \"turnout in red vs. blue counties\" stays current all night instead of going stale.",
     "turn on Updating for the question the room keeps coming back to, then return to this tab after each big batch of results.",
     "Answers from the Ask box are saved here the moment they finish. Updating cards re-ask every 10 minutes while this page is open (at most 3, each one a Claude question on Nate's plan). Guests' phones get these cards within about 10 minutes."],
-  summary: ["All 32 races added up: how many are called for each party, which seats are changing party compared with who holds them now, who leads the rest, the total vote counted across all 32 districts, and the board's CAPE score. The table lists every race, closest first, with each race's CAPE score; tap a row to open it. CAPE scores (Candidate Advantage over Pre-election Expectation) are the lab's yardsticks: the CAPE score is a candidate's two-way margin tonight minus Decision Desk HQ's pre-election forecast margin, in points; the caucus scoreboards add the ticket score (vs. the same party's statewide candidate in the same counties), crossover wins (winning where the other party's presidential nominee won in 2024) and the tide (the national swing vs. 2024); the weather page adds the rain tax (turnout shortfall per inch of rain).",
+  summary: ["Where the House and Senate stand: seats called and seats if every current leader holds, the races still uncalled (closest first), the tide in every House race, and then the lab's 32 battleground races added up: how many are called for each party, which seats are changing party compared with who holds them now, who leads the rest, the total vote counted across all 32 districts, and the board's CAPE score. The table lists every race, closest first, with each race's CAPE score; tap a row to open it. CAPE scores (Candidate Advantage over Pre-election Expectation) are the lab's yardsticks: the CAPE score is a candidate's two-way margin tonight minus Decision Desk HQ's pre-election forecast margin, in points; the caucus scoreboards add the ticket score (vs. the same party's statewide candidate in the same counties), crossover wins (winning where the other party's presidential nominee won in 2024) and the tide (the national swing vs. 2024); the weather page adds the rain tax (turnout shortfall per inch of rain).",
     "It answers the room's big question in one look: is either party picking up seats in the races that decide the House, and by how much?",
     "at 9pm, read off \"If every leader holds\" and the seats changing party, then tap the closest row in the table to walk through that race.",
     "District totals and race calls are written into this dashboard from a news results feed every few minutes on election night (the line above says when the last update arrived). \"Held by\" is the party that holds each seat now; for open seats, the party of the member leaving. These are 32 hand-picked close races, so they are a read on the battleground, not the whole House."],
@@ -1001,7 +1006,7 @@ function render() {
   if (view === "race") renderRace();
   const m = live().meta, any = Object.keys(live().counties).length || Object.keys(live().races).length;
   { const tb = document.querySelector('nav button[data-view="turnout"]'); if (tb) tb.title = Object.keys(live().counties).length ? "" : "County counts arrive with the first results"; }
-  $("#status").textContent = REH ? "Rehearsal" : any ? "Results coming in" : "Waiting for results";
+  $("#status").textContent = REH ? "Rehearsal" : any ? (Date.now() > Date.parse("2026-11-04T12:00:00Z") ? "Counting continues" : "Results coming in") : "Waiting for results";
   $("#status").className = "pill" + (any && !REH ? " live" : "");
   $("#updated").hidden = !m?.updated;
   if (m?.updated) $("#updated").textContent = "Updated " + new Date(m.updated).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", timeZone: "America/Los_Angeles" }) + " PT";
@@ -1234,11 +1239,12 @@ async function pollHouse() {
 }
 function startMirror() {
   document.body.classList.add("mirror");
+  if (Date.now() > Date.parse("2026-11-04T12:00:00Z")) document.querySelectorAll(".qrcorner").forEach(q => q.hidden = true);  // the watch-party QR is done; keep it off the public page after the night
   { const gs = document.querySelectorAll("nav .navgroup"); if (gs.length) gs[gs.length - 1].textContent = "From the room"; }
   pollHouse(); setInterval(() => { if (!document.hidden) pollHouse(); }, 60e3);
   pollSenate(); setInterval(() => { if (!document.hidden) pollSenate(); }, 60e3);
   pollGov(); setInterval(() => { if (!document.hidden) pollGov(); }, 60e3);
-  const b = document.querySelector(".brand small"); if (b) b.textContent = "Watch-party big screen, live view · U.S. House · California · Tuesday, Nov 3, 2026";
+  const b = document.querySelector(".brand small"); if (b) b.textContent = "Live results · U.S. House, Senate · California · Election of Nov 3, 2026";
   $("#status").insertAdjacentHTML("afterend", `<span class="pill mirrorpill" id="mirrorStamp">Live view</span>`);
   loadSnap(); setInterval(() => { if (!document.hidden) loadSnap(); }, 60e3);
   document.addEventListener("visibilitychange", () => { if (!document.hidden) loadSnap(); });
