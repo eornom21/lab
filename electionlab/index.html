@@ -309,6 +309,11 @@ a.hbtn.detail{border-color:var(--ink);color:var(--ink)}
         </div>
         <div class="seats" id="seatBody"></div>
         <p class="note" id="seatNote"></p>
+        <div style="display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between;margin-top:14px;border-top:1px solid var(--rule);padding-top:12px">
+          <h3 style="font-family:var(--display);font-weight:800;font-size:22px;text-transform:uppercase;margin:0">Still uncalled</h3>
+          <div class="seg" role="group" aria-label="Uncalled races"><button data-uc="house" aria-pressed="true">House</button><button data-uc="senate" aria-pressed="false">Senate</button></div>
+        </div>
+        <div class="tablewrap" id="ucTable" style="margin-top:8px"></div>
       </div>
       <div class="card2" id="tide">
         <div style="display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between">
@@ -743,10 +748,30 @@ function renderSeats() {
     sn = P ? block("The Senate", T.proj.D, T.proj.R, 0, 100, 51, `${(T.lead.D || 0) + (T.lead.I || 0) + (T.lead.R || 0)} going to the current leader`)
            : block("The Senate", cD, cR, 0, 100, 51, `includes the ${T.notUp.D + T.notUp.R} seats not up this year`); }
   else sn = `<div><div class="ch">The Senate</div><div class="wait2">Fills in with the Senate feed</div></div>`;
-  body.innerHTML = h + sn;
+  body.innerHTML = h + sn; renderUncalled();
   $("#seatNote").textContent = P ? "If every leader holds: called races, plus every uncalled race given to whoever leads the count right now, plus races with no votes yet left with the party that holds the seat. A projection from the count, not a forecast. Senate independents counted with Democrats; the line marks a majority."
     : "Called so far: races Decision Desk HQ has called. The Senate adds the seats not on the ballot this year (53 R – 47 D going in, independents with Democrats). The line marks a majority.";
 }
+function renderUncalled() {
+  const el = $("#ucTable"); if (!el) return;
+  const row = (name, held, cs, pct, tip) => { const tot = cs.reduce((t, c) => t + c.v, 0), a = cs[0], b = cs[1];
+    const mg = a && b && tot ? (a.v - b.v) / tot * 100 : null, fl = a && tot && a.p !== held && held !== "O";
+    return `<tr><td><b>${esc(name)}</b>${tip ? `<div class="tiny">${esc(tip)}</div>` : ""}</td><td class="${(held || "").toLowerCase()}">${held === "O" ? "–" : held}</td>
+      <td>${cs.map(c => `<span class="${c.p === "D" ? "d" : c.p === "R" ? "r" : ""}">${esc(c.n)}${c.inc ? " *" : ""} ${tot ? pct1(c.v / tot) : ""}</span>`).join(" · ") || "–"}</td>
+      <td class="${a && mg != null ? (a.p === "D" ? "d" : a.p === "R" ? "r" : "") : ""}">${mg == null ? "–" : `${a.p} +${mg.toFixed(1)}<div class="tiny">${fmt(a.v - b.v)} votes</div>`}</td>
+      <td>${pct ? pct + "%" : "–"}</td><td>${tot ? (fl ? `<span class="flip">Would flip</span>` : "Hold") : "No votes yet"}</td></tr>`; };
+  const pct1 = v => (v * 100).toFixed(1) + "%";
+  const close = (x) => { const t = x.cands.reduce((s, c) => s + c.v, 0); return t && x.cands[1] ? (x.cands[0].v - x.cands[1].v) / t : 9; };
+  let rows = [], n = 0;
+  if (ucMode === "house") { const L = HSEATS ? HSEATS.open.slice() : []; n = L.length; L.sort((a, b) => close(a) - close(b));
+    rows = L.map(x => row(x.k, x.held, x.cands, x.pct, "")); }
+  else { const L = (SEN.races || []).filter(r => !r.called).map(r => ({ ...r, cands: (r.cands || []).slice(0, 2) })); n = L.length; L.sort((a, b) => close(a) - close(b));
+    rows = L.map(r => row(r.name, r.prev, r.cands, r.pct, r.rating || "")); }
+  el.innerHTML = !n ? `<div class="wait2" style="font-size:20px">${ucMode === "house" && !HSEATS ? "Fills in when Decision Desk HQ's House feed loads" : "Every race is called"}</div>`
+    : `<table><thead><tr><th>Race</th><th>Held by</th><th>Top two</th><th>Margin</th><th>Counted</th><th>If the leader holds</th></tr></thead><tbody>${rows.join("")}</tbody></table>
+       <p class="note">${n} ${ucMode === "house" ? "House" : "Senate"} race${n === 1 ? "" : "s"} not called by Decision Desk HQ, closest first. * incumbent.</p>`;
+}
+document.querySelectorAll("[data-uc]").forEach(b => b.onclick = () => { ucMode = b.dataset.uc; document.querySelectorAll("[data-uc]").forEach(x => x.setAttribute("aria-pressed", String(x === b))); renderUncalled(); });
 document.querySelectorAll("[data-sm]").forEach(b => b.onclick = () => { seatMode = b.dataset.sm; document.querySelectorAll("[data-sm]").forEach(x => x.setAttribute("aria-pressed", String(x === b))); renderSeats(); });
 
 // ---------- the tide: every House race tonight vs the same district's 2024 or 2022 House result ----------
@@ -755,7 +780,7 @@ document.querySelectorAll("[data-sm]").forEach(b => b.onclick = () => { seatMode
 const TD = B.tide || { house: {}, house_state: {}, redrawn: {} };
 let tideBase = "2024", tideCut = 50, HOUSE = {};  // HOUSE: "PA-10" -> [d, r, pct]
 let SEN = { at: null, races: [] };
-let HSEATS = null, seatMode = "called";  // HSEATS: all 435 House races from Decision Desk HQ, {called, lead, none} by party
+let HSEATS = null, seatMode = "called", ucMode = "house";  // HSEATS: all 435 House races from Decision Desk HQ, {called, lead, none} by party
 let GOV = { at: null, races: [] };  // live/gov doc or electionlab/gov_live.json, same shape as SEN
 let CALEG = null, calegFilter = "all", calegOpen = null;  // live/caleg: {at, reporting_time, senate: [{d, rep, pct, cands: [{n, p, v, inc}]}], assembly: [...]}  // live/senate doc or electionlab/senate_live.json: {at, races: [{id, st, name, prev, rating, fm, pct, called, cands: [{n, p, v, w, inc}]}]}
 function tideRows() {
@@ -1186,15 +1211,17 @@ async function pollHouse() {
   try {
     const j = await fetch("https://race-api-proxy-production.decisiondeskhq.workers.dev/house", { cache: "no-store" }).then(r => r.json());
     const ids = new Set(B.races.map(r => r.id)), bd = {}; for (const r of (B.bluedogs?.races || [])) bd[r[0]] = r[1].split(" ").slice(-1)[0].toLowerCase();
-    const races = {}, house = {}, lbd = {}; let newest = ""; const hs = { called: { D: 0, R: 0, O: 0 }, lead: { D: 0, R: 0, O: 0 }, none: { D: 0, R: 0, O: 0 } };
+    const races = {}, house = {}, lbd = {}; let newest = ""; const hs = { called: { D: 0, R: 0, O: 0 }, lead: { D: 0, R: 0, O: 0 }, none: { D: 0, R: 0, O: 0 }, open: [] };
     for (const r of j.races || []) { const m = /^([A-Z]{2})-(\d+|AL)$/.exec(r.displayName || ""); if (!m) continue;
       const key = m[1] + "-" + (m[2] === "AL" ? "AL" : String(+m[2])), id = key.replace("-", ""), cs = (r.results && r.results.candidates) || [];
       let d = 0, rr = 0, called = null; for (const c of cs) { const p = c.party && c.party.abbrev; if (p === "DEM") d += c.votes || 0; if (p === "GOP") rr += c.votes || 0; if (c.winner) called = p === "DEM" ? "D" : p === "GOP" ? "R" : "O"; }
       const pct = Math.round((r.results && r.results.percentIn) || 0); if (r.results && r.results.lastUpdated > newest && d + rr > 0) newest = r.results.lastUpdated;
       if (d + rr > 0) house[key] = [d, rr, pct];
       if (m[1] !== "DC") { const pp = r.previousParty && r.previousParty.abbrev, held = pp === "DEM" ? "D" : pp === "GOP" ? "R" : "O";
-        if (called) hs.called[called]++; else { const top = [...cs].sort((a, b) => (b.votes || 0) - (a.votes || 0))[0], tp = top && top.party && top.party.abbrev;
-          if (top && (top.votes || 0) > 0) hs.lead[tp === "DEM" ? "D" : tp === "GOP" ? "R" : "O"]++; else hs.none[held]++; } }
+        if (called) hs.called[called]++; else { const so = [...cs].sort((a, b) => (b.votes || 0) - (a.votes || 0)), top = so[0], tp = top && top.party && top.party.abbrev;
+          if (top && (top.votes || 0) > 0) hs.lead[tp === "DEM" ? "D" : tp === "GOP" ? "R" : "O"]++; else hs.none[held]++;
+          const pa = c => { const a = c && c.party && c.party.abbrev; return a === "DEM" ? "D" : a === "GOP" ? "R" : "I"; }, tot = cs.reduce((t, c) => t + (c.votes || 0), 0);
+          hs.open.push({ k: key, held, pct, tot, cands: so.slice(0, 2).map(c => ({ n: ((c.firstName || "") + " " + (c.lastName || "")).trim(), p: pa(c), v: c.votes || 0, inc: !!c.incumbent })) }); } }
       let fm = null; { const fc = r.forecast || {}, la = (fc.leadingParty || {}).abbrev; if (fc.margin != null && (la === "DEM" || la === "GOP")) fm = la === "DEM" ? fc.margin : -fc.margin; }
       if (fm != null) FM_ALL[key] = fm;
       if (ids.has(id)) races[id] = { d, r: rr, pct, called, fm };
