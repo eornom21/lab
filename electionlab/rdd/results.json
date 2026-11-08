@@ -1,11 +1,11 @@
 {
- "run_at": "2026-11-08T08:25:58.899308+00:00",
- "run_at_pt": "12:25 AM PT",
+ "run_at": "2026-11-08T23:16:51.575850+00:00",
+ "run_at_pt": "3:16 PM PT",
  "sample": false,
  "feed": {
   "races": 436,
   "fetched": 436,
-  "rain_asof": "2026-11-08T06:49:39.278900+00:00"
+  "rain_asof": "2026-11-08T23:16:51.575850+00:00"
  },
  "hypotheses": [
   {
@@ -13,36 +13,36 @@
    "title": "Rain lowers Election-Day turnout",
    "claim": "Gomez, Hansford & Krause (2007, Journal of Politics) found that each inch of Election-Day rain cut turnout by just under one percentage point in presidential years; at midterm turnout that is roughly two percent fewer votes than expected.",
    "design": "Counties at least half counted. The county's votes vs. expectation (Decision Desk HQ's live estimate of its final vote against its pre-election expectation, in percent) regressed on today's precipitation, with state fixed effects; standard errors clustered by state, p-values on t with states minus one degrees of freedom.",
-   "n": 3026,
-   "r2": 0.32532431221797,
+   "n": 3027,
+   "r2": 0.3249799521671721,
    "clusters": 45,
    "table": [
     {
      "term": "rain (per cm)",
-     "est": 0.3494135336080986,
-     "se": 0.016397967147996153,
-     "t": 21.308344531645027,
-     "p": 0.0,
+     "est": -0.11834278923403858,
+     "se": 0.01271567687918997,
+     "t": -9.306841496398373,
+     "p": 5.837330618874148e-12,
      "ci": [
-      0.31636560233124317,
-      0.3824614648849541
+      -0.14396955210345452,
+      -0.09271602636462266
      ],
      "df": 44
     },
     {
      "term": "rain (per inch)",
-     "est": 0.8875103753645706,
-     "se": 0.04165083655591023,
-     "t": 21.308344531645027,
-     "p": 0.0,
+     "est": -0.300590684654458,
+     "se": 0.03229781927314252,
+     "t": -9.306841496398373,
+     "p": 5.837330618874148e-12,
      "ci": [
-      0.8035686299213577,
-      0.9714521208077834
+      -0.36568266234277447,
+      -0.23549870696614156
      ]
     }
    ],
-   "verdict": "Opposite direction so far",
-   "reading": "Across 3026 counties at least half counted, each inch of rain today goes with +0.89% votes vs. expectation (p < 0.01; 95% CI +0.80 to +0.97). The literature's roughly \u22122% per inch is outside that interval."
+   "verdict": "Consistent so far",
+   "reading": "Across 3027 counties at least half counted, each inch of rain today goes with -0.30% votes vs. expectation (p < 0.01; 95% CI -0.37 to -0.24). The literature's roughly \u22122% per inch is outside that interval."
   },
   {
    "id": "H2",
@@ -54,30 +54,30 @@
    "early_days_table": [
     {
      "term": "rain (per cm)",
-     "est": 0.7323571751211668,
-     "se": 0.4475057215148765,
-     "t": 1.636531422753711,
-     "p": 0.10886237203278748,
+     "est": -0.3630438675831959,
+     "se": 0.2711065213501946,
+     "t": -1.3391189034300053,
+     "p": 0.18740911830198304,
      "ci": [
-      -0.16953134539770132,
-      1.6342456956400349
+      -0.9094231599324574,
+      0.18333542476606562
      ],
      "df": 44
     },
     {
      "term": "rain x early-voting days (per 10 days)",
-     "est": -0.31702446449104954,
-     "se": 0.37130876043169597,
-     "t": -0.853802813923556,
-     "p": 0.397838799553617,
+     "est": 0.2026744974745639,
+     "se": 0.22107194157679289,
+     "t": 0.9167807367546987,
+     "p": 0.36425537244397965,
      "ci": [
-      -1.065348100371769,
-      0.43129917138967006
+      -0.24286672519849484,
+      0.6482157201476226
      ],
      "df": 44
     }
    ],
-   "early_days_n": 3026
+   "early_days_n": 3027
   },
   {
    "id": "H3",
@@ -85,7 +85,7 @@
    "claim": "Gomez, Hansford & Krause (2007) found rain shifted the vote toward Republicans, on the premise that the voters it keeps home lean Democratic. That premise is contested after 2024, when lower-propensity voters leaned Republican, and the effect should shrink or reverse where Democrats vote by mail.",
    "design": "Counties at least half counted, in House races with both a Democrat and a Republican. The county's Democratic two-way share tonight minus Harris's 2024 two-way share (the swing), regressed on rain and rain x convenience-voting state, with state fixed effects; errors clustered by state. A negative rain coefficient means rain is moving the count toward Republicans where voting is Election-Day heavy. Which ballots a county counts first changes its partisan mix during the night, so this test means little until most counties are mostly counted.",
    "verdict": "Too early",
-   "reading": "Needs about 150 counties at least half counted in two-party races (3022 so far) with at least 10 wet counties on each side of the rules split (0 in states without convenience voting, 171 with)."
+   "reading": "Needs about 150 counties at least half counted in two-party races (3023 so far) with at least 10 wet counties on each side of the rules split (0 in states without convenience voting, 150 with)."
   },
   {
    "id": "H4",
@@ -95,92 +95,92 @@
    "n": 3165,
    "counties": 1256,
    "clusters": 25,
-   "r2": 0.9379832416965285,
+   "r2": 0.9379596611170146,
    "table": [
     {
      "term": "eday x rain (per cm)",
-     "est": 0.06431741804064768,
-     "se": 0.015251329049004819,
-     "t": 4.217168079843148,
-     "p": 0.00030396801987508937,
+     "est": -0.022837353826302947,
+     "se": 0.03245979623797549,
+     "t": -0.7035581387779933,
+     "p": 0.48847805020568735,
      "ci": [
-      0.03284022195349732,
-      0.09579461412779805
+      -0.08983108059258574,
+      0.04415637293997984
      ],
      "df": 24
     },
     {
      "term": "early in-person x rain (per cm)",
-     "est": 0.07899250767250017,
-     "se": 0.015114148497115204,
-     "t": 5.226394837100962,
-     "p": 2.3449654629192906e-05,
+     "est": -0.0010474395002396746,
+     "se": 0.0319794180444394,
+     "t": -0.032753551011595224,
+     "p": 0.9741419971827263,
      "ci": [
-      0.04779843832907806,
-      0.11018657701592227
+      -0.06704971440384606,
+      0.0649548354033667
      ],
      "df": 24
     }
    ],
-   "verdict": "Opposite direction so far",
-   "reading": "Within the same county (1256 counties, 3165 county-type rows), each centimeter of rain goes with +6.4% Election-Day votes relative to the county's other ballots (p < 0.01; 95% CI +3.3% to +9.6%). The placebo, early in-person votes cast before today: +7.9% per cm (p < 0.01)."
+   "verdict": "No clear signal yet",
+   "reading": "Within the same county (1256 counties, 3165 county-type rows), each centimeter of rain goes with -2.3% Election-Day votes relative to the county's other ballots (p = 0.49, not significant; 95% CI -9.0% to +4.4%). The placebo, early in-person votes cast before today: -0.1% per cm (p = 0.97, not significant)."
   },
   {
    "id": "H5",
    "title": "The rain effect is larger in small, rural counties",
    "claim": "Gomez, Hansford & Krause (2007) found the turnout cost of rain concentrated outside big metropolitan counties, where polling places are farther apart and more voters drive. Here county size (log 2024 presidential votes) stands in for rural vs. urban.",
    "design": "H1 with one more term: rain x county size, where size is the log of the county's 2024 presidential vote, centered at the average county. The rain term is then the effect at an average-sized county; a positive interaction means the rain penalty shrinks as counties get bigger (that is, it is larger in small counties). State fixed effects; standard errors clustered by state.",
-   "n": 3024,
+   "n": 3025,
    "clusters": 45,
-   "r2": 0.37588683917375665,
+   "r2": 0.37599958443950143,
    "table": [
     {
      "term": "rain (per cm, average-sized county)",
-     "est": 0.35123772686648475,
-     "se": 0.029591314903885776,
-     "t": 11.869622151206334,
-     "p": 2.6645352591003757e-15,
+     "est": 0.3910773717021191,
+     "se": 0.10955297820805406,
+     "t": 3.569755730048862,
+     "p": 0.000878564843922458,
      "ci": [
-      0.29160035032405707,
-      0.4108751034089124
+      0.17028785173792998,
+      0.6118668916663081
      ],
      "df": 44
     },
     {
      "term": "rain x county size (per log unit)",
-     "est": 0.24612489038302526,
-     "se": 0.05463025008483831,
-     "t": 4.505285807786061,
-     "p": 4.844408677406875e-05,
+     "est": 0.4422200794542322,
+     "se": 0.08290117240403638,
+     "t": 5.334304288231042,
+     "p": 3.173972455305929e-06,
      "ci": [
-      0.13602485577832202,
-      0.3562249249877285
+      0.27514374470781605,
+      0.6092964142006483
      ],
      "df": 44
     },
     {
      "term": "county size (log 2024 votes)",
-     "est": 2.2650079471283515,
-     "se": 0.36820327116149415,
-     "t": 6.151515004153556,
-     "p": 2.02045365327308e-07,
+     "est": 2.25109967661312,
+     "se": 0.3591057340499057,
+     "t": 6.268626377044372,
+     "p": 1.3587243907764446e-07,
      "ci": [
-      1.5229430136255777,
-      3.0070728806311253
+      1.527369624412335,
+      2.9748297288139054
      ],
      "df": 44
     }
    ],
    "verdict": "Consistent so far",
-   "reading": "Across 3024 counties, each centimeter of rain goes with +0.35% votes vs. expectation at an average-sized county; the rain term moves +0.25 per log unit of size (p < 0.01; 95% CI +0.14 to +0.36), so about -0.02% per cm in a county a quarter the average size and +0.72% in one four times it."
+   "reading": "Across 3025 counties, each centimeter of rain goes with +0.39% votes vs. expectation at an average-sized county; the rain term moves +0.44 per log unit of size (p < 0.01; 95% CI +0.28 to +0.61), so about -0.27% per cm in a county a quarter the average size and +1.05% in one four times it."
   }
  ],
  "data": {
   "counties_in_feed": 3045,
-  "counties_with_votes": 3026,
+  "counties_with_votes": 3027,
   "counties_any_votes": 3042,
-  "counties_wet_1mm": 172,
-  "rain_asof": "2026-11-08T06:49:39.278900+00:00",
+  "counties_wet_1mm": 151,
+  "rain_asof": "2026-11-08T23:16:51.575850+00:00",
   "states_with_votes": 45,
   "rain_coverage": 3045,
   "rain_missing_states": [],
@@ -196,5 +196,5 @@
   "H4": "fig_h4.svg",
   "H5": "fig_h5.svg"
  },
- "seconds": 10.3
+ "seconds": 201.1
 }
