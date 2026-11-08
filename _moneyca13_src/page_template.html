@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>CA-13: Where the Money Comes From</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{--bg:#F6F3EC;--paper:#FFFDF8;--ink:#1B2A41;--body:#3D4A5C;--muted:#6B7280;--line:#DCD5C8;--accent:#1B2A41;--accent-ink:#F6F3EC;--dem:#2E5E9E;--rep:#B5451B;--teal:#2E6F8E;--gold:#C98B2E}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#11161F;--paper:#18202C;--ink:#EEF1F5;--body:#C9D3DC;--muted:#93A0B0;--line:#2C3747;--accent:#0E1520;--accent-ink:#EEF1F5;--dem:#6D9FE0;--rep:#E07E58;--teal:#6FB3CF;--gold:#E0B060}}
+:root[data-theme="dark"]{--bg:#11161F;--paper:#18202C;--ink:#EEF1F5;--body:#C9D3DC;--muted:#93A0B0;--line:#2C3747;--accent:#0E1520;--accent-ink:#EEF1F5;--dem:#6D9FE0;--rep:#E07E58;--teal:#6FB3CF;--gold:#E0B060}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--body);font:17px/1.5 'IBM Plex Sans',system-ui,sans-serif}
+header{background:var(--accent);color:var(--accent-ink);padding:28px 16px 22px;text-align:center}
+h1{font-family:'Source Serif 4',Georgia,serif;font-weight:700;font-size:clamp(28px,7vw,44px);line-height:1.1}
+.sub{opacity:.85;margin-top:8px;max-width:640px;margin-left:auto;margin-right:auto}
+main{max-width:960px;margin:0 auto;padding:18px 16px 64px}
+h2{font-family:'Source Serif 4',Georgia,serif;font-weight:700;font-size:26px;color:var(--ink);margin:30px 0 6px}
+.lede{color:var(--muted);margin-bottom:12px}
+.who{display:flex;gap:6px;background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:4px;margin:16px auto 0;max-width:460px}
+.who button{flex:1;border:0;border-radius:999px;padding:12px 8px;font:600 16px 'IBM Plex Sans',sans-serif;background:transparent;color:var(--ink);cursor:pointer;min-height:48px}
+.who button.d.on{background:var(--dem);color:#fff}.who button.r.on{background:var(--rep);color:#fff}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:14px 0}
+.stat{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:14px}
+.stat .big{font-family:'Source Serif 4',Georgia,serif;font-size:38px;font-weight:700;color:var(--ink);line-height:1}
+.stat .lbl{color:var(--muted);font-size:14px;margin-top:6px}
+.stack{display:flex;height:34px;border-radius:9px;overflow:hidden;margin:6px 0 4px}
+.stack span{display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden}
+.k{display:flex;gap:14px;flex-wrap:wrap;font-size:14px;color:var(--muted)}
+.k i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:14px;margin:12px 0}
+.two{display:grid;grid-template-columns:1fr;gap:14px}
+@media(min-width:760px){.two{grid-template-columns:1fr 1fr}}
+svg{width:100%;height:auto;display:block}
+.tt{position:fixed;pointer-events:none;background:var(--ink);color:var(--bg);padding:6px 10px;border-radius:8px;font-size:14px;display:none;z-index:9}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line)}
+th{color:var(--ink);font-weight:600}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+.pill{display:inline-block;font-size:12px;padding:2px 8px;border-radius:999px;background:var(--line);color:var(--ink);margin-left:6px}
+.pill.in{background:var(--teal);color:#fff}
+.hbar{display:grid;grid-template-columns:52px 1fr 70px;gap:8px;align-items:center;margin:4px 0;font-size:14px}
+.hbar .t{height:16px;background:var(--line);border-radius:8px;overflow:hidden}.hbar .t i{display:block;height:100%}
+.tiles{display:grid;grid-template-columns:repeat(12,1fr);gap:3px;margin-top:8px}
+.tile{aspect-ratio:1;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:clamp(8px,2vw,13px);font-weight:600;color:var(--ink)}
+.tile.home{outline:3px solid var(--ink);outline-offset:-3px}
+.note{font-size:14px;color:var(--muted);margin-top:8px}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:0 16px 32px;max-width:760px;margin:0 auto}
+</style>
+</head>
+<body>
+<header>
+  <h1>CA-13: Where the Money Comes From</h1>
+  <div class="sub">Itemized gifts from individuals to each campaign this cycle, placed by the donor’s ZIP code: inside the district, elsewhere in California, or out of state.</div>
+  <div class="who"><button class="d on" data-k="gray">Adam Gray (D)</button><button class="r" data-k="lincoln">Kevin Lincoln (R)</button></div>
+</header>
+<main>
+  <section id="top"></section>
+  <h2>Inside California</h2>
+  <p class="lede">Each county shaded by dollars given to the campaign. The district is outlined. Tap a county.</p>
+  <div class="two">
+    <div class="card" id="camap"></div>
+    <div class="card" id="counties"></div>
+  </div>
+  <h2>Top ZIP codes</h2>
+  <p class="lede">The California ZIP codes that gave the most, with whether the ZIP sits inside the district.</p>
+  <div class="card" id="zips"></div>
+  <h2>Out of state</h2>
+  <div class="card" id="states"></div>
+  <h2>Over time</h2>
+  <p class="lede">Money from inside the district against money from everywhere else, by month.</p>
+  <div class="card" id="timeline"></div>
+  <h2>Side by side</h2>
+  <div class="card" id="compare"></div>
+</main>
+<div class="tt" id="tt"></div>
+<footer id="foot"></footer>
+<script>
+const M = /*MONEY*/{};
+const CA = /*CA_COUNTIES*/null;
+const CD = /*CD13*/null;
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt = x => x >= 1e6 ? "$" + (x/1e6).toFixed(2) + "M" : x >= 1e3 ? "$" + Math.round(x/1e3) + "K" : "$" + Math.round(x);
+const pct = (a, b) => b ? Math.round(100 * a / b) : 0;
+let cur = "gray";
+const col = k => k === "gray" ? "var(--dem)" : "var(--rep)";
+/* projection: simple equirect scaled to California's bbox (good enough at this size) */
+const BB = {w: -124.5, e: -114.1, n: 42.05, s: 32.5}; const W = 600, H = 700;
+/* equirectangular with the x axis scaled by cos(37.5 deg) so shapes keep their proportions */
+const KX = Math.cos(37.5 * Math.PI / 180); const SX = W / ((BB.e - BB.w) * KX), SY = H / (BB.n - BB.s); const S = Math.min(SX, SY);
+const px = (lon, lat) => [ (lon - BB.w) * KX * S, (BB.n - lat) * S ];
+function ring(coords) { return coords.map(c => px(c[0], c[1]).map(v => v.toFixed(1)).join(",")).join(" "); }
+function pathOf(geom) {
+  const polys = geom.type === "Polygon" ? [geom.coordinates] : geom.coordinates;
+  return polys.map(p => p.map(r => "M" + ring(r) + "Z").join("")).join("");
+}
+function draw() {
+  const m = M[cur]; if (!m) return;
+  const tot = m.total || 1;
+  document.getElementById("top").innerHTML = `
+    <div class="grid">
+      <div class="stat"><div class="big">${fmt(m.total)}</div><div class="lbl">from ${m.n.toLocaleString()} itemized gifts</div></div>
+      <div class="stat"><div class="big">${pct(m.in_district, tot)}%</div><div class="lbl">from inside CA-13</div></div>
+      <div class="stat"><div class="big">${pct(m.rest_of_ca, tot)}%</div><div class="lbl">from the rest of California</div></div>
+      <div class="stat"><div class="big">${pct(m.out_of_state, tot)}%</div><div class="lbl">from out of state</div></div>
+    </div>
+    <div class="stack">
+      <span style="width:${pct(m.in_district,tot)}%;background:var(--teal)">${pct(m.in_district,tot) > 8 ? "In district" : ""}</span>
+      <span style="width:${pct(m.rest_of_ca,tot)}%;background:var(--gold)">${pct(m.rest_of_ca,tot) > 8 ? "Rest of CA" : ""}</span>
+      <span style="width:${pct(m.out_of_state,tot)}%;background:${col(cur)}">${pct(m.out_of_state,tot) > 8 ? "Out of state" : ""}</span>
+      <span style="width:${pct(m.unmatched,tot)}%;background:var(--line)"></span>
+    </div>
+    <div class="k"><span><i style="background:var(--teal)"></i>Inside the district ${fmt(m.in_district)}</span><span><i style="background:var(--gold)"></i>Rest of California ${fmt(m.rest_of_ca)}</span><span><i style="background:${col(cur)}"></i>Out of state ${fmt(m.out_of_state)}</span>${m.unmatched ? `<span><i style="background:var(--line)"></i>ZIP not placed ${fmt(m.unmatched)}</span>` : ""}</div>`;
+  /* county map */
+  const byc = m.by_county_ca || {}; const inCounties = {};
+  (m.by_zip || []).filter(z => z.in_district).forEach(z => inCounties[z.county] = (inCounties[z.county] || 0) + z.amt);
+  const max = Math.max(1, ...Object.values(byc));
+  let paths = "";
+  CA.features.forEach(f => {
+    const name = f.properties.name; const v = byc[name] || 0; const a = Math.sqrt(v / max);
+    const fill = v ? `color-mix(in srgb, var(--gold) ${Math.round(25 + 75 * a)}%, var(--paper))` : "var(--paper)";
+    paths += `<path d="${pathOf(f.geometry)}" fill="${fill}" stroke="var(--line)" stroke-width="1" data-n="${esc(name)}" data-v="${v}" data-i="${inCounties[name] || 0}"/>`;
+  });
+  const cd = CD.features.map(f => `<path d="${pathOf(f.geometry)}" fill="color-mix(in srgb, var(--teal) 35%, transparent)" stroke="var(--teal)" stroke-width="2.5"/>`).join("");
+  document.getElementById("camap").innerHTML = `<svg viewBox="0 0 ${((BB.e - BB.w) * KX * S).toFixed(0)} ${((BB.n - BB.s) * S).toFixed(0)}" aria-label="California counties shaded by dollars to the campaign">${paths}${cd}</svg><div class="note">Teal outline: the district (2026 lines). Gold: dollars from elsewhere in the state.</div>`;
+  const tt = document.getElementById("tt");
+  document.querySelectorAll("#camap path[data-n]").forEach(p => {
+    const show = e => { tt.style.display = "block"; tt.style.left = (e.clientX + 12) + "px"; tt.style.top = (e.clientY + 12) + "px";
+      tt.textContent = p.dataset.n + ": " + fmt(+p.dataset.v) + (+p.dataset.i ? " outside the district, " + fmt(+p.dataset.i) + " inside" : ""); };
+    p.addEventListener("mousemove", show); p.addEventListener("click", show); p.addEventListener("mouseleave", () => tt.style.display = "none");
+  });
+  /* county list */
+  const rows = Object.entries(byc).slice(0, 12);
+  document.getElementById("counties").innerHTML = `<strong>Elsewhere in California, by county</strong>` + rows.map(([c, v]) => `<div class="hbar"><span>${esc(c)}</span><span class="t"><i style="width:${pct(v, rows[0][1])}%;background:var(--gold)"></i></span><span class="n">${fmt(v)}</span></div>`).join("")
+    + `<div class="note">In-district money by county: ${Object.entries(inCounties).sort((a,b)=>b[1]-a[1]).map(([c,v]) => esc(c) + " " + fmt(v)).join(" · ") || "none"}</div>`;
+  /* zips */
+  const zs = (m.by_zip || []).slice(0, 15);
+  document.getElementById("zips").innerHTML = `<table><tr><th>ZIP</th><th>Place</th><th class="n">Gifts</th><th class="n">Dollars</th></tr>` + zs.map(z => `<tr><td>${z.zip}${z.in_district ? '<span class="pill in">in district</span>' : '<span class="pill">' + esc(z.county) + '</span>'}</td><td>${esc(z.place)}</td><td class="n">${z.n}</td><td class="n">${fmt(z.amt)}</td></tr>`).join("") + `</table><div class="note">${m.n_zips_ca} California ZIP codes gave.</div>`;
+  /* states */
+  const GRID = {AK:[0,0],ME:[0,11],VT:[1,10],NH:[1,11],WA:[2,1],ID:[2,2],MT:[2,3],ND:[2,4],MN:[2,5],IL:[2,6],WI:[2,7],MI:[2,8],NY:[2,9],RI:[2,10],MA:[2,11],OR:[3,1],NV:[3,2],WY:[3,3],SD:[3,4],IA:[3,5],IN:[3,6],OH:[3,7],PA:[3,8],NJ:[3,9],CT:[3,10],CA:[4,1],UT:[4,2],CO:[4,3],NE:[4,4],MO:[4,5],KY:[4,6],WV:[4,7],VA:[4,8],MD:[4,9],DE:[4,10],AZ:[5,2],NM:[5,3],KS:[5,4],AR:[5,5],TN:[5,6],NC:[5,7],SC:[5,8],DC:[5,9],OK:[6,4],LA:[6,5],MS:[6,6],AL:[6,7],GA:[6,8],HI:[7,0],TX:[7,4],FL:[7,9]};
+  const bs = m.by_state || {}; const smax = Math.max(1, ...Object.entries(bs).filter(([s]) => s !== "CA").map(([, v]) => v));
+  let cells = [];
+  for (let r = 0; r < 8; r++) for (let c = 0; c < 12; c++) {
+    const st = Object.keys(GRID).find(s => GRID[s][0] === r && GRID[s][1] === c);
+    if (!st) { cells.push("<div></div>"); continue; }
+    const v = bs[st] || 0, home = st === "CA", a = home ? 0 : Math.sqrt(v / smax);
+    cells.push(`<div class="tile ${home ? "home" : ""}" style="background:${home ? "var(--line)" : `color-mix(in srgb, ${col(cur)} ${Math.round(a*100)}%, var(--paper))`};color:${!home && a > .55 ? "#fff" : "var(--ink)"}" title="${st}: ${fmt(v)}">${st}</div>`);
+  }
+  const top = Object.entries(bs).filter(([s]) => s !== "CA").slice(0, 6);
+  document.getElementById("states").innerHTML = `<div class="tiles">${cells.join("")}</div><div class="note">Darker = more dollars. Top: ${top.map(([s, v]) => s + " " + fmt(v)).join(" · ")}</div>`;
+  /* timeline */
+  const bm = (m.by_month || []).filter(x => x.m !== "unknown"); const mmax = Math.max(1, ...bm.map(x => x.in + x.out));
+  const bw = 100 / Math.max(1, bm.length);
+  document.getElementById("timeline").innerHTML = `<svg viewBox="0 0 600 220" aria-label="Monthly money, inside the district vs everywhere else">` +
+    bm.map((x, i) => { const hIn = 170 * x.in / mmax, hOut = 170 * x.out / mmax; const X = i * 600 * bw / 100;
+      return `<rect x="${X+2}" y="${180 - hIn - hOut}" width="${600*bw/100 - 4}" height="${hOut}" fill="${col(cur)}"/><rect x="${X+2}" y="${180 - hIn}" width="${600*bw/100 - 4}" height="${hIn}" fill="var(--teal)"/>` +
+        (i % Math.ceil(bm.length / 8) === 0 ? `<text x="${X + 600*bw/200}" y="205" font-size="12" text-anchor="middle" fill="currentColor">${x.m.slice(2).replace("-", "/")}</text>` : ""); }).join("") +
+    `</svg><div class="k"><span><i style="background:var(--teal)"></i>Inside the district</span><span><i style="background:${col(cur)}"></i>Everywhere else</span></div>`;
+  /* compare */
+  const g = M.gray, l = M.lincoln;
+  if (g && l) document.getElementById("compare").innerHTML = `<table><tr><th></th><th class="n">Gray (D)</th><th class="n">Lincoln (R)</th></tr>
+    <tr><td>Itemized from individuals</td><td class="n">${fmt(g.total)}</td><td class="n">${fmt(l.total)}</td></tr>
+    <tr><td>Share from inside CA-13</td><td class="n">${pct(g.in_district,g.total)}%</td><td class="n">${pct(l.in_district,l.total)}%</td></tr>
+    <tr><td>Share from the rest of California</td><td class="n">${pct(g.rest_of_ca,g.total)}%</td><td class="n">${pct(l.rest_of_ca,l.total)}%</td></tr>
+    <tr><td>Share from out of state</td><td class="n">${pct(g.out_of_state,g.total)}%</td><td class="n">${pct(l.out_of_state,l.total)}%</td></tr>
+    <tr><td>Gifts of $200 or less (dollars)</td><td class="n">${pct(g.by_size["200-"]||0,g.total)}%</td><td class="n">${pct(l.by_size["200-"]||0,l.total)}%</td></tr>
+    <tr><td>Gifts of $1,000 or more (dollars)</td><td class="n">${pct(g.by_size["1000+"]||0,g.total)}%</td><td class="n">${pct(l.by_size["1000+"]||0,l.total)}%</td></tr></table>`;
+}
+document.querySelectorAll(".who button").forEach(b => b.addEventListener("click", () => { cur = b.dataset.k; document.querySelectorAll(".who button").forEach(x => x.classList.toggle("on", x === b)); draw(); }));
+document.getElementById("foot").textContent = M.asof ? `Source: FEC itemized individual contributions (types 15 and 15E, no memo entries), each campaign's principal committee, transactions through ${M.asof}, as processed by the FEC through ${M.built}. Gifts under $200 appear only when a campaign itemizes them. A donor is placed by the center of their ZIP code, so a ZIP that straddles the district line counts wholly on one side. Public records; no advocacy.` : "Money data loads here.";
+draw();
+</script>
+</body>
+</html>
